@@ -10,7 +10,9 @@ It should feel like a digital museum — not a generic gallery.
 
 ## Stack
 
-Next.js (App Router) · TypeScript · Tailwind CSS · shadcn-style UI primitives · Framer Motion · GSAP · Sharp · Cloudflare Pages + GitHub Pages
+Next.js (App Router) · TypeScript · Tailwind CSS · Three.js · React Three Fiber · Drei · Lenis · Framer Motion · GSAP · Sharp · Cloudflare Pages + GitHub Pages
+
+The homepage opens as a **cinematic 3D village experience** (stylized low-poly scene, camera fly-tos, optional muted ambience). Low-power devices and `prefers-reduced-motion` get graceful 2D fallbacks.
 
 ## Quick start
 

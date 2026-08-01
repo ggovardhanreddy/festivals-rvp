@@ -1142,6 +1142,310 @@ button:focus-visible {
   width: fit-content;
 }
 
+.nav-floating {
+  position: fixed;
+  top: 0.75rem;
+  left: 0;
+  right: 0;
+  width: min(1180px, calc(100% - 1.5rem));
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.mobile-nav {
+  position: relative;
+  z-index: 30;
+  margin-top: 5.25rem;
+}
+
+.cinematic-hero {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.village-canvas,
+.map-canvas,
+.cinematic-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-canvas {
+  position: relative;
+  min-height: min(70vh, 640px);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.village-canvas-fallback {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(212, 164, 90, 0.28), transparent 40%),
+    linear-gradient(135deg, #13241b, #2a4a38 45%, #1a3328);
+  background-size: cover;
+  background-position: center;
+}
+
+.cinematic-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition:
+    background 1.2s ease,
+    opacity 1.2s ease;
+}
+
+.cinematic-veil[data-phase="black"],
+.cinematic-veil[data-phase="logo"],
+.cinematic-veil[data-phase="light"] {
+  background: #050807;
+}
+
+.cinematic-veil[data-phase="fly"] {
+  background: linear-gradient(180deg, rgba(5, 8, 7, 0.35), rgba(5, 8, 7, 0.15));
+}
+
+.cinematic-veil[data-phase="sunrise"],
+.cinematic-veil[data-phase="alive"],
+.cinematic-veil[data-phase="ready"] {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 26, 20, 0.15),
+    rgba(15, 26, 20, 0.08) 40%,
+    rgba(15, 26, 20, 0.55)
+  );
+}
+
+.cinematic-logo-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  gap: 1.25rem;
+  justify-items: center;
+}
+
+.cinematic-logo {
+  position: relative;
+  filter: drop-shadow(0 12px 40px rgba(212, 164, 90, 0.35));
+}
+
+.cinematic-logo.light-sweep::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 236, 190, 0.55) 48%,
+    transparent 62%
+  );
+  animation: lightSweep 1.4s ease;
+  pointer-events: none;
+}
+
+@keyframes lightSweep {
+  from {
+    transform: translateX(-40%);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  to {
+    transform: translateX(40%);
+    opacity: 0;
+  }
+}
+
+.cinematic-progress {
+  width: min(220px, 50vw);
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(232, 239, 233, 0.18);
+  overflow: hidden;
+}
+
+.cinematic-progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.45s ease;
+}
+
+.cinematic-copy {
+  position: absolute;
+  left: max(1.25rem, 4vw);
+  bottom: max(2rem, 6vh);
+  z-index: 4;
+  max-width: 640px;
+  color: #f4f8f5;
+}
+
+.cinematic-copy .lede,
+.cinematic-copy .eyebrow {
+  color: rgba(244, 248, 245, 0.84);
+}
+
+.cinematic-panel {
+  position: absolute;
+  right: max(1.25rem, 4vw);
+  top: 30%;
+  z-index: 4;
+  width: min(300px, calc(100% - 2rem));
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.cinematic-hotspot-list {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: min(920px, calc(100% - 1.5rem));
+}
+
+.hotspot-chip {
+  border: 1px solid rgba(244, 248, 245, 0.2);
+  background: rgba(15, 26, 20, 0.45);
+  color: #f4f8f5;
+  backdrop-filter: blur(12px);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.hotspot-chip[data-active="true"] {
+  border-color: rgba(240, 201, 138, 0.7);
+  background: rgba(143, 106, 50, 0.45);
+}
+
+.interactive-village-map {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 920px) {
+  .interactive-village-map {
+    grid-template-columns: 1.7fr 1fr;
+    align-items: stretch;
+  }
+}
+
+.card-3d {
+  perspective: 1000px;
+}
+
+.card-lift {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.card-3d:hover .card-lift {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 70px rgba(19, 36, 27, 0.22);
+}
+
+.glass-year {
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.cursor-light {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 90;
+  background: radial-gradient(circle, rgba(212, 164, 90, 0.16), transparent 65%);
+  mix-blend-mode: screen;
+}
+
+.audio-toggle {
+  border: 1px solid var(--line);
+  background: var(--glass-strong);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.85rem 1.15rem;
+  cursor: pointer;
+  font-family: var(--font-accent);
+  font-size: 0.88rem;
+}
+
+.cinematic-loader {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(212, 164, 90, 0.18), transparent 42%), #0f1a14;
+  gap: 1rem;
+  color: #e8efe9;
+}
+
+.loader-rays {
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    transparent 0deg,
+    rgba(240, 215, 160, 0.12) 40deg,
+    transparent 80deg,
+    rgba(240, 215, 160, 0.08) 140deg,
+    transparent 200deg
+  );
+  animation: aurora 12s linear infinite;
+  pointer-events: none;
+}
+
+.loader-progress {
+  width: min(240px, 60vw);
+}
+
+.experience-page {
+  position: relative;
+  z-index: 1;
+  margin-top: -2rem;
+  padding-top: 2rem;
+  background: linear-gradient(180deg, transparent, var(--bg) 48px);
+}
+
+@media (max-width: 920px) {
+  .cinematic-panel {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin: 0 1rem 5.5rem;
+    width: auto;
+  }
+
+  .cinematic-copy {
+    bottom: 7.5rem;
+  }
+
+  .nav-floating {
+    top: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -1151,5 +1455,10 @@ button:focus-visible {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  .cursor-light,
+  .loader-rays {
+    display: none !important;
   }
 }

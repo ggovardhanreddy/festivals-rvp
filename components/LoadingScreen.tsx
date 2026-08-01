@@ -1,55 +1,59 @@
 "use client";
 
-import { m, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
-import { withBase } from "@/lib/base";
 
 export function LoadingScreen() {
+  const reduce = useReducedMotion();
   const [show, setShow] = useState(true);
+  const [progress, setProgress] = useState(8);
+
   useEffect(() => {
-    const id = window.setTimeout(() => setShow(false), 1200);
-    return () => window.clearTimeout(id);
-  }, []);
+    let frame = 0;
+    if (reduce) {
+      frame = window.requestAnimationFrame(() => {
+        setProgress(100);
+        setShow(false);
+      });
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / 1400);
+      setProgress(Math.round(8 + t * 92));
+      if (t < 1) frame = requestAnimationFrame(tick);
+      else setShow(false);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [reduce]);
 
   return (
     <AnimatePresence>
       {show && (
         <m.div
-          className="loader-screen"
+          className="loader-screen cinematic-loader"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
+          exit={{ opacity: 0, filter: "blur(10px)" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           role="status"
           aria-live="polite"
-          aria-label="Loading RVP Youth"
+          aria-label="Loading RVP Youth experience"
         >
+          <div className="loader-rays" aria-hidden />
           <m.div
             initial={{ scale: 0.92, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              display: "grid",
-              placeItems: "center",
-              gap: "1rem",
-              backgroundImage: `radial-gradient(circle at center, rgba(212,164,90,.18), transparent 55%), url(${withBase("/brand/splash-icon.png")})`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              backgroundSize: "120px",
-              minHeight: 180,
-              minWidth: 220,
-            }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <Logo className="loader-logo" />
           </m.div>
-          <m.p
-            className="eyebrow"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.25 }}
-          >
-            Digital Village Experience
-          </m.p>
+          <p className="eyebrow">Entering the village</p>
+          <div className="cinematic-progress loader-progress" aria-hidden>
+            <span style={{ width: `${progress}%` }} />
+          </div>
         </m.div>
       )}
     </AnimatePresence>

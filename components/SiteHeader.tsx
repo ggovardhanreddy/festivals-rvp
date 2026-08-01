@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { m } from "framer-motion";
+import { useEffect, useState } from "react";
+import { m, useReducedMotion } from "framer-motion";
 import { NAV } from "@/lib/site";
 import { ThemeToggle } from "./Theme";
 import { Logo } from "./Logo";
@@ -10,14 +11,42 @@ import { Logo } from "./Logo";
 export function SiteHeader() {
   const pathname = usePathname() || "/";
   const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
+  const reduce = useReducedMotion();
+  const [hidden, setHidden] = useState(false);
+  const [ready, setReady] = useState(pathname !== "/");
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      const frame = window.requestAnimationFrame(() => setReady(true));
+      return () => window.cancelAnimationFrame(frame);
+    }
+    const id = window.setTimeout(() => setReady(true), reduce ? 0 : 5600);
+    return () => window.clearTimeout(id);
+  }, [pathname, reduce]);
+
+  useEffect(() => {
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y > last && y > 120) setHidden(true);
+      else setHidden(false);
+      last = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
       <m.header
-        className="nav"
+        className="nav nav-floating"
         initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        animate={{
+          y: hidden ? -110 : 0,
+          opacity: ready ? 1 : 0,
+          pointerEvents: ready ? "auto" : "none",
+        }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       >
         <Link href="/" className="brand-link" aria-label="RVP Youth home">
           <Logo />
@@ -25,7 +54,9 @@ export function SiteHeader() {
         <nav className="nav-links" aria-label="Primary">
           {NAV.map((item) => {
             const active =
-              item.href === "/" ? normalized === "/" : normalized.startsWith(item.href);
+              item.href === "/"
+                ? normalized === "/"
+                : normalized.startsWith(item.href);
             return (
               <Link key={item.href} href={item.href} data-active={active}>
                 {item.label}
@@ -37,10 +68,16 @@ export function SiteHeader() {
           <ThemeToggle />
         </div>
       </m.header>
-      <nav className="mobile-nav" aria-label="Mobile">
+      <nav
+        className="mobile-nav"
+        aria-label="Mobile"
+        style={{ opacity: ready ? 1 : 0, pointerEvents: ready ? "auto" : "none" }}
+      >
         {NAV.map((item) => {
           const active =
-            item.href === "/" ? normalized === "/" : normalized.startsWith(item.href);
+            item.href === "/"
+              ? normalized === "/"
+              : normalized.startsWith(item.href);
           return (
             <Link key={item.href} href={item.href} data-active={active}>
               {item.label}

@@ -11,6 +11,7 @@ import { AdminClient } from "@/components/AdminClient";
 import { AlbumCard } from "@/components/AlbumCard";
 import { AlbumView } from "@/components/AlbumView";
 import { Gallery } from "@/components/Gallery";
+import { InteractiveVillageMap } from "@/components/experience/InteractiveVillageMap";
 import { MemoryHero } from "@/components/MemoryHero";
 import { MemoryWall } from "@/components/MemoryWall";
 import { PrivateNotice } from "@/components/PrivateNotice";
@@ -18,6 +19,16 @@ import { Reveal } from "@/components/Reveal";
 import { SearchClient } from "@/components/SearchClient";
 import { VillageStory } from "@/components/VillageStory";
 import { YearGrid } from "@/components/YearGrid";
+
+const BUCKET_ACCENT: Record<
+  BucketKey,
+  "default" | "sankranthi" | "vinayaka" | "birthday" | "trips"
+> = {
+  sankranthi: "sankranthi",
+  "vinayaka-chavithi": "vinayaka",
+  "rvp-birthdays": "birthday",
+  "fun-trips": "trips",
+};
 
 const BUCKET_ROUTES: BucketKey[] = [
   "sankranthi",
@@ -80,6 +91,15 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
         <p className="eyebrow">Festival Story</p>
         <h2>Why this chapter matters</h2>
         <p className="lede">{meta.story}</p>
+      </Reveal>
+      <Reveal className="section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Village Scene</p>
+            <h2>Step into this chapter</h2>
+          </div>
+        </div>
+        <InteractiveVillageMap accent={BUCKET_ACCENT[bucket]} />
       </Reveal>
       {!!featured.length && (
         <Reveal className="section">

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { allMedia, publicAlbums, years } from "@/lib/content";
-import { MemoryHero } from "@/components/MemoryHero";
 import { AlbumCard } from "@/components/AlbumCard";
 import { Gallery } from "@/components/Gallery";
 import { MemoryWall } from "@/components/MemoryWall";
-import { VillageMap } from "@/components/VillageMap";
+import { InteractiveVillageMap } from "@/components/experience/InteractiveVillageMap";
+import { CinematicHero } from "@/components/experience/CinematicHero";
 import { VillageStory } from "@/components/VillageStory";
 import { TimelineStrip } from "@/components/TimelineStrip";
 import { Reveal } from "@/components/Reveal";
@@ -13,9 +13,6 @@ import { PrivateNotice } from "@/components/PrivateNotice";
 export default function HomePage() {
   const albums = publicAlbums();
   const media = allMedia();
-  const featuredImage =
-    media.find((m) => m.type === "image" && m.favorite)?.file ||
-    media.find((m) => m.type === "image")?.file;
   const recent = albums.slice(0, 4);
   const featured = albums.filter((a) => a.media.some((m) => m.favorite)).slice(0, 3);
   const featuredAlbums = featured.length ? featured : recent;
@@ -24,21 +21,9 @@ export default function HomePage() {
 
   return (
     <main>
-      <MemoryHero
-        showLogo
-        fullBleed
-        atmosphere
-        backgroundImage={featuredImage}
-        eyebrow="RVP Youth"
-        title="A digital village of memory."
-        lede="Celebrate culture, festivals, and the people who make home eternal — through an interactive heritage experience."
-        primaryHref="/sankranthi/"
-        primaryLabel="Enter the village"
-        secondaryHref="/timeline/"
-        secondaryLabel="Open timeline"
-      />
+      <CinematicHero />
 
-      <div className="page">
+      <div className="page experience-page">
         <PrivateNotice />
 
         <Reveal className="section">
@@ -62,12 +47,14 @@ export default function HomePage() {
         <Reveal className="section" id="map">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Interactive Map</p>
-              <h2>Walk the village</h2>
-              <p className="lede">Touch a place to open the memories it still holds.</p>
+              <p className="eyebrow">Interactive Village</p>
+              <h2>Fly through memory</h2>
+              <p className="lede">
+                Hover to glow. Click to travel. Open the memories each place still holds.
+              </p>
             </div>
           </div>
-          <VillageMap />
+          <InteractiveVillageMap />
         </Reveal>
 
         <Reveal className="section">
@@ -112,7 +99,7 @@ export default function HomePage() {
             <p className="eyebrow">About</p>
             <h2>RVP Youth</h2>
             <p className="muted">
-              A free-to-host digital heritage museum for Sankranthi, Vinayaka Chavithi,
+              An immersive digital village museum for Sankranthi, Vinayaka Chavithi,
               birthdays, and journeys — curated by Govardhan Reddy.
             </p>
             <Link className="btn" href="/about/" style={{ marginTop: "1rem" }}>

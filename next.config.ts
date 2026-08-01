@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   basePath: repoBase || undefined,
   assetPrefix: repoBase || undefined,
+  transpilePackages: ["three", "@react-three/fiber", "@react-three/drei"],
 };
 
 export default nextConfig;
