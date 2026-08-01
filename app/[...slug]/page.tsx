@@ -1,5 +1,299 @@
-import Link from "next/link"; import {notFound} from "next/navigation"; import {allMedia,findAlbum,publicAlbums,years,categories} from "@/lib/content"; import {Gallery} from "@/components/Gallery"; import {PrivateNotice} from "@/components/PrivateNotice"; import {AdminClient} from "@/components/AdminClient";
-const fixed=["years","timeline","festivals","trips","videos","documents","gallery","favorites","search","settings","about","random","memory-of-the-day","this-day","offline","admin","admin/login"];
-export function generateStaticParams(){const paths=fixed.map(x=>({slug:x.split("/")}));for(const y of years())paths.push({slug:["years",y]});for(const a of publicAlbums())paths.push({slug:["years",a.year,a.category.toLowerCase(),a.slug]});return paths} export const dynamicParams=false;
-function Cards({albums}:{albums:ReturnType<typeof publicAlbums>}){return <div className="grid">{albums.map(a=><Link className="card" href={`/years/${a.year}/${a.category.toLowerCase()}/${a.slug}/`} key={`${a.year}${a.slug}`}><p className="eyebrow">{a.year} · {a.category}</p><h3>{a.title}</h3><p>{a.description}</p></Link>)}</div>}
-export default async function Route({params}:{params:Promise<{slug:string[]}>}){const {slug}=await params;const path=slug.join("/");const albums=publicAlbums();const media=allMedia(); if(slug[0]==="years"&&slug.length===1)return <main><h1>Years</h1><Cards albums={albums}/></main>;if(slug[0]==="years"&&slug.length===2){const matches=albums.filter(a=>a.year===slug[1]);if(!matches.length)notFound();return <main><p className="eyebrow">The {slug[1]} chapter</p><h1>{slug[1]}</h1><Cards albums={matches}/></main>}if(slug[0]==="years"&&slug.length===4){const a=findAlbum(slug[1],slug[2],slug[3]);if(!a||!a.published)notFound();return <main><p className="eyebrow">{a.year} · {a.category}</p><h1>{a.title}</h1><p>{a.description}</p><PrivateNotice/><Gallery items={a.media}/></main>}if(path==="gallery"||path==="timeline")return <main><h1>{path==="timeline"?"A family timeline":"The complete gallery"}</h1><PrivateNotice/><Gallery items={media}/></main>;if(path==="favorites")return <main><h1>Favorite moments</h1><Gallery items={media.filter(m=>m.favorite)}/></main>;if(["festivals","trips","videos","documents"].includes(path)){const filtered=path==="videos"?media.filter(m=>m.type==="video"):path==="documents"?media.filter(m=>m.type==="document"):media.filter(m=>m.album.category.toLowerCase()===path.slice(0,-1));return <main><h1>{path[0].toUpperCase()+path.slice(1)}</h1><Gallery items={filtered}/></main>}if(path==="search")return <main><h1>Search memories</h1><p>Use your browser’s find feature to search this static private archive. The generated <code>search-index.json</code> can also power a hosted client search.</p><Gallery items={media}/></main>;if(path==="random"||path==="memory-of-the-day"||path==="this-day"){const one=media.length?media[new Date().getDate()%media.length]:undefined;return <main><p className="eyebrow">A little surprise</p><h1>{path.replaceAll("-"," ")}</h1>{one?<Gallery items={[one]}/>:<p>Add memories with the ZIP workflow to begin.</p>}</main>}if(path==="settings")return <main><h1>Settings</h1><p>Choose light or dark mode from the button in the header. This preference stays on this device.</p></main>;if(path==="about")return <main><h1>RVP Memories</h1><p>Festivals RVP is Govardhan Reddy’s private, read-only family memory archive. It is intentionally simple: memories are versioned in Git and published as a fast static website.</p><PrivateNotice/></main>;if(path==="offline")return <main><h1>You’re offline</h1><p>Reconnect to browse memories that have not been cached on this device.</p></main>;if(path==="admin/login")return <main><h1>Administrator login</h1><form action="/api/admin/login" method="post" className="adminbox"><label>Password<input name="password" type="password" required/></label><button>Sign in</button><p>Only Govardhan Reddy can manage this archive.</p></form></main>;if(path==="admin")return <main><h1>Archive administration</h1><AdminClient/></main>;notFound()}
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import {
+  allMedia,
+  birthdayAlbums,
+  festivalAlbums,
+  findAlbum,
+  publicAlbums,
+  years,
+} from "@/lib/content";
+import { FESTIVALS, festivalBySlug } from "@/lib/site";
+import { AdminClient } from "@/components/AdminClient";
+import { AlbumCard } from "@/components/AlbumCard";
+import { AlbumView } from "@/components/AlbumView";
+import { Gallery } from "@/components/Gallery";
+import { MemoryHero } from "@/components/MemoryHero";
+import { PrivateNotice } from "@/components/PrivateNotice";
+import { Reveal } from "@/components/Reveal";
+import { SearchClient } from "@/components/SearchClient";
+import { YearGrid } from "@/components/YearGrid";
+export function generateStaticParams() {
+  const paths: { slug: string[] }[] = [
+    { slug: ["timeline"] },
+    { slug: ["festivals"] },
+    { slug: ["birthdays"] },
+    { slug: ["search"] },
+    { slug: ["about"] },
+    { slug: ["years"] },
+    { slug: ["admin"] },
+    { slug: ["offline"] },
+  ];
+
+  for (const festival of FESTIVALS) {
+    paths.push({ slug: ["festivals", festival.slug] });
+  }
+  for (const year of years()) {
+    paths.push({ slug: ["years", year] });
+  }
+  for (const album of publicAlbums()) {
+    paths.push({
+      slug: [album.category.toLowerCase(), album.year, album.slug],
+    });
+  }
+  return paths;
+}
+
+export const dynamicParams = false;
+
+export default async function ArchiveRoute({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}) {
+  const { slug } = await params;
+  const path = slug.join("/");
+  const albums = publicAlbums();
+  const media = allMedia();
+
+  if (path === "timeline") {
+    const ordered = [...media].sort((a, b) => b.date.localeCompare(a.date));
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow="Timeline"
+          title="A living ribbon of memory."
+          lede="Move through Sankranthi, Vinayaka Chavithi, and birthdays in the order they were lived."
+          primaryHref="/festivals/"
+          primaryLabel="Festivals"
+          secondaryHref="/birthdays/"
+          secondaryLabel="Birthdays"
+        />
+        <Reveal className="section">
+          <div className="timeline">
+            {ordered.map((item) => (
+              <div className="timeline-item glass-card" key={item.id}>
+                <p className="eyebrow">
+                  {item.date} · {item.album.category}
+                </p>
+                <h3>{item.title}</h3>
+                <p className="muted">{item.album.title}</p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </main>
+    );
+  }
+
+  if (path === "festivals") {
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow="Festivals"
+          title="Two celebrations, endlessly cherished."
+          lede="This archive holds only Sankranthi and Vinayaka Chavithi — kept with care, year after year."
+          primaryHref="/festivals/sankranthi/"
+          primaryLabel="Sankranthi"
+          secondaryHref="/festivals/vinayaka-chavithi/"
+          secondaryLabel="Vinayaka Chavithi"
+        />
+        <div className="grid-cards section">
+          {FESTIVALS.map((festival) => (
+            <Reveal key={festival.key}>
+              <Link
+                className="glass-card"
+                href={`/festivals/${festival.slug}/`}
+                style={{ display: "block", padding: "1.5rem" }}
+              >
+                <p className="eyebrow">{festival.eyebrow}</p>
+                <h2>{festival.title}</h2>
+                <p className="muted">{festival.blurb}</p>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal className="section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Recent festival albums</p>
+              <h2>Across the years</h2>
+            </div>
+          </div>
+          <div className="grid-cards">
+            {festivalAlbums().map((album, index) => (
+              <AlbumCard key={`${album.year}-${album.slug}`} album={album} index={index} />
+            ))}
+          </div>
+        </Reveal>
+      </main>
+    );
+  }
+
+  if (slug[0] === "festivals" && slug.length === 2) {
+    const festival = festivalBySlug(slug[1]!);
+    if (!festival) notFound();
+    const matches = festivalAlbums(festival.key);
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow={festival.eyebrow}
+          title={festival.title}
+          lede={festival.blurb}
+          primaryHref="/timeline/"
+          primaryLabel="View timeline"
+          secondaryHref="/search/"
+          secondaryLabel="Search memories"
+        />
+        <PrivateNotice />
+        <Reveal className="section">
+          <div className="grid-cards">
+            {matches.map((album, index) => (
+              <AlbumCard key={`${album.year}-${album.slug}`} album={album} index={index} />
+            ))}
+          </div>
+        </Reveal>
+        <Reveal className="section">
+          <Gallery items={matches.flatMap((album) => album.media)} />
+        </Reveal>
+      </main>
+    );
+  }
+
+  if (path === "birthdays") {
+    const birthdays = birthdayAlbums();
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow="Birthdays"
+          title="Celebrations of the people we love."
+          lede="Each album holds a name, a date, and the warmth of a day made special."
+          primaryHref="/timeline/"
+          primaryLabel="Open timeline"
+        />
+        <div className="grid-cards section">
+          {birthdays.map((album, index) => (
+            <AlbumCard
+              key={`${album.year}-${album.slug}`}
+              album={album}
+              index={index}
+              meta={`${album.personName || album.title} · ${album.birthdayDate || album.year}`}
+            />
+          ))}
+        </div>
+      </main>
+    );
+  }
+
+  if (path === "search") {
+    return (
+      <main className="page">
+        <div className="section">
+          <p className="eyebrow">Search</p>
+          <h1>Find a memory</h1>
+          <p className="lede">
+            Search across festivals, birthdays, years, and notes in this private archive.
+          </p>
+        </div>
+        <SearchClient items={media} />
+      </main>
+    );
+  }
+
+  if (path === "about") {
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow="About"
+          title="A premium digital memory book."
+          lede="Festivals RVP is Govardhan Reddy’s private archive for Sankranthi, Vinayaka Chavithi, and birthdays — published as a free static site."
+          primaryHref="/festivals/"
+          primaryLabel="Begin with festivals"
+        />
+        <Reveal className="section">
+          <div className="glass-card" style={{ padding: "1.5rem" }}>
+            <h2>What this archive holds</h2>
+            <p className="muted">
+              Only two festivals and a dedicated birthday collection. No trips, documents,
+              or extra categories — just the celebrations that matter most, presented with
+              care.
+            </p>
+            <PrivateNotice />
+          </div>
+        </Reveal>
+      </main>
+    );
+  }
+
+  if (path === "years") {
+    return (
+      <main className="page">
+        <div className="section">
+          <p className="eyebrow">Years</p>
+          <h1>Browse by year</h1>
+        </div>
+        <YearGrid years={years()} />
+      </main>
+    );
+  }
+
+  if (slug[0] === "years" && slug.length === 2) {
+    const year = slug[1]!;
+    const matches = albums.filter((album) => album.year === year);
+    if (!matches.length) notFound();
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow={`The ${year} chapter`}
+          title={year}
+          lede="Festivals and birthdays gathered from this year."
+          primaryHref="/timeline/"
+          primaryLabel="Timeline"
+        />
+        <div className="grid-cards section">
+          {matches.map((album, index) => (
+            <AlbumCard key={`${album.year}-${album.slug}`} album={album} index={index} />
+          ))}
+        </div>
+        <Reveal className="section">
+          <Gallery items={matches.flatMap((album) => album.media)} />
+        </Reveal>
+      </main>
+    );
+  }
+
+  if (
+    (slug[0] === "festivals" || slug[0] === "birthdays") &&
+    slug.length === 3
+  ) {
+    const album = findAlbum(slug[1]!, slug[0]!, slug[2]!);
+    if (!album || !album.published) notFound();
+    return <AlbumView album={album} />;
+  }
+
+  if (path === "admin") {
+    return (
+      <main className="page">
+        <div className="section">
+          <p className="eyebrow">Administrator</p>
+          <h1>Archive studio</h1>
+          <p className="lede">
+            Only Govardhan Reddy can import local folders and publish updates.
+          </p>
+        </div>
+        <AdminClient />
+      </main>
+    );
+  }
+
+  if (path === "offline") {
+    return (
+      <main className="page">
+        <h1>You’re offline</h1>
+        <p className="lede">Reconnect to browse memories that are not cached yet.</p>
+      </main>
+    );
+  }
+
+  notFound();
+}

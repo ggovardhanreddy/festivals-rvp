@@ -1,34 +1,107 @@
 [
   {
-    "title": "Coorg Monsoon",
-    "date": "2026-01-01",
+    "title": "Govardhan’s Birthday · cover",
+    "date": "2026-01-15",
     "tags": [
-      "trips"
+      "birthdays",
+      "birthday"
     ],
-    "url": "/years/2026/trips/coorg-monsoon/"
+    "album": "Govardhan’s Birthday",
+    "category": "Birthdays",
+    "url": "/birthdays/2026/govardhan/"
   },
   {
-    "title": "Sankranti at Home",
-    "date": "2025-01-01",
+    "title": "Govardhan’s Birthday · memory",
+    "date": "2026-01-16",
+    "tags": [
+      "birthdays"
+    ],
+    "album": "Govardhan’s Birthday",
+    "category": "Birthdays",
+    "url": "/birthdays/2026/govardhan/"
+  },
+  {
+    "title": "Sankranthi 2026 · cover",
+    "date": "2026-01-15",
+    "tags": [
+      "festivals",
+      "sankranthi"
+    ],
+    "album": "Sankranthi 2026",
+    "category": "Festivals",
+    "url": "/festivals/2026/sankranthi/"
+  },
+  {
+    "title": "Sankranthi 2026 · memory",
+    "date": "2026-01-16",
     "tags": [
       "festivals"
     ],
-    "url": "/years/2025/festivals/sankranti-home/"
+    "album": "Sankranthi 2026",
+    "category": "Festivals",
+    "url": "/festivals/2026/sankranthi/"
   },
   {
-    "title": "Goa Escape",
-    "date": "2024-01-01",
+    "title": "A Family Birthday · cover",
+    "date": "2025-01-15",
     "tags": [
-      "trips"
+      "birthdays",
+      "birthday"
     ],
-    "url": "/years/2024/trips/goa-escape/"
+    "album": "A Family Birthday",
+    "category": "Birthdays",
+    "url": "/birthdays/2025/family-birthday/"
   },
   {
-    "title": "Diwali Lights",
-    "date": "2023-01-01",
+    "title": "A Family Birthday · memory",
+    "date": "2025-01-16",
+    "tags": [
+      "birthdays"
+    ],
+    "album": "A Family Birthday",
+    "category": "Birthdays",
+    "url": "/birthdays/2025/family-birthday/"
+  },
+  {
+    "title": "Vinayaka Chavithi 2025 · cover",
+    "date": "2025-01-15",
+    "tags": [
+      "festivals",
+      "vinayaka-chavithi"
+    ],
+    "album": "Vinayaka Chavithi 2025",
+    "category": "Festivals",
+    "url": "/festivals/2025/vinayaka-chavithi/"
+  },
+  {
+    "title": "Vinayaka Chavithi 2025 · memory",
+    "date": "2025-01-16",
     "tags": [
       "festivals"
     ],
-    "url": "/years/2023/festivals/diwali-lights/"
+    "album": "Vinayaka Chavithi 2025",
+    "category": "Festivals",
+    "url": "/festivals/2025/vinayaka-chavithi/"
+  },
+  {
+    "title": "Sankranthi 2024 · cover",
+    "date": "2024-01-15",
+    "tags": [
+      "festivals",
+      "sankranthi"
+    ],
+    "album": "Sankranthi 2024",
+    "category": "Festivals",
+    "url": "/festivals/2024/sankranthi/"
+  },
+  {
+    "title": "Sankranthi 2024 · memory",
+    "date": "2024-01-16",
+    "tags": [
+      "festivals"
+    ],
+    "album": "Sankranthi 2024",
+    "category": "Festivals",
+    "url": "/festivals/2024/sankranthi/"
   }
 ]

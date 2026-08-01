@@ -178,12 +178,9 @@ export function AdminClient() {
       <label>
         Category
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="auto">Auto-detect from folder names</option>
-          <option value="festivals">festivals</option>
-          <option value="family">family</option>
-          <option value="trips">trips</option>
+          <option value="auto">Auto-detect (festivals / birthdays)</option>
+          <option value="festivals">festivals (Sankranthi / Vinayaka Chavithi)</option>
           <option value="birthdays">birthdays</option>
-          <option value="misc">misc</option>
         </select>
       </label>
 

@@ -1,0 +1,48 @@
+{
+  "year": "2026",
+  "category": "Birthdays",
+  "slug": "govardhan",
+  "title": "Govardhan’s Birthday",
+  "description": "A celebration wrapped in gratitude and quiet joy.",
+  "story": "Candles, familiar faces, and the soft feeling of another year held with care.",
+  "notes": [
+    "The cake was shared before the photos were done.",
+    "A toast to health and home."
+  ],
+  "cover": "/thumbs/2026/birthdays/govardhan/govardhan.svg",
+  "published": true,
+  "order": 0,
+  "personName": "Govardhan Reddy",
+  "birthdayDate": "2026-03-12",
+  "media": [
+    {
+      "id": "2026-govardhan-1",
+      "file": "/images/2026/birthdays/govardhan/govardhan.svg",
+      "thumb": "/thumbs/2026/birthdays/govardhan/govardhan.svg",
+      "type": "image",
+      "title": "Govardhan’s Birthday · cover",
+      "date": "2026-01-15",
+      "tags": [
+        "birthdays",
+        "birthday"
+      ],
+      "favorite": true,
+      "width": 1600,
+      "height": 1000,
+      "note": "The cake was shared before the photos were done."
+    },
+    {
+      "id": "2026-govardhan-2",
+      "file": "/images/2026/birthdays/govardhan/govardhan.svg",
+      "thumb": "/thumbs/2026/birthdays/govardhan/govardhan.svg",
+      "type": "image",
+      "title": "Govardhan’s Birthday · memory",
+      "date": "2026-01-16",
+      "tags": [
+        "birthdays"
+      ],
+      "width": 1600,
+      "height": 1000
+    }
+  ]
+}

@@ -26,7 +26,7 @@ async function main() {
 
 Options:
   --dir <path>              Local folder to scan recursively
-  --category <name|auto>    ${CATEGORIES.join(" | ")} | auto (default: auto)
+  --category <name|auto>    festivals | birthdays | auto (default: auto)
   --album <name|auto>       Album slug/name (default: auto from folder names)
   --no-originals            Do not copy into originals/
   --no-process              Copy files without WebP/AVIF conversion

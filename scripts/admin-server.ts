@@ -5,6 +5,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { importLocalFolder } from "../lib/import-media";
 import { CATEGORIES, type Category } from "../lib/paths";
+// Categories are festivals + birthdays only.
 
 const root = process.cwd();
 

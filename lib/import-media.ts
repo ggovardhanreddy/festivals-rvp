@@ -14,6 +14,7 @@ import {
   VIDEO_EXTS,
   categoryLabel,
   detectCategory,
+  detectFestival,
   slugify,
   titleCase,
   type Category,
@@ -121,7 +122,7 @@ function categoryFor(
     ...rel.split(path.sep).filter(Boolean),
     path.basename(sourceDir),
   ];
-  return detectCategory(parts, "misc");
+  return detectCategory(parts, "festivals");
 }
 
 function uniqueDest(dest: string): string {
@@ -204,6 +205,8 @@ function readAlbum(
     album.media = album.media || [];
     return album;
   }
+  const festival =
+    category === "festivals" ? detectFestival([albumSlug, year]) : undefined;
   return {
     year,
     category: categoryLabel(category),
@@ -216,6 +219,8 @@ function readAlbum(
     published: true,
     order: 0,
     media: [],
+    festival,
+    personName: category === "birthdays" ? titleCase(albumSlug) : undefined,
   };
 }
 
