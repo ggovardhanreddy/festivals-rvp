@@ -4,11 +4,13 @@ A private, read-only family archive for Govardhan Reddy. The public site is a st
 
 ## URL and deployment
 
-The default production URL is `https://festivals-rvp.pages.dev`. Set `NEXT_PUBLIC_SITE_URL` to that URL in your build environment. A custom domain can be connected later in Cloudflare Pages through DNS; no domain purchase is required by this repository.
+Live site: **https://ggovardhanreddy.github.io/festivals-rvp/**
 
-1. Create a GitHub repository for this folder and push it.
-2. In Cloudflare Pages, connect the GitHub repository and use `npm run build` with `out` as the output directory, or enable the included GitHub Pages deployment workflow.
-3. Add `ADMIN_PASSWORD_HASH` and `ADMIN_SESSION_SECRET` as Cloudflare secrets if you enable the admin Function.
+Repository: **https://github.com/ggovardhanreddy/festivals-rvp**
+
+GitHub Pages deploys automatically on every push to `main` via `.github/workflows/deploy.yml`. The workflow sets `NEXT_PUBLIC_BASE_PATH=/festivals-rvp` and `NEXT_PUBLIC_SITE_URL=https://ggovardhanreddy.github.io/festivals-rvp`.
+
+Optional later: connect the same repo to Cloudflare Pages for `*.pages.dev` (build command `npm run build`, output `out`). For a root URL there, leave `NEXT_PUBLIC_BASE_PATH` empty.
 
 ## Local setup
 
