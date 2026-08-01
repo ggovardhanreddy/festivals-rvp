@@ -1,3 +1,1 @@
-import { execFileSync } from "node:child_process";
-execFileSync("git", ["add", "-A", ":!.env.local"], {stdio:"inherit"});
-console.log("Staged archive changes locally. Review and commit; this command never pushes or configures a remote.");
+import {execFileSync} from "node:child_process";execFileSync('git',['add','content','originals','public/images','public/thumbs','public/search-index.json','public/sitemap.xml','public/feed.xml'],{stdio:'inherit'});execFileSync('git',['commit','-m','Publish memory archive'],{stdio:'inherit'});execFileSync('git',['push'],{stdio:'inherit'});

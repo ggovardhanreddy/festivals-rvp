@@ -1,0 +1,26 @@
+{
+  "year": "2023",
+  "category": "Festivals",
+  "slug": "diwali-lights",
+  "title": "Diwali Lights",
+  "description": "A cherished festivals chapter from 2023.",
+  "cover": "/thumbs/2023/festivals/diwali-lights/diwali-lights.svg",
+  "published": true,
+  "order": 0,
+  "media": [
+    {
+      "id": "2023-diwali-lights",
+      "file": "/images/2023/festivals/diwali-lights/diwali-lights.svg",
+      "thumb": "/thumbs/2023/festivals/diwali-lights/diwali-lights.svg",
+      "type": "image",
+      "title": "Diwali Lights",
+      "date": "2023-01-01",
+      "tags": [
+        "festivals"
+      ],
+      "favorite": false,
+      "width": 1200,
+      "height": 800
+    }
+  ]
+}

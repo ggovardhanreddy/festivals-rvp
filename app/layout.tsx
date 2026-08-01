@@ -1,21 +1,3 @@
-import type { Metadata } from "next";
-import "./globals.css";
-
-export const metadata: Metadata = {
-  title: { default: "Festivals RVP", template: "%s · Festivals RVP" },
-  description: "A private family archive of celebrations, journeys and memories.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://festivals-rvp.pages.dev"),
-  manifest: "/manifest.webmanifest",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
-    </html>
-  );
-}
+import type {Metadata} from "next"; import "./globals.css"; import {SiteHeader} from "@/components/SiteHeader";
+export const metadata:Metadata={metadataBase:new URL(process.env.NEXT_PUBLIC_SITE_URL||"https://festivals-rvp.pages.dev"),title:{default:"Festivals RVP | RVP Memories",template:"%s | RVP Memories"},description:"A private family archive of festivals, journeys, and everyday moments.",openGraph:{type:"website",siteName:"RVP Memories"},robots:{index:true,follow:true}};
+export default function Layout({children}:{children:React.ReactNode}){return <html lang="en" suppressHydrationWarning><body><SiteHeader/>{children}<script dangerouslySetInnerHTML={{__html:`if('serviceWorker'in navigator) addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))`}}/></body></html>}

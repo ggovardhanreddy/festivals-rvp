@@ -1,0 +1,26 @@
+{
+  "year": "2024",
+  "category": "Trips",
+  "slug": "goa-escape",
+  "title": "Goa Escape",
+  "description": "A cherished trips chapter from 2024.",
+  "cover": "/thumbs/2024/trips/goa-escape/goa-escape.svg",
+  "published": true,
+  "order": 0,
+  "media": [
+    {
+      "id": "2024-goa-escape",
+      "file": "/images/2024/trips/goa-escape/goa-escape.svg",
+      "thumb": "/thumbs/2024/trips/goa-escape/goa-escape.svg",
+      "type": "image",
+      "title": "Goa Escape",
+      "date": "2024-01-01",
+      "tags": [
+        "trips"
+      ],
+      "favorite": false,
+      "width": 1200,
+      "height": 800
+    }
+  ]
+}

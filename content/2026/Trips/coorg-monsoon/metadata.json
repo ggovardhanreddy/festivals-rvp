@@ -1,0 +1,26 @@
+{
+  "year": "2026",
+  "category": "Trips",
+  "slug": "coorg-monsoon",
+  "title": "Coorg Monsoon",
+  "description": "A cherished trips chapter from 2026.",
+  "cover": "/thumbs/2026/trips/coorg-monsoon/coorg-monsoon.svg",
+  "published": true,
+  "order": 0,
+  "media": [
+    {
+      "id": "2026-coorg-monsoon",
+      "file": "/images/2026/trips/coorg-monsoon/coorg-monsoon.svg",
+      "thumb": "/thumbs/2026/trips/coorg-monsoon/coorg-monsoon.svg",
+      "type": "image",
+      "title": "Coorg Monsoon",
+      "date": "2026-01-01",
+      "tags": [
+        "trips"
+      ],
+      "favorite": false,
+      "width": 1200,
+      "height": 800
+    }
+  ]
+}

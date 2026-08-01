@@ -1,4 +1,1 @@
-import { mkdir } from "node:fs/promises";
-const folders = ["content", "inbox", "public/images", "public/thumbs", ".tmp"];
-await Promise.all(folders.map((folder) => mkdir(folder, { recursive: true })));
-console.log("Archive folders are ready.");
+import fs from "node:fs"; import path from "node:path"; for(const p of ["content","originals","inbox","public/images","public/thumbs",".tmp"]){fs.mkdirSync(path.join(process.cwd(),p),{recursive:true})} console.log("Archive folders ready.");

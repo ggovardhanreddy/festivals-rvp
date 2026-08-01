@@ -1,0 +1,6 @@
+import fs from "node:fs"; import path from "node:path"; import type { Album, Media } from "./types";
+const root=path.join(process.cwd(),"content"); const slugify=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+export function albums():Album[]{ if(!fs.existsSync(root)) return []; const out:Album[]=[]; for(const year of fs.readdirSync(root)){const yp=path.join(root,year);if(!fs.statSync(yp).isDirectory())continue;for(const category of fs.readdirSync(yp)){const cp=path.join(yp,category);if(!fs.statSync(cp).isDirectory())continue;for(const album of fs.readdirSync(cp)){const f=path.join(cp,album,"metadata.json");if(fs.existsSync(f))try{const album=JSON.parse(fs.readFileSync(f,"utf8")); album.year=String(album.year); out.push(album)}catch{}}}} return out.sort((a,b)=>b.year.localeCompare(a.year)||a.order-b.order);}
+export const years=()=>[...new Set(albums().map(a=>a.year))].sort((a,b)=>b.localeCompare(a)); export const categories=()=>[...new Set(albums().map(a=>a.category))].sort();
+export const publicAlbums=()=>albums().filter(a=>a.published); export const allMedia=()=>publicAlbums().flatMap(a=>a.media.map(m=>({...m,album:a}))); export const findAlbum=(year:string,category:string,slug:string)=>albums().find(a=>a.year===year&&slugify(a.category)===category&&a.slug===slug);
+export {slugify};

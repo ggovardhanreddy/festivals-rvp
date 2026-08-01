@@ -1,9 +1,34 @@
 [
   {
-    "title": "Sankranti 2024",
-    "year": 2024,
-    "category": "Festivals",
-    "date": "2024-01-15",
-    "description": "A family celebration of color and togetherness."
+    "title": "Coorg Monsoon",
+    "date": "2026-01-01",
+    "tags": [
+      "trips"
+    ],
+    "url": "/years/2026/trips/coorg-monsoon/"
+  },
+  {
+    "title": "Sankranti at Home",
+    "date": "2025-01-01",
+    "tags": [
+      "festivals"
+    ],
+    "url": "/years/2025/festivals/sankranti-home/"
+  },
+  {
+    "title": "Goa Escape",
+    "date": "2024-01-01",
+    "tags": [
+      "trips"
+    ],
+    "url": "/years/2024/trips/goa-escape/"
+  },
+  {
+    "title": "Diwali Lights",
+    "date": "2023-01-01",
+    "tags": [
+      "festivals"
+    ],
+    "url": "/years/2023/festivals/diwali-lights/"
   }
 ]

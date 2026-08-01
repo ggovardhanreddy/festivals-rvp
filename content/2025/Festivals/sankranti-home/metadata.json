@@ -1,0 +1,26 @@
+{
+  "year": "2025",
+  "category": "Festivals",
+  "slug": "sankranti-home",
+  "title": "Sankranti at Home",
+  "description": "A cherished festivals chapter from 2025.",
+  "cover": "/thumbs/2025/festivals/sankranti-home/sankranti-home.svg",
+  "published": true,
+  "order": 0,
+  "media": [
+    {
+      "id": "2025-sankranti-home",
+      "file": "/images/2025/festivals/sankranti-home/sankranti-home.svg",
+      "thumb": "/thumbs/2025/festivals/sankranti-home/sankranti-home.svg",
+      "type": "image",
+      "title": "Sankranti at Home",
+      "date": "2025-01-01",
+      "tags": [
+        "festivals"
+      ],
+      "favorite": true,
+      "width": 1200,
+      "height": 800
+    }
+  ]
+}

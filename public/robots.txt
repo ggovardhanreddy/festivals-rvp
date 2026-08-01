@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://festivals-rvp.pages.dev/sitemap.xml

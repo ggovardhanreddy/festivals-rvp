@@ -1,1 +1,1 @@
-console.log("Google Takeout helper: export media manually, place files in originals/, then run npm run optimize. No Google API or credentials are used.");
+console.log('Export Google Photos with Google Takeout, place ZIP files in inbox/, then run npm run ingest. No account credentials are stored by this project.');

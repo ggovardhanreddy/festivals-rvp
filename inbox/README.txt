@@ -1,2 +1,2 @@
-Drop reviewed ZIP archives here before running `npm run ingest`.
-ZIP ingestion is deliberately local-only. Do not put credentials or private links in this folder.
+Drop ZIP files here, then run: npm run ingest
+Folders may contain photos, videos, or documents. Files are deduplicated by SHA-256. Use npm run ingest -- --publish to publish after processing.
