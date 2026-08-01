@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare:site": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts && tsx scripts/generate-all.ts",
+    "prepare:site": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts && tsx scripts/generate-logo-system.ts && tsx scripts/generate-all.ts",
     "sync": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts",
     "validate": "tsx scripts/validate-site.ts",
     "test": "tsx scripts/smoke-test.ts",
@@ -24,7 +24,8 @@
     "sample-data": "tsx scripts/sample-data.ts",
     "ensure-folders": "tsx scripts/ensure-folders.ts",
     "migrate:cms": "tsx scripts/migrate-cms-layout.ts",
-    "brand:assets": "tsx scripts/generate-brand-assets.ts"
+    "brand:assets": "tsx scripts/generate-brand-assets.ts",
+    "brand:logo": "tsx scripts/generate-logo-system.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

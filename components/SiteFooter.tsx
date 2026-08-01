@@ -12,7 +12,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-inner">
         <div>
-          <Logo />
+          <Logo variant="auto" />
           <p className="muted" style={{ marginTop: "0.75rem", maxWidth: "42ch" }}>
             {SITE_NAME} — {SITE_TAGLINE} for {VILLAGE_NAME}. A private heritage
             archive of Sankranthi, Vinayaka Chavithi, birthdays, and journeys.

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="RVP Youth">
+  <title>RVP Youth</title>
+  <defs>
+    <linearGradient id="ld" x1="8%" y1="0%" x2="92%" y2="100%">
+      <stop offset="0%" stop-color="#1e4fd6"/>
+      <stop offset="16%" stop-color="#06b6d4"/>
+      <stop offset="32%" stop-color="#10b981"/>
+      <stop offset="48%" stop-color="#7c3aed"/>
+      <stop offset="64%" stop-color="#ec4899"/>
+      <stop offset="80%" stop-color="#d4a45a"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="ldShine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="ldBloom" cx="34%" cy="28%" r="68%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g transform="translate(2 0)">
+  <circle cx="32" cy="32" r="29" fill="url(#ld)" opacity="0.16"/>
+  <circle cx="32" cy="32" r="27" fill="none" stroke="url(#ld)" stroke-width="2.6"/>
+  <circle cx="32" cy="32" r="22.5" fill="url(#ldBloom)"/>
+  <path d="M14 38.5 C18 30.5 24.5 26 32 26 C39.5 26 46 30.5 50 38.5" fill="none" stroke="url(#ld)" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M16 40.5 A16 16 0 0 1 48 40.5" fill="url(#ld)" opacity="0.92"/>
+  <path d="M32 40.2 V18.5" stroke="url(#ld)" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M32 24.5 L23.5 16.2" stroke="url(#ld)" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M32 24.5 L40.5 16.2" stroke="url(#ld)" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="32" cy="15.2" r="2.2" fill="url(#ld)"/>
+  <ellipse cx="26" cy="20" rx="10" ry="6" fill="url(#ldShine)"/>
+  </g>
+  <text x="78" y="39" fill="url(#ld)" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="1.8">RVP</text>
+  <text x="146" y="39" fill="url(#ld)" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="500" letter-spacing="2.6">Youth</text>
+</svg>

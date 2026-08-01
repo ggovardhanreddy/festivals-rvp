@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="RVP Youth">
+  <title>RVP Youth</title>
+  <g transform="translate(2 0)">
+  <circle cx="32" cy="32" r="27" fill="none" stroke="#ffffff" stroke-width="2.4"/>
+  <circle cx="32" cy="32" r="22.5" fill="#ffffff" opacity="0.08"/>
+  <path d="M14 38.5 C18 30.5 24.5 26 32 26 C39.5 26 46 30.5 50 38.5" fill="none" stroke="#f0d7a0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M16 40.5 A16 16 0 0 1 48 40.5" fill="#f0d7a0" opacity="0.92"/>
+  <path d="M32 40.2 V18.5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M32 24.5 L23.5 16.2" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M32 24.5 L40.5 16.2" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="32" cy="15.2" r="2.1" fill="#f0d7a0"/>
+  </g>
+  <text x="78" y="39" fill="#ffffff" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="1.8">RVP</text>
+  <text x="146" y="39" fill="#ffffff" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="500" letter-spacing="2.6">Youth</text>
+</svg>

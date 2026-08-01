@@ -37,10 +37,10 @@ export function LoadingScreen() {
             aria-hidden
           />
           <img
-            src={withBase("/brand/rvp-youth-logo-light.svg")}
+            src={withBase("/logo/loading-logo.svg")}
             alt="RVP Youth"
-            width={180}
-            height={52}
+            width={200}
+            height={56}
             className="landing-loader-logo"
           />
         </m.div>

@@ -55,7 +55,7 @@ export function CinematicHero() {
           transition={{ duration: 0.75, delay: reduce ? 0 : 0.12, ease: [0.22, 1, 0.36, 1] }}
         >
           <img
-            src={withBase("/brand/rvp-youth-logo-light.svg")}
+            src={withBase("/logo/logo-white.svg")}
             alt={SITE_NAME}
             className="landing-hero-brand"
             width={220}

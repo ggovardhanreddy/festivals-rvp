@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RVP Youth">
+  <title>RVP Youth</title>
+  <defs>
+    <linearGradient id="mo" x1="8%" y1="0%" x2="92%" y2="100%">
+      <stop offset="0%" stop-color="#1e4fd6"/>
+      <stop offset="16%" stop-color="#06b6d4"/>
+      <stop offset="32%" stop-color="#10b981"/>
+      <stop offset="48%" stop-color="#7c3aed"/>
+      <stop offset="64%" stop-color="#ec4899"/>
+      <stop offset="80%" stop-color="#d4a45a"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="moShine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="moBloom" cx="34%" cy="28%" r="68%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="29" fill="url(#mo)" opacity="0.14"/>
+  <circle cx="32" cy="32" r="27" fill="none" stroke="url(#mo)" stroke-width="2.5"/>
+  <text x="32" y="39" text-anchor="middle" fill="url(#mo)" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="20" font-weight="800" letter-spacing="-0.8">RVP</text>
+</svg>

@@ -35,8 +35,10 @@ function checkPublicAssets() {
     "public/sitemap.xml",
     "public/robots.txt",
     "public/manifest.webmanifest",
-    "public/brand/og-banner.jpg",
-    "public/brand/icon-512.png",
+    "public/logo/social-banner.png",
+    "public/logo/app-icon.png",
+    "public/logo/logo.svg",
+    "public/logo/favicon.svg",
   ]) {
     if (!exists(file)) errors.push(`Missing required asset: ${file}`);
   }

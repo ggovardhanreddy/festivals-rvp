@@ -85,13 +85,13 @@ fs.writeFileSync(
       theme_color: "#1f3d2e",
       icons: [
         {
-          src: `${iconBase}/brand/icon-192.png`,
+          src: `${iconBase}/logo/android-icon.png`,
           sizes: "192x192",
           type: "image/png",
           purpose: "any maskable",
         },
         {
-          src: `${iconBase}/brand/icon-512.png`,
+          src: `${iconBase}/logo/app-icon.png`,
           sizes: "512x512",
           type: "image/png",
           purpose: "any maskable",
