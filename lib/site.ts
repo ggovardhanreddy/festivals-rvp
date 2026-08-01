@@ -90,6 +90,12 @@ export const BUCKETS = [
 
 export type BucketKey = (typeof BUCKETS)[number]["key"];
 
+/** Festival chapter hero plates (never leave bucket pages blank). */
+export const FESTIVAL_HEROES: Partial<Record<BucketKey, string>> = {
+  "vinayaka-chavithi": "/brand/vinayaka-hero.webp",
+  sankranthi: "/brand/og-banner.jpg",
+};
+
 export const FESTIVALS: {
   key: FestivalKey;
   slug: string;

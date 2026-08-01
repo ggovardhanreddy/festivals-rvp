@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Vinayaka Chavithi">
+  <title>Vinayaka Chavithi</title>
+  <defs>
+    <linearGradient id="gold" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#f7e3b0"/>
+      <stop offset="45%" stop-color="#d4a45a"/>
+      <stop offset="100%" stop-color="#8f6a32"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#f0d7a0" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#f0d7a0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="120" cy="120" r="112" fill="#13241b"/>
+  <circle cx="120" cy="120" r="112" fill="url(#glow)"/>
+  <circle cx="120" cy="120" r="104" fill="none" stroke="url(#gold)" stroke-width="3"/>
+  <!-- Abstract auspicious crest: lamp + rising form (non-literal, iconic) -->
+  <path d="M120 178 C86 158 74 128 78 98 C82 72 98 56 120 52 C142 56 158 72 162 98 C166 128 154 158 120 178 Z" fill="url(#gold)" opacity="0.95"/>
+  <path d="M120 70 V42" stroke="#f7e3b0" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="120" cy="36" r="8" fill="#f7e3b0"/>
+  <path d="M96 110 C104 96 116 90 120 90 C124 90 136 96 144 110" fill="none" stroke="#13241b" stroke-width="5" stroke-linecap="round" opacity="0.35"/>
+  <path d="M108 132 H132" stroke="#13241b" stroke-width="4" stroke-linecap="round" opacity="0.28"/>
+  <text x="120" y="214" text-anchor="middle" fill="#f0d7a0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="2">VINAYAKA</text>
+</svg>

@@ -8,6 +8,7 @@ import {
 } from "@/lib/content";
 import {
   BUCKETS,
+  FESTIVAL_HEROES,
   VILLAGE_ADDRESS_LINE,
   VILLAGE_MAPS_URL,
   VILLAGE_NAME,
@@ -15,6 +16,8 @@ import {
 } from "@/lib/site";
 import { YouthPortrait } from "@/components/YouthPortrait";
 import { VillageDepthMap } from "@/components/VillageDepthMap";
+import { FestivalIdolBanner } from "@/components/FestivalIdolBanner";
+import { EmptyState } from "@/components/ui/empty-state";
 import { AdminClient } from "@/components/AdminClient";
 import { AlbumCard } from "@/components/AlbumCard";
 import { AlbumView } from "@/components/AlbumView";
@@ -81,7 +84,14 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
   const meta = BUCKETS.find((b) => b.key === bucket)!;
   const albums = albumsByBucket(bucket);
   const media = albums.flatMap((a) => a.media);
+  const images = media.filter((m) => m.type === "image");
   const featured = albums.filter((a) => a.media.some((m) => m.favorite)).slice(0, 3);
+  const highlightAlbums = featured.length ? featured : albums.slice(0, 3);
+  const heroImage =
+    FESTIVAL_HEROES[bucket] ||
+    albums.find((a) => a.cover)?.cover ||
+    images[0]?.file;
+
   return (
     <main className="page">
       <MemoryHero
@@ -92,9 +102,12 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
         primaryLabel="Open gallery"
         secondaryHref="/timeline/"
         secondaryLabel="Timeline"
-        backgroundImage={media.find((m) => m.type === "image")?.file}
+        backgroundImage={heroImage}
+        atmosphere={bucket === "vinayaka-chavithi" || bucket === "sankranthi"}
       />
-      <PrivateNotice />
+      {bucket === "vinayaka-chavithi" && (
+        <FestivalIdolBanner lede={meta.story} />
+      )}
       <Reveal className="section">
         <p className="eyebrow">Festival Story</p>
         <h2>Why this chapter matters</h2>
@@ -109,7 +122,7 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
         </div>
         <InteractiveVillageMap accent={BUCKET_ACCENT[bucket]} />
       </Reveal>
-      {!!featured.length && (
+      {!!highlightAlbums.length && (
         <Reveal className="section">
           <div className="section-head">
             <div>
@@ -118,7 +131,7 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
             </div>
           </div>
           <div className="grid-cards">
-            {featured.map((album, index) => (
+            {highlightAlbums.map((album, index) => (
               <AlbumCard
                 key={`${album.year}-${album.slug}-feat`}
                 album={album}
@@ -135,11 +148,20 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
             <h2>Browse the seasons</h2>
           </div>
         </div>
-        <YearGrid
-          years={[...new Set(albums.map((a) => a.year))].sort((a, b) =>
-            b.localeCompare(a),
-          )}
-        />
+        {albums.length ? (
+          <YearGrid
+            years={[...new Set(albums.map((a) => a.year))].sort((a, b) =>
+              b.localeCompare(a),
+            )}
+          />
+        ) : (
+          <EmptyState
+            title="No albums yet"
+            description={`Add photos under content/<YEAR>/${bucket}/ and push to main.`}
+            actionHref="/admin/"
+            actionLabel="CMS guide"
+          />
+        )}
       </Reveal>
       <Reveal className="section">
         <div className="grid-cards">
@@ -155,7 +177,16 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
             <h2>Every frame</h2>
           </div>
         </div>
-        <Gallery items={media} />
+        {media.length ? (
+          <Gallery items={media} />
+        ) : (
+          <EmptyState
+            title="Gallery is waiting"
+            description="Festival photos will appear here after the next content sync."
+            actionHref="/"
+            actionLabel="Back home"
+          />
+        )}
       </Reveal>
     </main>
   );
