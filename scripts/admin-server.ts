@@ -4,9 +4,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { importLocalFolder } from "../lib/import-media";
-import { CATEGORIES, type Category } from "../lib/paths";
-// Categories are festivals + birthdays only.
-
 const root = process.cwd();
 
 function loadEnvFile(filePath: string) {
@@ -142,26 +139,9 @@ const server = http.createServer(async (req, res) => {
       typeof value.path === "string" ? expandHome(value.path.trim()) : "";
     if (!folder) return json(res, 400, { error: "Folder path is required." });
 
-    const categoryRaw =
-      typeof value.category === "string" ? value.category.toLowerCase() : "auto";
-    const category =
-      categoryRaw === "auto"
-        ? "auto"
-        : (CATEGORIES.find((item) => item === categoryRaw) as Category | undefined);
-    if (!category) {
-      return json(res, 400, {
-        error: `Category must be auto or one of: ${CATEGORIES.join(", ")}`,
-      });
-    }
-
     try {
       const result = await importLocalFolder({
         sourceDir: folder,
-        category,
-        album:
-          typeof value.album === "string" && value.album.trim()
-            ? value.album.trim()
-            : "auto",
         keepOriginals: value.keepOriginals !== false,
         processImages: value.processImages !== false,
       });

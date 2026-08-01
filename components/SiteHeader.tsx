@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { m } from "framer-motion";
-import { NAV, SITE_BRAND } from "@/lib/site";
+import { NAV } from "@/lib/site";
 import { ThemeToggle } from "./Theme";
+import { Logo } from "./Logo";
 
 export function SiteHeader() {
   const pathname = usePathname() || "/";
@@ -18,9 +19,8 @@ export function SiteHeader() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
-        <Link href="/" className="brand">
-          {SITE_BRAND}
-          <small>Memories</small>
+        <Link href="/" className="brand-link" aria-label="RVP Youth home">
+          <Logo />
         </Link>
         <nav className="nav-links" aria-label="Primary">
           {NAV.map((item) => {

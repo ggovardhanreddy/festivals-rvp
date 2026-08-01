@@ -1,0 +1,65 @@
+{
+  "year": "2016",
+  "category": "Festivals",
+  "slug": "sankranthi",
+  "title": "Sankranthi 2016",
+  "description": "Sankranthi 2016 memories.",
+  "published": true,
+  "order": 0,
+  "media": [
+    {
+      "id": "d133d7b502b16328",
+      "file": "/images/2016/sankranthi/dsc-0960-jpg.webp",
+      "thumb": "/thumbs/2016/sankranthi/dsc-0960-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0960 Jpg",
+      "date": "2016-01-14",
+      "tags": [
+        "sankranthi",
+        "2016"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRgYBAABXRUJQVlA4IPoAAABwBgCdASoYACsAPu1oqU6ppiOiKrgN+TAdiUAYnyZoFbx4j3pcicD+/6pF6cfKaQdhpRq5qpTapHCp0eAA/urzS5TvYZd+cw4Ki/URvUaywrfmPFk29TkV/dOmawlCd1Twki1/IZcllW5VZfM6sf+nDx1fCcTfxYmaXH3ciqmgav22SD30wK+TYsUMHbmr26kKhpeDOsTah4xcfffnb48enuyvH5FaTIdWotUsyjB4ikb1gEZuK1cVCwLpdDFNdSCvfSvP90atQCiFGo4frJG3F6xUDjZTojHveSf7ibyWXZCy12UesP8uhiykgi9s4wyiE+POZtDXkAAA",
+      "sha256": "d133d7b502b16328452414c3b0899c4ceffd3f2e6501ca00a4047b4ec91181c3"
+    },
+    {
+      "id": "83ec339dbb3b933d",
+      "file": "/images/2016/sankranthi/dsc-0961-jpg.webp",
+      "thumb": "/thumbs/2016/sankranthi/dsc-0961-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0961 Jpg",
+      "date": "2016-01-14",
+      "tags": [
+        "sankranthi",
+        "2016"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAwBACdASoYAA4APu1iqU2ppaQiMAgBMB2JYgCdLwABrPzwlde508DLfOgAzUb8Wzs0pQYSIBo+fa8ETkg2rDnQbUyKfcr1DliMziWurNi68ifkXichJ+gOU6WO83LtVAIlO5lhxa7TuwtBScq2Sxu8i3aFzdUxCOEiDxcAAAA=",
+      "sha256": "83ec339dbb3b933d6fd42837854b7713d6c2dbc4bf25f854995ed4e594507f01"
+    },
+    {
+      "id": "22e3a862a92417d5",
+      "file": "/images/2016/sankranthi/dsc-0968-jpg.webp",
+      "thumb": "/thumbs/2016/sankranthi/dsc-0968-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0968 Jpg",
+      "date": "2016-01-14",
+      "tags": [
+        "sankranthi",
+        "2016"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRuAAAABXRUJQVlA4INQAAACwBgCdASoYACsAPuFcqE2opSQiNVgMARAcCWIAwvgU0Y0vvNcl4xAHtprXGqSBVxiYlRzVIRRTEibGiHigoADdaKIeE6BEyMiLMPGQ9e64PSNBHTWkE0oMIqx6q//7HQRuLFVj6tAbSZffvb1mVsW2Ri2dp0UFPsPgQFJ05QZpUuXzIcj+eGbhQ7vtIJ/ucX6OwI2fYk0n1NgzkUS1cOTZDlr8VN0H+XwbDh0XICu77+Ul8AOkpIbOmZmEPMw0tHM7FS4Tiy21ZUdhlD55ZxMdlfgAAA==",
+      "sha256": "22e3a862a92417d5eed346ef86513b8b23ed2d7eaa8b3e2cf142caeb41e02025"
+    }
+  ],
+  "bucket": "sankranthi",
+  "festival": "sankranthi",
+  "cover": "/thumbs/2016/sankranthi/dsc-0960-jpg.webp"
+}

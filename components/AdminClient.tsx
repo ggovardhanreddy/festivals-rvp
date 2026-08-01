@@ -8,8 +8,10 @@ type ImportResult = {
   scanned: number;
   imported: number;
   skippedDuplicates: number;
+  nearDuplicatesReview?: number;
   skippedUnsupported: number;
   unknownYear: number;
+  byBucket?: Record<string, number>;
   albumsTouched: string[];
   errors: string[];
 };
@@ -17,9 +19,9 @@ type ImportResult = {
 export function AdminClient() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
-  const [folder, setFolder] = useState("");
-  const [category, setCategory] = useState("auto");
-  const [album, setAlbum] = useState("");
+  const [folder, setFolder] = useState(
+    "/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest",
+  );
   const [keepOriginals, setKeepOriginals] = useState(true);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -69,8 +71,6 @@ export function AdminClient() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           path: folder.trim(),
-          category,
-          album: album.trim() || "auto",
           keepOriginals,
           processImages: true,
         }),
@@ -167,29 +167,11 @@ export function AdminClient() {
       </p>
 
       <label>
-        Local folder path
+        Local folder path (default Fest source)
         <input
           value={folder}
           onChange={(e) => setFolder(e.target.value)}
-          placeholder="~/Downloads or /Users/you/Pictures/Family"
-        />
-      </label>
-
-      <label>
-        Category
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="auto">Auto-detect (festivals / birthdays)</option>
-          <option value="festivals">festivals (Sankranthi / Vinayaka Chavithi)</option>
-          <option value="birthdays">birthdays</option>
-        </select>
-      </label>
-
-      <label>
-        Album name (optional)
-        <input
-          value={album}
-          onChange={(e) => setAlbum(e.target.value)}
-          placeholder="Leave blank to use each subfolder name"
+          placeholder="/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest"
         />
       </label>
 
@@ -219,10 +201,10 @@ export function AdminClient() {
       {lastImport && (
         <div className="notice">
           <p>
-            Scanned {lastImport.scanned}, imported {lastImport.imported},
-            duplicates skipped {lastImport.skippedDuplicates}, unsupported{" "}
-            {lastImport.skippedUnsupported}, unknown year{" "}
-            {lastImport.unknownYear}.
+            Scanned {lastImport.scanned}, imported {lastImport.imported}, exact
+            dupes {lastImport.skippedDuplicates}, near-dupe review{" "}
+            {lastImport.nearDuplicatesReview || 0}, unsupported{" "}
+            {lastImport.skippedUnsupported}.
           </p>
           {!!lastImport.albumsTouched.length && (
             <p>Albums: {lastImport.albumsTouched.join(", ")}</p>

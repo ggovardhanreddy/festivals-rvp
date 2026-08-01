@@ -1,0 +1,47 @@
+{
+  "year": "2015",
+  "category": "Trips",
+  "slug": "fun-trips",
+  "title": "Fun Trips 2015",
+  "description": "Trips and moments — including photos awaiting a more specific festival or birthday home.",
+  "published": true,
+  "order": 50,
+  "media": [
+    {
+      "id": "4734eefa7cb53811",
+      "file": "/images/2015/fun-trips/dsc-0618-jpg.webp",
+      "thumb": "/thumbs/2015/fun-trips/dsc-0618-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0618 Jpg",
+      "date": "2015-12-20",
+      "tags": [
+        "fun-trips",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 1920,
+      "height": 1080,
+      "blurDataURL": "data:image/webp;base64,UklGRswAAABXRUJQVlA4IMAAAADQBACdASoYAA4APu1iqU2ppaOiMAgBMB2JZgCdMoMpA0fp2jOz2IhUZzeZSADkwADOCXFVJ+l1dJF4hpeWpvRco4IDjOGRTLbVj5+Tr2GiMRNR/ykhvYBnbBW1wBNxlbuPocwn9BItKbOtYfjpHVLEY5R41hShrumuLUxMa8cvfHp1XFVt+wOyshhwZXWwBLhk3b3h/IvXqB2e/zXtXNSSw3U0YAFUj5Yupuic02ZInZ3EQt0f21jvFxo5B9HAAAA=",
+      "sha256": "4734eefa7cb53811ec652f97902d0d56502ef790a9b1434a26a9028a4d11058f"
+    },
+    {
+      "id": "7b6e5c6539459345",
+      "file": "/images/2015/fun-trips/dsc-0619-jpg.webp",
+      "thumb": "/thumbs/2015/fun-trips/dsc-0619-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0619 Jpg",
+      "date": "2015-12-20",
+      "tags": [
+        "fun-trips",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 1920,
+      "height": 1080,
+      "blurDataURL": "data:image/webp;base64,UklGRsQAAABXRUJQVlA4ILgAAABQBACdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdMoMrZ0k8yP8qVwZPJ/kAAPx+ydLsfXlnIg6i967yrw9I7CihOYnwF40k3YqEjtRu/4y88ISG+/4bmfr0OLa330TMeH9sEmU0JWbm8LMUTordqzVfge1h8730XySZG9Q2mVtXvJI/jdOrQBaAKlu+W4qyiYEkWQA7nJGhyikJYqVR6yfHsGHSM8lzB5qwpEERIGcIlMZf63hAAAAA",
+      "sha256": "7b6e5c653945934577a72736f865099a6b9b56a544339a82a94193d1ef6986c9"
+    }
+  ],
+  "bucket": "fun-trips",
+  "cover": "/thumbs/2015/fun-trips/dsc-0618-jpg.webp"
+}

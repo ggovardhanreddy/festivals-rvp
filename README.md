@@ -1,44 +1,38 @@
-# Festivals RVP / RVP Memories
+# RVP Youth (`festivals-rvp`)
 
-A premium private memory book for **Govardhan Reddy**.
+Premium interactive memory experience for **Govardhan Reddy**.
 
+- **Brand:** RVP Youth  
 - **Repo:** https://github.com/ggovardhanreddy/festivals-rvp  
-- **Live:** https://ggovardhanreddy.github.io/festivals-rvp/
+- **Live (GitHub Pages):** https://ggovardhanreddy.github.io/festivals-rvp/
 
 ## Sections
 
-- Home
-- Timeline
-- Festivals (**Sankranthi** and **Vinayaka Chavithi** only)
-- Birthdays
-- Search
-- About
+Home · Sankranthi · Vinayaka Chavithi · RVP Birthdays · Fun Trips · Timeline · Search · About
 
-No trips, family, documents, videos, or other festival categories.
-
-## Local development
+## Import source (mandatory default)
 
 ```bash
-npm install
-npm run admin-hash "your-password"   # paste into .env.local
-npm run sample-data
-npm run generate
-npm run dev
+/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest
 ```
-
-## Import local photos (no ZIP required)
 
 ```bash
-npm run import:folder -- --dir "~/Downloads/Sankranthi-2026" --category festivals --album sankranthi
-npm run import:folder -- --dir "~/Downloads/Birthday" --category birthdays
+npm run import:folder
 ```
 
-Import never publishes. After review:
+Organizes into:
+
+```text
+public/images/<YEAR>/sankranthi/
+public/images/<YEAR>/vinayaka-chavithi/
+public/images/<YEAR>/rvp-birthdays/
+public/images/<YEAR>/fun-trips/
+```
+
+Exact duplicates skipped (SHA-256). Visually similar images go to `review/near-duplicates/` for admin review.
+
+Publish only after confirmation:
 
 ```bash
 npm run publish -- --confirm
 ```
-
-## Design
-
-Premium glass UI, Playfair Display + Inter + Poppins, light/dark mode, Framer Motion animations with `prefers-reduced-motion` support, and static export for free GitHub / Cloudflare Pages hosting.

@@ -94,26 +94,91 @@ select {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.9rem max(1.25rem, 4vw);
-  backdrop-filter: blur(18px) saturate(1.2);
+  padding: 0.85rem max(1.25rem, 4vw);
+  backdrop-filter: blur(22px) saturate(1.25);
   background: color-mix(in srgb, var(--glass) 88%, transparent);
   border-bottom: 1px solid var(--line);
 }
 
-.brand {
-  display: grid;
-  gap: 0.1rem;
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  line-height: 1;
+.brand-link {
+  display: inline-flex;
+  align-items: center;
 }
 
-.brand small {
+.brand-logo {
+  height: 42px;
+  width: auto;
+  display: block;
+}
+
+.hero-logo {
+  height: 54px;
+  width: auto;
+  filter: drop-shadow(0 10px 30px rgba(212, 164, 90, 0.35));
+}
+
+.loader-logo {
+  height: 72px;
+  width: auto;
+}
+
+.aurora {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(212, 164, 90, 0.28), transparent 34%),
+    radial-gradient(circle at 80% 20%, rgba(120, 160, 190, 0.18), transparent 32%),
+    radial-gradient(circle at 60% 80%, rgba(180, 100, 80, 0.16), transparent 36%);
+  filter: blur(18px);
+  animation: aurora 14s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes aurora {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.05);
+  }
+}
+
+.scroll-hint {
+  margin-top: 2rem;
   font-family: var(--font-accent);
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--muted);
+}
+
+.site-footer {
+  margin-top: 2rem;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--glass) 70%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.footer-inner {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.footer-links {
+  display: grid;
+  gap: 0.55rem;
+  font-family: var(--font-accent);
+  color: var(--muted);
+}
+
+.footer-links a:hover {
+  color: var(--ink);
 }
 
 .nav-links {

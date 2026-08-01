@@ -1,0 +1,31 @@
+{
+  "year": "2013",
+  "category": "Festivals",
+  "slug": "vinayaka-chavithi",
+  "title": "Vinayaka Chavithi 2013",
+  "description": "Vinayaka Chavithi 2013 memories.",
+  "published": true,
+  "order": 0,
+  "media": [
+    {
+      "id": "723ceb72f6f4e858",
+      "file": "/images/2013/vinayaka-chavithi/img-20130924-134706.webp",
+      "thumb": "/thumbs/2013/vinayaka-chavithi/img-20130924-134706.webp",
+      "type": "image",
+      "title": "Img 20130924 134706",
+      "date": "2013-09-24",
+      "tags": [
+        "vinayaka-chavithi",
+        "2013"
+      ],
+      "favorite": false,
+      "width": 1536,
+      "height": 2048,
+      "blurDataURL": "data:image/webp;base64,UklGRvAAAABXRUJQVlA4IOQAAAAQBQCdASoYACAAPu1iqE2ppaOiMAgBMB2JYwDE2CKT5exdXn2oSCYnDYUWzcoJ446AAP6VDl0PcOnqJ7zATydNTdgEsHV/67sY65cz+RCq6oGLJkUYGSTqXrKWodcBRWy38e7QhRT29ECc13OS2/haXGsF7dKXOfSzx3NiTjjmctH+lfATRj0ceEhdnjOFJzYRcp9mcOupw/Ua1hNrRsr7F1la3p8bN0EkM+J4/OElHKUR4JEkwpxY46RXB7O/Z0yBecTQjj61mJZKmV8+2/29M1U8R/8/vUBYH6qDGoZrKQkdwAA=",
+      "sha256": "723ceb72f6f4e8588c392adfee4046db668eb61f16abb4e6354b119308a6be91"
+    }
+  ],
+  "bucket": "vinayaka-chavithi",
+  "festival": "vinayaka-chavithi",
+  "cover": "/thumbs/2013/vinayaka-chavithi/img-20130924-134706.webp"
+}

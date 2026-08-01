@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { basePath, withBase } from "@/lib/base";
@@ -33,12 +34,20 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${SITE_NAME} | Festivals RVP`,
+    default: `${SITE_NAME} | Premium Memory Experience`,
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "A premium private memory book for Sankranthi, Vinayaka Chavithi, and birthdays.",
-  openGraph: { type: "website", siteName: SITE_NAME },
+    "RVP Youth — a premium interactive memory experience for Sankranthi, Vinayaka Chavithi, birthdays, and fun trips.",
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    images: [{ url: withBase("/brand/rvp-youth-mark.svg") }],
+  },
+  icons: {
+    icon: [{ url: withBase("/brand/rvp-youth-mark.svg") }],
+    apple: [{ url: withBase("/brand/rvp-youth-mark.svg") }],
+  },
   robots: { index: true, follow: true },
 };
 
@@ -56,6 +65,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="site-shell">
             <SiteHeader />
             {children}
+            <SiteFooter />
           </div>
         </Providers>
         <script

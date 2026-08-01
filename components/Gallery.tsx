@@ -86,7 +86,16 @@ export function Gallery({ items }: { items: Media[] }) {
                 src={withBase(media.thumb || media.file)}
                 alt={media.title}
                 loading="lazy"
+                decoding="async"
                 draggable={false}
+                style={
+                  media.blurDataURL
+                    ? {
+                        backgroundImage: `url(${media.blurDataURL})`,
+                        backgroundSize: "cover",
+                      }
+                    : undefined
+                }
               />
             ) : (
               <div className="card-body">

@@ -7,3 +7,6 @@ inbox/*.zip
 inbox/*.processed
 originals/**
 !originals/.gitkeep
+review/**
+!review/.gitkeep
+!review/near-duplicates/.gitkeep

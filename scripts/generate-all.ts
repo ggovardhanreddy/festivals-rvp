@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { publicAlbums, allMedia, years } from "../lib/content";
-import { FESTIVALS } from "../lib/site";
-import { albumHref } from "../lib/site";
+import { BUCKETS, albumHref } from "../lib/site";
 
 const root = process.cwd();
 const url =
@@ -15,13 +14,12 @@ const media = allMedia();
 const routes = [
   "",
   "timeline",
-  "festivals",
-  "birthdays",
   "search",
   "about",
   "years",
-  ...FESTIVALS.map((festival) => `festivals/${festival.slug}`),
+  ...BUCKETS.map((b) => b.key),
   ...years().map((year) => `years/${year}`),
+  ...BUCKETS.flatMap((b) => years().map((year) => `${b.key}/${year}`)),
   ...albums.map((album) => albumHref(album).replace(/^\/|\/$/g, "")),
 ];
 
@@ -33,7 +31,7 @@ fs.writeFileSync(
       date: item.date,
       tags: item.tags,
       album: item.album.title,
-      category: item.album.category,
+      bucket: item.album.bucket,
       url: `${base}${albumHref(item.album)}`,
     })),
     null,
@@ -43,14 +41,16 @@ fs.writeFileSync(
 
 fs.writeFileSync(
   path.join(root, "public", "sitemap.xml"),
-  `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes
+  `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[
+    ...new Set(routes),
+  ]
     .map((route) => `<url><loc>${url}/${route}</loc></url>`)
     .join("")}</urlset>`,
 );
 
 fs.writeFileSync(
   path.join(root, "public", "feed.xml"),
-  `<?xml version="1.0"?><rss version="2.0"><channel><title>RVP Memories</title><link>${url}</link><description>Sankranthi, Vinayaka Chavithi, and birthday memories</description>${albums
+  `<?xml version="1.0"?><rss version="2.0"><channel><title>RVP Youth</title><link>${url}</link><description>Premium memory experience</description>${albums
     .map(
       (album) =>
         `<item><title>${album.title}</title><link>${url}${albumHref(album)}</link><description>${album.description}</description></item>`,
@@ -60,9 +60,7 @@ fs.writeFileSync(
 
 fs.writeFileSync(
   path.join(root, "public", "sw.js"),
-  `const CACHE="rvp-memories-v2",BASE=${JSON.stringify(base || "")};self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([BASE+"/",BASE+"/offline/",BASE+"/festivals/",BASE+"/birthdays/"]))));self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match(BASE+"/offline/"))))});`,
+  `const CACHE="rvp-youth-v1",BASE=${JSON.stringify(base || "")};self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([BASE+"/",BASE+"/offline/",BASE+"/sankranthi/",BASE+"/vinayaka-chavithi/"]))));self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match(BASE+"/offline/"))))});`,
 );
 
-console.log(
-  `Generated sitemap, search index and RSS for ${albums.length} albums.`,
-);
+console.log(`Generated SEO assets for ${albums.length} RVP Youth albums.`);

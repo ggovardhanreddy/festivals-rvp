@@ -1,0 +1,456 @@
+{
+  "year": "2015",
+  "category": "Festivals",
+  "slug": "vinayaka-chavithi",
+  "title": "Vinayaka Chavithi 2015",
+  "description": "Vinayaka Chavithi 2015 memories.",
+  "published": true,
+  "order": 0,
+  "media": [
+    {
+      "id": "2f13c54a8a19bb7b",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0024-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0024-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0024 Jpg",
+      "date": "2015-09-16",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRtgAAABXRUJQVlA4IMwAAAAwBgCdASoYACsAPu1wrlMppiQipWmZMB2JYwDImFzZmoYuGZOb3urFINLa2/cUxSEpVgucPQsIRIsAAP729YNa7HK+0Q862O2Md6yKa3/QdFgVcLSug5L1KKo4gg71bKkb9/cMTWalG0Ud4NPigCCuom5u4UcjJPSBuMQcgw7ieDDRjnBFA5HYZXt6E9ildNT9EszOcAf3zgkK0N/BSzXIELWkJlZT4eC6llQsM89QAq3MLPza/X37oN0w2t9IgLx42YlkFQSYIcYAAAA=",
+      "sha256": "2f13c54a8a19bb7b86118807c60c2014af56044a53345c4b7ad12f3849f48426"
+    },
+    {
+      "id": "e32fe853dc37041f",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0025-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0025-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0025 Jpg",
+      "date": "2015-09-16",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRvoAAABXRUJQVlA4IO4AAADwBQCdASoYACsAPu1qrVCppaQipWzJMB2JYgC/PbNFkl67aCB2qTbU8m+Jn7Lg7EymPgvQqAkWsAD+/EbUPTp/oP7ZutQQ39AwUjoz2uUgZ0e38XKL79yVkpzqfqlVdYZIP0mOpHUK1NDj/VVsyRGWQ7ggzLsMmhmRLdG2PS1VCk1JMgaFRfZeXinGZ94wQqch4+inBdeKZ6Z2HBy1oeGO+Z0p72sXbH8l4W0d36NAbe6wx6izW1S4R5GlwrVSGwb+7iAZkTiZ0cGciXgqKxMBxyECkZhUM2nHY3uyWYFBXaI3At5mPhNz/oj+3gAA",
+      "sha256": "e32fe853dc37041f66717dcfd13617e8c8b220dfbcc7343a5cf69639f842cd4f"
+    },
+    {
+      "id": "1d2a5df34e8d3513",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0026-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0026-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0026 Jpg",
+      "date": "2015-09-16",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRv4AAABXRUJQVlA4IPIAAACQBwCdASoYACsAPu1gp08ppSMiMBVdUTAdiUAYyj9UCmV2GoZJfOTElwbczkdyDzmTRZvB2i5qbQZLD6FPwhbsLINMVAAA/vVniZav+lWtkCXc3psz5Y5ZfookIksnn3Fxo6MByNjSw+b3m4eSCKMOaB5/wo8SwTJ8StTexDNiCIBcNuEtGplnNlZSa6hvFs9TGdqdGY8uQQIjVWVS9/mfk3zV/B6IHLtwL3h4W9l509qHMP+jba+3+p4+lkArfsbNnFVmW0PlWYbXIWk9O+AgVKth0jaL+1UjtrRbsOUntWhiJBxcOFiZc6N2E+8n5kgAAA==",
+      "sha256": "1d2a5df34e8d35132660b4c15a4ac3399dbc6cf09498259fb559df1eeddb9e3c"
+    },
+    {
+      "id": "f694381df6adf83e",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0027-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0027-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0027 Jpg",
+      "date": "2015-09-16",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRtYAAABXRUJQVlA4IMoAAACwBgCdASoYACsAPu1qqlCppaOipW5hMB2JQBibMTHMSAR9xwOvehuPIIeuWJJL1AuE48zvoW8/Ssm48S8DAAD++ElCSmj53B1ZoqO39gQoEP3xU8Dn87W4E19hl0ky/sLAAmEGeRkVKQvApbg+G+i9ZU/RUTbsc/MgjjWwMnpyYzppOrY8CMCweCA7g16GbDm8u7MqqkxbdLZM4oz4zWCVpUYvJheVDmmwgSUyx2FPQYw/f9GYovEIPi4GeJQptZRUZbrYt1aogAAA",
+      "sha256": "f694381df6adf83ed74316ff7ef8d57c36d8a153eab4536628aab74729cc9a0c"
+    },
+    {
+      "id": "19c379687a519fa6",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0028-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0028-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0028 Jpg",
+      "date": "2015-09-16",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRjABAABXRUJQVlA4ICQBAADQBwCdASoYACsAPu1uq1EppqOiqrgKATAdiWwAuzOYA9eYA8i8Vmd9iltjQNbUWlDiulP4xFVlO0hBz6sLhizxdJdanmumAAD+9COGIu9PAcC/HTcMzmgYqy3WND9KU5zhmDW5iohZEHQgRHZaOSJaHLZaGQwEx8Pr1nVuMp7KDOjOZuz8731QRazMEBVwjt+jVJZr4PXNq5gDEoS/tWE0C7VE0Ib0i4A/peGCTZGkP8ElaFbIaGAQxiIxWuLAZlsZQPGRYYAJ3+dtLJsLLjdH/kZtQCEAe5mnVuAhaqw1KEeXGjPXf7296T+l5qBxJkLd7sSzx+OLzBBdLN9+QZLHJ0kBUm0fJ50K1mdqi4HrebdPxdRtsTQ80Fa0l8UyemFxfAAA",
+      "sha256": "19c379687a519fa6158b25d163fb5c53a1691ad2679eb2125fa9a982d4e7e193"
+    },
+    {
+      "id": "713f4f872d0b763f",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0035-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0035-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0035 Jpg",
+      "date": "2015-09-16",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 1920,
+      "height": 1080,
+      "blurDataURL": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAABwBACdASoYAA4APu1iqU2ppaOiMAgBMB2JaACdAdwLhPRmypPWvSlbuqggQAD+ymBTlrTzLC2W1Z1ln1o5jLEjNsmqR1v5FOc6gaPpYfcob53Q2Bozp9KPF7sRZdCTlZQx3HrYwOK7C8WVgeqfHbAsFY2sBHgXicRd/jirtqrzse7Xj3LwxEF28XTQBou/C7dbWFpzGJOJLcENq/ZVo1kcxhOIu5zbRf8XgsCpwzb/69MQP+SAAA==",
+      "sha256": "713f4f872d0b763ff5d499d8bbda078407d561a8dc9943fb29795ad558a08df8"
+    },
+    {
+      "id": "b58012b2203a509b",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0037-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0037-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0037 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRnABAABXRUJQVlA4IGQBAADwBwCdASoYACsAPu1orVAppaQisBVYATAdiWwAuzNmWAHei3uZbmkx7xZNou6vlMk74IM26ttKoH5cYWHarUBGaC8pT9o8QGAA/qNyh83p2oC+Rl07I93a+3m1G5ahhs0WpYS4qsBGlyBKe1iCcDuyRHpDM4kT0AaJVFGEOAzsSPqPj1AYE1rbQ3Vo3FWQRlmM0ZUdBnSCkigJ0V9/FEhI9qd36zAN+BSZUzGgzu+eNN0QR6a/cTTAD9JOy0BTlE3pdNtDjkaMOR4eM550G5FWhaAh5LxGvE7ugR61+sPGd+27Y/OVlRQxjwQIzk+EmqY+F83peuKWE9YD/Fael3P44vqMPxBQXeZf49lImFPDx+RcH9uPa/rpZj5jRUa8v42ujcC7zF3v/aba4ATZwLQ0LW/awxkorDDqs2PwQy4mgdX5ri0W7uPSZvUCUS1R+E3MqiwudGsTI5rTtCUhG9qMligAAA==",
+      "sha256": "b58012b2203a509b4e153f009c69988cbf0d1e15dea892f146844bca561c4c4e"
+    },
+    {
+      "id": "679277b33b943084",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0038-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0038-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0038 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4IKoAAABQBACdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdDiACPA96Qn8nUF8s+8gAAMURDnniYgwkqO6thR6FL+0Vi+OkOOivBUs5/LOuP2NwCTtpbW9noTwRTgTKgqLp91j33tSdPU6+5835+Gl8VypkcVJTIQYiGQf/em0hsQYeBCcmVY2oQPQgRsrDRKI4D/uscL4xF4xEU3Gdw2Z6e/FoWeuTzzZ0ktwsr8bEAA==",
+      "sha256": "679277b33b943084e819a2fce550e0bdbbd06d63e3b3356054b462b4db2f7db6"
+    },
+    {
+      "id": "b0805e101c76d267",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0039-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0039-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0039 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAADQAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdAYxsR69fv+3WquAAyTCCLWmW4Face7pMFKJiy1cmgFmZMwuS3M9oydK7QxMcu855mcuszcRPTLB1ii1yGPCpQ3KSXf6qAmb7v5UVgWbwM5HCm38r6ackQo44ml7gDN5BIqlwp1uCvMjtsM95rYDfAmBI2ghh328wJD3uZHkmbDiDWbBTyS2STAAA",
+      "sha256": "b0805e101c76d2673dea93ac80c5898993be9a89ac76d927826ec1e0f3ee99b2"
+    },
+    {
+      "id": "9f9fef8fb27b91c0",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0042-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0042-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0042 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAAAwBACdASoYAA4APu1iqU2ppaOiMAgBMB2JaACw7YyeeC9jNqKkjND1v4AAy0DWoHC1+GEQwSyWBYXTCNJVr+2YUBt6U2vYe8oLsyMDV2qCMeQ8Kq8P14Ooosmk7Hm1pu8gdmbWMrwg2VCKv7GcYDze4HZ2R5MH6ma9ZKD6CvpmOmDt3xsBMhmkVMIw4A54/2e3rn+rkqv3TA3Tewnv+9zNUETpqZiOiXBLdIVgtW64AA==",
+      "sha256": "9f9fef8fb27b91c0628188ae9d412fba86e722dd20451f9a87b93fd65b428258"
+    },
+    {
+      "id": "cbd36500490b18b5",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0055-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0055-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0055 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 1920,
+      "height": 1080,
+      "blurDataURL": "data:image/webp;base64,UklGRkIBAABXRUJQVlA4IDYBAACQBwCdASoYACsAPu1krVGppSQiqrgKATAdiWMAy17yToM1wv3SmKSrgo58u2f/DUnYz1Uueb2cXKhkpg+gDTicp0pJ8EAA/ooeWpGWW8EH+nyb2qrE8A+kf2Tb01J81hsZA2uQZZUyqnbBSS1MGJzrB4arOAkx6R/PFx9SFzs0YHEOY4N+JtIbG+bJr4U/PRNEDNZ0oNyNnKUO6Zx23ZM0+LlddYJiZEsVEEsjPLZ/mmK7OQL4H3ti0Za3yP6bUXfDSaiIjpohUJ1bJXo5maqPu+dovb52f4bZATArZQVpnnCyyykkYQ4d/JMB+6ZhazSAfZA0JOU6fjMscj+J31IQ5BSfG+4Z9jBt3R5DUKXUzXgNWbz7NksKGHLZQ99bJiLWPF+DsEVEbSNMT9VNDPspLMKmgAAA",
+      "sha256": "cbd36500490b18b508a5cbbca8122d38f8644cbe0179779b7d43ab16e7f8cf98"
+    },
+    {
+      "id": "831099ae318860b5",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0076-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0076-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0076 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAABwBACdASoYAA4APu1iqU2ppaOiMAgBMB2JYgCdAYxO7OFjjGXf6f0O4T1jPAD+aw+0T3gFHZatHxZrfmScPz9KAnCLcN1GtZ/JfhakmZRc0q4ZTB1hbGkA55E38CWpVcL5sAaT6xZ/mLAlwP/gNb3s15AAQA4l/QMs4Z4c1APTEBhE0XZyDZJFWCo00aKHxIudeTGkqCHUB90AAAA=",
+      "sha256": "831099ae318860b55442c47de8b55d2c42097874f4918c8d9b5e65f197804764"
+    },
+    {
+      "id": "4a66b9fceb028809",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0077-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0077-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0077 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAADQAwCdASoYAA4APu1iqU2ppaQiMAgBMB2JQBdgAiGo97ACvxMsrqAAzg0US+lQj7vi0rErzxYl3QWfScrasHA5jFJN3rOBSGA1ev/sDKY5/CWwn/oQMFzwo+bEmGSEHU2T68EfIIdU2dF/ST7dSleYLVv/tVnfUrOybOORiZMbM7C4ookmW37eFmOEuZkAAAA=",
+      "sha256": "4a66b9fceb028809a5e8e1d3fc51ed06e3b3cba1f0181983b9cc909c086032cc"
+    },
+    {
+      "id": "60fa1af704594ef5",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0078-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0078-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0078 Jpg",
+      "date": "2015-09-17",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAABwBACdASoYAA4APu1iqU2ppaOiMAgBMB2JQBfnZYJzwVvmypEbBY/eSBTu7AD+4NcEPadfmstdbbZoBjTgl7SorCjQ8JPR9wTlM1QPPvx2hxL200B0gIit1ZPcWTP22wbjC/+weGe8bObrR30MDJR2usYHrJWOpbKdUwTIeZQwX04X6WOOO3OTCc8UCfbsrff6/BfmdsfvuFOoLR1VJIRcv7ILyrAA",
+      "sha256": "60fa1af704594ef5ec5942fb9878ac84bad6c3d5f5b2b2f1ce75fa2a50b7f472"
+    },
+    {
+      "id": "f5a1bd8ec4ac1e71",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0093-1-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0093-1-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0093 1 Jpg",
+      "date": "2015-09-18",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAACQAwCdASoYAA4APu1iqk4ppaQiMAgBMB2JbACdABoKKayRXoMgAP7ytK55R4qaWuRfRFgmANaVOYO64e//2dnrQj8lW7IxpsIs0hbZgfB88UEMf5iYBMMFSagI+rX66724mfjD95H7nQwUAAA=",
+      "sha256": "f5a1bd8ec4ac1e71ad8e2e8d7de7beb9ef1552a991c3fbcc96cd802c0d2a5512"
+    },
+    {
+      "id": "02e031023abceed9",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0095-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0095-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0095 Jpg",
+      "date": "2015-09-18",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRvYAAABXRUJQVlA4IOoAAAAwBgCdASoYACsAPu1wrVIppiQipWsxMB2JbACBrE7lXIFxBJEjOmopS5byRmPvzuXr881FarEmUDtgAP7vDwi+/qeS0DKqTh+T0AMzm6eACAtNr4u+gj3q//GFJSexPCfohfLvh8Uo7F/MgGAUPfVzka7DqyExqpDJ69+qT1VtN/RBCTSv5Nw9HQHwe8EGDns80eRVgwdVwP8Rj4j3HQzonp82nCFKB3iwHs0Qb/qjbx22LzUAXfaMCzQZPRKrgjyLqNssNzafzD5176FxS91CRFD2E2VVXqsQ9/PP62z7+e+lYt4dnU+cAAA=",
+      "sha256": "02e031023abceed93171d9c30bc9cbfc020650072878206e753ee176fff9ebed"
+    },
+    {
+      "id": "0c79acdedaa08513",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0096-1-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0096-1-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0096 1 Jpg",
+      "date": "2015-09-18",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRkABAABXRUJQVlA4IDQBAAAwBwCdASoYACsAPu1mpk+ppSMiKqwBMB2JbACBxj7oEAGZkBYBVroVm7umO6lkzAiaJH1e5lcZXm3oUGZWJu0VYAAA/ux8OBsMwrF1x4AmZjmaSCAPLUdl++aDUtypH//xvFubW6WZVKK0OD+ZZ5BDWUP95QiflRh4/jc3ixLLE+gDN3kBZ585i6MFgiNmEEntsUhYAm18BtyUAAqXlz45Ra635e2U4bATlSbPCs1MIbFsDzjnw+sqAFVovPhaadP88kwA3fpWrZwmsd6ixn4d2V3Y64I9H5ENi0SyjiMPwV5oMvc1MubeKdlzGiEAn013baRn13lRt3q6Wt0vR6hqbj8OHR+TSqcziy57+p6l0WJ5fEHpCIe9OWBJpDq4qJ/j8k4p4G3PkLSBx6zv4sBYY8AAAA==",
+      "sha256": "0c79acdedaa08513422b021da1e2580149974bebc5a48bde646bf5c61fee3641"
+    },
+    {
+      "id": "c9f18c9cb2e3e4e0",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0099-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0099-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0099 Jpg",
+      "date": "2015-09-18",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRkgBAABXRUJQVlA4IDwBAACQBwCdASoYACsAPu1qrU+ppiQiKqoBMB2JbACdMsIma96pq89UArB9OJPwi+T4yrik2Cc/fhuQTTqKfT2A4ZVHaRW+ygAA/qwS7OUOTX12jzo9FhJFSwEazdL2K7NJ+Po9o+BX/xIZ+6KWSsSgOOtEJCAiHKdH/h5dyjr5gx3s/RYewi3Z4Ke0kiBn6DDmO+eIo7H8TRdBxhbVHYXVJLz6uTc45CUi4cDsNpGnndO56uwvkTvCdW/yNMkrjQs2btwsYGMOL8x0WbP6rLeSfB26+uQeQbWO+0Kd2apySjsvm4JHOZVrbGGV5Q2GHQxvfjKN2BXqWZO6XJKCUyYcFoh/po/kb+Ln8+h9CwvukW4vwDIKwQHM6bbqMLvj2ZAfxu5Zbsaa6Wd/ygic1oU3Lv2D4/YYiCWoSH+38AAA",
+      "sha256": "c9f18c9cb2e3e4e02d799edbae3a5c81706059978a5c0b829336094350b8a447"
+    },
+    {
+      "id": "657886f3d81b2508",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0114-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0114-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0114 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRjYBAABXRUJQVlA4ICoBAACQBwCdASoYACsAPu1uq1GppiOipWzJMB2JQBUk7lTgNMS0spR+MNJAZjI9nsGTPL2CdFg/Ps0bx3xnJ5uV3AHS8aWMh4AA/vxGujmc5G4qJk5JuSO71kWD4c78KEtIX8bsIinUbaz+Gj46Kk6mG05XTC1UyIn8EfMV2Td0snQ7nCl7vW+QKoIhQ3HN8PFNKbDxpG9ILDj2I+ALqSQTsOhZRLSYoCorZevX6Lzl2AM0EKxZFZL7/PFejkso0BWKUZ0+texfwiLzimP9KdaJIvAp5REh5x1IOi/cFOs24fRF3iCzbZd1QzKdiJ48LQudRyZewkJ78WlUh27vqIBd/dsy/tGp/05H7JG5bLjuB3t2owDe+0r0HTokrB/5RZXSkaHRoIRRow0ykAAA",
+      "sha256": "657886f3d81b25085d8f9b8791539e3120325410559253cc71bf29c91f30972d"
+    },
+    {
+      "id": "fea42e3ecf4839f9",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0115-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0115-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0115 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRjoBAABXRUJQVlA4IC4BAACwBwCdASoYACsAPu1urVKppiQipWsxMB2JbAC7M4UCwAFxNGjf4muAg1aZj1xD9Jd71fiPNe9DaCXBddjnq/uaeJrat4xgAP77aNR6cjsN2F9xnrHxhraADvBwldIXCMwlwD4o8gaW7PCDUgK9vDloohtteaGMarjyarBpZg7AQiQlVWQv8s/Ef079poot+qdTUnJHnpekMLqrxKlSfly4P+C6+VJrUzvdzHVmFI8lt+qVkmvv6tre1/VqY53ASVrvl1EIfK893nH6xjs+h68okVF7aaBMMo1qfZBilRPblUwlpDgqfxyya+qsnqHba5K7jh1m7p8kimjQO+ycsPqdFEzDNq45sHuCAAdU3di4dkz7VVGjsfIHV0AxevGspLVxI98G4u5BJxnUW2AAAA==",
+      "sha256": "fea42e3ecf4839f9a5275c24c0e321c441908ef9ecb51c925874aa1c6e00bfcb"
+    },
+    {
+      "id": "869b18ba57833838",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0117-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0117-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0117 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRmwBAABXRUJQVlA4IGABAACwBwCdASoYACsAPu1krFGppKQiqrgKATAdiWwAuzNXoRrtmCASCFzsvh/TwFc48fr+cNOQ+MQ0y1+lzLhWsarYCzAuUICAAP78RhTj6QZwC2ExlzbXGAbtKoJKnb0bUtT1W//eOSOnElmNY+Cd3K9OKFWT17IFfk49Kz4NuDTe1A8KqpqVM8iTFsbwqicqz6eJE4TmGQwihjWnkcST5O/POKMb5XxsFcFCbyElENLWwWviS4HfeHxYC0EA6wRrzsNyUc8eKXMv21hbIHGtSBNR+xLd97pRFfOmZ3uUYGl+wtbaTFNONhx0dbSHQDzZ0D4IdmvlTxyl7hJYqigq0VIvP9FPfUZFJBGa9GQHOCi12n07XY0uF9fKWL8T0k9dxQSZjParlkGp5itxES50RELkeDdn8VXUQEFADMGjxbeY9imEpHvjeKqlsNMA9Q+s6+YfNnY6vnH+9/rlcNgo+iAA",
+      "sha256": "869b18ba5783383871fe43a9b39570220b10e532f5e847e0ea9866cbc4563e5e"
+    },
+    {
+      "id": "c94a02551f31d21b",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0121-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0121-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0121 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRr4AAABXRUJQVlA4ILIAAABQBACdASoYAA4APu1iqU2ppaOiMAgBMB2JagCdMoADZt1vYlbqmGy57sCAAP34gCj6azYGlI4ONOuMS1j83lUHpdVUb3SGtZa6xfVQTad65XBdwxExqLPwAwLRglHLehCKRM7rkIxlfQ8UWtHEe4Ab70QkACAPY4824zwtyRkcqPiBz3yFOj0LThOKa5MPdrUvIqbxr10hPulDt2K4t9dtE4e5WW4oE0XcqiEvv9CTQAAA",
+      "sha256": "c94a02551f31d21b65715b765b4ff63ffd4f0c08569101f1d8b46d942a988561"
+    },
+    {
+      "id": "eff480ddfedd650b",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0122-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0122-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0122 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAADwAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdABh51MmKuSF+2IsgAP7Hg6bTfnBk31OnvpulNc2MQWv4B6WbOfMQ/gOLfsQIg0VXz9v+ePLhcVC2uT9LACdhruVKn0oOJXWqqyHAP52+hz34QWF/pZ9tDod/JrL5vfi1+4Y6d6NPbTVHJfO3+Q9Ksj/K697qcM4UFkYAAA==",
+      "sha256": "eff480ddfedd650ba74f92be82c2bd0a68e485778b15d592b74d9c2ee810f5a4"
+    },
+    {
+      "id": "1d7790ff89a02c8a",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0123-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0123-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0123 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAAAwBACdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdMoACQPyNFJyOlKbpXAAA/uv/UEstgRkLkIl6U9JAOZi1H8HI8f3yX76xyXUuiCtHQScdBLIoznIkO6y7IeuHVMAOfbruzhjgmYQaoJr3LHMFNZ8MF6Blkt7gwQlfUoKOYzSPU8Agu/J3X/zIG1W+P/wWo+2AfumAAAA=",
+      "sha256": "1d7790ff89a02c8a730d7992dc9a66718838f387ece4fb49ab729828d06bd634"
+    },
+    {
+      "id": "d228dae477486712",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0124-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0124-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0124 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRsYAAABXRUJQVlA4ILoAAABQBACdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdMoADJ5jyU8Tdqh5WROMAAP7w36+rpL/1Yzbuye2i/MR+Fkbw5A6CfvpM6duTMtisIVbhbA9LY6NTsUpqrmmiXs8d4FeTFCBJ/6Bt2yrCuGMoPq1oYVrdN1l9Rj6bI5rk2ogfjc+IXN3HK8DuZMESPj4ZIr0gLKp4RnXAzppop5Q3z1xwes0OZdgZEssWmWU2aj+vz8fvHiMUaVPQAAA=",
+      "sha256": "d228dae477486712a0d5486fa11daf4c56432fce78884087e96f7ffa0b9d4428"
+    },
+    {
+      "id": "9bcf1e712924f8a5",
+      "file": "/images/2015/vinayaka-chavithi/dsc-0125-jpg.webp",
+      "thumb": "/thumbs/2015/vinayaka-chavithi/dsc-0125-jpg.webp",
+      "type": "image",
+      "title": "Dsc 0125 Jpg",
+      "date": "2015-09-19",
+      "tags": [
+        "vinayaka-chavithi",
+        "2015"
+      ],
+      "favorite": false,
+      "width": 3840,
+      "height": 2160,
+      "blurDataURL": "data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAACQBACdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdMoAlwRSlZP07RgVDT1WAyqAA/reOY9qr/ZZaPqXK6eU5NYVBI6IFfwlkKblS4qXhlCt1q6Tnt9lARGCJXYvZ7p5yNLx9OGy7rCC/Zrqy9U4YgjsCcPQGCQTBl0QOLNUPlN8xeUKmwABo8oF2cureKoka2gln+cgp5eJ39889uW7QnMjKB0cAAA==",
+      "sha256": "9bcf1e712924f8a5b3a1d2c3f8fb17f731725610d3e3f41530f34601576ce6d9"
+    }
+  ],
+  "bucket": "vinayaka-chavithi",
+  "festival": "vinayaka-chavithi",
+  "cover": "/thumbs/2015/vinayaka-chavithi/dsc-0024-jpg.webp"
+}

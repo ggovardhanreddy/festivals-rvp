@@ -1,8 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { m, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import {
+  m,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Particles } from "./Particles";
+import { Logo } from "./Logo";
+import { withBase } from "@/lib/base";
 
 export function MemoryHero({
   eyebrow,
@@ -12,6 +20,8 @@ export function MemoryHero({
   primaryLabel,
   secondaryHref,
   secondaryLabel,
+  backgroundImage,
+  showLogo = false,
 }: {
   eyebrow: string;
   title: string;
@@ -20,14 +30,16 @@ export function MemoryHero({
   primaryLabel: string;
   secondaryHref?: string;
   secondaryLabel?: string;
+  backgroundImage?: string;
+  showLogo?: boolean;
 }) {
   const reduce = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 40, damping: 20 });
   const sy = useSpring(y, { stiffness: 40, damping: 20 });
-  const moveX = useTransform(sx, [-40, 40], [-12, 12]);
-  const moveY = useTransform(sy, [-40, 40], [-10, 10]);
+  const moveX = useTransform(sx, [-40, 40], [-14, 14]);
+  const moveY = useTransform(sy, [-40, 40], [-12, 12]);
 
   return (
     <section
@@ -43,10 +55,32 @@ export function MemoryHero({
         y.set(0);
       }}
     >
-      <m.div className="hero-media" style={{ x: moveX, y: moveY }} />
+      <m.div
+        className="hero-media"
+        style={{
+          x: moveX,
+          y: moveY,
+          backgroundImage: backgroundImage
+            ? `linear-gradient(180deg, rgba(10,8,6,.25), rgba(10,8,6,.78)), url(${withBase(backgroundImage)})`
+            : undefined,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="aurora" aria-hidden />
       <Particles />
       <div className="hero-fade" />
       <div className="hero-copy">
+        {showLogo && (
+          <m.div
+            initial={reduce ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+            style={{ marginBottom: "1.25rem" }}
+          >
+            <Logo className="hero-logo" />
+          </m.div>
+        )}
         <m.p
           className="eyebrow"
           initial={reduce ? false : { opacity: 0, y: 12 }}
@@ -84,6 +118,14 @@ export function MemoryHero({
               {secondaryLabel}
             </Link>
           )}
+        </m.div>
+        <m.div
+          className="scroll-hint"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.8, y: [0, 6, 0] }}
+          transition={{ delay: 0.8, duration: 2.2, repeat: Infinity }}
+        >
+          Scroll
         </m.div>
       </div>
     </section>

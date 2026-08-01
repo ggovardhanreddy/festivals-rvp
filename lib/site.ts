@@ -1,18 +1,54 @@
 import type { Album, FestivalKey } from "./types";
 import { slugify } from "./slug";
 
-export const SITE_NAME = "RVP Memories";
-export const SITE_BRAND = "Festivals RVP";
+export const SITE_NAME = "RVP Youth";
+export const SITE_BRAND = "RVP Youth";
 export const ADMIN_NAME = "Govardhan Reddy";
+export const SITE_TAGLINE = "A premium memory experience";
 
 export const NAV = [
   { href: "/", label: "Home" },
+  { href: "/sankranthi/", label: "Sankranthi" },
+  { href: "/vinayaka-chavithi/", label: "Vinayaka Chavithi" },
+  { href: "/rvp-birthdays/", label: "RVP Birthdays" },
+  { href: "/fun-trips/", label: "Fun Trips" },
   { href: "/timeline/", label: "Timeline" },
-  { href: "/festivals/", label: "Festivals" },
-  { href: "/birthdays/", label: "Birthdays" },
   { href: "/search/", label: "Search" },
   { href: "/about/", label: "About" },
 ] as const;
+
+export const BUCKETS = [
+  {
+    key: "sankranthi" as const,
+    href: "/sankranthi/",
+    title: "Sankranthi",
+    eyebrow: "Harvest · Light · Home",
+    blurb: "Rangoli, sweetness, and the quiet joy of beginning the year together.",
+  },
+  {
+    key: "vinayaka-chavithi" as const,
+    href: "/vinayaka-chavithi/",
+    title: "Vinayaka Chavithi",
+    eyebrow: "Devotion · Beginnings",
+    blurb: "Clay, lamp light, and prayers that mark a beloved beginning each year.",
+  },
+  {
+    key: "rvp-birthdays" as const,
+    href: "/rvp-birthdays/",
+    title: "RVP Birthdays",
+    eyebrow: "People we love",
+    blurb: "Candles, laughter, and the warmth of another year celebrated.",
+  },
+  {
+    key: "fun-trips" as const,
+    href: "/fun-trips/",
+    title: "Fun Trips",
+    eyebrow: "Journeys & moments",
+    blurb: "Memories on the move — and anything still waiting for a final home.",
+  },
+] as const;
+
+export type BucketKey = (typeof BUCKETS)[number]["key"];
 
 export const FESTIVALS: {
   key: FestivalKey;
@@ -47,6 +83,22 @@ export function festivalByKey(key?: FestivalKey) {
   return FESTIVALS.find((f) => f.key === key);
 }
 
+export function bucketByKey(key: string) {
+  return BUCKETS.find((b) => b.key === key);
+}
+
 export function albumHref(album: Album) {
+  if (album.category === "Birthdays" || album.bucket === "rvp-birthdays") {
+    return `/rvp-birthdays/${album.year}/${album.slug}/`;
+  }
+  if (album.bucket === "fun-trips" || album.slug === "fun-trips") {
+    return `/fun-trips/${album.year}/`;
+  }
+  if (album.festival === "vinayaka-chavithi" || album.slug === "vinayaka-chavithi") {
+    return `/vinayaka-chavithi/${album.year}/`;
+  }
+  if (album.festival === "sankranthi" || album.slug === "sankranthi") {
+    return `/sankranthi/${album.year}/`;
+  }
   return `/${slugify(album.category)}/${album.year}/${album.slug}/`;
 }

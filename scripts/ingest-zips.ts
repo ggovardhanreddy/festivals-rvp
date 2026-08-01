@@ -1,6 +1,5 @@
 /**
- * Optional ZIP ingest kept for Takeout archives.
- * Prefer local folder import: npm run import:folder -- --dir "/path/to/photos"
+ * Optional ZIP ingest. Prefer: npm run import:folder
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -12,7 +11,7 @@ const inbox = path.join(root, "inbox");
 const tmp = path.join(root, ".tmp");
 
 if (process.argv.includes("--publish")) {
-  console.error("Ingest will not publish. After review run: npm run publish -- --confirm");
+  console.error("Ingest will not publish. Run: npm run publish -- --confirm");
   process.exit(1);
 }
 
@@ -35,8 +34,6 @@ for (const zip of zips) {
   execFileSync("unzip", ["-oq", path.join(inbox, zip), "-d", out]);
   const result = await importLocalFolder({
     sourceDir: out,
-    category: "auto",
-    album: zip.replace(/\.zip$/i, ""),
     keepOriginals: true,
     processImages: true,
   });
