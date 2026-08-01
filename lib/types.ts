@@ -3,10 +3,7 @@ export type MediaType = "image" | "video";
 export type FestivalKey = "sankranthi" | "vinayaka-chavithi";
 
 export type BucketKey =
-  | "sankranthi"
-  | "vinayaka-chavithi"
-  | "rvp-birthdays"
-  | "fun-trips";
+  "sankranthi" | "vinayaka-chavithi" | "rvp-birthdays" | "fun-trips";
 
 export type Media = {
   id: string;

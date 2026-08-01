@@ -71,8 +71,7 @@ async function captureDate(filePath: string): Promise<Captured> {
     const exif = await exifr.parse(filePath, {
       pick: ["DateTimeOriginal", "CreateDate", "MediaCreateDate"],
     });
-    const raw =
-      exif?.DateTimeOriginal || exif?.CreateDate || exif?.MediaCreateDate;
+    const raw = exif?.DateTimeOriginal || exif?.CreateDate || exif?.MediaCreateDate;
     if (raw) {
       const date = raw instanceof Date ? raw : new Date(raw);
       if (!Number.isNaN(date.getTime())) {
@@ -166,11 +165,7 @@ async function processImage(
     .webp({ quality: 78 })
     .toFile(thumb);
 
-  const blur = await sharp(readable)
-    .rotate()
-    .resize(24)
-    .webp({ quality: 40 })
-    .toBuffer();
+  const blur = await sharp(readable).rotate().resize(24).webp({ quality: 40 }).toBuffer();
 
   return {
     file: `/images/${webpRel.replace(/\\/g, "/")}`,
@@ -383,9 +378,7 @@ export async function importLocalFolder(
 
     try {
       if (keepOriginals) {
-        const originalDest = uniqueDest(
-          path.join(ORIGINALS_DIR, `${relNoExt}${ext}`),
-        );
+        const originalDest = uniqueDest(path.join(ORIGINALS_DIR, `${relNoExt}${ext}`));
         fs.mkdirSync(path.dirname(originalDest), { recursive: true });
         fs.copyFileSync(filePath, originalDest);
       }
@@ -422,10 +415,7 @@ export async function importLocalFolder(
               if (fs.existsSync(existingPublic)) {
                 fs.copyFileSync(
                   existingPublic,
-                  path.join(
-                    REVIEW_DIR,
-                    `replaced-${path.basename(existingPublic)}`,
-                  ),
+                  path.join(REVIEW_DIR, `replaced-${path.basename(existingPublic)}`),
                 );
               }
               phashes[phash] = mediaPaths.file;
@@ -446,9 +436,7 @@ export async function importLocalFolder(
         const dest = uniqueDest(path.join(PUBLIC_IMAGES_DIR, relWithExt));
         fs.mkdirSync(path.dirname(dest), { recursive: true });
         fs.copyFileSync(filePath, dest);
-        const publicRel = path
-          .relative(PUBLIC_IMAGES_DIR, dest)
-          .replace(/\\/g, "/");
+        const publicRel = path.relative(PUBLIC_IMAGES_DIR, dest).replace(/\\/g, "/");
         mediaPaths = {
           file: `/images/${publicRel}`,
           thumb: `/images/${publicRel}`,
@@ -467,9 +455,7 @@ export async function importLocalFolder(
           meta.title,
           meta.bucket,
           classification.festival,
-          classification.personName
-            ? titleCase(classification.personName)
-            : undefined,
+          classification.personName ? titleCase(classification.personName) : undefined,
         );
 
       const media: Media = {
@@ -478,9 +464,7 @@ export async function importLocalFolder(
         thumb: mediaPaths.thumb,
         type: kind,
         title: titleCase(baseName),
-        date: captured.unknownYear
-          ? "unknown"
-          : captured.date.toISOString().slice(0, 10),
+        date: captured.unknownYear ? "unknown" : captured.date.toISOString().slice(0, 10),
         tags: [classification.bucket, year === "Unknown" ? "needs-year" : year],
         favorite: false,
         width: mediaPaths.width,

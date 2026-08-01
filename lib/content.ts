@@ -21,10 +21,7 @@ function normalizeAlbum(raw: Album): Album {
       album.bucket = "vinayaka-chavithi";
       album.festival = "vinayaka-chavithi";
       album.category = "Festivals";
-    } else if (
-      album.festival === "sankranthi" ||
-      album.slug.includes("sankr")
-    ) {
+    } else if (album.festival === "sankranthi" || album.slug.includes("sankr")) {
       album.bucket = "sankranthi";
       album.festival = "sankranthi";
       album.category = "Festivals";
@@ -73,25 +70,18 @@ export const albumsByBucket = (bucket: BucketKey) =>
 
 export const festivalAlbums = (key?: FestivalKey) =>
   publicAlbums().filter(
-    (a) =>
-      a.category === "Festivals" &&
-      (!key || a.festival === key || a.bucket === key),
+    (a) => a.category === "Festivals" && (!key || a.festival === key || a.bucket === key),
   );
 
 export const birthdayAlbums = () => albumsByBucket("rvp-birthdays");
 export const tripAlbums = () => albumsByBucket("fun-trips");
 
 export const allMedia = (): MediaWithAlbum[] =>
-  publicAlbums().flatMap((album) =>
-    album.media.map((media) => ({ ...media, album })),
-  );
+  publicAlbums().flatMap((album) => album.media.map((media) => ({ ...media, album })));
 
 export const findAlbum = (year: string, category: string, slug: string) =>
   albums().find(
-    (a) =>
-      a.year === year &&
-      slugify(a.category) === category &&
-      a.slug === slug,
+    (a) => a.year === year && slugify(a.category) === category && a.slug === slug,
   );
 
 export const findYearBucketAlbum = (bucket: BucketKey, year: string) =>

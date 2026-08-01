@@ -47,8 +47,7 @@ export function hammingHex(a: string, b: string): number {
   if (a.length !== b.length) return 64;
   let distance = 0;
   for (let i = 0; i < a.length; i += 1) {
-    const x =
-      Number.parseInt(a[i]!, 16) ^ Number.parseInt(b[i]!, 16);
+    const x = Number.parseInt(a[i]!, 16) ^ Number.parseInt(b[i]!, 16);
     distance += x.toString(2).replace(/0/g, "").length;
   }
   return distance;

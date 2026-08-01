@@ -18,9 +18,7 @@ if (process.argv.includes("--publish")) {
 fs.mkdirSync(inbox, { recursive: true });
 fs.mkdirSync(tmp, { recursive: true });
 
-const zips = fs
-  .readdirSync(inbox)
-  .filter((name) => name.toLowerCase().endsWith(".zip"));
+const zips = fs.readdirSync(inbox).filter((name) => name.toLowerCase().endsWith(".zip"));
 
 if (!zips.length) {
   console.log("No ZIP files in inbox/. Use npm run import:folder for local photos.");

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" role="img" aria-label="RVP Youth">
+  <defs>
+    <linearGradient id="brassDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0d7a0"/>
+      <stop offset="45%" stop-color="#d4a45a"/>
+      <stop offset="100%" stop-color="#f7e7c4"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="18" width="84" height="84" rx="26" fill="url(#brassDark)" opacity=".18"/>
+  <path d="M28 78 V42 h18c12 0 20 7 20 18s-8 18-20 18H40l22 18h-12l-20-16z M40 54v12h5c5 0 9-2.5 9-6s-4-6-9-6z" fill="url(#brassDark)"/>
+  <text x="112" y="58" font-family="Georgia, 'Times New Roman', serif" font-size="42" letter-spacing="2" fill="url(#brassDark)">RVP</text>
+  <text x="112" y="92" font-family="Arial, Helvetica, sans-serif" font-size="22" letter-spacing="8" fill="#e8efe9" fill-opacity=".85">YOUTH</text>
+  <circle cx="386" cy="34" r="4" fill="#d4a45a"/>
+</svg>

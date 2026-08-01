@@ -1,17 +1,12 @@
 import Link from "next/link";
-import {
-  allMedia,
-  birthdayAlbums,
-  festivalAlbums,
-  publicAlbums,
-  tripAlbums,
-  years,
-} from "@/lib/content";
-import { BUCKETS } from "@/lib/site";
+import { allMedia, publicAlbums, years } from "@/lib/content";
 import { MemoryHero } from "@/components/MemoryHero";
 import { AlbumCard } from "@/components/AlbumCard";
-import { YearGrid } from "@/components/YearGrid";
-import { Counter } from "@/components/Counter";
+import { Gallery } from "@/components/Gallery";
+import { MemoryWall } from "@/components/MemoryWall";
+import { VillageMap } from "@/components/VillageMap";
+import { VillageStory } from "@/components/VillageStory";
+import { TimelineStrip } from "@/components/TimelineStrip";
 import { Reveal } from "@/components/Reveal";
 import { PrivateNotice } from "@/components/PrivateNotice";
 
@@ -22,107 +17,110 @@ export default function HomePage() {
     media.find((m) => m.type === "image" && m.favorite)?.file ||
     media.find((m) => m.type === "image")?.file;
   const recent = albums.slice(0, 4);
-  const featured = albums
-    .filter((a) => a.media.some((m) => m.favorite))
-    .slice(0, 3);
+  const featured = albums.filter((a) => a.media.some((m) => m.favorite)).slice(0, 3);
+  const featuredAlbums = featured.length ? featured : recent;
+  const galleryTeaser = media.filter((m) => m.type === "image").slice(0, 12);
   const yearList = years();
 
   return (
-    <main className="page">
+    <main>
       <MemoryHero
         showLogo
+        fullBleed
+        atmosphere
         backgroundImage={featuredImage}
         eyebrow="RVP Youth"
-        title="Memories, elevated."
-        lede="A premium interactive archive for Sankranthi, Vinayaka Chavithi, RVP Birthdays, and Fun Trips — crafted to feel alive."
+        title="A digital village of memory."
+        lede="Celebrate culture, festivals, and the people who make home eternal — through an interactive heritage experience."
         primaryHref="/sankranthi/"
-        primaryLabel="Explore Sankranthi"
+        primaryLabel="Enter the village"
         secondaryHref="/timeline/"
         secondaryLabel="Open timeline"
       />
 
-      <PrivateNotice />
+      <div className="page">
+        <PrivateNotice />
 
-      <Reveal className="section">
-        <div className="grid-cards">
-          <Counter value={yearList.length} label="Years remembered" />
-          <Counter value={festivalAlbums().length} label="Festival chapters" />
-          <Counter value={birthdayAlbums().length} label="Birthday albums" />
-          <Counter value={tripAlbums().length} label="Fun trip sets" />
-        </div>
-      </Reveal>
-
-      <Reveal className="section">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Collections</p>
-            <h2>Only what matters</h2>
+        <Reveal className="section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Featured Memories</p>
+              <h2>Kept close</h2>
+            </div>
           </div>
-        </div>
-        <div className="grid-cards">
-          {BUCKETS.map((bucket) => (
-            <Link
-              key={bucket.key}
-              className="glass-card"
-              href={bucket.href}
-              style={{ display: "block", padding: "1.4rem" }}
-            >
-              <p className="eyebrow">{bucket.eyebrow}</p>
-              <h3>{bucket.title}</h3>
-              <p className="muted">{bucket.blurb}</p>
+          <div className="grid-cards">
+            {featuredAlbums.map((album, index) => (
+              <AlbumCard
+                key={`${album.year}-${album.slug}`}
+                album={album}
+                index={index}
+              />
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal className="section" id="map">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Interactive Map</p>
+              <h2>Walk the village</h2>
+              <p className="lede">Touch a place to open the memories it still holds.</p>
+            </div>
+          </div>
+          <VillageMap />
+        </Reveal>
+
+        <Reveal className="section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Recent Memories</p>
+              <h2>Newly gathered</h2>
+            </div>
+          </div>
+          <div className="grid-cards">
+            {recent.map((album, index) => (
+              <AlbumCard
+                key={`${album.year}-${album.slug}-recent`}
+                album={album}
+                index={index}
+              />
+            ))}
+          </div>
+        </Reveal>
+
+        <TimelineStrip years={yearList.slice(0, 8)} />
+
+        <Reveal className="section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Gallery</p>
+              <h2>Frames from home</h2>
+            </div>
+            <Link className="btn ghost" href="/search/">
+              Browse all
             </Link>
-          ))}
-        </div>
-      </Reveal>
-
-      <Reveal className="section" delay={0.05}>
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Years</p>
-            <h2>Choose a chapter</h2>
           </div>
-          <Link className="btn ghost" href="/timeline/">
-            Timeline
-          </Link>
-        </div>
-        <YearGrid years={yearList} />
-      </Reveal>
+          <Gallery items={galleryTeaser} />
+        </Reveal>
 
-      <Reveal className="section" delay={0.08}>
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Featured</p>
-            <h2>Kept close</h2>
-          </div>
-        </div>
-        <div className="grid-cards">
-          {(featured.length ? featured : recent).map((album, index) => (
-            <AlbumCard
-              key={`${album.year}-${album.slug}`}
-              album={album}
-              index={index}
-            />
-          ))}
-        </div>
-      </Reveal>
+        <MemoryWall items={media} />
 
-      <Reveal className="section" delay={0.1}>
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Recent highlights</p>
-            <h2>Newly gathered</h2>
+        <VillageStory compact />
+
+        <Reveal className="section">
+          <div className="glass-card about-cta" style={{ padding: "1.6rem" }}>
+            <p className="eyebrow">About</p>
+            <h2>RVP Youth</h2>
+            <p className="muted">
+              A free-to-host digital heritage museum for Sankranthi, Vinayaka Chavithi,
+              birthdays, and journeys — curated by Govardhan Reddy.
+            </p>
+            <Link className="btn" href="/about/" style={{ marginTop: "1rem" }}>
+              Read our story
+            </Link>
           </div>
-        </div>
-        <div className="grid-cards">
-          {recent.map((album, index) => (
-            <AlbumCard
-              key={`${album.year}-${album.slug}-recent`}
-              album={album}
-              index={index}
-            />
-          ))}
-        </div>
-      </Reveal>
+        </Reveal>
+      </div>
     </main>
   );
 }

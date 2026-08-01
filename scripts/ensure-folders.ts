@@ -3,21 +3,25 @@ import path from "node:path";
 import { BUCKET_FOLDERS } from "../lib/paths";
 
 const root = process.cwd();
-const years = [
-  "2013",
-  "2015",
-  "2016",
-  "2018",
-  "2019",
-  "2020",
-  "2021",
-  "2022",
-  "2023",
-  "2024",
-  "2025",
-  "2026",
+
+function listYearDirs(dir: string): string[] {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter((name) => {
+    const full = path.join(dir, name);
+    if (!fs.statSync(full).isDirectory()) return false;
+    if (name === "Unknown") return true;
+    return /^\d{4}$/.test(name);
+  });
+}
+
+const discovered = new Set<string>([
+  ...listYearDirs(path.join(root, "content")),
+  ...listYearDirs(path.join(root, "public", "images")),
+  String(new Date().getFullYear()),
   "Unknown",
-];
+]);
+
+const years = [...discovered].sort((a, b) => b.localeCompare(a));
 
 for (const dir of [
   "content",
@@ -43,4 +47,6 @@ for (const year of years) {
   }
 }
 
-console.log("RVP Youth archive folders ready.");
+console.log(
+  `RVP Youth archive folders ready for years: ${years.filter((y) => y !== "Unknown").join(", ")}.`,
+);

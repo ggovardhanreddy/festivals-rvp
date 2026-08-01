@@ -135,8 +135,7 @@ const server = http.createServer(async (req, res) => {
   const value = await readBody(req);
 
   if (route === "/api/admin/import-folder" && req.method === "POST") {
-    const folder =
-      typeof value.path === "string" ? expandHome(value.path.trim()) : "";
+    const folder = typeof value.path === "string" ? expandHome(value.path.trim()) : "";
     if (!folder) return json(res, 400, { error: "Folder path is required." });
 
     try {
@@ -162,7 +161,10 @@ const server = http.createServer(async (req, res) => {
     const album = value.album as { year: string; category: string; slug: string };
     const directory = path.join(root, "content", album.year, album.category, album.slug);
     fs.mkdirSync(directory, { recursive: true });
-    fs.writeFileSync(path.join(directory, "metadata.json"), JSON.stringify(value.album, null, 2));
+    fs.writeFileSync(
+      path.join(directory, "metadata.json"),
+      JSON.stringify(value.album, null, 2),
+    );
     spawnSync("npm", ["run", "generate"], { cwd: root, stdio: "inherit" });
     return json(res, 200, { ok: true });
   }

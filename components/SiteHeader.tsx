@@ -25,9 +25,7 @@ export function SiteHeader() {
         <nav className="nav-links" aria-label="Primary">
           {NAV.map((item) => {
             const active =
-              item.href === "/"
-                ? normalized === "/"
-                : normalized.startsWith(item.href);
+              item.href === "/" ? normalized === "/" : normalized.startsWith(item.href);
             return (
               <Link key={item.href} href={item.href} data-active={active}>
                 {item.label}
@@ -42,9 +40,7 @@ export function SiteHeader() {
       <nav className="mobile-nav" aria-label="Mobile">
         {NAV.map((item) => {
           const active =
-            item.href === "/"
-              ? normalized === "/"
-              : normalized.startsWith(item.href);
+            item.href === "/" ? normalized === "/" : normalized.startsWith(item.href);
           return (
             <Link key={item.href} href={item.href} data-active={active}>
               {item.label}

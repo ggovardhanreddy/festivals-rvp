@@ -161,9 +161,9 @@ export function AdminClient() {
     <section className="adminbox">
       <h2>Local photos import</h2>
       <p>
-        Select a folder on this computer. The archive scans every subfolder for
-        photos and videos — ZIP files are not required. Import never pushes to
-        GitHub until you confirm publish.
+        Select a folder on this computer. The archive scans every subfolder for photos and
+        videos — ZIP files are not required. Import never pushes to GitHub until you
+        confirm publish.
       </p>
 
       <label>
@@ -201,8 +201,8 @@ export function AdminClient() {
       {lastImport && (
         <div className="notice">
           <p>
-            Scanned {lastImport.scanned}, imported {lastImport.imported}, exact
-            dupes {lastImport.skippedDuplicates}, near-dupe review{" "}
+            Scanned {lastImport.scanned}, imported {lastImport.imported}, exact dupes{" "}
+            {lastImport.skippedDuplicates}, near-dupe review{" "}
             {lastImport.nearDuplicatesReview || 0}, unsupported{" "}
             {lastImport.skippedUnsupported}.
           </p>
@@ -218,10 +218,9 @@ export function AdminClient() {
       {message && <p className="notice">{message}</p>}
 
       <p>
-        Supported: JPG, JPEG, PNG, HEIC, WEBP, AVIF, GIF, MP4, MOV, WEBM, MKV.
-        EXIF date → year folders under <code>public/images/</code>. SHA-256
-        duplicates are skipped. CLI:{" "}
-        <code>npm run import:folder -- --dir &quot;~/Downloads&quot;</code>
+        Supported: JPG, JPEG, PNG, HEIC, WEBP, AVIF, GIF, MP4, MOV, WEBM, MKV. EXIF date →
+        year folders under <code>public/images/</code>. SHA-256 duplicates are skipped.
+        CLI: <code>npm run import:folder -- --dir &quot;~/Downloads&quot;</code>
       </p>
     </section>
   );

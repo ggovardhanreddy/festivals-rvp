@@ -9,8 +9,8 @@ export function SiteFooter() {
         <div>
           <Logo />
           <p className="muted" style={{ marginTop: "0.75rem", maxWidth: "36ch" }}>
-            {SITE_NAME} — {SITE_TAGLINE}. A private archive of Sankranthi,
-            Vinayaka Chavithi, birthdays, and fun trips.
+            {SITE_NAME} — {SITE_TAGLINE}. A private heritage archive of Sankranthi,
+            Vinayaka Chavithi, birthdays, and journeys.
           </p>
         </div>
         <div className="footer-links">

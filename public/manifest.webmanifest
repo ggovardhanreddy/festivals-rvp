@@ -1,1 +1,24 @@
-{"name":"RVP Memories","short_name":"RVP Memories","start_url":"/","display":"standalone","background_color":"#fffaf5","theme_color":"#9f3a38","icons":[]}
+{
+  "name": "RVP Youth",
+  "short_name": "RVP Youth",
+  "description": "Digital Village Experience - festivals, birthdays, and journeys.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f1a14",
+  "theme_color": "#1f3d2e",
+  "icons": [
+    {
+      "src": "/brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

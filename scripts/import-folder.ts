@@ -24,9 +24,7 @@ async function main() {
     process.argv.find((value, index) => index > 1 && !value.startsWith("-")) ||
     DEFAULT_IMPORT_DIR;
 
-  const resolved = path.resolve(
-    source.replace(/^~(?=$|\/|\\)/, process.env.HOME || ""),
-  );
+  const resolved = path.resolve(source.replace(/^~(?=$|\/|\\)/, process.env.HOME || ""));
 
   console.log(`RVP Youth import from: ${resolved}`);
   const result = await importLocalFolder({

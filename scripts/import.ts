@@ -5,9 +5,8 @@
 import { spawnSync } from "node:child_process";
 
 const args = process.argv.slice(2);
-const result = spawnSync(
-  "npx",
-  ["tsx", "scripts/import-folder.ts", ...args],
-  { cwd: process.cwd(), stdio: "inherit" },
-);
+const result = spawnSync("npx", ["tsx", "scripts/import-folder.ts", ...args], {
+  cwd: process.cwd(),
+  stdio: "inherit",
+});
 process.exit(result.status ?? 1);

@@ -1,12 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="RVP Youth">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="markGold" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#f0d7a0"/>
-      <stop offset="50%" stop-color="#d4a45a"/>
-      <stop offset="100%" stop-color="#f7e7c4"/>
+      <stop offset="50%" stop-color="#c49855"/>
+      <stop offset="100%" stop-color="#8f6a32"/>
+    </linearGradient>
+    <linearGradient id="markForest" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a4a38"/>
+      <stop offset="100%" stop-color="#13241b"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="36" fill="#120f0c"/>
-  <rect x="10" y="10" width="108" height="108" rx="30" fill="url(#g)" opacity=".16"/>
-  <path d="M34 92 V40 h24c16 0 27 9 27 24s-11 24-27 24H50l28 24H62L36 72z M50 56v16h7c7 0 12-3 12-8s-5-8-12-8z" fill="url(#g)"/>
+  <rect width="128" height="128" rx="36" fill="url(#markForest)"/>
+  <circle cx="64" cy="64" r="46" fill="none" stroke="url(#markGold)" stroke-width="2" opacity=".45"/>
+  <path d="M42 88 V44 h20c14 0 24 8 24 22s-10 22-24 22H54l24 20h-14L42 88z M54 58v14h6c6 0 10-3 10-7s-4-7-10-7z" fill="url(#markGold)"/>
 </svg>

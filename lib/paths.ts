@@ -11,8 +11,7 @@ export const REVIEW_DIR = path.join(ROOT, "review", "near-duplicates");
 export const HASH_INDEX_PATH = path.join(CONTENT_DIR, "hashes.json");
 export const PHASH_INDEX_PATH = path.join(CONTENT_DIR, "phashes.json");
 
-export const DEFAULT_IMPORT_DIR =
-  "/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest";
+export const DEFAULT_IMPORT_DIR = "/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest";
 
 export const BUCKET_FOLDERS: BucketKey[] = [
   "sankranthi",
@@ -71,9 +70,7 @@ export function classifyMedia(input: {
       input.pathParts
         .filter(
           (part) =>
-            !/^(birthdays?|bday|rvp-birthdays|fest|downloads?|fun-trips)$/i.test(
-              part,
-            ),
+            !/^(birthdays?|bday|rvp-birthdays|fest|downloads?|fun-trips)$/i.test(part),
         )
         .at(-1) || "rvp-birthday";
     return { bucket: "rvp-birthdays", personName: person };

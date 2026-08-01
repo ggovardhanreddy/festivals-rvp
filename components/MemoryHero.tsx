@@ -10,6 +10,9 @@ import {
 } from "framer-motion";
 import { Particles } from "./Particles";
 import { Logo } from "./Logo";
+import { Clouds } from "./atmosphere/Clouds";
+import { Birds } from "./atmosphere/Birds";
+import { SunRays } from "./atmosphere/SunRays";
 import { withBase } from "@/lib/base";
 
 export function MemoryHero({
@@ -21,7 +24,10 @@ export function MemoryHero({
   secondaryHref,
   secondaryLabel,
   backgroundImage,
+  backgroundVideo,
   showLogo = false,
+  fullBleed = false,
+  atmosphere = false,
 }: {
   eyebrow: string;
   title: string;
@@ -31,7 +37,10 @@ export function MemoryHero({
   secondaryHref?: string;
   secondaryLabel?: string;
   backgroundImage?: string;
+  backgroundVideo?: string;
   showLogo?: boolean;
+  fullBleed?: boolean;
+  atmosphere?: boolean;
 }) {
   const reduce = useReducedMotion();
   const x = useMotionValue(0);
@@ -43,7 +52,7 @@ export function MemoryHero({
 
   return (
     <section
-      className="hero"
+      className={fullBleed ? "hero hero-fullbleed" : "hero"}
       onMouseMove={(event) => {
         if (reduce) return;
         const rect = event.currentTarget.getBoundingClientRect();
@@ -61,13 +70,33 @@ export function MemoryHero({
           x: moveX,
           y: moveY,
           backgroundImage: backgroundImage
-            ? `linear-gradient(180deg, rgba(10,8,6,.25), rgba(10,8,6,.78)), url(${withBase(backgroundImage)})`
+            ? `linear-gradient(180deg, rgba(10,16,12,.2), rgba(10,16,12,.78)), url(${withBase(backgroundImage)})`
             : undefined,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       />
+      {backgroundVideo && (
+        <video
+          className="hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={backgroundImage ? withBase(backgroundImage) : undefined}
+          aria-hidden
+        >
+          <source src={withBase(backgroundVideo)} />
+        </video>
+      )}
       <div className="aurora" aria-hidden />
+      {atmosphere && (
+        <>
+          <SunRays />
+          <Clouds />
+          <Birds />
+        </>
+      )}
       <Particles />
       <div className="hero-fade" />
       <div className="hero-copy">
@@ -81,14 +110,16 @@ export function MemoryHero({
             <Logo className="hero-logo" />
           </m.div>
         )}
-        <m.p
-          className="eyebrow"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {eyebrow}
-        </m.p>
+        {!showLogo && (
+          <m.p
+            className="eyebrow"
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {eyebrow}
+          </m.p>
+        )}
         <m.h1
           initial={reduce ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
@@ -110,7 +141,7 @@ export function MemoryHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.18 }}
         >
-          <Link className="btn" href={primaryHref}>
+          <Link className="btn magnetic" href={primaryHref}>
             {primaryLabel}
           </Link>
           {secondaryHref && secondaryLabel && (
@@ -122,8 +153,10 @@ export function MemoryHero({
         <m.div
           className="scroll-hint"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.8, y: [0, 6, 0] }}
-          transition={{ delay: 0.8, duration: 2.2, repeat: Infinity }}
+          animate={reduce ? { opacity: 0.8 } : { opacity: 0.8, y: [0, 6, 0] }}
+          transition={
+            reduce ? { delay: 0.8 } : { delay: 0.8, duration: 2.2, repeat: Infinity }
+          }
         >
           Scroll
         </m.div>

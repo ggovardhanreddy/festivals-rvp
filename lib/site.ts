@@ -4,7 +4,7 @@ import { slugify } from "./slug";
 export const SITE_NAME = "RVP Youth";
 export const SITE_BRAND = "RVP Youth";
 export const ADMIN_NAME = "Govardhan Reddy";
-export const SITE_TAGLINE = "A premium memory experience";
+export const SITE_TAGLINE = "Digital Village Experience";
 
 export const NAV = [
   { href: "/", label: "Home" },
@@ -24,6 +24,8 @@ export const BUCKETS = [
     title: "Sankranthi",
     eyebrow: "Harvest · Light · Home",
     blurb: "Rangoli, sweetness, and the quiet joy of beginning the year together.",
+    story:
+      "Sankranthi arrives with harvest light — rangoli at the door, sesame sweetness, and the village gathering as one family under a newly opened year.",
   },
   {
     key: "vinayaka-chavithi" as const,
@@ -31,6 +33,8 @@ export const BUCKETS = [
     title: "Vinayaka Chavithi",
     eyebrow: "Devotion · Beginnings",
     blurb: "Clay, lamp light, and prayers that mark a beloved beginning each year.",
+    story:
+      "Vinayaka Chavithi fills the house with clay idols, lamp glow, and first prayers — a tender beginning renewed each monsoon season.",
   },
   {
     key: "rvp-birthdays" as const,
@@ -38,13 +42,17 @@ export const BUCKETS = [
     title: "RVP Birthdays",
     eyebrow: "People we love",
     blurb: "Candles, laughter, and the warmth of another year celebrated.",
+    story:
+      "Birthdays hold the faces we love most — cake light, teasing, and the soft archive of another year lived together.",
   },
   {
     key: "fun-trips" as const,
     href: "/fun-trips/",
     title: "Fun Trips",
     eyebrow: "Journeys & moments",
-    blurb: "Memories on the move — and anything still waiting for a final home.",
+    blurb: "Memories on the move — roads, laughter, and unexpected stops.",
+    story:
+      "Fun trips are the open chapters — buses, roadsides, shared snacks, and the freedom of leaving home only to remember it more clearly.",
   },
 ] as const;
 
@@ -62,16 +70,14 @@ export const FESTIVALS: {
     slug: "sankranthi",
     title: "Sankranthi",
     eyebrow: "Harvest · Light · Home",
-    blurb:
-      "Rangoli, sweetness, and the quiet joy of a family harvest celebration.",
+    blurb: "Rangoli, sweetness, and the quiet joy of a family harvest celebration.",
   },
   {
     key: "vinayaka-chavithi",
     slug: "vinayaka-chavithi",
     title: "Vinayaka Chavithi",
     eyebrow: "Devotion · Beginnings",
-    blurb:
-      "Clay, lamp light, and prayers that mark a beloved beginning each year.",
+    blurb: "Clay, lamp light, and prayers that mark a beloved beginning each year.",
   },
 ];
 

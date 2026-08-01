@@ -9,22 +9,21 @@ export function Gallery({ items }: { items: Media[] }) {
   const reduce = useReducedMotion();
   const [selected, setSelected] = useState<number | null>(null);
   const [shown, setShown] = useState(18);
+  const [zoom, setZoom] = useState(1);
   const visible = items.slice(0, shown);
 
-  const close = useCallback(() => setSelected(null), []);
+  const close = useCallback(() => {
+    setSelected(null);
+    setZoom(1);
+  }, []);
   const next = useCallback(
-    () =>
-      setSelected((i) =>
-        i === null ? null : (i + 1) % Math.max(items.length, 1),
-      ),
+    () => setSelected((i) => (i === null ? null : (i + 1) % Math.max(items.length, 1))),
     [items.length],
   );
   const prev = useCallback(
     () =>
       setSelected((i) =>
-        i === null
-          ? null
-          : (i - 1 + items.length) % Math.max(items.length, 1),
+        i === null ? null : (i - 1 + items.length) % Math.max(items.length, 1),
       ),
     [items.length],
   );
@@ -35,6 +34,8 @@ export function Gallery({ items }: { items: Media[] }) {
       if (event.key === "Escape") close();
       if (event.key === "ArrowRight") next();
       if (event.key === "ArrowLeft") prev();
+      if (event.key === "+" || event.key === "=") setZoom((z) => Math.min(2.5, z + 0.2));
+      if (event.key === "-") setZoom((z) => Math.max(1, z - 0.2));
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -84,7 +85,7 @@ export function Gallery({ items }: { items: Media[] }) {
             {media.type === "image" ? (
               <img
                 src={withBase(media.thumb || media.file)}
-                alt={media.title}
+                alt={media.title || "Memory photograph"}
                 loading="lazy"
                 decoding="async"
                 draggable={false}
@@ -110,7 +111,11 @@ export function Gallery({ items }: { items: Media[] }) {
 
       {shown < items.length && (
         <div className="btn-row" style={{ justifyContent: "center" }}>
-          <button className="btn ghost" type="button" onClick={() => setShown((n) => n + 18)}>
+          <button
+            className="btn ghost"
+            type="button"
+            onClick={() => setShown((n) => n + 18)}
+          >
             Load more memories
           </button>
         </div>
@@ -120,6 +125,9 @@ export function Gallery({ items }: { items: Media[] }) {
         {current && selected !== null && (
           <m.div
             className="lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={current.title}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -133,13 +141,29 @@ export function Gallery({ items }: { items: Media[] }) {
               transition={{ duration: 0.35 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <img src={withBase(current.file)} alt={current.title} />
+              <img
+                src={withBase(current.file)}
+                alt={current.title || "Memory photograph"}
+                style={{
+                  transform: `scale(${zoom})`,
+                  transition: reduce ? undefined : "transform 0.25s ease",
+                }}
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+              />
               <p style={{ color: "#f7efe4", margin: 0 }}>
                 {current.date} · {current.title}
               </p>
               <div className="lightbox-actions">
                 <button className="btn ghost" type="button" onClick={prev}>
                   Previous
+                </button>
+                <button
+                  className="btn ghost"
+                  type="button"
+                  onClick={() => setZoom((z) => Math.min(2.5, z + 0.25))}
+                >
+                  Zoom
                 </button>
                 <button className="btn ghost" type="button" onClick={close}>
                   Close

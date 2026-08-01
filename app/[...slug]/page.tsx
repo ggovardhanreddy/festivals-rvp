@@ -12,9 +12,11 @@ import { AlbumCard } from "@/components/AlbumCard";
 import { AlbumView } from "@/components/AlbumView";
 import { Gallery } from "@/components/Gallery";
 import { MemoryHero } from "@/components/MemoryHero";
+import { MemoryWall } from "@/components/MemoryWall";
 import { PrivateNotice } from "@/components/PrivateNotice";
 import { Reveal } from "@/components/Reveal";
 import { SearchClient } from "@/components/SearchClient";
+import { VillageStory } from "@/components/VillageStory";
 import { YearGrid } from "@/components/YearGrid";
 
 const BUCKET_ROUTES: BucketKey[] = [
@@ -60,21 +62,56 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
   const meta = BUCKETS.find((b) => b.key === bucket)!;
   const albums = albumsByBucket(bucket);
   const media = albums.flatMap((a) => a.media);
+  const featured = albums.filter((a) => a.media.some((m) => m.favorite)).slice(0, 3);
   return (
     <main className="page">
       <MemoryHero
         eyebrow={meta.eyebrow}
         title={meta.title}
         lede={meta.blurb}
-        primaryHref="/timeline/"
-        primaryLabel="View timeline"
-        secondaryHref="/search/"
-        secondaryLabel="Search"
+        primaryHref="#gallery"
+        primaryLabel="Open gallery"
+        secondaryHref="/timeline/"
+        secondaryLabel="Timeline"
         backgroundImage={media.find((m) => m.type === "image")?.file}
       />
       <PrivateNotice />
       <Reveal className="section">
-        <YearGrid years={[...new Set(albums.map((a) => a.year))].sort((a, b) => b.localeCompare(a))} />
+        <p className="eyebrow">Festival Story</p>
+        <h2>Why this chapter matters</h2>
+        <p className="lede">{meta.story}</p>
+      </Reveal>
+      {!!featured.length && (
+        <Reveal className="section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Featured</p>
+              <h2>Highlights</h2>
+            </div>
+          </div>
+          <div className="grid-cards">
+            {featured.map((album, index) => (
+              <AlbumCard
+                key={`${album.year}-${album.slug}-feat`}
+                album={album}
+                index={index}
+              />
+            ))}
+          </div>
+        </Reveal>
+      )}
+      <Reveal className="section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Years</p>
+            <h2>Browse the seasons</h2>
+          </div>
+        </div>
+        <YearGrid
+          years={[...new Set(albums.map((a) => a.year))].sort((a, b) =>
+            b.localeCompare(a),
+          )}
+        />
       </Reveal>
       <Reveal className="section">
         <div className="grid-cards">
@@ -84,6 +121,12 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
         </div>
       </Reveal>
       <Reveal className="section">
+        <div className="section-head" id="gallery">
+          <div>
+            <p className="eyebrow">Gallery</p>
+            <h2>Every frame</h2>
+          </div>
+        </div>
         <Gallery items={media} />
       </Reveal>
     </main>
@@ -133,10 +176,7 @@ export default async function ArchiveRoute({
 
   if (slug[0] === "rvp-birthdays" && slug.length === 3) {
     const album = publicAlbums().find(
-      (a) =>
-        a.bucket === "rvp-birthdays" &&
-        a.year === slug[1] &&
-        a.slug === slug[2],
+      (a) => a.bucket === "rvp-birthdays" && a.year === slug[1] && a.slug === slug[2],
     );
     if (!album) notFound();
     return <AlbumView album={album} />;
@@ -192,22 +232,27 @@ export default async function ArchiveRoute({
       <main className="page">
         <MemoryHero
           showLogo
+          atmosphere
           eyebrow="About"
           title="RVP Youth"
-          lede="A premium digital memory experience — elegant, intimate, and free to host forever."
+          lede="An interactive digital heritage museum — elegant, intimate, and free to host forever."
           primaryHref="/sankranthi/"
           primaryLabel="Begin with Sankranthi"
+          secondaryHref="/#map"
+          secondaryLabel="Village map"
         />
+        <VillageStory />
         <Reveal className="section">
           <div className="glass-card" style={{ padding: "1.5rem" }}>
             <h2>What this archive holds</h2>
             <p className="muted">
-              Sankranthi, Vinayaka Chavithi, RVP Birthdays, and Fun Trips. Nothing else.
-              Designed as a polished memory book rather than a standard gallery.
+              Sankranthi, Vinayaka Chavithi, RVP Birthdays, and Fun Trips — curated as a
+              living village memory book, not a generic gallery.
             </p>
             <PrivateNotice />
           </div>
         </Reveal>
+        <MemoryWall items={media} />
       </main>
     );
   }

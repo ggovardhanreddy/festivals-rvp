@@ -1,49 +1,45 @@
 import type { Album } from "@/lib/types";
-import { festivalByKey } from "@/lib/site";
+import { festivalByKey, bucketByKey } from "@/lib/site";
 import { Gallery } from "./Gallery";
 import { Slideshow } from "./Slideshow";
 import { PrivateNotice } from "./PrivateNotice";
 import { Reveal } from "./Reveal";
-import { withBase } from "@/lib/base";
+import { MemoryHero } from "./MemoryHero";
 
 export function AlbumView({ album }: { album: Album }) {
   const festival = festivalByKey(album.festival);
+  const bucket = bucketByKey(album.bucket || "");
+  const story =
+    album.story ||
+    bucket?.story ||
+    festival?.blurb ||
+    "A chapter from the village archive.";
+
+  const eyebrow =
+    album.category === "Birthdays"
+      ? `${album.personName || album.title} · ${album.birthdayDate || album.year}`
+      : festival?.eyebrow || `${album.year} · ${album.bucket || album.category}`;
+
   return (
-    <div className="page">
-      <section className="hero" style={{ minHeight: "62vh" }}>
-        <div
-          className="hero-media"
-          style={
-            album.cover
-              ? {
-                  backgroundImage: `url(${withBase(album.cover)})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }
-              : undefined
-          }
-        />
-        <div className="hero-fade" />
-        <div className="hero-copy">
-          <p className="eyebrow">
-            {album.category === "Birthdays"
-              ? `${album.personName || album.title} · ${album.birthdayDate || album.year}`
-              : festival?.eyebrow || `${album.year} · Festival`}
-          </p>
-          <h1>{album.title}</h1>
-          <p className="lede">{album.description}</p>
-        </div>
-      </section>
+    <main className="page">
+      <MemoryHero
+        eyebrow={eyebrow}
+        title={album.title}
+        lede={album.description}
+        primaryHref="#gallery"
+        primaryLabel="Open gallery"
+        secondaryHref="#slideshow"
+        secondaryLabel="Slideshow"
+        backgroundImage={album.cover}
+      />
 
       <PrivateNotice />
 
-      {album.story && (
-        <Reveal className="section">
-          <p className="eyebrow">Story</p>
-          <h2>A chapter worth keeping</h2>
-          <p className="lede">{album.story}</p>
-        </Reveal>
-      )}
+      <Reveal className="section">
+        <p className="eyebrow">Festival Story</p>
+        <h2>A chapter worth keeping</h2>
+        <p className="lede">{story}</p>
+      </Reveal>
 
       {!!album.notes?.length && (
         <Reveal className="section" delay={0.05}>
@@ -59,7 +55,7 @@ export function AlbumView({ album }: { album: Album }) {
         </Reveal>
       )}
 
-      <Reveal className="section" delay={0.08}>
+      <Reveal className="section" delay={0.08} id="slideshow">
         <div className="section-head">
           <div>
             <p className="eyebrow">Slideshow</p>
@@ -87,7 +83,7 @@ export function AlbumView({ album }: { album: Album }) {
         </div>
       </Reveal>
 
-      <Reveal className="section" delay={0.12}>
+      <Reveal className="section" delay={0.12} id="gallery">
         <div className="section-head">
           <div>
             <p className="eyebrow">Gallery</p>
@@ -96,6 +92,6 @@ export function AlbumView({ album }: { album: Album }) {
         </div>
         <Gallery items={album.media} />
       </Reveal>
-    </div>
+    </main>
   );
 }

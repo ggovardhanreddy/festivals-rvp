@@ -1,21 +1,31 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const emptySubscribe = () => () => {};
 
 export function ThemeToggle() {
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return <button className="icon-btn" aria-label="Theme" />;
+
+  if (!mounted) {
+    return <button className="icon-btn" aria-label="Theme" type="button" />;
+  }
+
   const dark = resolvedTheme === "dark";
   return (
     <button
       className="icon-btn"
+      type="button"
       aria-label="Toggle color theme"
       onClick={() => setTheme(dark ? "light" : "dark")}
     >
-      {dark ? "☀" : "☾"}
+      {dark ? "Light" : "Dark"}
     </button>
   );
 }

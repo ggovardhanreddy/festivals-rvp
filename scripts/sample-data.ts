@@ -4,12 +4,7 @@ import type { Album, FestivalKey } from "../lib/types";
 
 const root = process.cwd();
 
-function writeSvg(
-  filePath: string,
-  title: string,
-  year: string,
-  tone: [string, string],
-) {
+function writeSvg(filePath: string, title: string, year: string, tone: [string, string]) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
   <defs>
@@ -165,7 +160,10 @@ const samples = [
     description: "A celebration wrapped in gratitude and quiet joy.",
     story:
       "Candles, familiar faces, and the soft feeling of another year held with care.",
-    notes: ["The cake was shared before the photos were done.", "A toast to health and home."],
+    notes: [
+      "The cake was shared before the photos were done.",
+      "A toast to health and home.",
+    ],
     tone: ["#3d2a45", "#c49b6c"],
   }),
   makeAlbum({
@@ -178,7 +176,10 @@ const samples = [
     description: "Laughter around the table and a night of remembered songs.",
     story:
       "Simple decorations, favorite dishes, and memories that already feel timeless.",
-    notes: ["Someone saved the first slice for later.", "The playlist never left the 90s."],
+    notes: [
+      "Someone saved the first slice for later.",
+      "The playlist never left the 90s.",
+    ],
     tone: ["#243447", "#8fa6c0"],
   }),
 ];

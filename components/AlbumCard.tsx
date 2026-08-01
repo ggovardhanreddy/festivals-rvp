@@ -35,9 +35,7 @@ export function AlbumCard({
           <div className="card-media skeleton" />
         )}
         <div className="card-body">
-          <p className="eyebrow">
-            {meta || `${album.year} · ${album.category}`}
-          </p>
+          <p className="eyebrow">{meta || `${album.year} · ${album.category}`}</p>
           <h3>{album.title}</h3>
           <p className="muted">{album.description}</p>
         </div>
