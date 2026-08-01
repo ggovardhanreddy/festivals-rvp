@@ -175,6 +175,10 @@ export function CinematicFireworks({
 
     const tick = (now: number) => {
       if (!alive) return;
+      if (document.hidden) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
       const dt = Math.min(32, now - last || 16) / 16;

@@ -159,7 +159,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const el = audioRef.current;
     if (!el) return;
     el.loop = true;
-    el.preload = "auto";
+    el.preload = "none";
     const onPlay = () => {
       setPlaying(true);
       setNeedsGesture(false);
@@ -365,50 +365,62 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     };
   }, [duck, unduck, swell]);
 
-  // Autoplay once the site opens (unless user stopped this session)
+  // Soft autoplay after first paint — load audio only when attempting play
   useEffect(() => {
     if (!ready || autoTried.current) return;
-    autoTried.current = true;
     if (!wantsPlay.current) return;
 
-    ensureLoaded(themeId);
-    const el = audioRef.current;
-    if (!el) return;
+    const start = () => {
+      if (autoTried.current) return;
+      autoTried.current = true;
+      ensureLoaded(themeId);
+      const el = audioRef.current;
+      if (!el) return;
 
-    el.muted = muted;
-    el.volume = 0;
-    fadeLock.current = true;
-    void el
-      .play()
-      .then(() => {
-        setNeedsGesture(false);
-        fadeVolume(el, 0, muted ? 0 : volume, 1200, () => {
-          fadeLock.current = false;
-        });
-      })
-      .catch(() => {
-        fadeLock.current = false;
-        setNeedsGesture(true);
-        // Unlock on first user gesture anywhere
-        const unlock = () => {
-          if (!wantsPlay.current) return;
-          ensureLoaded(themeId);
-          const audio = audioRef.current;
-          if (!audio) return;
-          audio.muted = muted;
-          audio.volume = 0;
-          void audio.play().then(() => {
-            setNeedsGesture(false);
-            fadeVolume(audio, 0, muted ? 0 : volume, 900);
-            window.removeEventListener("pointerdown", unlock);
-            window.removeEventListener("keydown", unlock);
-            window.removeEventListener("touchstart", unlock);
+      el.muted = muted;
+      el.volume = 0;
+      fadeLock.current = true;
+      void el
+        .play()
+        .then(() => {
+          setNeedsGesture(false);
+          fadeVolume(el, 0, muted ? 0 : volume, 1200, () => {
+            fadeLock.current = false;
           });
-        };
-        window.addEventListener("pointerdown", unlock, { once: true });
-        window.addEventListener("keydown", unlock, { once: true });
-        window.addEventListener("touchstart", unlock, { once: true });
-      });
+        })
+        .catch(() => {
+          fadeLock.current = false;
+          setNeedsGesture(true);
+          const unlock = () => {
+            if (!wantsPlay.current) return;
+            ensureLoaded(themeId);
+            const audio = audioRef.current;
+            if (!audio) return;
+            audio.muted = muted;
+            audio.volume = 0;
+            void audio.play().then(() => {
+              setNeedsGesture(false);
+              fadeVolume(audio, 0, muted ? 0 : volume, 900);
+              window.removeEventListener("pointerdown", unlock);
+              window.removeEventListener("keydown", unlock);
+              window.removeEventListener("touchstart", unlock);
+            });
+          };
+          window.addEventListener("pointerdown", unlock, { once: true });
+          window.addEventListener("keydown", unlock, { once: true });
+          window.addEventListener("touchstart", unlock, { once: true });
+        });
+    };
+
+    // Defer network until after first paint / intro sky
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      if (!cancelled) start();
+    }, 900);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [ready, ensureLoaded, themeId, muted, volume]);
 
   const value = useMemo(
@@ -464,7 +476,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         ref={audioRef}
         className="site-music-audio"
         loop
-        preload="auto"
+        preload="none"
         playsInline
         aria-hidden
       />

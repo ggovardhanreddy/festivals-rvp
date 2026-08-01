@@ -1,13 +1,22 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { ThemeProvider } from "next-themes";
 import { LazyMotion, domAnimation } from "framer-motion";
-import { SmoothScroll } from "./experience/SmoothScroll";
-import { LiquidCursor } from "./experience/LiquidCursor";
 import { AudioDeckProvider } from "./media/AudioDeck";
 import { MusicProvider } from "./music/MusicProvider";
 import { GlassMusicPlayer } from "./music/GlassMusicPlayer";
 import { MusicRouteSync } from "./music/MusicRouteSync";
+
+const SmoothScroll = dynamic(
+  () => import("./experience/SmoothScroll").then((m) => m.SmoothScroll),
+  { ssr: false },
+);
+
+const LiquidCursor = dynamic(
+  () => import("./experience/LiquidCursor").then((m) => m.LiquidCursor),
+  { ssr: false },
+);
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

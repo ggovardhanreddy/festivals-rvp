@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
-import { withBase } from "@/lib/base";
+import { mediaDisplaySrc } from "@/lib/media-src";
 
 const HOVER_INTERVAL_MS = 900;
 
@@ -70,7 +70,7 @@ export function HoverSlideshowTile({
         <AnimatePresence mode="sync">
           <m.img
             key={current.id}
-            src={withBase(current.thumb || current.file)}
+            src={mediaDisplaySrc(current)}
             alt={current.title || title || "Memory"}
             initial={reduce || !active ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -78,6 +78,7 @@ export function HoverSlideshowTile({
             transition={{ duration: 0.35 }}
             draggable={false}
             loading="lazy"
+            decoding="async"
           />
         </AnimatePresence>
       </div>

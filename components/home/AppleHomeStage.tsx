@@ -32,17 +32,18 @@ export function AppleHomeStage({
   const router = useRouter();
   const [tileHovered, setTileHovered] = useState(false);
 
+  const pool = useMemo(
+    () => media.filter((m) => m.type === "image").slice(0, 48),
+    [media],
+  );
+
   const slideshowItems = useMemo(() => {
-    const favorites = media.filter((m) => m.type === "image" && m.favorite);
-    const images = (favorites.length ? favorites : media.filter((m) => m.type === "image")).slice(
-      0,
-      16,
-    );
-    return images;
-  }, [media]);
+    const favorites = pool.filter((m) => m.favorite);
+    return (favorites.length ? favorites : pool).slice(0, 8);
+  }, [pool]);
 
   const frameTiles = useMemo(
-    () => galleryTeaser.filter((m) => m.type === "image").slice(0, 10),
+    () => galleryTeaser.filter((m) => m.type === "image").slice(0, 6),
     [galleryTeaser],
   );
 
@@ -92,7 +93,7 @@ export function AppleHomeStage({
               <HoverSlideshowTile
                 key={item.id}
                 cover={item}
-                frames={relatedFrames(item, media)}
+                frames={relatedFrames(item, pool)}
                 title={item.title}
                 meta={`${item.album.year} · ${item.album.title}`}
                 size={size}

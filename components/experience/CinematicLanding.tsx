@@ -144,13 +144,17 @@ function IntroStages() {
               <NightVillageBackdrop brighten={flyProgress > 0.4} />
               <CinematicFireworks intensity={fwIntensity} />
             </div>
-            {use3d && (
-              <LandingFlythrough
-                progress={flyProgress}
-                active={showSky}
-                className="aaa-flythrough"
-              />
-            )}
+            {use3d &&
+              (phase === "ready" ||
+                phase === "highlight" ||
+                phase === "fly" ||
+                flyProgress > 0) && (
+                <LandingFlythrough
+                  progress={flyProgress}
+                  active={phase === "fly" || flyProgress > 0.02}
+                  className="aaa-flythrough"
+                />
+              )}
           </>
         )}
         <div className="cinematic-landing-veil" data-phase={phase} />
@@ -262,7 +266,6 @@ function PostIntroHero() {
       aria-label="Homepage hero"
     >
       <NightVillageBackdrop brighten />
-      <CinematicFireworks intensity={1.35} className="cine-home-fireworks" />
       <div className="landing-hero-stage cine-home-stage">
         <m.figure
           className="landing-hero-portrait"
@@ -276,6 +279,8 @@ function PostIntroHero() {
             alt={`${SITE_NAME} — friends of ${VILLAGE_NAME}`}
             width={1400}
             height={900}
+            loading="lazy"
+            decoding="async"
           />
           <figcaption>RVP Youth · Festival night at home</figcaption>
         </m.figure>

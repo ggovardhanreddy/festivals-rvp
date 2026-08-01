@@ -3436,6 +3436,13 @@ html.intro-active .glass-music {
   padding-top: 2rem;
 }
 
+.apple-stage-skeleton {
+  min-height: 70svh;
+  background:
+    linear-gradient(180deg, rgba(15, 26, 20, 0.4), transparent 40%),
+    #05080c;
+}
+
 .float-field--albums {
   grid-template-rows: repeat(3, minmax(140px, 18vh));
   min-height: 56svh;

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
-import { withBase } from "@/lib/base";
+import { mediaDisplaySrc, prefetchImage } from "@/lib/media-src";
 
 const INTERVAL_MS = 4200;
 
@@ -15,7 +15,10 @@ export function AutoMemorySlideshow({
   paused?: boolean;
 }) {
   const reduce = useReducedMotion();
-  const slides = items.filter((item) => item.type === "image");
+  const slides = useMemo(
+    () => items.filter((item) => item.type === "image").slice(0, 8),
+    [items],
+  );
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -26,6 +29,12 @@ export function AutoMemorySlideshow({
     );
     return () => window.clearInterval(id);
   }, [slides.length, reduce, paused]);
+
+  useEffect(() => {
+    if (!slides.length) return;
+    const next = slides[(index + 1) % slides.length];
+    if (next) prefetchImage(mediaDisplaySrc(next));
+  }, [index, slides]);
 
   if (!slides.length) return null;
   const current = slides[index]!;
@@ -40,13 +49,15 @@ export function AutoMemorySlideshow({
           initial={reduce ? false : { opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: reduce ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reduce ? 0 : 0.85, ease: [0.22, 1, 0.36, 1] }}
         >
           <img
-            src={withBase(current.file)}
+            src={mediaDisplaySrc(current)}
             alt={current.title || "Memory"}
             className="apple-slideshow-img"
             draggable={false}
+            decoding="async"
+            fetchPriority={index === 0 ? "high" : "auto"}
           />
         </m.div>
       </AnimatePresence>
@@ -59,7 +70,7 @@ export function AutoMemorySlideshow({
         {yearHint ? <p className="apple-slideshow-meta">{yearHint}</p> : null}
       </div>
 
-      {slides.length > 1 && slides.length <= 12 ? (
+      {slides.length > 1 ? (
         <div className="apple-slideshow-dots" aria-hidden>
           {slides.map((slide, i) => (
             <span

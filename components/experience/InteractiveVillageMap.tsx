@@ -14,7 +14,7 @@ import {
 import { useIsClient, useLowPowerDevice } from "@/lib/client";
 import { VillageMap } from "@/components/VillageMap";
 import { VILLAGE_MAPS_URL } from "@/lib/site";
-import { withBase } from "@/lib/base";
+import { mediaDisplaySrc, prefetchImage } from "@/lib/media-src";
 import type { Media } from "@/lib/types";
 
 const VillageCanvas = dynamic(
@@ -32,7 +32,7 @@ function MapViewportSlideshow({
 }) {
   const reduce = useReducedMotion();
   const slides = useMemo(
-    () => items.filter((item) => item.type === "image").slice(0, 24),
+    () => items.filter((item) => item.type === "image").slice(0, 8),
     [items],
   );
   const [index, setIndex] = useState(0);
@@ -46,6 +46,12 @@ function MapViewportSlideshow({
     );
     return () => window.clearInterval(id);
   }, [slides.length, reduce, hovered]);
+
+  useEffect(() => {
+    if (!slides.length) return;
+    const next = slides[(index + 1) % slides.length];
+    if (next) prefetchImage(mediaDisplaySrc(next));
+  }, [index, slides]);
 
   if (!slides.length) return null;
   const current = slides[index]!;
@@ -62,13 +68,15 @@ function MapViewportSlideshow({
         <m.img
           key={current.id}
           className="map-viewport-slideshow-img"
-          src={withBase(current.file)}
+          src={mediaDisplaySrc(current)}
           alt={current.title || "Village memory"}
           initial={reduce ? false : { opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduce ? 0 : 0.85, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reduce ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
           draggable={false}
+          decoding="async"
+          loading="eager"
         />
       </AnimatePresence>
       <div className="map-viewport-slideshow-veil" aria-hidden />
