@@ -20,15 +20,16 @@ export const OVERVIEW_CAMERA: CameraPose = {
   target: [0, 0.2, -1],
 };
 
-/** Cinematic landing fly-through — strong forward push into the village. */
+/** Cinematic landing fly-through — wide open → hard dive into Ramalayam. */
 export const LANDING_FLY_PATH: { t: number; pose: CameraPose }[] = [
-  { t: 0, pose: { position: [0, 38, 58], target: [0, 0.2, -2] } },
-  { t: 0.22, pose: { position: [1, 22, 36], target: [0, 0.5, 8] } },
-  { t: 0.45, pose: { position: [4, 12, 20], target: [-0.4, 0.6, 3] } },
-  { t: 0.68, pose: { position: [2.2, 7.5, 10], target: [-1.2, 0.75, 0] } },
-  { t: 0.86, pose: { position: [0.6, 4.8, 5.2], target: [-1.2, 0.85, -0.4] } },
+  { t: 0, pose: { position: [0, 46, 72], target: [0, 0.4, -4] } },
+  { t: 0.18, pose: { position: [2, 28, 44], target: [0.2, 0.6, 6] } },
+  { t: 0.38, pose: { position: [5.5, 14, 24], target: [-0.2, 0.7, 4] } },
+  { t: 0.58, pose: { position: [3.2, 8.2, 12], target: [-1.0, 0.8, 1] } },
+  { t: 0.78, pose: { position: [1.1, 5.2, 6.2], target: [-1.2, 0.85, -0.2] } },
+  { t: 0.92, pose: { position: [-0.1, 3.6, 3.1], target: [-1.25, 0.78, -0.5] } },
   // Deep finish — close over Ramalayam / village heart
-  { t: 1, pose: { position: [-0.4, 3.2, 2.4], target: [-1.2, 0.7, -0.6] } },
+  { t: 1, pose: { position: [-0.55, 2.7, 1.7], target: [-1.3, 0.68, -0.75] } },
 ];
 
 export function sampleLandingFlyPose(progress: number): CameraPose {

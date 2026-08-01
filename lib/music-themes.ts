@@ -85,6 +85,23 @@ export function getMusicTheme(id: MusicThemeId | string): MusicTheme {
   return MUSIC_THEMES.find((t) => t.id === id) ?? MUSIC_THEMES[0]!;
 }
 
+/** Pick a theme from the current route (festival pages get their own bed). */
+export function themeForPathname(pathname: string): MusicThemeId {
+  const path = pathname.replace(/\/+$/, "") || "/";
+  if (path.includes("vinayaka")) return "vinayaka";
+  if (path.includes("sankranthi")) return "sankranthi";
+  if (path.includes("rvp-birthdays") || path.includes("birthday")) {
+    return "festival-night";
+  }
+  if (path.includes("fun-trips") || path.includes("trips")) {
+    return "village-morning";
+  }
+  if (path.includes("about") || path.includes("timeline") || path.includes("search")) {
+    return "calm-ambient";
+  }
+  return DEFAULT_MUSIC_THEME;
+}
+
 export function themeSourcesAbsolute(theme: MusicTheme) {
   return theme.sources.map((s) => ({
     ...s,

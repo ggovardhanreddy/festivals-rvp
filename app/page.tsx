@@ -1,9 +1,5 @@
 import Link from "next/link";
 import { allMedia, publicAlbums, years } from "@/lib/content";
-import { BUCKETS } from "@/lib/site";
-import { AlbumCard } from "@/components/AlbumCard";
-import { Gallery } from "@/components/Gallery";
-import { MemoryWall } from "@/components/MemoryWall";
 import { InteractiveVillageMap } from "@/components/experience/InteractiveVillageMap";
 import { CinematicHero } from "@/components/experience/CinematicHero";
 import { VillageStory } from "@/components/VillageStory";
@@ -11,6 +7,8 @@ import { YouthPortrait } from "@/components/YouthPortrait";
 import { TimelineStrip } from "@/components/TimelineStrip";
 import { YearGrid } from "@/components/YearGrid";
 import { Reveal } from "@/components/Reveal";
+import { AppleHomeStage } from "@/components/home/AppleHomeStage";
+import { MemoryWall } from "@/components/MemoryWall";
 
 export default function HomePage() {
   const albums = publicAlbums();
@@ -25,128 +23,65 @@ export default function HomePage() {
     <main>
       <CinematicHero />
 
-      <div className="page experience-page">
-        <Reveal className="section">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Featured Memories</p>
-              <h2>Kept close</h2>
-            </div>
-          </div>
-          <div className="grid-cards">
-            {featuredAlbums.map((album, index) => (
-              <AlbumCard
-                key={`${album.year}-${album.slug}`}
-                album={album}
-                index={index}
-              />
-            ))}
-          </div>
-        </Reveal>
+      <div className="experience-page experience-page--apple">
+        <AppleHomeStage
+          featuredAlbums={featuredAlbums}
+          media={media}
+          galleryTeaser={galleryTeaser}
+        />
 
-        <Reveal className="section" id="festivals">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Festivals & Gatherings</p>
-              <h2>Where we gather</h2>
+        <div className="page apple-rest">
+          <Reveal className="section" id="map">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Kondreddigaripalli · Ramalayam</p>
+                <h2>Fly through the village</h2>
+                <p className="lede">
+                  Aerial of home, lifted into depth — hover to glow, visit
+                  Ramalayam, open the memories each place still holds.
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="grid-cards home-bucket-grid">
-            {BUCKETS.map((bucket) => (
-              <Link
-                key={bucket.key}
-                href={bucket.href}
-                className="glass-card home-bucket-card magnetic"
-              >
-                <p className="eyebrow">{bucket.eyebrow}</p>
-                <h3>{bucket.title}</h3>
-                <p className="muted">{bucket.blurb}</p>
+            <InteractiveVillageMap slides={galleryTeaser} />
+          </Reveal>
+
+          <Reveal>
+            <YouthPortrait />
+          </Reveal>
+
+          <TimelineStrip years={yearList.slice(0, 8)} />
+
+          <Reveal className="section" id="years">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Years</p>
+                <h2>Choose a year</h2>
+              </div>
+              <Link className="btn ghost" href="/timeline/">
+                Full timeline
               </Link>
-            ))}
-          </div>
-        </Reveal>
+            </div>
+            <YearGrid years={yearList} />
+          </Reveal>
 
-        <Reveal className="section" id="map">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Kondreddigaripalli · Ramalayam</p>
-              <h2>Fly through the village</h2>
-              <p className="lede">
-                Aerial of home, lifted into depth — hover to glow, visit
-                Ramalayam, open the memories each place still holds.
+          <MemoryWall items={media} />
+
+          <VillageStory compact />
+
+          <Reveal className="section">
+            <div className="glass-card about-cta" style={{ padding: "1.6rem" }}>
+              <p className="eyebrow">About</p>
+              <h2>RVP Youth</h2>
+              <p className="muted">
+                An immersive digital village museum for Sankranthi, Vinayaka Chavithi,
+                birthdays, and journeys — curated by Govardhan Reddy.
               </p>
+              <Link className="btn" href="/about/" style={{ marginTop: "1rem" }}>
+                Read our story
+              </Link>
             </div>
-          </div>
-          <InteractiveVillageMap />
-        </Reveal>
-
-        <Reveal>
-          <YouthPortrait />
-        </Reveal>
-
-        <Reveal className="section">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Recent Memories</p>
-              <h2>Newly gathered</h2>
-            </div>
-          </div>
-          <div className="grid-cards">
-            {recent.map((album, index) => (
-              <AlbumCard
-                key={`${album.year}-${album.slug}-recent`}
-                album={album}
-                index={index}
-              />
-            ))}
-          </div>
-        </Reveal>
-
-        <TimelineStrip years={yearList.slice(0, 8)} />
-
-        <Reveal className="section" id="years">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Years</p>
-              <h2>Choose a year</h2>
-            </div>
-            <Link className="btn ghost" href="/timeline/">
-              Full timeline
-            </Link>
-          </div>
-          <YearGrid years={yearList} />
-        </Reveal>
-
-        <Reveal className="section">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Gallery</p>
-              <h2>Frames from home</h2>
-            </div>
-            <Link className="btn ghost" href="/search/">
-              Search memories
-            </Link>
-          </div>
-          <Gallery items={galleryTeaser} />
-        </Reveal>
-
-        <MemoryWall items={media} />
-
-        <VillageStory compact />
-
-        <Reveal className="section">
-          <div className="glass-card about-cta" style={{ padding: "1.6rem" }}>
-            <p className="eyebrow">About</p>
-            <h2>RVP Youth</h2>
-            <p className="muted">
-              An immersive digital village museum for Sankranthi, Vinayaka Chavithi,
-              birthdays, and journeys — curated by Govardhan Reddy.
-            </p>
-            <Link className="btn" href="/about/" style={{ marginTop: "1rem" }}>
-              Read our story
-            </Link>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
       </div>
     </main>
   );

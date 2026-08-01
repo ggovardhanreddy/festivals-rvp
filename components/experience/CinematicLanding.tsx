@@ -124,10 +124,10 @@ function IntroStages() {
   const uiFade = flying ? 1 - Math.min(1, flyProgress * 1.3) : 1;
   const welcomeFade = flying ? uiFade : 1;
   const backdropFade = 1 - flyProgress * 0.8;
-  // Big opening salvo; stay powerful into the fly-through (second beat)
+  // Opening sky + surge through the mid-fly climax, then ease down
   const fwIntensity = lowPower
-    ? 1.1 - flyProgress * 0.25
-    : 2.15 - flyProgress * 0.35;
+    ? 1.2 + (flying ? Math.sin(flyProgress * Math.PI) * 0.55 : 0)
+    : 2.25 + (flying ? Math.sin(flyProgress * Math.PI) * 0.85 : 0);
 
   return (
     <section

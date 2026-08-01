@@ -32,6 +32,7 @@ import { Reveal } from "@/components/Reveal";
 import { SearchClient } from "@/components/SearchClient";
 import { VillageStory } from "@/components/VillageStory";
 import { YearGrid } from "@/components/YearGrid";
+import { AppleBucketStage } from "@/components/home/AppleBucketStage";
 
 const BUCKET_ACCENT: Record<
   BucketKey,
@@ -87,109 +88,66 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
   const albums = albumsByBucket(bucket);
   const media = albums.flatMap((a) => a.media);
   const images = media.filter((m) => m.type === "image");
-  const featured = albums.filter((a) => a.media.some((m) => m.favorite)).slice(0, 3);
-  const highlightAlbums = featured.length ? featured : albums.slice(0, 3);
   const heroImage =
     FESTIVAL_HEROES[bucket] ||
     albums.find((a) => a.cover)?.cover ||
     images[0]?.file;
 
   return (
-    <main className="page">
-      <MemoryHero
-        eyebrow={meta.eyebrow}
+    <main className="experience-page experience-page--apple">
+      <AppleBucketStage
+        bucket={bucket}
         title={meta.title}
-        lede={meta.blurb}
-        primaryHref="#gallery"
-        primaryLabel="Open gallery"
-        secondaryHref="/timeline/"
-        secondaryLabel="Timeline"
-        backgroundImage={heroImage}
-        atmosphere={bucket === "vinayaka-chavithi" || bucket === "sankranthi"}
+        eyebrow={meta.eyebrow}
+        blurb={meta.blurb}
+        story={meta.story}
+        albums={albums}
+        heroImage={heroImage}
       />
+
       {bucket === "vinayaka-chavithi" && (
-        <FestivalIdolBanner lede={meta.story} />
-      )}
-      <Reveal className="section">
-        <p className="eyebrow">Festival Story</p>
-        <h2>Why this chapter matters</h2>
-        <p className="lede">{meta.story}</p>
-      </Reveal>
-      <Reveal className="section">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Village Scene</p>
-            <h2>Step into this chapter</h2>
-          </div>
+        <div className="page apple-rest">
+          <FestivalIdolBanner lede={meta.story} />
         </div>
-        <InteractiveVillageMap accent={BUCKET_ACCENT[bucket]} />
-      </Reveal>
-      {!!highlightAlbums.length && (
+      )}
+
+      <div className="page apple-rest">
         <Reveal className="section">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Featured</p>
-              <h2>Highlights</h2>
+              <p className="eyebrow">Village Scene</p>
+              <h2>Step into this chapter</h2>
             </div>
           </div>
-          <div className="grid-cards">
-            {highlightAlbums.map((album, index) => (
-              <AlbumCard
-                key={`${album.year}-${album.slug}-feat`}
-                album={album}
-                index={index}
-              />
-            ))}
-          </div>
+          <InteractiveVillageMap
+            accent={BUCKET_ACCENT[bucket]}
+            slides={images.slice(0, 18)}
+          />
         </Reveal>
-      )}
-      <Reveal className="section">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Years</p>
-            <h2>Browse the seasons</h2>
-          </div>
-        </div>
-        {albums.length ? (
-          <YearGrid
-            years={[...new Set(albums.map((a) => a.year))].sort((a, b) =>
-              b.localeCompare(a),
-            )}
-          />
-        ) : (
-          <EmptyState
-            title="No albums yet"
-            description={`Add photos under content/<YEAR>/${bucket}/ and push to main.`}
-            actionHref="/admin/"
-            actionLabel="CMS guide"
-          />
+
+        {!albums.length && (
+          <Reveal className="section">
+            <EmptyState
+              title="No albums yet"
+              description={`Add photos under content/<YEAR>/${bucket}/ and push to main.`}
+              actionHref="/admin/"
+              actionLabel="CMS guide"
+            />
+          </Reveal>
         )}
-      </Reveal>
-      <Reveal className="section">
-        <div className="grid-cards">
-          {albums.map((album, index) => (
-            <AlbumCard key={`${album.year}-${album.slug}`} album={album} index={index} />
-          ))}
-        </div>
-      </Reveal>
-      <Reveal className="section">
-        <div className="section-head" id="gallery">
-          <div>
-            <p className="eyebrow">Gallery</p>
-            <h2>Every frame</h2>
-          </div>
-        </div>
-        {media.length ? (
-          <Gallery items={media} />
-        ) : (
-          <EmptyState
-            title="Gallery is waiting"
-            description="Festival photos will appear here after the next content sync."
-            actionHref="/"
-            actionLabel="Back home"
-          />
+
+        {media.length > 10 && (
+          <Reveal className="section" id="full-gallery">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Full gallery</p>
+                <h2>Every frame</h2>
+              </div>
+            </div>
+            <Gallery items={media} />
+          </Reveal>
         )}
-      </Reveal>
+      </div>
     </main>
   );
 }

@@ -44,6 +44,11 @@ type MusicContextValue = {
   unmute: () => void;
   toggleMute: () => void;
   setVolume: (v: number) => void;
+  /** Temporarily lower music (intro / hover scenes) */
+  duck: (amount?: number) => void;
+  unduck: () => void;
+  /** Brief swell for fireworks climax */
+  swell: (ms?: number) => void;
   ready: boolean;
 };
 
@@ -109,8 +114,27 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const fadeLock = useRef(false);
   const loadedTheme = useRef<string | null>(null);
   const autoTried = useRef(false);
+  const duckMul = useRef(1);
+  const baseVolume = useRef(0.6);
+  const volumeRef = useRef(0.6);
+  const mutedRef = useRef(false);
 
   const theme = getMusicTheme(themeId);
+
+  useEffect(() => {
+    baseVolume.current = volume;
+    volumeRef.current = volume;
+  }, [volume]);
+
+  useEffect(() => {
+    mutedRef.current = muted;
+  }, [muted]);
+
+  const applyGain = useCallback(() => {
+    const el = audioRef.current;
+    if (!el || mutedRef.current || fadeLock.current) return;
+    el.volume = Math.min(1, Math.max(0, volumeRef.current * duckMul.current));
+  }, []);
 
   useEffect(() => {
     const savedTheme = readSession(SESSION.theme, DEFAULT_MUSIC_THEME);
@@ -215,7 +239,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       setVolumeState(next);
       writeSession(SESSION.volume, String(next));
       const el = audioRef.current;
-      if (el && !muted && !fadeLock.current) el.volume = next;
+      if (el && !muted && !fadeLock.current) {
+        el.volume = next * duckMul.current;
+      }
     },
     [muted],
   );
@@ -244,22 +270,100 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
   const setThemeId = useCallback(
     (id: MusicThemeId) => {
+      if (id === loadedTheme.current) {
+        setThemeIdState(id);
+        writeSession(SESSION.theme, id);
+        return;
+      }
       const el = audioRef.current;
       const resume = wantsPlay.current;
       setThemeIdState(id);
       writeSession(SESSION.theme, id);
       if (!el) return;
-      loadThemeSources(el, getMusicTheme(id));
-      loadedTheme.current = id;
-      el.muted = muted;
-      el.volume = muted ? 0 : volume;
-      if (resume) {
+
+      const swap = () => {
+        loadThemeSources(el, getMusicTheme(id));
+        loadedTheme.current = id;
+        el.muted = mutedRef.current;
         el.currentTime = 0;
-        void el.play().catch(() => setNeedsGesture(true));
+        if (resume) {
+          el.volume = 0;
+          fadeLock.current = true;
+          void el
+            .play()
+            .then(() => {
+              setNeedsGesture(false);
+              const target = mutedRef.current
+                ? 0
+                : volumeRef.current * duckMul.current;
+              fadeVolume(el, 0, target, 1100, () => {
+                fadeLock.current = false;
+              });
+            })
+            .catch(() => {
+              fadeLock.current = false;
+              setNeedsGesture(true);
+            });
+        }
+      };
+
+      if (playing && !mutedRef.current) {
+        fadeLock.current = true;
+        fadeVolume(el, el.volume, 0, 500, () => {
+          el.pause();
+          fadeLock.current = false;
+          swap();
+        });
+      } else {
+        swap();
       }
     },
-    [muted, volume],
+    [playing],
   );
+
+  const duck = useCallback(
+    (amount = 0.35) => {
+      duckMul.current = Math.min(1, Math.max(0.12, amount));
+      applyGain();
+    },
+    [applyGain],
+  );
+
+  const unduck = useCallback(() => {
+    duckMul.current = 1;
+    applyGain();
+  }, [applyGain]);
+
+  const swell = useCallback(
+    (ms = 1400) => {
+      const el = audioRef.current;
+      if (!el || mutedRef.current || !wantsPlay.current) return;
+      const from = el.volume;
+      const peak = Math.min(1, volumeRef.current * 1.15);
+      fadeLock.current = true;
+      fadeVolume(el, from, peak, Math.min(400, ms * 0.3), () => {
+        fadeVolume(el, peak, volumeRef.current * duckMul.current, ms * 0.7, () => {
+          fadeLock.current = false;
+        });
+      });
+    },
+    [],
+  );
+
+  // Intro / fireworks audio cues
+  useEffect(() => {
+    const onChrome = () => duck(0.42);
+    const onComplete = () => unduck();
+    const onSwell = () => swell(1600);
+    window.addEventListener("rvp:intro-chrome", onChrome);
+    window.addEventListener("rvp:intro-complete", onComplete);
+    window.addEventListener("rvp:audio-swell", onSwell);
+    return () => {
+      window.removeEventListener("rvp:intro-chrome", onChrome);
+      window.removeEventListener("rvp:intro-complete", onComplete);
+      window.removeEventListener("rvp:audio-swell", onSwell);
+    };
+  }, [duck, unduck, swell]);
 
   // Autoplay once the site opens (unless user stopped this session)
   useEffect(() => {
@@ -325,6 +429,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       unmute,
       toggleMute,
       setVolume,
+      duck,
+      unduck,
+      swell,
       ready,
     }),
     [
@@ -343,6 +450,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       unmute,
       toggleMute,
       setVolume,
+      duck,
+      unduck,
+      swell,
       ready,
     ],
   );

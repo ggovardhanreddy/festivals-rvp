@@ -50,6 +50,11 @@ export function CinematicFireworks({
   const reduce = useReducedMotion();
   const lowPower = useLowPowerDevice();
   const ref = useRef<HTMLCanvasElement>(null);
+  const intensityRef = useRef(intensity);
+
+  useEffect(() => {
+    intensityRef.current = intensity;
+  }, [intensity]);
 
   useEffect(() => {
     if (reduce) return;
@@ -64,13 +69,16 @@ export function CinematicFireworks({
     let spawnAt = 0;
     const rockets: Rocket[] = [];
     const sparks: Spark[] = [];
-    const power = Math.max(0.35, intensity);
-    const maxRockets = lowPower
-      ? Math.min(4, 2 + Math.floor(power))
-      : Math.min(10, 5 + Math.floor(power * 2));
-    const sparkBudget = lowPower
-      ? Math.floor(220 * power)
-      : Math.floor(720 * Math.min(2.4, power));
+
+    const powerOf = () => Math.max(0.35, intensityRef.current);
+    const maxRocketsOf = () =>
+      lowPower
+        ? Math.min(5, 2 + Math.floor(powerOf()))
+        : Math.min(14, 5 + Math.floor(powerOf() * 2.4));
+    const sparkBudgetOf = () =>
+      lowPower
+        ? Math.floor(240 * powerOf())
+        : Math.floor(860 * Math.min(2.6, powerOf()));
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -91,23 +99,24 @@ export function CinematicFireworks({
       scale: number,
       ring = false,
     ) => {
-      const base = lowPower ? 36 : 70;
-      const count = Math.floor((base + Math.random() * 40) * scale * power);
+      const power = powerOf();
+      const base = lowPower ? 40 : 78;
+      const count = Math.floor((base + Math.random() * 44) * scale * power);
       for (let i = 0; i < count; i += 1) {
-        if (sparks.length > sparkBudget) sparks.shift();
+        if (sparks.length > sparkBudgetOf()) sparks.shift();
         const angle = ring
           ? (i / count) * Math.PI * 2 + Math.random() * 0.08
           : Math.random() * Math.PI * 2;
-        const speed = (1.4 + Math.random() * 5.2) * scale * (0.85 + power * 0.25);
+        const speed = (1.5 + Math.random() * 5.6) * scale * (0.85 + power * 0.28);
         sparks.push({
           x,
           y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed * 0.92,
           life: 1,
-          max: 0.85 + Math.random() * 1.1,
+          max: 0.9 + Math.random() * 1.15,
           color: Math.random() > 0.7 ? "#fff6df" : color,
-          size: (1.2 + Math.random() * 2.8) * scale,
+          size: (1.25 + Math.random() * 3) * scale,
           gravity: 0.02 + Math.random() * 0.028,
           drag: 0.982 + Math.random() * 0.012,
         });
@@ -115,31 +124,35 @@ export function CinematicFireworks({
     };
 
     const explode = (x: number, y: number, color: string, pwr: number) => {
-      burst(x, y, color, 1.15 * pwr, true);
-      burst(x, y, color, 0.75 * pwr, false);
-      if (!lowPower && pwr > 0.9) {
-        // Secondary delayed bloom for big shells
+      burst(x, y, color, 1.2 * pwr, true);
+      burst(x, y, color, 0.8 * pwr, false);
+      if (!lowPower && pwr > 0.85) {
         window.setTimeout(() => {
           if (!alive) return;
-          burst(x, y + 6, PALETTE[Math.floor(Math.random() * PALETTE.length)]!, 0.55 * pwr);
-        }, 90 + Math.random() * 80);
+          burst(
+            x,
+            y + 6,
+            PALETTE[Math.floor(Math.random() * PALETTE.length)]!,
+            0.62 * pwr,
+          );
+        }, 80 + Math.random() * 90);
       }
     };
 
-    const launch = (w: number, h: number) => {
-      if (rockets.length >= maxRockets) return;
+    const launch = (w: number, h: number, force = false) => {
+      if (!force && rockets.length >= maxRocketsOf()) return;
       const color = PALETTE[Math.floor(Math.random() * PALETTE.length)]!;
-      const pwr = 0.85 + Math.random() * 0.55;
-      // Occasional double launch for festival power
-      const count = !lowPower && Math.random() > 0.55 ? 2 : 1;
+      const pwr = 0.9 + Math.random() * 0.65;
+      const power = powerOf();
+      const count = !lowPower && (force || Math.random() > 0.5) ? 2 : 1;
       for (let n = 0; n < count; n += 1) {
-        if (rockets.length >= maxRockets) break;
+        if (!force && rockets.length >= maxRocketsOf()) break;
         rockets.push({
-          x: w * (0.08 + Math.random() * 0.84),
+          x: w * (0.06 + Math.random() * 0.88),
           y: h + 10,
-          vx: (Math.random() - 0.5) * 0.85,
-          vy: -(5.2 + Math.random() * 3.2) * power * pwr,
-          targetY: h * (0.08 + Math.random() * 0.32),
+          vx: (Math.random() - 0.5) * 0.95,
+          vy: -(5.6 + Math.random() * 3.6) * power * pwr,
+          targetY: h * (0.06 + Math.random() * 0.3),
           color,
           trail: [],
           power: pwr,
@@ -147,22 +160,36 @@ export function CinematicFireworks({
       }
     };
 
+    const salvo = (count = 6) => {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      for (let i = 0; i < count; i += 1) {
+        window.setTimeout(() => {
+          if (alive) launch(w, h, true);
+        }, i * 110);
+      }
+    };
+
+    const onClimax = () => salvo(lowPower ? 4 : 8);
+    const onExplore = () => salvo(lowPower ? 3 : 6);
+
     const tick = (now: number) => {
       if (!alive) return;
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
       const dt = Math.min(32, now - last || 16) / 16;
       last = now;
+      const power = powerOf();
 
       ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
       ctx.fillRect(0, 0, w, h);
       ctx.globalCompositeOperation = "source-over";
 
       if (now > spawnAt) {
         launch(w, h);
-        const gap = (lowPower ? 900 : 480) / Math.max(0.6, power);
-        spawnAt = now + gap + Math.random() * (gap * 0.45);
+        const gap = (lowPower ? 820 : 420) / Math.max(0.55, power);
+        spawnAt = now + gap + Math.random() * (gap * 0.4);
       }
 
       ctx.globalCompositeOperation = "lighter";
@@ -173,22 +200,21 @@ export function CinematicFireworks({
         r.y += r.vy * dt;
         r.vy += 0.014 * dt;
         r.trail.push({ x: r.x, y: r.y, a: 1 });
-        if (r.trail.length > 18) r.trail.shift();
+        if (r.trail.length > 20) r.trail.shift();
         for (const t of r.trail) {
           t.a *= 0.9;
-          ctx.fillStyle = `rgba(255, 220, 160, ${0.28 * t.a})`;
+          ctx.fillStyle = `rgba(255, 220, 160, ${0.3 * t.a})`;
           ctx.beginPath();
-          ctx.arc(t.x, t.y, 1.8, 0, Math.PI * 2);
+          ctx.arc(t.x, t.y, 1.9, 0, Math.PI * 2);
           ctx.fill();
         }
-        // Bright rocket head + soft bloom
         ctx.fillStyle = r.color;
         ctx.beginPath();
-        ctx.arc(r.x, r.y, 2.6, 0, Math.PI * 2);
+        ctx.arc(r.x, r.y, 2.8, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = `rgba(255, 246, 223, 0.35)`;
+        ctx.fillStyle = `rgba(255, 246, 223, 0.38)`;
         ctx.beginPath();
-        ctx.arc(r.x, r.y, 6.5, 0, Math.PI * 2);
+        ctx.arc(r.x, r.y, 7.2, 0, Math.PI * 2);
         ctx.fill();
         if (r.y <= r.targetY || r.vy >= -0.15) {
           explode(r.x, r.y, r.color, r.power);
@@ -213,11 +239,10 @@ export function CinematicFireworks({
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.size * alpha, 0, Math.PI * 2);
         ctx.fill();
-        // Soft bloom halo on bright sparks
         if (!lowPower && s.size > 2) {
-          ctx.globalAlpha = alpha * 0.22;
+          ctx.globalAlpha = alpha * 0.24;
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.size * alpha * 2.4, 0, Math.PI * 2);
+          ctx.arc(s.x, s.y, s.size * alpha * 2.5, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -228,21 +253,24 @@ export function CinematicFireworks({
 
     resize();
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-    // Opening salvo
-    spawnAt = performance.now() + 120;
-    for (let i = 0; i < (lowPower ? 2 : 4); i += 1) {
+    spawnAt = performance.now() + 100;
+    for (let i = 0; i < (lowPower ? 3 : 5); i += 1) {
       window.setTimeout(() => {
-        if (alive) launch(canvas.clientWidth, canvas.clientHeight);
-      }, 180 + i * 160);
+        if (alive) launch(canvas.clientWidth, canvas.clientHeight, true);
+      }, 140 + i * 140);
     }
     raf = requestAnimationFrame(tick);
     window.addEventListener("resize", resize);
+    window.addEventListener("rvp:fireworks-climax", onClimax);
+    window.addEventListener("rvp:intro-chrome", onExplore);
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("rvp:fireworks-climax", onClimax);
+      window.removeEventListener("rvp:intro-chrome", onExplore);
     };
-  }, [reduce, lowPower, intensity]);
+  }, [reduce, lowPower]);
 
   if (reduce) return null;
   return (

@@ -69,14 +69,22 @@ export function IntroProvider({ children }: { children: ReactNode }) {
     window.dispatchEvent(new CustomEvent("rvp:intro-chrome"));
     const start = performance.now();
     const from = progressRef.current;
-    const dur = 4200 * (1 - from);
+    // Punchier forward dive; second fireworks beat mid-flight
+    const dur = 3800 * (1 - from);
+    let climaxSent = false;
 
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / Math.max(400, dur));
-      const eased = 1 - Math.pow(1 - t, 3);
+      const t = Math.min(1, (now - start) / Math.max(380, dur));
+      // Strong ease-out: slow lift, then commit into the village
+      const eased = 1 - Math.pow(1 - t, 2.75);
       const value = from + (1 - from) * eased;
       progressRef.current = value;
       setFlyProgress(value);
+      if (!climaxSent && value >= 0.52) {
+        climaxSent = true;
+        window.dispatchEvent(new CustomEvent("rvp:fireworks-climax"));
+        window.dispatchEvent(new CustomEvent("rvp:audio-swell"));
+      }
       if (t < 1) {
         requestAnimationFrame(tick);
       } else {
