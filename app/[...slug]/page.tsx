@@ -9,9 +9,12 @@ import {
 import {
   BUCKETS,
   VILLAGE_ADDRESS_LINE,
+  VILLAGE_MAPS_URL,
   VILLAGE_NAME,
   type BucketKey,
 } from "@/lib/site";
+import { YouthPortrait } from "@/components/YouthPortrait";
+import { VillageDepthMap } from "@/components/VillageDepthMap";
 import { AdminClient } from "@/components/AdminClient";
 import { AlbumCard } from "@/components/AlbumCard";
 import { AlbumView } from "@/components/AlbumView";
@@ -277,9 +280,18 @@ export default async function ArchiveRoute({
             <p className="muted" style={{ marginTop: "0.75rem" }}>
               {VILLAGE_ADDRESS_LINE}
             </p>
+            <p style={{ marginTop: "1rem" }}>
+              <a className="btn" href={VILLAGE_MAPS_URL} target="_blank" rel="noreferrer">
+                Open Ramalayam on Google Maps
+              </a>
+            </p>
             <PrivateNotice />
           </div>
         </Reveal>
+        <Reveal className="section">
+          <VillageDepthMap />
+        </Reveal>
+        <YouthPortrait />
         <MemoryWall items={media} />
       </main>
     );

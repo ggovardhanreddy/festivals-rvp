@@ -10,6 +10,7 @@ import {
   type VillageHotspotId,
   type WeatherMode,
 } from "@/lib/experience";
+import { RealVillageTerrain } from "./RealVillageTerrain";
 
 function Tree({
   position,
@@ -59,33 +60,6 @@ function Building({
         <meshStandardMaterial color={roof} />
       </mesh>
     </group>
-  );
-}
-
-function Lake() {
-  const ref = useRef<THREE.Mesh>(null);
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    ref.current.position.y = Math.sin(clock.elapsedTime * 0.7) * 0.02;
-    const mat = ref.current.material as THREE.MeshStandardMaterial;
-    mat.opacity = 0.72 + Math.sin(clock.elapsedTime * 0.9) * 0.05;
-  });
-  return (
-    <mesh
-      ref={ref}
-      position={[10, 0.05, -6]}
-      rotation={[-Math.PI / 2, 0, 0]}
-      receiveShadow
-    >
-      <circleGeometry args={[3.2, 40]} />
-      <meshStandardMaterial
-        color="#4a7a8c"
-        transparent
-        opacity={0.75}
-        metalness={0.35}
-        roughness={0.15}
-      />
-    </mesh>
   );
 }
 
@@ -246,35 +220,23 @@ export function VillageWorld({
 
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]} receiveShadow>
         <circleGeometry args={[48, 48]} />
-        <meshStandardMaterial color={night ? "#1a2a22" : "#3f6b4a"} />
+        <meshStandardMaterial color={night ? "#1a2a22" : "#2f4a38"} />
       </mesh>
 
-      {/* Fields */}
-      <mesh position={[-14, 0.02, -8]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[12, 10]} />
-        <meshStandardMaterial color="#6f8f45" />
-      </mesh>
-      <mesh position={[14, 0.02, 8]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[10, 12]} />
-        <meshStandardMaterial color="#7a984f" />
-      </mesh>
+      {/* Real village aerial as living 3D terrain */}
+      <RealVillageTerrain night={night} reduced={reduced} />
 
-      {/* Road */}
-      <mesh position={[0, 0.04, 6]} rotation={[-Math.PI / 2, 0, 0.2]} receiveShadow>
-        <planeGeometry args={[3.2, 28]} />
-        <meshStandardMaterial color="#6d5b47" />
-      </mesh>
-
+      {/* Landmark markers float above the aerial for fly-to hotspots */}
       <Building
-        position={[-6, 0, -4]}
-        size={[2.4, 2.2, 2.4]}
+        position={[-6, 0.2, -8]}
+        size={[1.6, 1.4, 1.6]}
         color="#efe6d6"
         roof="#9a6b2f"
       />
-      <mesh position={[-6, 3.1, -4]} castShadow>
-        <coneGeometry args={[1.1, 1.6, 4]} />
+      <mesh position={[-6, 2.2, -8]} castShadow>
+        <coneGeometry args={[0.8, 1.2, 4]} />
         <meshStandardMaterial
           color="#c49855"
           emissive="#8f6a32"
@@ -282,43 +244,34 @@ export function VillageWorld({
         />
       </mesh>
 
+      {/* Soft landmark accents at edges — keep aerial readable */}
       <Building
-        position={[4, 0, -2]}
-        size={[3.2, 1.6, 2.2]}
+        position={[7, 0.15, 8]}
+        size={[1.8, 1.2, 1.4]}
         color="#d8e2da"
         roof="#5f7466"
       />
-      <mesh position={[0, 0.08, 4]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <circleGeometry args={[3.4, 28]} />
-        <meshStandardMaterial color="#5f7a4f" />
+
+      {/* Entrance markers at south edge of aerial */}
+      <mesh position={[-4, 1.1, 14]} castShadow>
+        <boxGeometry args={[0.28, 2.2, 0.28]} />
+        <meshStandardMaterial color="#7a5a35" />
       </mesh>
-      <mesh position={[5, 0.1, 6]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <circleGeometry args={[2.6, 24]} />
+      <mesh position={[-2.4, 1.1, 14]} castShadow>
+        <boxGeometry args={[0.28, 2.2, 0.28]} />
+        <meshStandardMaterial color="#7a5a35" />
+      </mesh>
+      <mesh position={[-3.2, 2.3, 14]} castShadow>
+        <boxGeometry args={[2, 0.28, 0.32]} />
         <meshStandardMaterial color="#8f6a32" />
       </mesh>
 
-      {/* Entrance arch */}
-      <mesh position={[-10, 1.4, 10]} castShadow>
-        <boxGeometry args={[0.35, 2.8, 0.35]} />
-        <meshStandardMaterial color="#7a5a35" />
-      </mesh>
-      <mesh position={[-8.2, 1.4, 10]} castShadow>
-        <boxGeometry args={[0.35, 2.8, 0.35]} />
-        <meshStandardMaterial color="#7a5a35" />
-      </mesh>
-      <mesh position={[-9.1, 2.9, 10]} castShadow>
-        <boxGeometry args={[2.4, 0.35, 0.4]} />
-        <meshStandardMaterial color="#8f6a32" />
-      </mesh>
-
-      <Lake />
-
-      {/* Mountains */}
+      {/* Distant hills frame the real village */}
       {[
-        [-18, 0, -22],
-        [-10, 0, -24],
-        [2, 0, -26],
-        [14, 0, -22],
+        [-22, 0, -20],
+        [-12, 0, -24],
+        [6, 0, -26],
+        [18, 0, -20],
       ].map((pos, i) => (
         <mesh key={i} position={pos as [number, number, number]} castShadow>
           <coneGeometry args={[5 + i, 7 + i * 0.6, 5]} />
@@ -327,13 +280,10 @@ export function VillageWorld({
       ))}
 
       {[
-        [-3, 0, 1],
-        [-8, 0, 2],
-        [2, 0, -7],
-        [8, 0, 2],
-        [-12, 0, -2],
-        [7, 0, -10],
-        [-1, 0, 9],
+        [-14, 0, 12],
+        [12, 0, 12],
+        [-16, 0, -2],
+        [14, 0, -6],
       ].map((pos, i) => (
         <Tree
           key={i}

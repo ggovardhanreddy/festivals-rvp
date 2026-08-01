@@ -115,7 +115,7 @@ export function CinematicHero() {
         <div
           className="village-canvas village-canvas-fallback"
           style={{
-            backgroundImage: `linear-gradient(180deg, rgba(15,26,20,.35), rgba(15,26,20,.75)), url(${withBase("/brand/og-banner.jpg")})`,
+            backgroundImage: `linear-gradient(180deg, rgba(15,26,20,.35), rgba(15,26,20,.75)), url(${withBase("/brand/village-aerial.webp")})`,
           }}
         />
       )}

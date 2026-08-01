@@ -6,6 +6,7 @@ import { MemoryWall } from "@/components/MemoryWall";
 import { InteractiveVillageMap } from "@/components/experience/InteractiveVillageMap";
 import { CinematicHero } from "@/components/experience/CinematicHero";
 import { VillageStory } from "@/components/VillageStory";
+import { YouthPortrait } from "@/components/YouthPortrait";
 import { TimelineStrip } from "@/components/TimelineStrip";
 import { Reveal } from "@/components/Reveal";
 import { PrivateNotice } from "@/components/PrivateNotice";
@@ -47,14 +48,19 @@ export default function HomePage() {
         <Reveal className="section" id="map">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Interactive Village</p>
-              <h2>Fly through memory</h2>
+              <p className="eyebrow">Kondreddigaripalli · Ramalayam</p>
+              <h2>Fly through the real village</h2>
               <p className="lede">
-                Hover to glow. Click to travel. Open the memories each place still holds.
+                Your aerial of home, lifted into depth — hover to glow, click
+                Ramalayam, open memories each place still holds.
               </p>
             </div>
           </div>
           <InteractiveVillageMap />
+        </Reveal>
+
+        <Reveal>
+          <YouthPortrait />
         </Reveal>
 
         <Reveal className="section">

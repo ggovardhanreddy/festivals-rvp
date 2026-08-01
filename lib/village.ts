@@ -20,12 +20,12 @@ export const VILLAGE_SPOTS: VillageSpot[] = [
   },
   {
     id: "temple",
-    label: "Temple",
-    blurb: "Bell tones, lamp light, and quiet devotion at the heart of home.",
-    x: 22,
-    y: 30,
+    label: "Ramalayam",
+    blurb: "రామాలయం — bell tones and lamp light at the heart of Kondreddigaripalli.",
+    x: 46,
+    y: 42,
     href: "/vinayaka-chavithi/",
-    memoryHint: "Festival prayers",
+    memoryHint: "Temple prayers",
   },
   {
     id: "school",

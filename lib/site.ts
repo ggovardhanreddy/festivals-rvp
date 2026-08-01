@@ -27,6 +27,17 @@ export const VILLAGE_ADDRESS_LINE = [
   `PIN ${VILLAGE_ADDRESS.pincode}`,
 ].join(", ");
 
+/** Google Maps — Ramalayam, Kondreddigaripalli */
+export const VILLAGE_MAPS_URL = "https://maps.app.goo.gl/w7Nn7pbXju6uQ6vx6";
+export const VILLAGE_MAPS_EMBED =
+  "https://www.google.com/maps?q=13.9039796,78.7552737&z=18&output=embed";
+export const VILLAGE_COORDS = {
+  lat: 13.9039796,
+  lng: 78.7552737,
+  label: "Ramalayam",
+  labelTe: "రామాలయం",
+} as const;
+
 export const NAV = [
   { href: "/", label: "Home" },
   { href: "/sankranthi/", label: "Sankranthi" },

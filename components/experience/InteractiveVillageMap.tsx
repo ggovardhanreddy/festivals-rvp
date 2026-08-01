@@ -13,6 +13,7 @@ import {
 } from "@/lib/experience";
 import { useIsClient, useLowPowerDevice } from "@/lib/client";
 import { VillageMap } from "@/components/VillageMap";
+import { VILLAGE_MAPS_URL } from "@/lib/site";
 
 const VillageCanvas = dynamic(
   () => import("./village/VillageCanvas").then((mod) => mod.VillageCanvas),
@@ -70,6 +71,9 @@ export function InteractiveVillageMap({
               Open memories
             </Link>
           )}
+          <a className="btn ghost" href={VILLAGE_MAPS_URL} target="_blank" rel="noreferrer">
+            Google Maps
+          </a>
           <button
             type="button"
             className="btn ghost"

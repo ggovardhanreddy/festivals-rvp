@@ -16,8 +16,8 @@ export const INTRO_CAMERA: CameraPose = {
 };
 
 export const OVERVIEW_CAMERA: CameraPose = {
-  position: [14, 16, 22],
-  target: [0, 0.5, 0],
+  position: [8, 18, 20],
+  target: [0, 0.2, -1],
 };
 
 export const VILLAGE_HOTSPOTS: {
@@ -38,11 +38,11 @@ export const VILLAGE_HOTSPOTS: {
   },
   {
     id: "temple",
-    label: "Temple",
-    blurb: "Bell tones and lamp light at the heart of belonging.",
+    label: "Ramalayam",
+    blurb: "రామాలయం — lamp light and prayer at the heart of Kondreddigaripalli.",
     href: "/vinayaka-chavithi/",
-    position: [-6, 0.4, -4],
-    camera: { position: [-8, 5, 2], target: [-6, 2, -4] },
+    position: [-1.2, 0.9, -0.2],
+    camera: { position: [2, 8, 10], target: [-1.2, 0.6, -0.2] },
   },
   {
     id: "school",

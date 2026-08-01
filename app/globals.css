@@ -1535,6 +1535,135 @@ button:focus-visible {
   margin-inline: auto;
 }
 
+.village-depth-map {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+.village-depth-stage {
+  position: relative;
+  min-height: min(72vh, 640px);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  isolation: isolate;
+  perspective: 900px;
+  background: #1a2a22;
+  box-shadow: var(--elevation-3);
+}
+
+.village-depth-layer {
+  position: absolute;
+  inset: -6%;
+  will-change: transform;
+}
+
+.village-depth-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.08);
+  filter: saturate(1.05) contrast(1.04);
+}
+
+.village-depth-mist {
+  background:
+    radial-gradient(circle at 30% 40%, rgba(240, 217, 160, 0.12), transparent 42%),
+    linear-gradient(180deg, transparent 40%, rgba(15, 26, 20, 0.35));
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.village-depth-glow {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 164, 90, 0.35), transparent 70%);
+  pointer-events: none;
+  filter: blur(4px);
+}
+
+.village-depth-pin {
+  position: absolute;
+  left: 48%;
+  top: 44%;
+  translate: -50% -100%;
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.village-depth-pin-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50% 50% 50% 0;
+  rotate: -45deg;
+  background: #d64545;
+  box-shadow: 0 0 0 6px rgba(214, 69, 69, 0.25);
+}
+
+.village-depth-pin-label {
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--glass-strong) 92%, transparent);
+  backdrop-filter: blur(10px);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.village-depth-pin-label small {
+  display: block;
+  font-weight: var(--font-weight-regular);
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.village-depth-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 45%, rgba(15, 26, 20, 0.45));
+  pointer-events: none;
+}
+
+.youth-portrait-frame {
+  margin: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--elevation-2);
+  background: var(--color-bg-elevated);
+}
+
+.youth-portrait-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.youth-portrait-frame figcaption {
+  padding: 0.85rem 1.25rem 1.1rem;
+}
+
+@media (max-width: 920px) {
+  .village-depth-map {
+    grid-template-columns: 1fr;
+  }
+
+  .village-depth-stage {
+    min-height: 52vh;
+  }
+}
+
 .skeleton {
   display: block;
   border-radius: var(--radius-sm);
