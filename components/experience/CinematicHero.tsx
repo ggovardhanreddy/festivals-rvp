@@ -4,62 +4,82 @@ import Link from "next/link";
 import { m, useReducedMotion } from "framer-motion";
 import { withBase } from "@/lib/base";
 import { VILLAGE_ALSO_KNOWN_AS, VILLAGE_NAME, SITE_NAME } from "@/lib/site";
+import { Fireworks } from "./Fireworks";
 
 /**
- * Landing hero — RVP Youth photo first.
- * No black intro stages; village 3D lives in the map section below.
+ * Festival landing — RVP Youth portrait with fireworks celebration sky.
  */
 export function CinematicHero() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="landing-hero" aria-label={`${SITE_NAME} home`}>
-      <div className="landing-hero-media" aria-hidden={!reduce}>
+    <section className="landing-hero festival-hero" aria-label={`${SITE_NAME} home`}>
+      <div className="landing-hero-sky" aria-hidden>
         <img
-          src={withBase("/brand/rvp-youth-photo.webp")}
+          src={withBase("/brand/village-night-sky.webp")}
           alt=""
-          className="landing-hero-photo"
-          width={1400}
-          height={900}
+          className="landing-hero-sky-photo"
+          width={1800}
+          height={1200}
           fetchPriority="high"
           decoding="async"
         />
-        <div className="landing-hero-shade" aria-hidden />
+        <div className="landing-hero-sky-wash" />
+        <div className="landing-hero-sparkles" />
       </div>
 
-      <m.div
-        className="landing-hero-copy"
-        initial={reduce ? false : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <img
-          src={withBase("/brand/rvp-youth-logo-light.svg")}
-          alt={SITE_NAME}
-          className="landing-hero-brand"
-          width={200}
-          height={58}
-        />
-        <p className="eyebrow">
-          {SITE_NAME} · {VILLAGE_NAME}
-        </p>
-        <h1>{VILLAGE_NAME}</h1>
-        <p className="lede">
-          Digital Village Experience for {VILLAGE_NAME} ({VILLAGE_ALSO_KNOWN_AS}) —
-          festivals, friendships, and memories of home.
-        </p>
-        <div className="btn-row">
-          <a className="btn magnetic" href="#map">
-            Explore Village
-          </a>
-          <Link className="btn ghost" href="/sankranthi/">
-            Sankranthi
-          </Link>
-          <Link className="btn ghost" href="/about/">
-            About
-          </Link>
-        </div>
-      </m.div>
+      <Fireworks />
+
+      <div className="landing-hero-stage">
+        <m.figure
+          className="landing-hero-portrait"
+          initial={reduce ? false : { opacity: 0, y: 28, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <img
+            src={withBase("/brand/rvp-youth-festival.webp")}
+            alt={`${SITE_NAME} — friends of ${VILLAGE_NAME}`}
+            width={1400}
+            height={900}
+            fetchPriority="high"
+            decoding="async"
+          />
+          <figcaption>RVP Youth · Celebration of home</figcaption>
+        </m.figure>
+
+        <m.div
+          className="landing-hero-copy festival-copy"
+          initial={reduce ? false : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: reduce ? 0 : 0.12, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <img
+            src={withBase("/brand/rvp-youth-logo-light.svg")}
+            alt={SITE_NAME}
+            className="landing-hero-brand"
+            width={220}
+            height={64}
+          />
+          <p className="eyebrow">Festival night · {VILLAGE_NAME}</p>
+          <h1>RVP Youth</h1>
+          <p className="lede">
+            Fireworks over {VILLAGE_NAME} ({VILLAGE_ALSO_KNOWN_AS}) — friendships,
+            festivals, and the Digital Village Experience.
+          </p>
+          <div className="btn-row">
+            <a className="btn magnetic" href="#map">
+              Explore Village
+            </a>
+            <Link className="btn ghost" href="/sankranthi/">
+              Sankranthi
+            </Link>
+            <Link className="btn ghost" href="/about/">
+              About
+            </Link>
+          </div>
+        </m.div>
+      </div>
     </section>
   );
 }

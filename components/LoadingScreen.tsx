@@ -31,7 +31,7 @@ export function LoadingScreen() {
           aria-label="Loading RVP Youth"
         >
           <img
-            src={withBase("/brand/rvp-youth-photo.webp")}
+            src={withBase("/brand/rvp-youth-festival.webp")}
             alt=""
             className="landing-loader-photo"
             aria-hidden
