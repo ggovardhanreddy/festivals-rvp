@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Festivals RVP
 
-## Getting Started
+A private, static family memory archive for festivals, trips, videos, documents and photographs. Built with Next.js App Router and exported for Cloudflare Pages—no database or paid API.
 
-First, run the development server:
+## Local development
 
 ```bash
+npm install
+npm run sample-data
+npm run optimize
+npm run generate
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site runs on `http://localhost:3000`; the local-only administrator service runs on port `8788`. If `.env.local` does not exist, create credentials with `npm run admin-hash change-me-govardhan`, then replace that temporary password.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Albums use `content/<year>/<Category>/<Album>/metadata.json`, `originals/` (private source files), and generated `public/images/` and `public/thumbs/`. Put files in `originals/`, update metadata, then run `npm run optimize && npm run generate`.
 
-## Learn More
+## Commands
 
-To learn more about Next.js, take a look at the following resources:
+- `prepare:site` creates folders; `ingest` checks ZIPs in `inbox/`.
+- `import` and `import-google` describe local import workflows.
+- `optimize` creates derivatives; `generate` writes search, feed, and sitemap.
+- `publish` stages locally only; it never pushes or configures remotes.
+- `admin-hash <password>` stores HMAC credentials in `.env.local`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`npm run build` creates `out/` for Cloudflare Pages. The default URL is `https://festivals-rvp.pages.dev`; set `NEXT_PUBLIC_SITE_URL` after configuring a custom Cloudflare DNS domain. The included GitHub workflow requires `CLOUDFLARE_API_TOKEN`.
 
-## Deploy on Vercel
+## Privacy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Images have no download controls and the gallery discourages right-click and drag interactions, but browser-visible files cannot be technically impossible to save. Keep originals under `content/**/originals/` and only publish derivatives safe to display.

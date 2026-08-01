@@ -1,12 +1,22 @@
 {
   "name": "festivals-rvp",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"tsx scripts/admin-server.ts\" \"next dev\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prepare:site": "tsx scripts/ensure-folders.ts",
+    "ingest": "tsx scripts/ingest-zips.ts",
+    "publish": "tsx scripts/publish.ts",
+    "generate": "tsx scripts/generate-all.ts",
+    "optimize": "tsx scripts/optimize-images.ts",
+    "sample-data": "tsx scripts/sample-data.ts",
+    "admin-hash": "tsx scripts/admin-hash.ts",
+    "import": "tsx scripts/import.ts",
+    "import-google": "tsx scripts/import-google.ts"
   },
   "dependencies": {
     "chalk": "^6.0.0",
