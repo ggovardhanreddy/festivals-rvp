@@ -2,58 +2,47 @@
 
 import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Logo } from "./Logo";
+import { withBase } from "@/lib/base";
 
+/** Brief soft splash — never a long black screen. */
 export function LoadingScreen() {
   const reduce = useReducedMotion();
   const [show, setShow] = useState(true);
-  const [progress, setProgress] = useState(8);
 
   useEffect(() => {
-    let frame = 0;
     if (reduce) {
-      frame = window.requestAnimationFrame(() => {
-        setProgress(100);
-        setShow(false);
-      });
+      const frame = window.requestAnimationFrame(() => setShow(false));
       return () => window.cancelAnimationFrame(frame);
     }
-
-    const start = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / 1400);
-      setProgress(Math.round(8 + t * 92));
-      if (t < 1) frame = requestAnimationFrame(tick);
-      else setShow(false);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    const timer = window.setTimeout(() => setShow(false), 480);
+    return () => window.clearTimeout(timer);
   }, [reduce]);
 
   return (
     <AnimatePresence>
       {show && (
         <m.div
-          className="loader-screen cinematic-loader"
+          className="loader-screen landing-loader"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, filter: "blur(10px)" }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
           role="status"
           aria-live="polite"
-          aria-label="Loading RVP Youth experience"
+          aria-label="Loading RVP Youth"
         >
-          <div className="loader-rays" aria-hidden />
-          <m.div
-            initial={{ scale: 0.92, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Logo className="loader-logo" />
-          </m.div>
-          <p className="eyebrow">Entering the village</p>
-          <div className="cinematic-progress loader-progress" aria-hidden>
-            <span style={{ width: `${progress}%` }} />
-          </div>
+          <img
+            src={withBase("/brand/rvp-youth-photo.webp")}
+            alt=""
+            className="landing-loader-photo"
+            aria-hidden
+          />
+          <img
+            src={withBase("/brand/rvp-youth-logo-light.svg")}
+            alt="RVP Youth"
+            width={180}
+            height={52}
+            className="landing-loader-logo"
+          />
         </m.div>
       )}
     </AnimatePresence>

@@ -9,8 +9,6 @@ import { VillageStory } from "@/components/VillageStory";
 import { YouthPortrait } from "@/components/YouthPortrait";
 import { TimelineStrip } from "@/components/TimelineStrip";
 import { Reveal } from "@/components/Reveal";
-import { PrivateNotice } from "@/components/PrivateNotice";
-
 export default function HomePage() {
   const albums = publicAlbums();
   const media = allMedia();
@@ -25,8 +23,6 @@ export default function HomePage() {
       <CinematicHero />
 
       <div className="page experience-page">
-        <PrivateNotice />
-
         <Reveal className="section">
           <div className="section-head">
             <div>
