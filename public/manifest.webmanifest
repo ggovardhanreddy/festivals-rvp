@@ -1,7 +1,7 @@
 {
   "name": "RVP Youth",
   "short_name": "RVP Youth",
-  "description": "Digital Village Experience - festivals, birthdays, and journeys.",
+  "description": "Where Every Celebration Becomes a Legacy. Our Village. Our Heritage. Our Memories.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,13 +9,13 @@
   "theme_color": "#1f3d2e",
   "icons": [
     {
-      "src": "/brand/icon-192.png",
+      "src": "/logo/android-icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/brand/icon-512.png",
+      "src": "/logo/app-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

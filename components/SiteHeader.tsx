@@ -20,8 +20,22 @@ export function SiteHeader() {
       const frame = window.requestAnimationFrame(() => setReady(true));
       return () => window.cancelAnimationFrame(frame);
     }
-    const id = window.setTimeout(() => setReady(true), reduce ? 0 : 5600);
-    return () => window.clearTimeout(id);
+    setReady(false);
+    const reveal = () => setReady(true);
+    window.addEventListener("rvp:intro-chrome", reveal);
+    window.addEventListener("rvp:intro-complete", reveal);
+    if (reduce) {
+      const frame = window.requestAnimationFrame(reveal);
+      return () => {
+        window.cancelAnimationFrame(frame);
+        window.removeEventListener("rvp:intro-chrome", reveal);
+        window.removeEventListener("rvp:intro-complete", reveal);
+      };
+    }
+    return () => {
+      window.removeEventListener("rvp:intro-chrome", reveal);
+      window.removeEventListener("rvp:intro-complete", reveal);
+    };
   }, [pathname, reduce]);
 
   useEffect(() => {

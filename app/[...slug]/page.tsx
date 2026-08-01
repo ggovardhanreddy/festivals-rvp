@@ -9,6 +9,8 @@ import {
 import {
   BUCKETS,
   FESTIVAL_HEROES,
+  LANDING_BRAND_TAGLINES,
+  SITE_TAGLINE,
   VILLAGE_ADDRESS_LINE,
   VILLAGE_MAPS_URL,
   VILLAGE_NAME,
@@ -294,7 +296,7 @@ export default async function ArchiveRoute({
           atmosphere
           eyebrow="About"
           title="RVP Youth"
-          lede={`Digital Village Experience for ${VILLAGE_NAME} — elegant, intimate, and free to host forever.`}
+          lede={SITE_TAGLINE}
           primaryHref="/sankranthi/"
           primaryLabel="Begin with Sankranthi"
           secondaryHref="/#map"
@@ -304,7 +306,12 @@ export default async function ArchiveRoute({
         <Reveal className="section">
           <div className="glass-card" style={{ padding: "1.5rem" }}>
             <h2>What this archive holds</h2>
-            <p className="muted">
+            {LANDING_BRAND_TAGLINES.map((line) => (
+              <p key={line} className="muted" style={{ marginTop: "0.5rem" }}>
+                {line}
+              </p>
+            ))}
+            <p className="muted" style={{ marginTop: "0.75rem" }}>
               Sankranthi, Vinayaka Chavithi, RVP Birthdays, and Fun Trips — curated as a
               living memory book for {VILLAGE_NAME}, not a generic gallery.
             </p>

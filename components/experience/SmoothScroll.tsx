@@ -17,13 +17,21 @@ export function SmoothScroll() {
 
     let frame = 0;
     const raf = (time: number) => {
-      lenis.raf(time);
+      if (!document.documentElement.classList.contains("intro-locked")) {
+        lenis.raf(time);
+      }
       frame = requestAnimationFrame(raf);
     };
     frame = requestAnimationFrame(raf);
 
+    const stop = () => lenis.stop();
+    const start = () => lenis.start();
+    window.addEventListener("rvp:intro-complete", start);
+    if (document.documentElement.classList.contains("intro-locked")) stop();
+
     return () => {
       cancelAnimationFrame(frame);
+      window.removeEventListener("rvp:intro-complete", start);
       lenis.destroy();
     };
   }, [reduce]);

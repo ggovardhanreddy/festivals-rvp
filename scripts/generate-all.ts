@@ -77,7 +77,7 @@ fs.writeFileSync(
     {
       name: "RVP Youth",
       short_name: "RVP Youth",
-      description: "Digital Village Experience - festivals, birthdays, and journeys.",
+      description: "Where Every Celebration Becomes a Legacy. Our Village. Our Heritage. Our Memories.",
       start_url: startUrl,
       scope: base || "/",
       display: "standalone",

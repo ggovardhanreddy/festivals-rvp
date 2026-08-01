@@ -20,6 +20,42 @@ export const OVERVIEW_CAMERA: CameraPose = {
   target: [0, 0.2, -1],
 };
 
+/** Cinematic landing fly-through — strong forward push into the village. */
+export const LANDING_FLY_PATH: { t: number; pose: CameraPose }[] = [
+  { t: 0, pose: { position: [0, 38, 58], target: [0, 0.2, -2] } },
+  { t: 0.22, pose: { position: [1, 22, 36], target: [0, 0.5, 8] } },
+  { t: 0.45, pose: { position: [4, 12, 20], target: [-0.4, 0.6, 3] } },
+  { t: 0.68, pose: { position: [2.2, 7.5, 10], target: [-1.2, 0.75, 0] } },
+  { t: 0.86, pose: { position: [0.6, 4.8, 5.2], target: [-1.2, 0.85, -0.4] } },
+  // Deep finish — close over Ramalayam / village heart
+  { t: 1, pose: { position: [-0.4, 3.2, 2.4], target: [-1.2, 0.7, -0.6] } },
+];
+
+export function sampleLandingFlyPose(progress: number): CameraPose {
+  const p = Math.min(1, Math.max(0, progress));
+  const path = LANDING_FLY_PATH;
+  let i = 0;
+  while (i < path.length - 1 && path[i + 1]!.t < p) i += 1;
+  const a = path[i]!;
+  const b = path[Math.min(i + 1, path.length - 1)]!;
+  const span = Math.max(0.0001, b.t - a.t);
+  const u = (p - a.t) / span;
+  const ease = u * u * (3 - 2 * u);
+  const lerp = (x: number, y: number) => x + (y - x) * ease;
+  return {
+    position: [
+      lerp(a.pose.position[0], b.pose.position[0]),
+      lerp(a.pose.position[1], b.pose.position[1]),
+      lerp(a.pose.position[2], b.pose.position[2]),
+    ],
+    target: [
+      lerp(a.pose.target[0], b.pose.target[0]),
+      lerp(a.pose.target[1], b.pose.target[1]),
+      lerp(a.pose.target[2], b.pose.target[2]),
+    ],
+  };
+}
+
 export const VILLAGE_HOTSPOTS: {
   id: VillageHotspotId;
   label: string;

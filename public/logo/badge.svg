@@ -1,39 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="RVP Youth">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="RVP Youth">
   <title>RVP Youth</title>
-  <defs>
-    <linearGradient id="b" x1="8%" y1="0%" x2="92%" y2="100%">
-      <stop offset="0%" stop-color="#1e4fd6"/>
-      <stop offset="16%" stop-color="#06b6d4"/>
-      <stop offset="32%" stop-color="#10b981"/>
-      <stop offset="48%" stop-color="#7c3aed"/>
-      <stop offset="64%" stop-color="#ec4899"/>
-      <stop offset="80%" stop-color="#d4a45a"/>
-      <stop offset="100%" stop-color="#f97316"/>
-    </linearGradient>
-    <linearGradient id="bShine" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
-      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.1"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <radialGradient id="bBloom" cx="34%" cy="28%" r="68%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <circle cx="64" cy="64" r="60" fill="#0f1a14"/>
-  <circle cx="64" cy="64" r="57" fill="none" stroke="url(#b)" stroke-width="2.8"/>
-  <g transform="translate(32 16)">
-  <circle cx="32" cy="32" r="29" fill="url(#b)" opacity="0.16"/>
-  <circle cx="32" cy="32" r="27" fill="none" stroke="url(#b)" stroke-width="2.6"/>
-  <circle cx="32" cy="32" r="22.5" fill="url(#bBloom)"/>
-  <path d="M14 38.5 C18 30.5 24.5 26 32 26 C39.5 26 46 30.5 50 38.5" fill="none" stroke="url(#b)" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M16 40.5 A16 16 0 0 1 48 40.5" fill="url(#b)" opacity="0.92"/>
-  <path d="M32 40.2 V18.5" stroke="url(#b)" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M32 24.5 L23.5 16.2" stroke="url(#b)" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M32 24.5 L40.5 16.2" stroke="url(#b)" stroke-width="2.4" stroke-linecap="round"/>
-  <circle cx="32" cy="15.2" r="2.2" fill="url(#b)"/>
-  <ellipse cx="26" cy="20" rx="10" ry="6" fill="url(#bShine)"/>
+  <circle cx="110" cy="110" r="108" fill="#FFFDF0"/>
+  <g transform="translate(110 100) scale(0.78) rotate(0)">
+    <g fill="#E88B41">
+      <circle cx="0" cy="-78" r="15.5"/>
+      <path d="M-30,-60 C-36,-38 -34,-8 -14,12 L0,24 L14,12 C34,-8 36,-38 30,-60
+               L16,-60 C20,-42 18,-16 6,-2 L0,6 L-6,-2 C-18,-16 -20,-42 -16,-60 Z"/>
+      <g fill="#ffffff" opacity="0.95">
+        <path transform="translate(0 -48) scale(0.42)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -34) scale(0.38)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -21) scale(0.32)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+      </g>
+    </g>
   </g>
-  <text x="64" y="110" text-anchor="middle" fill="#f0d7a0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2.2">RVP YOUTH</text>
+  <g transform="translate(110 100) scale(0.78) rotate(60)">
+    <g fill="#8BC367">
+      <circle cx="0" cy="-78" r="15.5"/>
+      <path d="M-30,-60 C-36,-38 -34,-8 -14,12 L0,24 L14,12 C34,-8 36,-38 30,-60
+               L16,-60 C20,-42 18,-16 6,-2 L0,6 L-6,-2 C-18,-16 -20,-42 -16,-60 Z"/>
+      <g fill="#ffffff" opacity="0.95">
+        <path transform="translate(0 -48) scale(0.42)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -34) scale(0.38)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -21) scale(0.32)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(110 100) scale(0.78) rotate(120)">
+    <g fill="#4A81BF">
+      <circle cx="0" cy="-78" r="15.5"/>
+      <path d="M-30,-60 C-36,-38 -34,-8 -14,12 L0,24 L14,12 C34,-8 36,-38 30,-60
+               L16,-60 C20,-42 18,-16 6,-2 L0,6 L-6,-2 C-18,-16 -20,-42 -16,-60 Z"/>
+      <g fill="#ffffff" opacity="0.95">
+        <path transform="translate(0 -48) scale(0.42)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -34) scale(0.38)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -21) scale(0.32)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(110 100) scale(0.78) rotate(180)">
+    <g fill="#4A81BF">
+      <circle cx="0" cy="-78" r="15.5"/>
+      <path d="M-30,-60 C-36,-38 -34,-8 -14,12 L0,24 L14,12 C34,-8 36,-38 30,-60
+               L16,-60 C20,-42 18,-16 6,-2 L0,6 L-6,-2 C-18,-16 -20,-42 -16,-60 Z"/>
+      <g fill="#ffffff" opacity="0.95">
+        <path transform="translate(0 -48) scale(0.42)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -34) scale(0.38)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -21) scale(0.32)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(110 100) scale(0.78) rotate(240)">
+    <g fill="#4A81BF">
+      <circle cx="0" cy="-78" r="15.5"/>
+      <path d="M-30,-60 C-36,-38 -34,-8 -14,12 L0,24 L14,12 C34,-8 36,-38 30,-60
+               L16,-60 C20,-42 18,-16 6,-2 L0,6 L-6,-2 C-18,-16 -20,-42 -16,-60 Z"/>
+      <g fill="#ffffff" opacity="0.95">
+        <path transform="translate(0 -48) scale(0.42)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -34) scale(0.38)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -21) scale(0.32)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(110 100) scale(0.78) rotate(300)">
+    <g fill="#8BC367">
+      <circle cx="0" cy="-78" r="15.5"/>
+      <path d="M-30,-60 C-36,-38 -34,-8 -14,12 L0,24 L14,12 C34,-8 36,-38 30,-60
+               L16,-60 C20,-42 18,-16 6,-2 L0,6 L-6,-2 C-18,-16 -20,-42 -16,-60 Z"/>
+      <g fill="#ffffff" opacity="0.95">
+        <path transform="translate(0 -48) scale(0.42)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -34) scale(0.38)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -21) scale(0.32)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+      </g>
+    </g>
+  </g>
+  <text x="110" y="205" text-anchor="middle" fill="#4A81BF" font-family="Montserrat, ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="16" font-weight="800" letter-spacing="2.4">RVP YOUTH</text>
 </svg>

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import {
+  LANDING_BRAND_TAGLINES,
   SITE_NAME,
-  SITE_TAGLINE,
   VILLAGE_ADDRESS_LINE,
   VILLAGE_NAME,
 } from "@/lib/site";
@@ -13,9 +13,18 @@ export function SiteFooter() {
       <div className="footer-inner">
         <div>
           <Logo variant="auto" />
-          <p className="muted" style={{ marginTop: "0.75rem", maxWidth: "42ch" }}>
-            {SITE_NAME} — {SITE_TAGLINE} for {VILLAGE_NAME}. A private heritage
-            archive of Sankranthi, Vinayaka Chavithi, birthdays, and journeys.
+          {LANDING_BRAND_TAGLINES.map((line, i) => (
+            <p
+              key={line}
+              className={`muted ${i === 0 ? "brand-tagline" : ""}`}
+              style={{ marginTop: i === 0 ? "0.75rem" : "0.35rem", maxWidth: "42ch" }}
+            >
+              {line}
+            </p>
+          ))}
+          <p className="muted" style={{ marginTop: "0.75rem", maxWidth: "48ch", fontSize: "0.85rem" }}>
+            {SITE_NAME} · {VILLAGE_NAME}. Sankranthi, Vinayaka Chavithi, birthdays,
+            and journeys.
           </p>
           <p className="muted" style={{ marginTop: "0.5rem", maxWidth: "48ch", fontSize: "0.85rem" }}>
             {VILLAGE_ADDRESS_LINE}

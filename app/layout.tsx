@@ -6,7 +6,14 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { basePath, withBase } from "@/lib/base";
-import { SITE_NAME, VILLAGE_ADDRESS_LINE, VILLAGE_NAME } from "@/lib/site";
+import {
+  SITE_DESCRIPTOR,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_TAGLINE_HERITAGE,
+  VILLAGE_ADDRESS_LINE,
+  VILLAGE_NAME,
+} from "@/lib/site";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -27,21 +34,21 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${SITE_NAME} | Digital Village Experience`,
+    default: `${SITE_NAME} | ${SITE_TAGLINE}`,
     template: `%s | ${SITE_NAME}`,
   },
-  description: `RVP Youth — Digital Village Experience for ${VILLAGE_NAME}. Sankranthi, Vinayaka Chavithi, birthdays, and journeys. ${VILLAGE_ADDRESS_LINE}.`,
+  description: `${SITE_NAME} — ${SITE_TAGLINE} ${SITE_TAGLINE_HERITAGE} ${SITE_DESCRIPTOR} for ${VILLAGE_NAME}. Sankranthi, Vinayaka Chavithi, birthdays, and journeys. ${VILLAGE_ADDRESS_LINE}.`,
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
     title: `${SITE_NAME} | ${VILLAGE_NAME}`,
-    description: `Celebrate the culture, festivals, and memories of ${VILLAGE_NAME} through a premium interactive archive.`,
+    description: `${SITE_TAGLINE} ${SITE_TAGLINE_HERITAGE}`,
     images: [{ url: withBase("/logo/social-banner.png"), width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE_NAME} | ${VILLAGE_NAME}`,
-    description: `Celebrate the culture, festivals, and memories of ${VILLAGE_NAME} through a premium interactive archive.`,
+    description: `${SITE_TAGLINE} ${SITE_TAGLINE_HERITAGE}`,
     images: [withBase("/logo/social-banner.png")],
   },
   icons: {
@@ -61,7 +68,7 @@ const jsonLd = {
   "@type": "WebSite",
   name: SITE_NAME,
   url: siteUrl,
-  description: `Digital Village Experience for ${VILLAGE_NAME} — festivals, traditions, and memories.`,
+  description: `${SITE_TAGLINE} ${SITE_DESCRIPTOR} for ${VILLAGE_NAME} — festivals, traditions, and memories.`,
   potentialAction: {
     "@type": "SearchAction",
     target: `${siteUrl}/search/?q={search_term_string}`,
@@ -78,6 +85,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       className={`${playfair.variable} ${poppins.variable}`}
     >
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var base=${JSON.stringify(basePath || "")}.replace(/\\/$/,"");var path=location.pathname.replace(/\\/$/,"")||"/";var home=base||"/";if(path===home)document.documentElement.classList.add("intro-pending");}catch(e){}})();`,
+          }}
+        />
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>

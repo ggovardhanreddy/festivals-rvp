@@ -15,7 +15,8 @@ type LogoVariant =
   | "white"
   | "black"
   | "mark"
-  | "loading";
+  | "loading"
+  | "vertical";
 
 export function Logo({
   className = "",
@@ -36,24 +37,28 @@ export function Logo({
   const src = withBase(
     markOnly || variant === "mark"
       ? "/logo/mark.svg"
-      : variant === "glass" || variant === "loading"
-        ? variant === "loading"
-          ? "/logo/loading-logo.svg"
-          : "/logo/logo-glass.svg"
-        : variant === "gold"
-          ? "/logo/logo-gold.svg"
-          : variant === "white"
-            ? "/logo/logo-white.svg"
-            : variant === "black"
-              ? "/logo/logo-black.svg"
-              : variant === "light"
-                ? "/logo/logo-light.svg"
-                : variant === "dark"
-                  ? "/logo/logo-dark.svg"
-                  : dark
+      : variant === "vertical"
+        ? "/logo/logo-vertical.png"
+        : variant === "glass" || variant === "loading"
+          ? variant === "loading"
+            ? "/logo/loading-logo.svg"
+            : "/logo/logo-glass.svg"
+          : variant === "gold"
+            ? "/logo/logo-gold.svg"
+            : variant === "white"
+              ? "/logo/logo-white.svg"
+              : variant === "black"
+                ? "/logo/logo-black.svg"
+                : variant === "light"
+                  ? "/logo/logo-light.svg"
+                  : variant === "dark"
                     ? "/logo/logo-dark.svg"
-                    : "/logo/logo-light.svg",
+                    : dark
+                      ? "/logo/logo-dark.svg"
+                      : "/logo/logo-light.svg",
   );
+
+  const vertical = variant === "vertical";
 
   useEffect(() => {
     if (!animated || reduce || !ref.current) return;
@@ -76,11 +81,11 @@ export function Logo({
   return (
     <m.img
       ref={ref}
-      className={`brand-logo ${className}`.trim()}
+      className={`brand-logo ${vertical ? "brand-logo-vertical" : ""} ${className}`.trim()}
       src={src}
       alt="RVP Youth"
-      width={markOnly ? 40 : 168}
-      height={markOnly ? 40 : 48}
+      width={markOnly ? 40 : vertical ? 120 : 168}
+      height={markOnly ? 40 : vertical ? 162 : 48}
       draggable={false}
     />
   );

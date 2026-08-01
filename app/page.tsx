@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { allMedia, publicAlbums, years } from "@/lib/content";
+import { BUCKETS } from "@/lib/site";
 import { AlbumCard } from "@/components/AlbumCard";
 import { Gallery } from "@/components/Gallery";
 import { MemoryWall } from "@/components/MemoryWall";
@@ -8,7 +9,9 @@ import { CinematicHero } from "@/components/experience/CinematicHero";
 import { VillageStory } from "@/components/VillageStory";
 import { YouthPortrait } from "@/components/YouthPortrait";
 import { TimelineStrip } from "@/components/TimelineStrip";
+import { YearGrid } from "@/components/YearGrid";
 import { Reveal } from "@/components/Reveal";
+
 export default function HomePage() {
   const albums = publicAlbums();
   const media = allMedia();
@@ -41,14 +44,36 @@ export default function HomePage() {
           </div>
         </Reveal>
 
+        <Reveal className="section" id="festivals">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Festivals & Gatherings</p>
+              <h2>Where we gather</h2>
+            </div>
+          </div>
+          <div className="grid-cards home-bucket-grid">
+            {BUCKETS.map((bucket) => (
+              <Link
+                key={bucket.key}
+                href={bucket.href}
+                className="glass-card home-bucket-card magnetic"
+              >
+                <p className="eyebrow">{bucket.eyebrow}</p>
+                <h3>{bucket.title}</h3>
+                <p className="muted">{bucket.blurb}</p>
+              </Link>
+            ))}
+          </div>
+        </Reveal>
+
         <Reveal className="section" id="map">
           <div className="section-head">
             <div>
               <p className="eyebrow">Kondreddigaripalli · Ramalayam</p>
-              <h2>Fly through the real village</h2>
+              <h2>Fly through the village</h2>
               <p className="lede">
-                Your aerial of home, lifted into depth — hover to glow, click
-                Ramalayam, open memories each place still holds.
+                Aerial of home, lifted into depth — hover to glow, visit
+                Ramalayam, open the memories each place still holds.
               </p>
             </div>
           </div>
@@ -79,6 +104,19 @@ export default function HomePage() {
 
         <TimelineStrip years={yearList.slice(0, 8)} />
 
+        <Reveal className="section" id="years">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Years</p>
+              <h2>Choose a year</h2>
+            </div>
+            <Link className="btn ghost" href="/timeline/">
+              Full timeline
+            </Link>
+          </div>
+          <YearGrid years={yearList} />
+        </Reveal>
+
         <Reveal className="section">
           <div className="section-head">
             <div>
@@ -86,7 +124,7 @@ export default function HomePage() {
               <h2>Frames from home</h2>
             </div>
             <Link className="btn ghost" href="/search/">
-              Browse all
+              Search memories
             </Link>
           </div>
           <Gallery items={galleryTeaser} />

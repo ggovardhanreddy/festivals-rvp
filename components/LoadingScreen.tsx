@@ -1,22 +1,27 @@
 "use client";
 
 import { m, AnimatePresence, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { withBase } from "@/lib/base";
 
-/** Brief soft splash — never a long black screen. */
+/** Brief soft splash — on home, stay black so the cinematic intro owns the open. */
 export function LoadingScreen() {
+  const pathname = usePathname() || "/";
+  const isHome = pathname === "/";
   const reduce = useReducedMotion();
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    if (reduce) {
+    if (isHome || reduce) {
       const frame = window.requestAnimationFrame(() => setShow(false));
       return () => window.cancelAnimationFrame(frame);
     }
     const timer = window.setTimeout(() => setShow(false), 480);
     return () => window.clearTimeout(timer);
-  }, [reduce]);
+  }, [isHome, reduce]);
+
+  if (isHome) return null;
 
   return (
     <AnimatePresence>

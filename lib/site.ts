@@ -4,7 +4,27 @@ import { slugify } from "./slug";
 export const SITE_NAME = "RVP Youth";
 export const SITE_BRAND = "RVP Youth";
 export const ADMIN_NAME = "Govardhan Reddy";
-export const SITE_TAGLINE = "Digital Village Experience";
+/** Primary brand line */
+export const SITE_TAGLINE = "Where Every Celebration Becomes a Legacy.";
+export const SITE_TAGLINE_HERITAGE = "Our Village. Our Heritage. Our Memories.";
+export const SITE_TAGLINE_TOGETHER = "Together We Celebrate. Together We Remember.";
+export const SITE_TAGLINE_TOMORROW = "From Traditions to Tomorrow.";
+/** Landing hero line */
+export const SITE_TAGLINE_LANDING =
+  "Celebrating Every Moment. Preserving Every Memory.";
+/** Brand lines shown on the cinematic landing before Explore */
+export const LANDING_BRAND_TAGLINES = [
+  SITE_TAGLINE,
+  SITE_TAGLINE_HERITAGE,
+  SITE_TAGLINE_TOGETHER,
+  SITE_TAGLINE_TOMORROW,
+] as const;
+export const SITE_TAGLINES = [
+  SITE_TAGLINE_LANDING,
+  ...LANDING_BRAND_TAGLINES,
+] as const;
+/** Short descriptor for SEO / utility contexts */
+export const SITE_DESCRIPTOR = "Digital Village Experience";
 
 /** Village identity */
 export const VILLAGE_NAME = "Kondreddigaripalli";

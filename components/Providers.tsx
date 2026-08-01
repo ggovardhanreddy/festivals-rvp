@@ -3,18 +3,23 @@
 import { ThemeProvider } from "next-themes";
 import { LazyMotion, domAnimation } from "framer-motion";
 import { SmoothScroll } from "./experience/SmoothScroll";
-import { CursorLight } from "./experience/CursorLight";
+import { LiquidCursor } from "./experience/LiquidCursor";
 import { AudioDeckProvider } from "./media/AudioDeck";
+import { MusicProvider } from "./music/MusicProvider";
+import { GlassMusicPlayer } from "./music/GlassMusicPlayer";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <LazyMotion features={domAnimation}>
-        <AudioDeckProvider>
-          <SmoothScroll />
-          <CursorLight />
-          {children}
-        </AudioDeckProvider>
+        <MusicProvider>
+          <AudioDeckProvider>
+            <SmoothScroll />
+            <LiquidCursor />
+            {children}
+            <GlassMusicPlayer />
+          </AudioDeckProvider>
+        </MusicProvider>
       </LazyMotion>
     </ThemeProvider>
   );

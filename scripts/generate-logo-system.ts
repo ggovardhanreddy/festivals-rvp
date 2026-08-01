@@ -1,6 +1,6 @@
 /**
- * RVP Youth — Premium brand identity generator
- * Horizon Crest mark: unity ring + rising sun + growth fork.
+ * RVP Youth — Community Unity logo system
+ * Six figures in a circle (orange / green / blue) + RVP YOUTH wordmark.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -8,6 +8,41 @@ import sharp from "sharp";
 
 const OUT = path.join(process.cwd(), "public", "logo");
 const BRAND = path.join(process.cwd(), "public", "brand");
+const MASTER = path.join(BRAND, "rvp-youth-logo-master.png");
+
+const ORANGE = "#E88B41";
+const GREEN = "#8BC367";
+const BLUE = "#4A81BF";
+const CREAM = "#FFFDF0";
+
+/** One community figure pointing up (head at top), origin at circle center. */
+function figure(fill: string, heartFill = "#ffffff") {
+  return `    <g fill="${fill}">
+      <circle cx="0" cy="-78" r="15.5"/>
+      <path d="M-30,-60 C-36,-38 -34,-8 -14,12 L0,24 L14,12 C34,-8 36,-38 30,-60
+               L16,-60 C20,-42 18,-16 6,-2 L0,6 L-6,-2 C-18,-16 -20,-42 -16,-60 Z"/>
+      <g fill="${heartFill}" opacity="0.95">
+        <path transform="translate(0 -48) scale(0.42)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -34) scale(0.38)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+        <path transform="translate(0 -21) scale(0.32)" d="M0,6 C0,6 -8,-2 -8,-8 C-8,-12 -5,-14 0,-10 C5,-14 8,-12 8,-8 C8,-2 0,6 0,6Z"/>
+      </g>
+    </g>`;
+}
+
+function communityMark(cx: number, cy: number, scale = 1, mono?: string) {
+  const colors = mono
+    ? [mono, mono, mono, mono, mono, mono]
+    : [ORANGE, GREEN, BLUE, BLUE, BLUE, GREEN];
+  const petals = colors
+    .map(
+      (c, i) =>
+        `  <g transform="translate(${cx} ${cy}) scale(${scale}) rotate(${i * 60})">
+${figure(c, mono ? "rgba(255,255,255,0.92)" : "#ffffff")}
+  </g>`,
+    )
+    .join("\n");
+  return petals;
+}
 
 function wrap(vb: string, body: string) {
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -18,77 +53,12 @@ ${body}
 `;
 }
 
-function defs(id: string) {
-  return `  <defs>
-    <linearGradient id="${id}" x1="8%" y1="0%" x2="92%" y2="100%">
-      <stop offset="0%" stop-color="#1e4fd6"/>
-      <stop offset="16%" stop-color="#06b6d4"/>
-      <stop offset="32%" stop-color="#10b981"/>
-      <stop offset="48%" stop-color="#7c3aed"/>
-      <stop offset="64%" stop-color="#ec4899"/>
-      <stop offset="80%" stop-color="#d4a45a"/>
-      <stop offset="100%" stop-color="#f97316"/>
-    </linearGradient>
-    <linearGradient id="${id}Shine" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
-      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.1"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <radialGradient id="${id}Bloom" cx="34%" cy="28%" r="68%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>`;
+function wordmarkHorizontal(fill: string, x = 118, y = 58) {
+  return `  <text x="${x}" y="${y}" fill="${fill}" font-family="Montserrat, ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="34" font-weight="800" letter-spacing="3.2">RVP YOUTH</text>`;
 }
 
-function markSolid(stroke: string, accent: string, fillOpacity = 0.12) {
-  return `  <circle cx="32" cy="32" r="27" fill="none" stroke="${stroke}" stroke-width="2.4"/>
-  <circle cx="32" cy="32" r="22.5" fill="${stroke}" opacity="${fillOpacity}"/>
-  <path d="M14 38.5 C18 30.5 24.5 26 32 26 C39.5 26 46 30.5 50 38.5" fill="none" stroke="${accent}" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M16 40.5 A16 16 0 0 1 48 40.5" fill="${accent}" opacity="0.92"/>
-  <path d="M32 40.2 V18.5" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M32 24.5 L23.5 16.2" stroke="${stroke}" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M32 24.5 L40.5 16.2" stroke="${stroke}" stroke-width="2.4" stroke-linecap="round"/>
-  <circle cx="32" cy="15.2" r="2.1" fill="${accent}"/>`;
-}
-
-function markGlassBody(id: string) {
-  return `  <circle cx="32" cy="32" r="29" fill="url(#${id})" opacity="0.16"/>
-  <circle cx="32" cy="32" r="27" fill="none" stroke="url(#${id})" stroke-width="2.6"/>
-  <circle cx="32" cy="32" r="22.5" fill="url(#${id}Bloom)"/>
-  <path d="M14 38.5 C18 30.5 24.5 26 32 26 C39.5 26 46 30.5 50 38.5" fill="none" stroke="url(#${id})" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M16 40.5 A16 16 0 0 1 48 40.5" fill="url(#${id})" opacity="0.92"/>
-  <path d="M32 40.2 V18.5" stroke="url(#${id})" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M32 24.5 L23.5 16.2" stroke="url(#${id})" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M32 24.5 L40.5 16.2" stroke="url(#${id})" stroke-width="2.4" stroke-linecap="round"/>
-  <circle cx="32" cy="15.2" r="2.2" fill="url(#${id})"/>
-  <ellipse cx="26" cy="20" rx="10" ry="6" fill="url(#${id}Shine)"/>`;
-}
-
-function wordmark(fill: string) {
-  return `  <text x="78" y="39" fill="${fill}" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="1.8">RVP</text>
-  <text x="146" y="39" fill="${fill}" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="500" letter-spacing="2.6">Youth</text>`;
-}
-
-function horizontal(mark: string, fill: string) {
-  return wrap(
-    "0 0 280 64",
-    `  <g transform="translate(2 0)">
-${mark}
-  </g>
-${wordmark(fill)}`,
-  );
-}
-
-function horizontalGlass(id: string) {
-  return wrap(
-    "0 0 280 64",
-    `${defs(id)}
-  <g transform="translate(2 0)">
-${markGlassBody(id)}
-  </g>
-${wordmark(`url(#${id})`)}`,
-  );
+function wordmarkStacked(fill: string, x = 100, y1 = 218, y2 = 248) {
+  return `  <text x="${x}" y="${y1}" text-anchor="middle" fill="${fill}" font-family="Montserrat, ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="28" font-weight="800" letter-spacing="4.5">RVP YOUTH</text>`;
 }
 
 function write(name: string, svg: string) {
@@ -96,100 +66,215 @@ function write(name: string, svg: string) {
   console.log("wrote", name);
 }
 
+async function makeTransparentMaster() {
+  if (!fs.existsSync(MASTER)) {
+    console.warn("Master PNG missing — SVG-only generation");
+    return null;
+  }
+  // Knock out near-cream background for clean app icons
+  const { data, info } = await sharp(MASTER)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i]!;
+    const g = data[i + 1]!;
+    const b = data[i + 2]!;
+    // Cream / near-white → transparent
+    if (r > 235 && g > 230 && b > 210) {
+      data[i + 3] = 0;
+    }
+  }
+
+  const out = path.join(OUT, "logo-master.png");
+  await sharp(data, {
+    raw: { width: info.width, height: info.height, channels: 4 },
+  })
+    .png()
+    .toFile(out);
+  return out;
+}
+
 async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   fs.mkdirSync(BRAND, { recursive: true });
 
-  write("mark.svg", wrap("0 0 64 64", `${defs("m")}\n${markGlassBody("m")}`));
-  write("favicon.svg", wrap("0 0 64 64", `${defs("f")}\n${markGlassBody("f")}`));
-  write("logo-glass.svg", horizontalGlass("gl"));
-  write("logo.svg", horizontalGlass("p"));
-  write("loading-logo.svg", horizontalGlass("ld"));
-  write("logo-light.svg", horizontal(markSolid("#1f3d2e", "#8f6a32"), "#13241b"));
-  write("logo-dark.svg", horizontal(markSolid("#e8efe9", "#d4a45a", 0.1), "#e8efe9"));
-  write("logo-gold.svg", horizontal(markSolid("#8f6a32", "#f0d7a0"), "#8f6a32"));
-  write("logo-white.svg", horizontal(markSolid("#ffffff", "#f0d7a0", 0.08), "#ffffff"));
-  write("logo-black.svg", horizontal(markSolid("#111111", "#8f6a32"), "#111111"));
-  write("logo-transparent.svg", horizontal(markSolid("#1f3d2e", "#c49855"), "#1f3d2e"));
-  write("logo-horizontal.svg", horizontal(markSolid("#1f3d2e", "#8f6a32"), "#13241b"));
-  write("logo-header.svg", horizontal(markSolid("#1f3d2e", "#8f6a32"), "#13241b"));
-  write("logo-footer.svg", horizontal(markSolid("#e8efe9", "#d4a45a", 0.1), "#e8efe9"));
+  // Mark only (square)
+  write(
+    "mark.svg",
+    wrap("0 0 200 200", communityMark(100, 100, 0.95)),
+  );
+  write(
+    "favicon.svg",
+    wrap("0 0 200 200", communityMark(100, 100, 0.95)),
+  );
 
+  // Full color vertical (matches master artwork)
   write(
     "logo-vertical.svg",
     wrap(
-      "0 0 64 118",
-      `${markSolid("#1f3d2e", "#8f6a32")}
-  <text x="32" y="88" text-anchor="middle" fill="#13241b" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.4">RVP</text>
-  <text x="32" y="106" text-anchor="middle" fill="#13241b" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="11" font-weight="500" letter-spacing="3.4">YOUTH</text>`,
+      "0 0 200 270",
+      `${communityMark(100, 100, 0.92)}
+${wordmarkStacked(BLUE)}`,
+    ),
+  );
+
+  // Horizontal lockups
+  const hMark = (mono?: string) => communityMark(52, 48, 0.42, mono);
+
+  write(
+    "logo.svg",
+    wrap("0 0 360 96", `${hMark()}\n${wordmarkHorizontal(BLUE, 112, 58)}`),
+  );
+  write(
+    "logo-glass.svg",
+    wrap("0 0 360 96", `${hMark()}\n${wordmarkHorizontal("#F0D7A0", 112, 58)}`),
+  );
+  write(
+    "loading-logo.svg",
+    wrap("0 0 360 96", `${hMark()}\n${wordmarkHorizontal(BLUE, 112, 58)}`),
+  );
+  write(
+    "logo-light.svg",
+    wrap("0 0 360 96", `${hMark()}\n${wordmarkHorizontal(BLUE, 112, 58)}`),
+  );
+  write(
+    "logo-dark.svg",
+    wrap(
+      "0 0 360 96",
+      `${hMark("#E8EFE9")}\n${wordmarkHorizontal("#E8EFE9", 112, 58)}`,
+    ),
+  );
+  write(
+    "logo-gold.svg",
+    wrap(
+      "0 0 360 96",
+      `${hMark("#D4A45A")}\n${wordmarkHorizontal("#D4A45A", 112, 58)}`,
+    ),
+  );
+  write(
+    "logo-white.svg",
+    wrap(
+      "0 0 360 96",
+      `${hMark("#FFFFFF")}\n${wordmarkHorizontal("#FFFFFF", 112, 58)}`,
+    ),
+  );
+  write(
+    "logo-black.svg",
+    wrap(
+      "0 0 360 96",
+      `${hMark("#111111")}\n${wordmarkHorizontal("#111111", 112, 58)}`,
+    ),
+  );
+  write(
+    "logo-transparent.svg",
+    wrap("0 0 360 96", `${hMark()}\n${wordmarkHorizontal(BLUE, 112, 58)}`),
+  );
+  write(
+    "logo-horizontal.svg",
+    wrap("0 0 360 96", `${hMark()}\n${wordmarkHorizontal(BLUE, 112, 58)}`),
+  );
+  write(
+    "logo-header.svg",
+    wrap("0 0 360 96", `${hMark()}\n${wordmarkHorizontal(BLUE, 112, 58)}`),
+  );
+  write(
+    "logo-footer.svg",
+    wrap(
+      "0 0 360 96",
+      `${hMark("#E8EFE9")}\n${wordmarkHorizontal("#E8EFE9", 112, 58)}`,
     ),
   );
 
   write(
     "monogram.svg",
     wrap(
-      "0 0 64 64",
-      `${defs("mo")}
-  <circle cx="32" cy="32" r="29" fill="url(#mo)" opacity="0.14"/>
-  <circle cx="32" cy="32" r="27" fill="none" stroke="url(#mo)" stroke-width="2.5"/>
-  <text x="32" y="39" text-anchor="middle" fill="url(#mo)" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="20" font-weight="800" letter-spacing="-0.8">RVP</text>`,
+      "0 0 200 200",
+      `${communityMark(100, 100, 0.72)}
+  <text x="100" y="188" text-anchor="middle" fill="${BLUE}" font-family="Montserrat, ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="2">RVP</text>`,
     ),
   );
 
   write(
     "badge.svg",
     wrap(
-      "0 0 128 128",
-      `${defs("b")}
-  <circle cx="64" cy="64" r="60" fill="#0f1a14"/>
-  <circle cx="64" cy="64" r="57" fill="none" stroke="url(#b)" stroke-width="2.8"/>
-  <g transform="translate(32 16)">
-${markGlassBody("b")}
-  </g>
-  <text x="64" y="110" text-anchor="middle" fill="#f0d7a0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2.2">RVP YOUTH</text>`,
+      "0 0 220 220",
+      `  <circle cx="110" cy="110" r="108" fill="${CREAM}"/>
+${communityMark(110, 100, 0.78)}
+  <text x="110" y="205" text-anchor="middle" fill="${BLUE}" font-family="Montserrat, ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="16" font-weight="800" letter-spacing="2.4">RVP YOUTH</text>`,
     ),
   );
 
-  const markBuf = fs.readFileSync(path.join(OUT, "favicon.svg"));
-  await sharp(markBuf).resize(512, 512).png().toFile(path.join(OUT, "logo.png"));
-  await sharp(markBuf).resize(32, 32).png().toFile(path.join(OUT, "favicon-32x32.png"));
-  await sharp(markBuf).resize(16, 16).png().toFile(path.join(OUT, "favicon-16x16.png"));
-  await sharp(markBuf).resize(48, 48).png().toFile(path.join(OUT, "favicon.ico"));
-  await sharp(markBuf).resize(180, 180).png().toFile(path.join(OUT, "apple-touch-icon.png"));
-  await sharp(markBuf).resize(192, 192).png().toFile(path.join(OUT, "android-icon.png"));
-  await sharp(markBuf).resize(512, 512).png().toFile(path.join(OUT, "app-icon.png"));
+  const transparentMaster = await makeTransparentMaster();
+  const markSource = transparentMaster
+    ? await sharp(transparentMaster)
+        .trim({ threshold: 8 })
+        .resize(512, 512, {
+          fit: "contain",
+          background: { r: 0, g: 0, b: 0, alpha: 0 },
+        })
+        .png()
+        .toBuffer()
+    : await sharp(Buffer.from(fs.readFileSync(path.join(OUT, "mark.svg"))))
+        .resize(512, 512)
+        .png()
+        .toBuffer();
+
+  // Prefer cropping the mark circle from master for app icons
+  let iconBuf = markSource;
+  if (transparentMaster) {
+    const meta = await sharp(transparentMaster).metadata();
+    const w = meta.width || 512;
+    const h = meta.height || 512;
+    // Master is vertical logo — take upper mark region
+    iconBuf = await sharp(transparentMaster)
+      .extract({
+        left: Math.floor(w * 0.12),
+        top: Math.floor(h * 0.04),
+        width: Math.floor(w * 0.76),
+        height: Math.floor(w * 0.76),
+      })
+      .resize(512, 512, {
+        fit: "contain",
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      })
+      .png()
+      .toBuffer();
+  }
+
+  await sharp(iconBuf).png().toFile(path.join(OUT, "logo.png"));
+  await sharp(iconBuf).resize(32, 32).png().toFile(path.join(OUT, "favicon-32x32.png"));
+  await sharp(iconBuf).resize(16, 16).png().toFile(path.join(OUT, "favicon-16x16.png"));
+  await sharp(iconBuf).resize(48, 48).png().toFile(path.join(OUT, "favicon.ico"));
+  await sharp(iconBuf).resize(180, 180).png().toFile(path.join(OUT, "apple-touch-icon.png"));
+  await sharp(iconBuf).resize(192, 192).png().toFile(path.join(OUT, "android-icon.png"));
+  await sharp(iconBuf).resize(512, 512).png().toFile(path.join(OUT, "app-icon.png"));
+
+  // Full vertical lockup PNG from master when available
+  if (transparentMaster) {
+    await sharp(transparentMaster)
+      .resize(800, 1080, {
+        fit: "contain",
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      })
+      .png()
+      .toFile(path.join(OUT, "logo-vertical.png"));
+    fs.copyFileSync(MASTER, path.join(OUT, "logo-source.png"));
+  }
 
   const bannerSvg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f1a14"/>
-      <stop offset="55%" stop-color="#1f3d2e"/>
-      <stop offset="100%" stop-color="#13241b"/>
-    </linearGradient>
-    <linearGradient id="h" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e4fd6"/>
-      <stop offset="25%" stop-color="#06b6d4"/>
-      <stop offset="45%" stop-color="#10b981"/>
-      <stop offset="65%" stop-color="#7c3aed"/>
-      <stop offset="82%" stop-color="#ec4899"/>
-      <stop offset="100%" stop-color="#d4a45a"/>
-    </linearGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <circle cx="980" cy="90" r="260" fill="url(#h)" opacity="0.22"/>
-  <circle cx="140" cy="540" r="200" fill="#d4a45a" opacity="0.14"/>
-  <g transform="translate(130 175) scale(2.6)">
-    <circle cx="32" cy="32" r="27" fill="none" stroke="url(#h)" stroke-width="2.4"/>
-    <path d="M14 38.5 C18 30.5 24.5 26 32 26 C39.5 26 46 30.5 50 38.5" fill="none" stroke="url(#h)" stroke-width="2.1" stroke-linecap="round"/>
-    <path d="M16 40.5 A16 16 0 0 1 48 40.5" fill="url(#h)"/>
-    <path d="M32 40.2 V18.5" stroke="url(#h)" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M32 24.5 L23.5 16.2" stroke="url(#h)" stroke-width="2.3" stroke-linecap="round"/>
-    <path d="M32 24.5 L40.5 16.2" stroke="url(#h)" stroke-width="2.3" stroke-linecap="round"/>
-    <circle cx="32" cy="15.2" r="2.1" fill="url(#h)"/>
+  <rect width="1200" height="630" fill="${CREAM}"/>
+  <circle cx="980" cy="80" r="220" fill="${ORANGE}" opacity="0.12"/>
+  <circle cx="120" cy="520" r="180" fill="${GREEN}" opacity="0.14"/>
+  <circle cx="600" cy="560" r="200" fill="${BLUE}" opacity="0.1"/>
+  <g transform="translate(120 95) scale(1.85)">
+${communityMark(100, 100, 1).replace(/^/gm, "    ")}
   </g>
-  <text x="380" y="300" fill="#f7f3ea" font-family="Georgia, 'Times New Roman', serif" font-size="92" font-weight="700">RVP Youth</text>
-  <text x="380" y="358" fill="#f0d7a0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="26" letter-spacing="4">DIGITAL VILLAGE EXPERIENCE</text>
+  <text x="480" y="280" fill="${BLUE}" font-family="Montserrat, ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="84" font-weight="800" letter-spacing="4">RVP YOUTH</text>
+  <text x="480" y="340" fill="#3a5f8a" font-family="Georgia, 'Times New Roman', serif" font-size="28">Where Every Celebration Becomes a Legacy.</text>
+  <text x="480" y="390" fill="#5a6b7a" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="22">Our Village. Our Heritage. Our Memories.</text>
 </svg>`;
   await sharp(Buffer.from(bannerSvg)).png().toFile(path.join(OUT, "social-banner.png"));
 
@@ -210,7 +295,13 @@ ${markGlassBody("b")}
     else fs.copyFileSync(src, dest);
   }
 
-  // app/icon convenience — Next may use app/icon.svg; also copy favicon to public root
+  if (fs.existsSync(path.join(OUT, "logo-vertical.png"))) {
+    fs.copyFileSync(
+      path.join(OUT, "logo-vertical.png"),
+      path.join(BRAND, "rvp-youth-logo-vertical.png"),
+    );
+  }
+
   fs.copyFileSync(path.join(OUT, "favicon.svg"), path.join(process.cwd(), "public", "favicon.svg"));
   fs.copyFileSync(path.join(OUT, "favicon.ico"), path.join(process.cwd(), "public", "favicon.ico"));
   fs.copyFileSync(
@@ -218,7 +309,7 @@ ${markGlassBody("b")}
     path.join(process.cwd(), "public", "apple-touch-icon.png"),
   );
 
-  console.log("RVP Youth logo system ready → public/logo/");
+  console.log("RVP Youth community logo system ready → public/logo/");
 }
 
 main().catch((error) => {
