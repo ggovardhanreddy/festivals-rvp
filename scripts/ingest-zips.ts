@@ -1,1 +1,49 @@
-import fs from "node:fs";import path from "node:path";import crypto from "node:crypto";import {execFileSync} from "node:child_process";import exifr from "exifr";const root=process.cwd(),inbox=path.join(root,'inbox'),tmp=path.join(root,'.tmp');fs.mkdirSync(tmp,{recursive:true});const seen=new Set<string>();for(const zip of fs.readdirSync(inbox).filter(x=>x.toLowerCase().endsWith('.zip'))){const out=path.join(tmp,zip.replace(/\.zip$/i,''));fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out,{recursive:true});execFileSync('unzip',['-oq',path.join(inbox,zip),'-d',out]);for(const file of fs.readdirSync(out,{recursive:true}) as string[]){const src=path.join(out,file);if(!fs.statSync(src).isFile())continue;const hash=crypto.createHash('sha256').update(fs.readFileSync(src)).digest('hex');if(seen.has(hash))continue;seen.add(hash);let date=new Date();try{const exif=await exifr.parse(src);if(exif?.DateTimeOriginal)date=new Date(exif.DateTimeOriginal)}catch{}const year=String(date.getFullYear()),month=date.toLocaleString('en',{month:'long'}),album=zip.replace(/\.zip$/i,'');const dest=path.join(root,'originals',year,'Unsorted',album,path.basename(file));fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(src,dest)}fs.renameSync(path.join(inbox,zip),path.join(inbox,zip+'.processed'))}fs.rmSync(tmp,{recursive:true,force:true});console.log('ZIP ingest finished. Run npm run optimize and npm run generate.');if(process.argv.includes('--publish'))execFileSync('npm',['run','publish'],{stdio:'inherit'});
+/**
+ * Optional ZIP ingest kept for Takeout archives.
+ * Prefer local folder import: npm run import:folder -- --dir "/path/to/photos"
+ */
+import fs from "node:fs";
+import path from "node:path";
+import { execFileSync } from "node:child_process";
+import { importLocalFolder } from "../lib/import-media";
+
+const root = process.cwd();
+const inbox = path.join(root, "inbox");
+const tmp = path.join(root, ".tmp");
+
+if (process.argv.includes("--publish")) {
+  console.error("Ingest will not publish. After review run: npm run publish -- --confirm");
+  process.exit(1);
+}
+
+fs.mkdirSync(inbox, { recursive: true });
+fs.mkdirSync(tmp, { recursive: true });
+
+const zips = fs
+  .readdirSync(inbox)
+  .filter((name) => name.toLowerCase().endsWith(".zip"));
+
+if (!zips.length) {
+  console.log("No ZIP files in inbox/. Use npm run import:folder for local photos.");
+  process.exit(0);
+}
+
+for (const zip of zips) {
+  const out = path.join(tmp, zip.replace(/\.zip$/i, ""));
+  fs.rmSync(out, { recursive: true, force: true });
+  fs.mkdirSync(out, { recursive: true });
+  execFileSync("unzip", ["-oq", path.join(inbox, zip), "-d", out]);
+  const result = await importLocalFolder({
+    sourceDir: out,
+    category: "auto",
+    album: zip.replace(/\.zip$/i, ""),
+    keepOriginals: true,
+    processImages: true,
+  });
+  console.log(zip, result);
+  fs.renameSync(path.join(inbox, zip), path.join(inbox, `${zip}.processed`));
+}
+
+fs.rmSync(tmp, { recursive: true, force: true });
+execFileSync("npm", ["run", "generate"], { stdio: "inherit" });
+console.log("ZIP ingest finished. Review, then: npm run publish -- --confirm");

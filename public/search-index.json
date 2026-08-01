@@ -5,7 +5,7 @@
     "tags": [
       "trips"
     ],
-    "url": "/festivals-rvp/years/2026/trips/coorg-monsoon/"
+    "url": "/years/2026/trips/coorg-monsoon/"
   },
   {
     "title": "Sankranti at Home",
@@ -13,7 +13,7 @@
     "tags": [
       "festivals"
     ],
-    "url": "/festivals-rvp/years/2025/festivals/sankranti-home/"
+    "url": "/years/2025/festivals/sankranti-home/"
   },
   {
     "title": "Goa Escape",
@@ -21,7 +21,7 @@
     "tags": [
       "trips"
     ],
-    "url": "/festivals-rvp/years/2024/trips/goa-escape/"
+    "url": "/years/2024/trips/goa-escape/"
   },
   {
     "title": "Diwali Lights",
@@ -29,6 +29,6 @@
     "tags": [
       "festivals"
     ],
-    "url": "/festivals-rvp/years/2023/festivals/diwali-lights/"
+    "url": "/years/2023/festivals/diwali-lights/"
   }
 ]
