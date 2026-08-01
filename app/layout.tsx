@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { basePath, withBase } from "@/lib/base";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, VILLAGE_ADDRESS_LINE, VILLAGE_NAME } from "@/lib/site";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -30,21 +30,18 @@ export const metadata: Metadata = {
     default: `${SITE_NAME} | Digital Village Experience`,
     template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "RVP Youth — an interactive digital heritage museum for Sankranthi, Vinayaka Chavithi, birthdays, and village journeys.",
+  description: `RVP Youth — Digital Village Experience for ${VILLAGE_NAME}. Sankranthi, Vinayaka Chavithi, birthdays, and journeys. ${VILLAGE_ADDRESS_LINE}.`,
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Digital Village Experience`,
-    description:
-      "Celebrate village culture, festivals, and memories through a premium interactive archive.",
+    title: `${SITE_NAME} | ${VILLAGE_NAME}`,
+    description: `Celebrate the culture, festivals, and memories of ${VILLAGE_NAME} through a premium interactive archive.`,
     images: [{ url: withBase("/brand/og-banner.jpg"), width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} | Digital Village Experience`,
-    description:
-      "Celebrate village culture, festivals, and memories through a premium interactive archive.",
+    title: `${SITE_NAME} | ${VILLAGE_NAME}`,
+    description: `Celebrate the culture, festivals, and memories of ${VILLAGE_NAME} through a premium interactive archive.`,
     images: [withBase("/brand/og-banner.jpg")],
   },
   icons: {
@@ -63,8 +60,7 @@ const jsonLd = {
   "@type": "WebSite",
   name: SITE_NAME,
   url: siteUrl,
-  description:
-    "Interactive digital heritage museum celebrating village festivals and memories.",
+  description: `Digital Village Experience for ${VILLAGE_NAME} — festivals, traditions, and memories.`,
   potentialAction: {
     "@type": "SearchAction",
     target: `${siteUrl}/search/?q={search_term_string}`,

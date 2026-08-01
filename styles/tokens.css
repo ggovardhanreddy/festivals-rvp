@@ -1,0 +1,165 @@
+/**
+ * RVP Youth — Design Tokens
+ * Single source of truth for color, type, space, motion, elevation.
+ * Import once from app/globals.css. Do not hardcode these values in components.
+ */
+
+:root {
+  /* Brand / color */
+  --color-bg: #eef3ef;
+  --color-bg-elevated: #e2ebe4;
+  --color-ink: #13241b;
+  --color-muted: #4a6356;
+  --color-accent: #8f6a32;
+  --color-accent-soft: #c49855;
+  --color-forest: #1f3d2e;
+  --color-dawn: #f0d7a0;
+  --color-danger: #9b3b32;
+  --color-success: #2f6b45;
+  --color-glass: rgba(244, 248, 245, 0.58);
+  --color-glass-strong: rgba(244, 248, 245, 0.82);
+  --color-line: rgba(19, 36, 27, 0.12);
+  --color-focus-ring: color-mix(in srgb, var(--color-accent) 45%, transparent);
+
+  /* Legacy aliases used across the app */
+  --bg: var(--color-bg);
+  --bg-2: var(--color-bg-elevated);
+  --ink: var(--color-ink);
+  --muted: var(--color-muted);
+  --accent: var(--color-accent);
+  --accent-2: var(--color-accent-soft);
+  --forest: var(--color-forest);
+  --glass: var(--color-glass);
+  --glass-strong: var(--color-glass-strong);
+  --line: var(--color-line);
+  --focus: 0 0 0 3px var(--color-focus-ring);
+
+  /* Typography */
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-poppins), system-ui, sans-serif;
+  --font-accent: var(--font-poppins), system-ui, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.35rem;
+  --text-2xl: clamp(1.8rem, 4vw, 2.8rem);
+  --text-hero: clamp(2.8rem, 8vw, 5.8rem);
+  --leading-tight: 0.95;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.7;
+  --tracking-eyebrow: 0.22em;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --page-gutter: max(1.25rem, 4vw);
+  --content-max: 1180px;
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+  --radius: var(--radius-lg);
+
+  /* Elevation / shadow / blur */
+  --elevation-1: 0 8px 24px rgba(19, 36, 27, 0.08);
+  --elevation-2: 0 24px 60px rgba(19, 36, 27, 0.12);
+  --elevation-3: 0 28px 70px rgba(19, 36, 27, 0.22);
+  --shadow: var(--elevation-2);
+  --blur-glass: 18px;
+  --blur-strong: 22px;
+
+  /* Motion */
+  --motion-fast: 160ms;
+  --motion-base: 280ms;
+  --motion-slow: 650ms;
+  --motion-cinematic: 900ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Breakpoints (reference; media queries still use literals) */
+  --bp-sm: 640px;
+  --bp-md: 920px;
+  --bp-lg: 1100px;
+  --bp-xl: 1440px;
+
+  /* Icon / control sizes */
+  --icon-sm: 16px;
+  --icon-md: 22px;
+  --icon-lg: 42px;
+  --control-height: 42px;
+
+  /* Button variants */
+  --btn-bg: var(--color-forest);
+  --btn-fg: #f7f3ea;
+  --btn-ghost-bg: transparent;
+  --btn-ghost-fg: var(--color-ink);
+  --btn-radius: var(--radius-pill);
+  --btn-padding-x: 1.15rem;
+  --btn-padding-y: 0.7rem;
+
+  /* Card variants */
+  --card-bg: var(--color-glass);
+  --card-bg-strong: var(--color-glass-strong);
+  --card-radius: var(--radius-lg);
+  --card-padding: var(--space-4);
+  --card-shadow: var(--elevation-2);
+
+  /* Input variants */
+  --input-bg: color-mix(in srgb, var(--color-glass-strong) 88%, transparent);
+  --input-fg: var(--color-ink);
+  --input-border: var(--color-line);
+  --input-radius: var(--radius-md);
+  --input-padding-x: 0.9rem;
+  --input-padding-y: 0.65rem;
+  --input-focus-ring: var(--focus);
+
+  /* Gradients */
+  --glow:
+    radial-gradient(circle at 18% 18%, rgba(196, 152, 85, 0.22), transparent 42%),
+    radial-gradient(circle at 82% 12%, rgba(80, 130, 110, 0.16), transparent 36%),
+    radial-gradient(circle at 70% 80%, rgba(47, 79, 58, 0.12), transparent 40%);
+  --hero-fade: linear-gradient(
+    180deg,
+    rgba(238, 243, 239, 0.05),
+    rgba(238, 243, 239, 0.88) 72%,
+    var(--color-bg)
+  );
+}
+
+.dark {
+  --color-bg: #0f1a14;
+  --color-bg-elevated: #13241b;
+  --color-ink: #e8efe9;
+  --color-muted: #a8b8ae;
+  --color-accent: #d4a45a;
+  --color-accent-soft: #f0c98a;
+  --color-forest: #2a4a38;
+  --color-glass: rgba(19, 36, 27, 0.55);
+  --color-glass-strong: rgba(19, 36, 27, 0.78);
+  --color-line: rgba(232, 239, 233, 0.12);
+  --elevation-1: 0 8px 24px rgba(0, 0, 0, 0.28);
+  --elevation-2: 0 24px 60px rgba(0, 0, 0, 0.45);
+  --elevation-3: 0 28px 70px rgba(0, 0, 0, 0.55);
+  --glow:
+    radial-gradient(circle at 20% 20%, rgba(212, 164, 90, 0.16), transparent 42%),
+    radial-gradient(circle at 80% 10%, rgba(70, 120, 100, 0.14), transparent 36%),
+    radial-gradient(circle at 70% 80%, rgba(40, 70, 55, 0.16), transparent 40%);
+  --hero-fade: linear-gradient(
+    180deg,
+    rgba(15, 26, 20, 0.05),
+    rgba(15, 26, 20, 0.9) 70%,
+    var(--color-bg)
+  );
+}

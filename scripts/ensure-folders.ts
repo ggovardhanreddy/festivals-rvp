@@ -1,34 +1,36 @@
 import fs from "node:fs";
 import path from "node:path";
-import { BUCKET_FOLDERS } from "../lib/paths";
+import { CMS_ALBUMS, isYearDir } from "../lib/cms";
 
 const root = process.cwd();
+const contentDir = path.join(root, "content");
 
 function listYearDirs(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter((name) => {
     const full = path.join(dir, name);
-    if (!fs.statSync(full).isDirectory()) return false;
-    if (name === "Unknown") return true;
-    return /^\d{4}$/.test(name);
+    return fs.statSync(full).isDirectory() && (isYearDir(name) || name === "Unknown");
   });
 }
 
 const discovered = new Set<string>([
-  ...listYearDirs(path.join(root, "content")),
+  ...listYearDirs(contentDir),
   ...listYearDirs(path.join(root, "public", "images")),
   String(new Date().getFullYear()),
-  "Unknown",
 ]);
 
 const years = [...discovered].sort((a, b) => b.localeCompare(a));
 
 for (const dir of [
   "content",
+  "generated",
   "originals",
   "inbox",
   "public/images",
   "public/thumbs",
+  "public/videos",
+  "public/audio",
+  "public/docs",
   "public/brand",
   "review/near-duplicates",
   ".tmp",
@@ -37,16 +39,16 @@ for (const dir of [
 }
 
 for (const year of years) {
-  for (const bucket of BUCKET_FOLDERS) {
-    fs.mkdirSync(path.join(root, "public/images", year, bucket), {
-      recursive: true,
-    });
-    fs.mkdirSync(path.join(root, "public/thumbs", year, bucket), {
-      recursive: true,
-    });
+  for (const album of CMS_ALBUMS) {
+    fs.mkdirSync(path.join(contentDir, year, album), { recursive: true });
+    for (const pub of ["images", "thumbs", "videos", "audio", "docs"]) {
+      fs.mkdirSync(path.join(root, "public", pub, year, album), {
+        recursive: true,
+      });
+    }
   }
 }
 
 console.log(
-  `RVP Youth archive folders ready for years: ${years.filter((y) => y !== "Unknown").join(", ")}.`,
+  `GitHub CMS folders ready for years: ${years.filter((y) => y !== "Unknown").join(", ")}.`,
 );

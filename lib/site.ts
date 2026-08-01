@@ -6,6 +6,27 @@ export const SITE_BRAND = "RVP Youth";
 export const ADMIN_NAME = "Govardhan Reddy";
 export const SITE_TAGLINE = "Digital Village Experience";
 
+/** Village identity */
+export const VILLAGE_NAME = "Kondreddigaripalli";
+export const VILLAGE_ALSO_KNOWN_AS = "Reddivaripalli";
+export const VILLAGE_ADDRESS = {
+  village: "Kondreddigaripalli (Reddivaripalli)",
+  post: "Devepatla (P)",
+  mandal: "Sambepalli (M)",
+  district: "Annamayya Dist",
+  pincode: "516215",
+  state: "Andhra Pradesh",
+  country: "India",
+} as const;
+
+export const VILLAGE_ADDRESS_LINE = [
+  VILLAGE_ADDRESS.village,
+  VILLAGE_ADDRESS.post,
+  VILLAGE_ADDRESS.mandal,
+  VILLAGE_ADDRESS.district,
+  `PIN ${VILLAGE_ADDRESS.pincode}`,
+].join(", ");
+
 export const NAV = [
   { href: "/", label: "Home" },
   { href: "/sankranthi/", label: "Sankranthi" },

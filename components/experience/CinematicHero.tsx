@@ -15,6 +15,7 @@ import {
 } from "@/lib/experience";
 import { useIsClient, useLowPowerDevice } from "@/lib/client";
 import { withBase } from "@/lib/base";
+import { VILLAGE_ALSO_KNOWN_AS, VILLAGE_NAME } from "@/lib/site";
 import { AudioAmbience } from "./AudioAmbience";
 
 const VillageCanvas = dynamic(
@@ -153,11 +154,12 @@ export function CinematicHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="eyebrow">RVP Youth</p>
+            <p className="eyebrow">RVP Youth · {VILLAGE_NAME}</p>
             <h1>Enter the village.</h1>
             <p className="lede">
-              A cinematic digital heritage experience — temples, festivals, and
-              memories waiting under the morning sky.
+              A cinematic Digital Village Experience for {VILLAGE_NAME} (
+              {VILLAGE_ALSO_KNOWN_AS}) — sunrise over temple and fields,
+              festivals, photos, films, and songs of home.
             </p>
             <div className="btn-row">
               <a className="btn magnetic" href="#map">

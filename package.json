@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n admin,next -c cyan,magenta \"tsx scripts/admin-server.ts\" \"next dev\"",
+    "dev": "npm run sync && next dev",
     "build": "npm run prepare:site && next build",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare:site": "tsx scripts/ensure-folders.ts && tsx scripts/generate-all.ts",
-    "optimize": "tsx scripts/optimize-images.ts",
+    "prepare:site": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts && tsx scripts/generate-all.ts",
+    "sync": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts",
+    "validate": "tsx scripts/validate-site.ts",
+    "test": "tsx scripts/smoke-test.ts",
+    "typecheck": "tsc --noEmit",
+    "optimize": "tsx scripts/sync-cms.ts",
     "ingest": "tsx scripts/ingest-zips.ts",
     "import": "tsx scripts/import-folder.ts",
     "import:folder": "tsx scripts/import-folder.ts",
@@ -19,6 +23,7 @@
     "admin-hash": "tsx scripts/admin-hash.ts",
     "sample-data": "tsx scripts/sample-data.ts",
     "ensure-folders": "tsx scripts/ensure-folders.ts",
+    "migrate:cms": "tsx scripts/migrate-cms-layout.ts",
     "brand:assets": "tsx scripts/generate-brand-assets.ts"
   },
   "dependencies": {

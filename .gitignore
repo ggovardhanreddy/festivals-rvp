@@ -1,8 +1,29 @@
-node_modules
-.next
-out
-.env.local
-.tmp
+# Dependencies
+node_modules/
+
+# Next.js / build
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts.bak
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Caches & temp
+.tmp/
+.cache/
+.turbo/
+*.log
+npm-debug.log*
+.DS_Store
+**/.DS_Store
+
+# Import / review workspaces
 inbox/*.zip
 inbox/*.processed
 originals/**
@@ -10,3 +31,11 @@ originals/**
 review/**
 !review/.gitkeep
 !review/near-duplicates/.gitkeep
+
+# Build-time generated catalogs (rebuilt by prepare:site)
+generated/
+
+# Editor
+.vscode/
+.idea/
+

@@ -1,9 +1,12 @@
-export type MediaType = "image" | "video";
+export type MediaType = "image" | "video" | "audio" | "document";
 
 export type FestivalKey = "sankranthi" | "vinayaka-chavithi";
 
 export type BucketKey =
-  "sankranthi" | "vinayaka-chavithi" | "rvp-birthdays" | "fun-trips";
+  | "sankranthi"
+  | "vinayaka-chavithi"
+  | "rvp-birthdays"
+  | "fun-trips";
 
 export type Media = {
   id: string;
@@ -20,6 +23,14 @@ export type Media = {
   blurDataURL?: string;
   sha256?: string;
   phash?: string;
+  /** Optional AVIF companion for images */
+  fileAvif?: string;
+  /** Original CMS path served for download when useful */
+  original?: string;
+  /** Video poster image */
+  poster?: string;
+  mime?: string;
+  duration?: number;
 };
 
 export type Album = {

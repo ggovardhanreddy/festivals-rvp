@@ -6,7 +6,12 @@ import {
   publicAlbums,
   years,
 } from "@/lib/content";
-import { BUCKETS, type BucketKey } from "@/lib/site";
+import {
+  BUCKETS,
+  VILLAGE_ADDRESS_LINE,
+  VILLAGE_NAME,
+  type BucketKey,
+} from "@/lib/site";
 import { AdminClient } from "@/components/AdminClient";
 import { AlbumCard } from "@/components/AlbumCard";
 import { AlbumView } from "@/components/AlbumView";
@@ -255,7 +260,7 @@ export default async function ArchiveRoute({
           atmosphere
           eyebrow="About"
           title="RVP Youth"
-          lede="An interactive digital heritage museum — elegant, intimate, and free to host forever."
+          lede={`Digital Village Experience for ${VILLAGE_NAME} — elegant, intimate, and free to host forever.`}
           primaryHref="/sankranthi/"
           primaryLabel="Begin with Sankranthi"
           secondaryHref="/#map"
@@ -267,7 +272,10 @@ export default async function ArchiveRoute({
             <h2>What this archive holds</h2>
             <p className="muted">
               Sankranthi, Vinayaka Chavithi, RVP Birthdays, and Fun Trips — curated as a
-              living village memory book, not a generic gallery.
+              living memory book for {VILLAGE_NAME}, not a generic gallery.
+            </p>
+            <p className="muted" style={{ marginTop: "0.75rem" }}>
+              {VILLAGE_ADDRESS_LINE}
             </p>
             <PrivateNotice />
           </div>
@@ -317,9 +325,10 @@ export default async function ArchiveRoute({
       <main className="page">
         <div className="section">
           <p className="eyebrow">Administrator</p>
-          <h1>RVP Youth studio</h1>
+          <h1>GitHub CMS</h1>
           <p className="lede">
-            Only Govardhan Reddy can import from the Fest folder and publish updates.
+            Manage photos in the GitHub repository. The website rebuilds and deploys
+            automatically — no uploads on this site.
           </p>
         </div>
         <AdminClient />

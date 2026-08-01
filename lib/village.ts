@@ -83,13 +83,13 @@ export const VILLAGE_QUOTES = [
 ];
 
 export const VILLAGE_STORY = {
-  eyebrow: "Our Village",
+  eyebrow: "Kondreddigaripalli",
   title: "A place held by memory",
-  lede: "RVP Youth is a living archive of culture, festivals, and the people who make home feel eternal.",
+  lede: "RVP Youth preserves the living culture of Kondreddigaripalli (Reddivaripalli) — festivals, traditions, and the people who make home eternal.",
   chapters: [
     {
       title: "Our Culture",
-      body: "Respect, togetherness, and the quiet dignity of rural life — passed hand to hand, generation to generation.",
+      body: "Respect, togetherness, and the quiet dignity of Annamayya district village life — passed hand to hand, generation to generation.",
     },
     {
       title: "Our Festivals",
@@ -101,7 +101,7 @@ export const VILLAGE_STORY = {
     },
     {
       title: "Our Journey",
-      body: "Birthdays, trips, and ordinary evenings that somehow became extraordinary because we were together.",
+      body: "Birthdays, trips, and ordinary evenings in Reddivaripalli that somehow became extraordinary because we were together.",
     },
   ],
 };

@@ -12,6 +12,7 @@ type SearchDoc = {
   title: string;
   date: string;
   tags?: string[];
+  type?: string;
   album: string;
   bucket?: string;
   url: string;
@@ -21,6 +22,7 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
   const [query, setQuery] = useState("");
   const [year, setYear] = useState("all");
   const [bucket, setBucket] = useState("all");
+  const [type, setType] = useState("all");
   const [index, setIndex] = useState<SearchDoc[] | null>(null);
 
   useEffect(() => {
@@ -45,6 +47,7 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
     return items.filter((item) => {
       if (year !== "all" && item.album.year !== year) return false;
       if (bucket !== "all" && item.album.bucket !== bucket) return false;
+      if (type !== "all" && item.type !== type) return false;
       if (!q) return true;
       const fromIndex = index?.find(
         (doc) => doc.title === item.title && doc.date === item.date,
@@ -66,7 +69,7 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
         .toLowerCase();
       return hay.includes(q);
     });
-  }, [items, query, year, bucket, index]);
+  }, [items, query, year, bucket, type, index]);
 
   return (
     <div>
@@ -110,6 +113,20 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
                   {b.title}
                 </option>
               ))}
+            </select>
+          </label>
+          <label>
+            <span className="sr-only">Media type</span>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              aria-label="Filter by media type"
+            >
+              <option value="all">All media</option>
+              <option value="image">Images</option>
+              <option value="video">Videos</option>
+              <option value="audio">Audio</option>
+              <option value="document">Documents</option>
             </select>
           </label>
         </div>

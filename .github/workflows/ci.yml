@@ -13,5 +13,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Install ffmpeg for media validation path
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: npm run lint
-      - run: npm run format:check
+      - run: npm run typecheck
+      - name: Sync CMS, optimize media, generate indexes
+        run: npm run prepare:site
+        env:
+          CMS_READ_EXIF: "1"
+      - run: npm run validate
+      - run: npm test
+      - name: Production build
+        run: npx next build
+        env:
+          NEXT_PUBLIC_BASE_PATH: ""
+          NEXT_PUBLIC_SITE_URL: https://festivals-rvp.pages.dev

@@ -1,108 +1,80 @@
 # RVP Youth — Digital Village Experience
 
-A premium interactive heritage archive for village festivals, birthdays, and journeys.
-It should feel like a digital museum — not a generic gallery.
+A premium cinematic heritage archive for **Kondreddigaripalli (Reddivaripalli)** — not a photo gallery, blog, or portfolio.
 
-- **Brand:** RVP Youth
-- **Repo:** https://github.com/ggovardhanreddy/festivals-rvp
-- **GitHub Pages:** https://ggovardhanreddy.github.io/festivals-rvp/
-- **Cloudflare Pages:** https://festivals-rvp.pages.dev
+| | |
+|---|---|
+| Village | Kondreddigaripalli (Reddivaripalli) |
+| Address | Devepatla (P), Sambepalli (M), Annamayya Dist, PIN 516215 |
+| Brand | RVP Youth |
+| Repo | https://github.com/ggovardhanreddy/festivals-rvp |
+| Cloudflare Pages | https://festivals-rvp.pages.dev |
+| GitHub Pages | https://ggovardhanreddy.github.io/festivals-rvp/ |
+
+## GitHub is the CMS
+
+Manage media in the repository:
+
+```text
+content/<YEAR>/sankranthi/
+content/<YEAR>/vinayaka-chavithi/
+content/<YEAR>/rvp-birthdays/
+content/<YEAR>/fun-trips/
+```
+
+Push to `main` → Actions sync, optimize, validate, build, and deploy.
+
+Guides: [CONTENT_GUIDE.md](./CONTENT_GUIDE.md) · [CONTENT.md](./CONTENT.md)
 
 ## Stack
 
-Next.js (App Router) · TypeScript · Tailwind CSS · Three.js · React Three Fiber · Drei · Lenis · Framer Motion · GSAP · Sharp · Cloudflare Pages + GitHub Pages
+Next.js App Router · TypeScript · Tailwind · Sharp · Framer Motion · GSAP · Three.js / R3F · Lenis · Cloudflare Pages
 
-The homepage opens as a **cinematic 3D village experience** (stylized low-poly scene, camera fly-tos, optional muted ambience). Low-power devices and `prefers-reduced-motion` get graceful 2D fallbacks.
-
-## Quick start
+## Local development
 
 ```bash
 npm install
-cp .env.example .env.local   # set ADMIN_PASSWORD_HASH + secrets
-npm run dev                  # Next + local admin API on :8788
+npm run sync
+npm run dev
 ```
 
-## Import photos
+| Command | Purpose |
+|---|---|
+| `npm run sync` | Scan `content/`, optimize media, write `generated/albums.json` |
+| `npm run generate` | Search index, sitemap, feed, manifest |
+| `npm run validate` | Pre-deploy quality gate |
+| `npm run typecheck` | TypeScript |
+| `npm run lint` | ESLint |
+| `npm run build` | Full production build |
 
-Default source (mandatory):
+## Documentation
 
-```text
-/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest
-```
+Governance and engineering docs live in [`/docs`](./docs):
 
-```bash
-npm run import:folder
-npm run optimize
-npm run generate
-```
+- [00 Master Prompt](./docs/00-MASTER_PROMPT.md)
+- [01 Architecture](./docs/01-ARCHITECTURE.md)
+- [02 Design System](./docs/02-DESIGN_SYSTEM.md)
+- [03 UI/UX](./docs/03-UI_UX.md)
+- [04 Animations](./docs/04-ANIMATIONS.md)
+- [05 3D Experience](./docs/05-3D_EXPERIENCE.md)
+- [06 Gallery](./docs/06-GALLERY.md)
+- [07 Media Pipeline](./docs/07-MEDIA_PIPELINE.md)
+- [08 Deployment](./docs/08-DEPLOYMENT.md)
+- [09 Coding Standards](./docs/09-CODING_STANDARDS.md)
+- [10 Testing](./docs/10-TESTING.md)
+- [11 Future Roadmap](./docs/11-FUTURE_ROADMAP.md)
+- [12 Acceptance Criteria](./docs/12-ACCEPTANCE_CRITERIA.md)
 
-Exact duplicates are skipped (SHA-256). Near-duplicates go to `review/near-duplicates/`.
+Operator docs: [CONTRIBUTING](./CONTRIBUTING.md) · [DEPLOYMENT](./DEPLOYMENT.md) · [TROUBLESHOOTING](./TROUBLESHOOTING.md) · [CHANGELOG](./CHANGELOG.md) · [LICENSE](./LICENSE)
 
-Publish only after confirmation:
+## Design tokens
 
-```bash
-npm run publish -- --confirm
-```
+Visual constants are centralized in `styles/tokens.css` (CSS) and `lib/design-tokens.ts` (TS). Do not hardcode colors, radii, shadows, or motion values in features.
 
-## Content layout
+## Quality gates
 
-Years are discovered automatically (never hardcoded):
+Deployments run typecheck, lint, sync, validate, and production build. Validation failures block deploy.
 
-```text
-content/<YEAR>/Festivals/sankranthi/
-content/<YEAR>/Festivals/vinayaka-chavithi/
-content/<YEAR>/Birthdays/<person>/
-content/<YEAR>/Trips/fun-trips/
-```
+## License
 
-Public media:
-
-```text
-public/images/<YEAR>/<bucket>/
-public/thumbs/<YEAR>/<bucket>/
-```
-
-Buckets: `sankranthi` · `vinayaka-chavithi` · `rvp-birthdays` · `fun-trips`
-
-## Admin
-
-- Single administrator (local studio only)
-- Visitors are read-only
-- Production Cloudflare admin route cannot write/upload
-- Local API: `http://127.0.0.1:8788` while `npm run dev` runs
-
-Generate password hash:
-
-```bash
-npm run admin-hash -- "your-password"
-```
-
-## Deploy
-
-| Host             | Workflow                                  | Base path        | URL       |
-| ---------------- | ----------------------------------------- | ---------------- | --------- |
-| GitHub Pages     | `.github/workflows/deploy.yml`            | `/festivals-rvp` | github.io |
-| Cloudflare Pages | `.github/workflows/deploy-cloudflare.yml` | ``               | pages.dev |
-
-Cloudflare secrets required: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
-
-CI checks lint + Prettier on PRs (`.github/workflows/ci.yml`).
-
-## Scripts
-
-| Command                        | Purpose                                     |
-| ------------------------------ | ------------------------------------------- |
-| `npm run import:folder`        | Scan Fest folder, EXIF, albums, dedupe      |
-| `npm run optimize`             | WebP/AVIF + thumbs + blur placeholders      |
-| `npm run generate`             | Search index, sitemap, feed, service worker |
-| `npm run brand:assets`         | Icons + OG banner from SVG marks            |
-| `npm run publish -- --confirm` | Commit & push published site                |
-
-## Environment
-
-See [`.env.example`](.env.example):
-
-- `ADMIN_PASSWORD_HASH`
-- `ADMIN_SESSION_SECRET`
-- `NEXT_PUBLIC_SITE_URL`
-- `NEXT_PUBLIC_BASE_PATH`
+Software: MIT — see [LICENSE](./LICENSE). Heritage media remains community-owned.

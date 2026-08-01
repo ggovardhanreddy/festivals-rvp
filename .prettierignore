@@ -16,4 +16,6 @@ review
 content/**/metadata.json
 content/hashes.json
 content/phashes.json
+content/**/*.{jpg,jpeg,png,webp,avif,heic,gif,mp4,mov,webm}
+generated
 package-lock.json

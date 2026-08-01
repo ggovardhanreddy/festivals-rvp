@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { SITE_NAME, SITE_TAGLINE } from "@/lib/site";
+import {
+  SITE_NAME,
+  SITE_TAGLINE,
+  VILLAGE_ADDRESS_LINE,
+  VILLAGE_NAME,
+} from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -8,9 +13,12 @@ export function SiteFooter() {
       <div className="footer-inner">
         <div>
           <Logo />
-          <p className="muted" style={{ marginTop: "0.75rem", maxWidth: "36ch" }}>
-            {SITE_NAME} — {SITE_TAGLINE}. A private heritage archive of Sankranthi,
-            Vinayaka Chavithi, birthdays, and journeys.
+          <p className="muted" style={{ marginTop: "0.75rem", maxWidth: "42ch" }}>
+            {SITE_NAME} — {SITE_TAGLINE} for {VILLAGE_NAME}. A private heritage
+            archive of Sankranthi, Vinayaka Chavithi, birthdays, and journeys.
+          </p>
+          <p className="muted" style={{ marginTop: "0.5rem", maxWidth: "48ch", fontSize: "0.85rem" }}>
+            {VILLAGE_ADDRESS_LINE}
           </p>
         </div>
         <div className="footer-links">

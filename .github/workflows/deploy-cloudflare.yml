@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch: {}
+concurrency:
+  group: cloudflare-pages
+  cancel-in-progress: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,10 +22,26 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run optimize && npm run generate && npm run build
+      - name: Install ffmpeg for video conversion/posters
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Quality gates — lint & typecheck
+        run: |
+          npm run lint
+          npm run typecheck
+      - name: Sync CMS, optimize media, generate indexes
+        run: npm run prepare:site
+        env:
+          CMS_READ_EXIF: "1"
+      - name: Validate content, assets, and routes
+        run: |
+          npm run validate
+          npm test
+      - name: Production build
+        run: npx next build
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy out --project-name=festivals-rvp
+

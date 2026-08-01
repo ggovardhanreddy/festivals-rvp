@@ -7,11 +7,15 @@ export const CONTENT_DIR = path.join(ROOT, "content");
 export const ORIGINALS_DIR = path.join(ROOT, "originals");
 export const PUBLIC_IMAGES_DIR = path.join(ROOT, "public", "images");
 export const PUBLIC_THUMBS_DIR = path.join(ROOT, "public", "thumbs");
+export const PUBLIC_VIDEOS_DIR = path.join(ROOT, "public", "videos");
+export const PUBLIC_AUDIO_DIR = path.join(ROOT, "public", "audio");
+export const PUBLIC_DOCS_DIR = path.join(ROOT, "public", "docs");
 export const REVIEW_DIR = path.join(ROOT, "review", "near-duplicates");
 export const HASH_INDEX_PATH = path.join(CONTENT_DIR, "hashes.json");
 export const PHASH_INDEX_PATH = path.join(CONTENT_DIR, "phashes.json");
 
-export const DEFAULT_IMPORT_DIR = "/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest";
+export const DEFAULT_IMPORT_DIR =
+  "/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest";
 
 export const BUCKET_FOLDERS: BucketKey[] = [
   "sankranthi",
@@ -20,17 +24,16 @@ export const BUCKET_FOLDERS: BucketKey[] = [
   "fun-trips",
 ];
 
-export const IMAGE_EXTS = new Set([
-  ".jpg",
-  ".jpeg",
-  ".png",
-  ".heic",
-  ".webp",
-  ".avif",
-  ".gif",
-]);
-
-export const VIDEO_EXTS = new Set([".mp4", ".mov", ".webm", ".mkv"]);
+export {
+  IMAGE_EXTS,
+  IMAGE_SOURCE_EXTS,
+  VIDEO_EXTS,
+  VIDEO_CONVERT_EXTS,
+  AUDIO_EXTS,
+  DOCUMENT_EXTS,
+  detectMediaKind,
+  mimeForExt,
+} from "./media-formats";
 
 export function detectFestival(parts: string[]): FestivalKey | undefined {
   const blob = parts.join(" ").toLowerCase();
