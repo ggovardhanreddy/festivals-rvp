@@ -27,4 +27,4 @@ jobs:
         run: npx next build
         env:
           NEXT_PUBLIC_BASE_PATH: ""
-          NEXT_PUBLIC_SITE_URL: https://www.reddyvaripalli.com
+          NEXT_PUBLIC_SITE_URL: https://www.reddivaripalli.com
