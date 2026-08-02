@@ -2489,10 +2489,24 @@ body {
   height: 100% !important;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 820px) {
+  .aaa-hero-frame {
+    /* Keep Explore tappable — short phones were clipping it with overflow:hidden */
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
   .aaa-logo-img,
   .aaa-logo-wrap {
-    height: min(28vh, 220px);
+    height: min(22vh, 160px);
+  }
+
+  .aaa-copy-band {
+    flex: 0 1 auto;
+    min-height: 0;
   }
 
   .aaa-tagline {
@@ -2501,19 +2515,37 @@ body {
   }
 
   .aaa-welcome-line {
-    font-size: clamp(1.4rem, 7.2vw, 2.1rem);
+    font-size: clamp(1.25rem, 6.5vw, 1.9rem);
   }
 
   .aaa-welcome-sub {
-    font-size: clamp(1.1rem, 5.2vw, 1.5rem);
+    font-size: clamp(1rem, 4.8vw, 1.4rem);
   }
 
   .aaa-brand-taglines {
-    gap: 0.22rem;
+    display: none; /* frees space so Explore stays on screen */
   }
 
-  .aaa-brand-taglines li {
-    font-size: clamp(0.8rem, 3vw, 0.95rem);
+  .aaa-cta-block {
+    position: sticky;
+    bottom: 0;
+    z-index: 8;
+    margin-top: 0.75rem;
+    padding: 0.85rem 0 calc(0.85rem + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(5, 8, 12, 0.88) 28%,
+      rgba(5, 8, 12, 0.96)
+    );
+  }
+
+  .aaa-skip-btn {
+    min-width: min(220px, 70vw);
+  }
+
+  .aaa-scroll-hint {
+    display: none;
   }
 }
 

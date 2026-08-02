@@ -61,7 +61,7 @@ fs.writeFileSync(
 
 fs.writeFileSync(
   path.join(root, "public", "sw.js"),
-  `const CACHE="rvp-youth-v2",BASE=${JSON.stringify(base || "")};self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([BASE+"/",BASE+"/offline/",BASE+"/sankranthi/",BASE+"/vinayaka-chavithi/"]))));self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match(BASE+"/offline/"))))});`,
+  `const CACHE="rvp-youth-v3",BASE=${JSON.stringify(base || "")};self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll([BASE+"/",BASE+"/offline/"])));self.skipWaiting()});self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;const req=e.request;if(req.mode==="navigate"){e.respondWith(fetch(req).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(req,copy));return r}).catch(()=>caches.match(req).then(r=>r||caches.match(BASE+"/offline/")||caches.match(BASE+"/")))));return}e.respondWith(fetch(req).catch(()=>caches.match(req)))});`,
 );
 
 fs.writeFileSync(

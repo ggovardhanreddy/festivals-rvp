@@ -88,7 +88,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var base=${JSON.stringify(basePath || "")}.replace(/\\/$/,"");var path=location.pathname.replace(/\\/$/,"")||"/";var home=base||"/";if(path===home)document.documentElement.classList.add("intro-pending");}catch(e){}})();`,
+            __html: `(function(){try{var base=${JSON.stringify(basePath || "")}.replace(/\\/$/,"");var path=location.pathname.replace(/\\/$/,"")||"/";var home=base||"/";if(path===home){document.documentElement.classList.add("intro-pending");setTimeout(function(){document.documentElement.classList.remove("intro-pending","intro-active","intro-locked");},9000);}}catch(e){}})();`,
           }}
         />
         <a className="skip-link" href="#main-content">

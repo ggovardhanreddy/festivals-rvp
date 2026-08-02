@@ -6,14 +6,7 @@ import type { Album, MediaWithAlbum } from "@/lib/types";
 import { Reveal } from "@/components/Reveal";
 import { TimelineStrip } from "@/components/TimelineStrip";
 import { YearGrid } from "@/components/YearGrid";
-
-const AppleHomeStage = dynamic(
-  () => import("./AppleHomeStage").then((m) => m.AppleHomeStage),
-  {
-    ssr: false,
-    loading: () => <div className="apple-stage-skeleton" aria-hidden />,
-  },
-);
+import { AppleHomeStage } from "./AppleHomeStage";
 
 const InteractiveVillageMap = dynamic(
   () =>
@@ -21,24 +14,20 @@ const InteractiveVillageMap = dynamic(
       (m) => m.InteractiveVillageMap,
     ),
   {
-    ssr: false,
     loading: () => <div className="map-canvas" aria-hidden />,
   },
 );
 
 const YouthPortrait = dynamic(
   () => import("@/components/YouthPortrait").then((m) => m.YouthPortrait),
-  { ssr: false },
 );
 
 const MemoryWall = dynamic(
   () => import("@/components/MemoryWall").then((m) => m.MemoryWall),
-  { ssr: false },
 );
 
 const VillageStory = dynamic(
   () => import("@/components/VillageStory").then((m) => m.VillageStory),
-  { ssr: false },
 );
 
 export function HomeBelowFold({
@@ -54,6 +43,7 @@ export function HomeBelowFold({
 }) {
   return (
     <div className="experience-page experience-page--apple">
+      {/* SSR this stage so mobile still has content if JS is slow */}
       <AppleHomeStage
         featuredAlbums={featuredAlbums}
         media={media}

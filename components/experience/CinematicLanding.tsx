@@ -12,7 +12,7 @@ import {
   VILLAGE_ALSO_KNOWN_AS,
   VILLAGE_NAME,
 } from "@/lib/site";
-import { useLowPowerDevice } from "@/lib/client";
+import { useIsClient, useLowPowerDevice } from "@/lib/client";
 import { MusicStartButton } from "@/components/music/MusicStartButton";
 import { CursorPrefs } from "./CursorPrefs";
 import { CinematicFireworks } from "./CinematicFireworks";
@@ -41,6 +41,7 @@ function useWebGlSupport() {
 }
 
 function IntroStages() {
+  const client = useIsClient();
   const reduce = useReducedMotion();
   const lowPower = useLowPowerDevice();
   const webgl = useWebGlSupport();
@@ -55,20 +56,42 @@ function IntroStages() {
   } = useIntro();
 
   useEffect(() => {
+    if (!client) return;
     if (reduce) {
       const frame = window.requestAnimationFrame(() => complete());
       return () => window.cancelAnimationFrame(frame);
     }
-    const timeline: { phase: IntroPhase; at: number }[] = [
-      { phase: "sky", at: 800 },
-      { phase: "logo", at: 1500 },
-      { phase: "ready", at: 3200 },
-    ];
+    // Phones: short brand open so Explore appears quickly
+    const timeline: { phase: IntroPhase; at: number }[] = lowPower
+      ? [
+          { phase: "sky", at: 180 },
+          { phase: "logo", at: 420 },
+          { phase: "ready", at: 900 },
+        ]
+      : [
+          { phase: "sky", at: 800 },
+          { phase: "logo", at: 1500 },
+          { phase: "ready", at: 3200 },
+        ];
     const timers = timeline.map((step) =>
       window.setTimeout(() => setPhase(step.phase), step.at),
     );
-    return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [reduce, setPhase, complete]);
+    // Failsafe — never leave mobile stuck on a black locked intro
+    const failsafe = window.setTimeout(() => {
+      if (!document.documentElement.classList.contains("intro-active")) return;
+      complete();
+      document.documentElement.classList.remove(
+        "intro-active",
+        "intro-locked",
+        "intro-pending",
+      );
+      window.dispatchEvent(new CustomEvent("rvp:intro-complete"));
+    }, lowPower ? 7000 : 14000);
+    return () => {
+      timers.forEach((id) => window.clearTimeout(id));
+      window.clearTimeout(failsafe);
+    };
+  }, [client, reduce, lowPower, setPhase, complete]);
 
   useEffect(() => {
     if (phase !== "ready" && phase !== "fly") return;
@@ -142,7 +165,7 @@ function IntroStages() {
               style={{ opacity: backdropFade }}
             >
               <NightVillageBackdrop brighten={flyProgress > 0.4} />
-              <CinematicFireworks intensity={fwIntensity} />
+              {!lowPower && <CinematicFireworks intensity={fwIntensity} />}
             </div>
             {use3d &&
               (phase === "ready" ||
@@ -237,17 +260,34 @@ function IntroStages() {
                   >
                     Explore
                   </button>
+                  <button
+                    type="button"
+                    className="btn ghost aaa-skip-btn"
+                    onClick={() => {
+                      complete();
+                      window.dispatchEvent(new CustomEvent("rvp:intro-complete"));
+                      window.requestAnimationFrame(() => {
+                        document
+                          .getElementById("home-start")
+                          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      });
+                    }}
+                  >
+                    Skip intro
+                  </button>
                   <div className="aaa-controls">
                     <MusicStartButton />
-                    <CursorPrefs />
+                    {!lowPower && <CursorPrefs />}
                   </div>
-                  <div className="aaa-scroll-hint" aria-hidden>
-                    <span className="aaa-scroll-mouse">
-                      <i />
-                    </span>
-                    <span className="aaa-scroll-arrow">↓</span>
-                    <span className="aaa-scroll-label">Scroll to Begin</span>
-                  </div>
+                  {!lowPower && (
+                    <div className="aaa-scroll-hint" aria-hidden>
+                      <span className="aaa-scroll-mouse">
+                        <i />
+                      </span>
+                      <span className="aaa-scroll-arrow">↓</span>
+                      <span className="aaa-scroll-label">Scroll to Begin</span>
+                    </div>
+                  )}
                 </m.div>
               )}
             </div>

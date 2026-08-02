@@ -97,6 +97,17 @@ export function IntroProvider({ children }: { children: ReactNode }) {
 
   const beginExplore = useCallback(() => {
     if (animating.current || phase === "done" || phase === "highlight") return;
+
+    // Phones / reduced-motion: enter immediately — no locked fly that can stall.
+    const light =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 820px)").matches ||
+      /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    if (light) {
+      finishExplore(setPhase, setFlyProgress);
+      return;
+    }
+
     animating.current = true;
     // First spotlight the welcome line, then fly into the village
     setPhase("highlight");
