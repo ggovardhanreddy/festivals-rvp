@@ -143,7 +143,6 @@ export function MembersGrid({
 }
 
 export function MembersByGroup({
-  group,
   members,
 }: {
   group: MemberGroup;

@@ -123,7 +123,7 @@ function ImageLightbox({
         alt={media.title || "Memory photograph"}
         style={{
           transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-          transition: reduce || drag.current ? undefined : "transform 0.25s ease",
+          transition: reduce ? undefined : "transform 0.2s ease",
           cursor: zoom > 1 ? "grab" : "default",
         }}
         draggable={false}
