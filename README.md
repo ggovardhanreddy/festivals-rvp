@@ -8,7 +8,7 @@ A premium cinematic heritage archive for **Kondreddigaripalli (Reddivaripalli)**
 | Address | Devepatla (P), Sambepalli (M), Annamayya Dist, PIN 516215 |
 | Brand | RVP Youth |
 | Repo | https://github.com/ggovardhanreddy/festivals-rvp |
-| Live site | https://www.reddyvaripalli.com |
+| Live site | https://www.reddivaripalli.com |
 | Cloudflare Pages | https://festivals-rvp.pages.dev |
 | GitHub Pages | https://ggovardhanreddy.github.io/festivals-rvp/ |
 

@@ -4,7 +4,7 @@
 
 | Target | URL | Workflow |
 |---|---|---|
-| Custom domain (primary) | https://www.reddyvaripalli.com | Hostinger DNS → Cloudflare Pages |
+| Custom domain (primary) | https://www.reddivaripalli.com | Hostinger DNS → Cloudflare Pages |
 | Cloudflare Pages | https://festivals-rvp.pages.dev | `.github/workflows/deploy-cloudflare.yml` |
 | GitHub Pages (mirror) | https://ggovardhanreddy.github.io/festivals-rvp/ | `.github/workflows/deploy.yml` |
 
@@ -39,7 +39,7 @@ Project name: `festivals-rvp`.
 | Variable | Cloudflare / custom domain | GitHub Pages |
 |---|---|---|
 | `NEXT_PUBLIC_BASE_PATH` | `""` | `/festivals-rvp` |
-| `NEXT_PUBLIC_SITE_URL` | `https://www.reddyvaripalli.com` | `https://ggovardhanreddy.github.io/festivals-rvp` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.reddivaripalli.com` | `https://ggovardhanreddy.github.io/festivals-rvp` |
 | `CMS_READ_EXIF` | `1` in CI | `1` in CI |
 
 ### Hostinger DNS

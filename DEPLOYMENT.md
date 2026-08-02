@@ -21,24 +21,28 @@ Set in the GitHub repository:
 
 ## Custom domain (Hostinger → Cloudflare Pages)
 
-Primary URL: **https://www.reddyvaripalli.com**
+Primary URL: **https://www.reddivaripalli.com**  
+(Registered spelling is **reddi**varipalli — with an **i**.)
 
-In Hostinger DNS for `reddyvaripalli.com`, set:
+In Hostinger → Domains → `reddivaripalli.com` → DNS / DNS Zone:
 
-| Type | Name | Target / value |
-|---|---|---|
-| CNAME | `www` | `festivals-rvp.pages.dev` |
-| CNAME or ALIAS | `@` (root) | `festivals-rvp.pages.dev` |
+1. **Delete** Hostinger parking records that point `@` / `www` to `2.57.91.91` (or any parking A/CNAME).
+2. **Add**:
 
-If Hostinger does not allow CNAME/ALIAS on `@`, use Cloudflare’s recommended A/AAAA records from the Pages custom-domain screen, or point Hostinger nameservers to Cloudflare.
+| Type | Name | Target / value | TTL |
+|---|---|---|---|
+| CNAME | `www` | `festivals-rvp.pages.dev` | Auto / 300 |
+| CNAME or ALIAS | `@` | `festivals-rvp.pages.dev` | Auto / 300 |
 
-Both `www.reddyvaripalli.com` and `reddyvaripalli.com` are attached to the `festivals-rvp` Pages project.
+If Hostinger blocks CNAME on `@`, use their **ALIAS/ANAME** for the root, or only set `www` first (site will work at www).
+
+Both `www.reddivaripalli.com` and `reddivaripalli.com` are attached to the `festivals-rvp` Pages project. SSL becomes Active after DNS is correct.
 
 ## Manual deploy
 
 ```bash
 npm ci
-export NEXT_PUBLIC_SITE_URL=https://www.reddyvaripalli.com
+export NEXT_PUBLIC_SITE_URL=https://www.reddivaripalli.com
 export NEXT_PUBLIC_BASE_PATH=
 npm run prepare:site
 npm run validate
