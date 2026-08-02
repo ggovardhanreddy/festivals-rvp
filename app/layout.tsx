@@ -5,12 +5,11 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { basePath, withBase } from "@/lib/base";
+import { withBase } from "@/lib/base";
 import {
   SITE_DESCRIPTOR,
   SITE_NAME,
   SITE_TAGLINE,
-  SITE_TAGLINE_HERITAGE,
   VILLAGE_ADDRESS_LINE,
   VILLAGE_ALSO_KNOWN_AS,
   VILLAGE_NAME,

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   allMedia,
@@ -297,9 +298,9 @@ export default async function ArchiveRoute({
                   Share updates, photos, and quick notes with fellow members.
                 </p>
               </div>
-              <a className="btn" href="/chat/">
+              <Link className="btn" href="/chat/">
                 Open chat
-              </a>
+              </Link>
             </div>
           </Reveal>
           <MembersGrid
