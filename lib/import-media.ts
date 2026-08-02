@@ -107,19 +107,30 @@ function uniqueDest(dest: string): string {
 
 function prepareReadableImage(sourceFile: string, hash: string): string {
   const ext = path.extname(sourceFile).toLowerCase();
-  if (ext !== ".heic") return sourceFile;
+  if (ext !== ".heic" && ext !== ".heif") return sourceFile;
   const tmpDir = path.join(process.cwd(), ".tmp", "heic");
   fs.mkdirSync(tmpDir, { recursive: true });
   const out = path.join(tmpDir, `${hash.slice(0, 16)}.jpg`);
-  if (fs.existsSync(out)) return out;
+  if (fs.existsSync(out) && fs.statSync(out).size > 0) return out;
   try {
     execFileSync("sips", ["-s", "format", "jpeg", sourceFile, "--out", out], {
       stdio: "ignore",
     });
-    return out;
+    if (fs.existsSync(out) && fs.statSync(out).size > 0) return out;
   } catch {
-    return sourceFile;
+    /* try ffmpeg */
   }
+  try {
+    execFileSync(
+      "ffmpeg",
+      ["-y", "-i", sourceFile, "-frames:v", "1", "-q:v", "2", out],
+      { stdio: "ignore" },
+    );
+    if (fs.existsSync(out) && fs.statSync(out).size > 0) return out;
+  } catch {
+    /* fall through */
+  }
+  return sourceFile;
 }
 
 async function processImage(
@@ -221,6 +232,30 @@ function albumMeta(input: {
       bucket: "vinayaka-chavithi",
     };
   }
+  if (input.bucket === "mathamma-jathara") {
+    return {
+      category: "Festivals",
+      slug: "mathamma-jathara",
+      title: `Mathamma Jathara ${input.year}`,
+      bucket: "mathamma-jathara",
+    };
+  }
+  if (input.bucket === "devapatlamma-jathara") {
+    return {
+      category: "Festivals",
+      slug: "devapatlamma-jathara",
+      title: `Devapatlamma Jathara ${input.year}`,
+      bucket: "devapatlamma-jathara",
+    };
+  }
+  if (input.bucket === "sri-rama-navami") {
+    return {
+      category: "Festivals",
+      slug: "sri-rama-navami",
+      title: `Sri Rama Navami ${input.year}`,
+      bucket: "sri-rama-navami",
+    };
+  }
   return {
     category: "Trips",
     slug: "fun-trips",
@@ -310,6 +345,9 @@ export async function importLocalFolder(
     byBucket: {
       sankranthi: 0,
       "vinayaka-chavithi": 0,
+      "mathamma-jathara": 0,
+      "devapatlamma-jathara": 0,
+      "sri-rama-navami": 0,
       "rvp-birthdays": 0,
       "fun-trips": 0,
     },

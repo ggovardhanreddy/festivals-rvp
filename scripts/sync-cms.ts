@@ -30,12 +30,23 @@ import {
   detectMediaKind,
   mimeForExt,
 } from "../lib/paths";
+import {
+  extractVideoPosterJpg,
+  isHeifDecodeError,
+  prepareRasterSource,
+  sanitizeSvg,
+  sniffMediaKind,
+  stripExtension,
+  transcodeToMp4,
+} from "../lib/media-convert";
+import { isDisplayableImageUrl } from "../lib/media-formats";
 import type { Album, BucketKey, Media } from "../lib/types";
 import { titleCase } from "../lib/slug";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
+const FORCE_REPROCESS = process.env.CMS_FORCE_MEDIA === "1";
 const GENERATED_DIR = path.join(process.cwd(), "generated");
 const ALBUMS_OUT = path.join(GENERATED_DIR, "albums.json");
 const WARNINGS_OUT = path.join(GENERATED_DIR, "sync-warnings.json");
@@ -119,6 +130,7 @@ async function fileDate(filePath: string, fallbackYear: string) {
 async function optimizeImage(
   source: string,
   relNoExt: string,
+  cacheKey: string,
 ): Promise<{ file: string; thumb: string; width: number; height: number; blurDataURL?: string }> {
   const dest = path.join(PUBLIC_IMAGES_DIR, `${relNoExt}.webp`);
   const avif = path.join(PUBLIC_IMAGES_DIR, `${relNoExt}.avif`);
@@ -128,11 +140,12 @@ async function optimizeImage(
 
   const ext = path.extname(source).toLowerCase();
   const sourceStat = fs.statSync(source);
-  const destExists = fs.existsSync(dest);
-  const thumbExists = fs.existsSync(thumb);
+  const destExists = fs.existsSync(dest) && fs.statSync(dest).size > 0;
+  const thumbExists = fs.existsSync(thumb) && fs.statSync(thumb).size > 0;
 
   // Fast path: source already optimized webp and outputs exist (common after CMS seed)
   const alreadyOptimized =
+    !FORCE_REPROCESS &&
     ext === ".webp" &&
     destExists &&
     thumbExists &&
@@ -140,9 +153,15 @@ async function optimizeImage(
       fs.statSync(dest).size > 0);
 
   const destFresh =
-    destExists && thumbExists && fs.statSync(dest).mtimeMs >= sourceStat.mtimeMs - 2000;
+    !FORCE_REPROCESS &&
+    destExists &&
+    thumbExists &&
+    fs.statSync(dest).mtimeMs >= sourceStat.mtimeMs - 2000;
 
   if (!alreadyOptimized && !destFresh) {
+    const prepared = await prepareRasterSource(source, cacheKey);
+    const raster = prepared.path;
+
     // If source is webp elsewhere, copy then ensure thumb
     if (ext === ".webp" && path.resolve(source) !== path.resolve(dest)) {
       fs.copyFileSync(source, dest);
@@ -153,7 +172,7 @@ async function optimizeImage(
           .toFile(thumb);
       }
     } else {
-      const pipeline = sharp(source).rotate();
+      const pipeline = sharp(raster).rotate();
       await pipeline
         .clone()
         .resize({ width: 2200, withoutEnlargement: true })
@@ -231,10 +250,18 @@ function copyFresh(source: string, dest: string) {
   }
 }
 
-/** Prefer favorites, then larger resolution images for album covers. */
+/** Prefer favorites, then larger resolution browser-safe images for album covers. */
 function pickBestCover(media: Media[]): string | undefined {
-  const images = media.filter((item) => item.type === "image");
-  if (!images.length) return media[0]?.file;
+  const images = media.filter(
+    (item) =>
+      item.type === "image" &&
+      isDisplayableImageUrl(item.file) &&
+      isDisplayableImageUrl(item.thumb || item.file),
+  );
+  if (!images.length) {
+    const poster = media.find((m) => m.poster && isDisplayableImageUrl(m.poster));
+    return poster?.poster || media.find((m) => isDisplayableImageUrl(m.thumb))?.thumb;
+  }
   let best = images[0]!;
   let bestScore = -1;
   for (const image of images) {
@@ -256,10 +283,19 @@ async function buildMediaFromFile(
   personName?: string,
 ): Promise<Media | null> {
   const ext = path.extname(source).toLowerCase();
-  const kind = detectMediaKind(ext);
+  let kind = detectMediaKind(ext);
+  // iPhone sometimes saves Live Photos / MOV with a .jpg extension
+  if (kind === "image") {
+    const sniffed = sniffMediaKind(source);
+    if (sniffed === "video") kind = "convert-video";
+    else if (sniffed === "heic") {
+      /* keep image — HEIC path + converters handle decode */
+    }
+  }
   if (kind === "skip") return null;
 
-  const base = path.basename(source, ext);
+  // Use original-case extension when stripping basename (fixes .HEIC / .MOV bugs)
+  const base = stripExtension(source);
   const safeBase = safeName(base);
   const relParts = personName
     ? [year, bucket, personName, safeBase]
@@ -278,50 +314,35 @@ async function buildMediaFromFile(
   if (kind === "convert-video") {
     const dest = path.join(PUBLIC_VIDEOS_DIR, `${relNoExt}.mp4`);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
-    if (!fs.existsSync(dest)) {
-      if (await hasFfmpeg()) {
-        try {
-          await execFileAsync("ffmpeg", [
-            "-y",
-            "-i",
-            source,
-            "-c:v",
-            "libx264",
-            "-preset",
-            "veryfast",
-            "-crf",
-            "23",
-            "-c:a",
-            "aac",
-            dest,
-          ]);
-        } catch (error) {
-          warnings.push(`Video conversion failed for ${source}: ${String(error)}`);
-          return null;
-        }
-      } else {
+    const needsConvert =
+      FORCE_REPROCESS ||
+      !fs.existsSync(dest) ||
+      fs.statSync(dest).size === 0 ||
+      fs.statSync(dest).mtimeMs < stat.mtimeMs - 1000;
+
+    if (needsConvert) {
+      if (!(await hasFfmpeg())) {
         warnings.push(
           `Unsupported video needs conversion (install ffmpeg): ${path.relative(process.cwd(), source)}`,
         );
         return null;
       }
+      const ok = await transcodeToMp4(source, dest);
+      if (!ok) {
+        warnings.push(`Video conversion failed for ${source}`);
+        return null;
+      }
     }
+
     const poster = path.join(PUBLIC_THUMBS_DIR, `${relNoExt}.webp`);
-    if (!fs.existsSync(poster) && (await hasFfmpeg())) {
+    if ((!fs.existsSync(poster) || FORCE_REPROCESS) && (await hasFfmpeg())) {
       try {
-        await execFileAsync("ffmpeg", [
-          "-y",
-          "-i",
-          dest,
-          "-frames:v",
-          "1",
-          "-q:v",
-          "3",
-          poster.replace(/\.webp$/, ".jpg"),
-        ]);
         const jpg = poster.replace(/\.webp$/, ".jpg");
-        if (fs.existsSync(jpg)) {
-          await sharp(jpg).resize({ width: 800, withoutEnlargement: true }).webp({ quality: 76 }).toFile(poster);
+        if (await extractVideoPosterJpg(dest, jpg)) {
+          await sharp(jpg)
+            .resize({ width: 800, withoutEnlargement: true })
+            .webp({ quality: 76 })
+            .toFile(poster);
           fs.unlinkSync(jpg);
         }
       } catch {
@@ -338,7 +359,7 @@ async function buildMediaFromFile(
       date,
       tags,
       mime: "video/mp4",
-      original: undefined,
+      original: `/videos/${relPosix}${ext}`,
       sha256,
     };
   }
@@ -347,12 +368,14 @@ async function buildMediaFromFile(
     const dest = path.join(PUBLIC_VIDEOS_DIR, `${relNoExt}${ext}`);
     copyFresh(source, dest);
     const poster = path.join(PUBLIC_THUMBS_DIR, `${relNoExt}.webp`);
-    if (!fs.existsSync(poster) && (await hasFfmpeg())) {
+    if ((!fs.existsSync(poster) || FORCE_REPROCESS) && (await hasFfmpeg())) {
       try {
         const jpg = poster.replace(/\.webp$/, ".jpg");
-        await execFileAsync("ffmpeg", ["-y", "-i", source, "-frames:v", "1", jpg]);
-        if (fs.existsSync(jpg)) {
-          await sharp(jpg).resize({ width: 800, withoutEnlargement: true }).webp({ quality: 76 }).toFile(poster);
+        if (await extractVideoPosterJpg(source, jpg)) {
+          await sharp(jpg)
+            .resize({ width: 800, withoutEnlargement: true })
+            .webp({ quality: 76 })
+            .toFile(poster);
           fs.unlinkSync(jpg);
         }
       } catch {
@@ -406,8 +429,26 @@ async function buildMediaFromFile(
     };
   }
 
-  // Images — SVG/ICO copy; raster optimize
-  if (ext === ".svg" || ext === ".ico") {
+  // Images — SVG sanitize + copy; ICO copy; raster optimize (HEIC via sips/ffmpeg)
+  if (ext === ".svg") {
+    const dest = path.join(PUBLIC_IMAGES_DIR, `${relNoExt}${ext}`);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    const raw = fs.readFileSync(source, "utf8");
+    fs.writeFileSync(dest, sanitizeSvg(raw));
+    return {
+      id: sha256.slice(0, 16),
+      file: `/images/${relPosix}${ext}`,
+      thumb: `/images/${relPosix}${ext}`,
+      type: "image",
+      title: titleCase(safeBase),
+      date,
+      tags,
+      mime: mimeForExt(ext),
+      sha256,
+    };
+  }
+
+  if (ext === ".ico") {
     const dest = path.join(PUBLIC_IMAGES_DIR, `${relNoExt}${ext}`);
     copyFresh(source, dest);
     return {
@@ -424,7 +465,7 @@ async function buildMediaFromFile(
   }
 
   try {
-    const optimized = await optimizeImage(source, relNoExt);
+    const optimized = await optimizeImage(source, relNoExt, sha256);
     const avifPath = path.join(PUBLIC_IMAGES_DIR, `${relNoExt}.avif`);
     return {
       id: sha256.slice(0, 16),
@@ -442,8 +483,55 @@ async function buildMediaFromFile(
       sha256,
     };
   } catch (error) {
+    // HEIC/HEIF or mislabeled HEIC (.jpg that is actually HEIF) → convert then retry
+    if (ext === ".heic" || ext === ".heif" || isHeifDecodeError(error)) {
+      try {
+        const prepared = await prepareRasterSource(source, sha256, true);
+        if (prepared.path !== source) {
+          // Write webp derivatives from the converted JPEG path
+          const dest = path.join(PUBLIC_IMAGES_DIR, `${relNoExt}.webp`);
+          const thumb = path.join(PUBLIC_THUMBS_DIR, `${relNoExt}.webp`);
+          fs.mkdirSync(path.dirname(dest), { recursive: true });
+          fs.mkdirSync(path.dirname(thumb), { recursive: true });
+          await sharp(prepared.path)
+            .rotate()
+            .resize({ width: 2200, withoutEnlargement: true })
+            .webp({ quality: 84 })
+            .toFile(dest);
+          await sharp(prepared.path)
+            .rotate()
+            .resize({ width: 600, withoutEnlargement: true })
+            .webp({ quality: 76 })
+            .toFile(thumb);
+          const meta = await sharp(dest).metadata();
+          return {
+            id: sha256.slice(0, 16),
+            file: `/images/${relPosix}.webp`,
+            thumb: `/thumbs/${relPosix}.webp`,
+            type: "image",
+            title: titleCase(safeBase),
+            date,
+            tags,
+            width: meta.width || 0,
+            height: meta.height || 0,
+            mime: "image/webp",
+            sha256,
+          };
+        }
+      } catch (retryError) {
+        warnings.push(
+          `Image optimize failed (${ext}): ${source} — ${String(error)} / retry ${String(retryError)}`,
+        );
+        if (ext === ".heic" || ext === ".heif" || isHeifDecodeError(error)) {
+          return null;
+        }
+      }
+    }
     warnings.push(`Image optimize failed (${ext}): ${source} — ${String(error)}`);
-    // Fallback: copy original
+    // Do not publish raw HEIC/HEIF — browsers cannot display them reliably
+    if (ext === ".heic" || ext === ".heif") {
+      return null;
+    }
     const dest = path.join(PUBLIC_IMAGES_DIR, `${relNoExt}${ext}`);
     copyFresh(source, dest);
     return {
@@ -544,6 +632,14 @@ async function buildAlbumFromDir(
     }
     seenNames.add(base);
     try {
+      const ext = path.extname(file).toLowerCase();
+      if (
+        ext === ".heic" ||
+        ext === ".heif" ||
+        [".mov", ".m4v", ".mkv", ".avi", ".3gp", ".mpeg", ".mpg"].includes(ext)
+      ) {
+        console.log(`    convert ${path.relative(process.cwd(), file)}`);
+      }
       const item = await buildMediaFromFile(file, year, bucket, slug, personName);
       if (item) {
         const extra = override.mediaExtras?.[item.id];
@@ -622,6 +718,7 @@ async function main() {
   const albums: Album[] = [];
 
   for (const year of years) {
+    console.log(`  ${year}…`);
     const yearAlbums = await syncYear(year);
     albums.push(...yearAlbums);
     console.log(`  ${year}: ${yearAlbums.length} album(s)`);

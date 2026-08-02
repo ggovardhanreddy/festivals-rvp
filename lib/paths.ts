@@ -15,11 +15,14 @@ export const HASH_INDEX_PATH = path.join(CONTENT_DIR, "hashes.json");
 export const PHASH_INDEX_PATH = path.join(CONTENT_DIR, "phashes.json");
 
 export const DEFAULT_IMPORT_DIR =
-  "/Users/govardhan.reddy.g.94gmail.com/Downloads/Fest";
+  "/Users/govardhan.reddy.g.94gmail.com/Downloads/Photos";
 
 export const BUCKET_FOLDERS: BucketKey[] = [
   "sankranthi",
   "vinayaka-chavithi",
+  "mathamma-jathara",
+  "devapatlamma-jathara",
+  "sri-rama-navami",
   "rvp-birthdays",
   "fun-trips",
 ];
@@ -28,19 +31,26 @@ export {
   IMAGE_EXTS,
   IMAGE_SOURCE_EXTS,
   VIDEO_EXTS,
+  VIDEO_PLAYABLE_EXTS,
   VIDEO_CONVERT_EXTS,
   AUDIO_EXTS,
   DOCUMENT_EXTS,
   detectMediaKind,
   mimeForExt,
+  isDisplayableImageUrl,
 } from "./media-formats";
 
 export function detectFestival(parts: string[]): FestivalKey | undefined {
   const blob = parts.join(" ").toLowerCase();
-  if (/\b(vinayaka|ganesh|ganesha|chavithi|chaturthi)\b/.test(blob)) {
+  if (/\b(vinayaka|ganesh|ganesha|chavithi|chaturthi|vinakaya)\b/.test(blob)) {
     return "vinayaka-chavithi";
   }
   if (/\b(sankranthi|sankranti|pongal)\b/.test(blob)) return "sankranthi";
+  if (/\b(mathamma)\b/.test(blob)) return "mathamma-jathara";
+  if (/\b(devapatlamma|devepatla)\b/.test(blob)) return "devapatlamma-jathara";
+  if (/\b(rama\s*navami|sreerama|sri-?rama|ramanavami)\b/.test(blob)) {
+    return "sri-rama-navami";
+  }
   return undefined;
 }
 
@@ -51,14 +61,13 @@ export function isBirthdayHint(parts: string[]): boolean {
 }
 
 export function isTripHint(parts: string[]): boolean {
-  return /\b(trip|trips|travel|tour|vacation|fun-trips)\b/.test(
+  return /\b(trip|trips|travel|tour|vacation|fun-trips|fun-fest|funfest)\b/.test(
     parts.join(" ").toLowerCase(),
   );
 }
 
 /**
- * Classify into only: sankranthi | vinayaka-chavithi | rvp-birthdays | fun-trips
- * Uncertain images go to fun-trips (not a separate unsorted folder).
+ * Classify into CMS buckets. Uncertain images go to fun-trips.
  */
 export function classifyMedia(input: {
   pathParts: string[];
@@ -73,7 +82,9 @@ export function classifyMedia(input: {
       input.pathParts
         .filter(
           (part) =>
-            !/^(birthdays?|bday|rvp-birthdays|fest|downloads?|fun-trips)$/i.test(part),
+            !/^(birthdays?|bday|rvp-birthdays|fest|downloads?|fun-trips|photos|images)$/i.test(
+              part,
+            ),
         )
         .at(-1) || "rvp-birthday";
     return { bucket: "rvp-birthdays", personName: person };
@@ -87,6 +98,9 @@ export function classifyMedia(input: {
   if (!input.unknownYear) {
     const month = input.date.getMonth() + 1;
     if (month === 1) return { bucket: "sankranthi", festival: "sankranthi" };
+    if (month === 3 || month === 4) {
+      return { bucket: "sri-rama-navami", festival: "sri-rama-navami" };
+    }
     if (month === 8 || month === 9) {
       return { bucket: "vinayaka-chavithi", festival: "vinayaka-chavithi" };
     }

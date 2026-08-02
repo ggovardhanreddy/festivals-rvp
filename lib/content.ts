@@ -28,6 +28,28 @@ function normalizeAlbum(raw: Album): Album {
       album.bucket = "sankranthi";
       album.festival = "sankranthi";
       album.category = "Festivals";
+    } else if (
+      album.festival === "mathamma-jathara" ||
+      album.slug.includes("mathamma")
+    ) {
+      album.bucket = "mathamma-jathara";
+      album.festival = "mathamma-jathara";
+      album.category = "Festivals";
+    } else if (
+      album.festival === "devapatlamma-jathara" ||
+      album.slug.includes("devapatlamma")
+    ) {
+      album.bucket = "devapatlamma-jathara";
+      album.festival = "devapatlamma-jathara";
+      album.category = "Festivals";
+    } else if (
+      album.festival === "sri-rama-navami" ||
+      album.slug.includes("rama-navami") ||
+      album.slug.includes("ramanavami")
+    ) {
+      album.bucket = "sri-rama-navami";
+      album.festival = "sri-rama-navami";
+      album.category = "Festivals";
     } else {
       album.bucket = "fun-trips";
       album.category = "Trips";
@@ -40,6 +62,8 @@ function albumsFromGenerated(): Album[] | null {
   if (!fs.existsSync(generatedAlbums)) return null;
   try {
     const raw = JSON.parse(fs.readFileSync(generatedAlbums, "utf8")) as Album[];
+    // Empty generated file usually means sync is mid-run — fall back to disk.
+    if (!Array.isArray(raw) || raw.length === 0) return null;
     return raw.map(normalizeAlbum);
   } catch {
     return null;
@@ -118,27 +142,39 @@ export function albums(): Album[] {
   return albumsFromGenerated() ?? albumsFromDiskScan();
 }
 
-export const years = () => {
-  const fromAlbums = albums().map((a) => a.year);
-  const fromDirs =
-    fs.existsSync(root)
-      ? fs.readdirSync(root).filter(
-          (name) =>
-            isYearDir(name) && fs.statSync(path.join(root, name)).isDirectory(),
-        )
-      : [];
-  return [...new Set([...fromAlbums, ...fromDirs])]
-    .filter((y) => y !== "Unknown")
-    .sort((a, b) => b.localeCompare(a));
-};
-
 export const publicAlbums = () => albums().filter((a) => a.published);
 
+/** Published albums that actually contain media — empty CMS folders stay hidden. */
+export const liveAlbums = () =>
+  publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
+
+/** Years that actually have published media — skip empty stub folders. */
+export const years = () =>
+  [...new Set(liveAlbums().map((a) => a.year))]
+    .filter((y) => y !== "Unknown")
+    .sort((a, b) => b.localeCompare(a));
+
 export const albumsByBucket = (bucket: BucketKey) =>
-  publicAlbums().filter((a) => a.bucket === bucket);
+  liveAlbums().filter((a) => a.bucket === bucket);
+
+/** True when a CMS bucket folder has at least one published image/video. */
+export function bucketHasContent(bucket: BucketKey | string | undefined) {
+  if (!bucket) return false;
+  return liveAlbums().some((a) => a.bucket === bucket);
+}
+
+export function bucketsWithContent(): BucketKey[] {
+  return [
+    ...new Set(
+      liveAlbums()
+        .map((a) => a.bucket)
+        .filter((b): b is BucketKey => Boolean(b)),
+    ),
+  ];
+}
 
 export const festivalAlbums = (key?: FestivalKey) =>
-  publicAlbums().filter(
+  liveAlbums().filter(
     (a) =>
       a.category === "Festivals" &&
       (!key || a.festival === key || a.bucket === key),
@@ -148,7 +184,7 @@ export const birthdayAlbums = () => albumsByBucket("rvp-birthdays");
 export const tripAlbums = () => albumsByBucket("fun-trips");
 
 export const allMedia = (): MediaWithAlbum[] =>
-  publicAlbums().flatMap((album) =>
+  liveAlbums().flatMap((album) =>
     album.media.map((media) => ({ ...media, album })),
   );
 

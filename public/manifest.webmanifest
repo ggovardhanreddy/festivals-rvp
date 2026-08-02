@@ -1,24 +1,81 @@
 {
+  "id": "/",
   "name": "RVP Youth",
   "short_name": "RVP Youth",
   "description": "Where Every Celebration Becomes a Legacy. Our Village. Our Heritage. Our Memories.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "fullscreen",
+    "browser"
+  ],
+  "orientation": "any",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "lifestyle",
+    "photo",
+    "entertainment"
+  ],
   "background_color": "#0f1a14",
   "theme_color": "#1f3d2e",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/logo/android-icon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/logo/android-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/logo/app-icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/logo/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sankranthi",
+      "short_name": "Sankranthi",
+      "url": "/sankranthi/",
+      "icons": [
+        {
+          "src": "/logo/android-icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Vinayaka Chavithi",
+      "short_name": "Vinayaka",
+      "url": "/vinayaka-chavithi/",
+      "icons": [
+        {
+          "src": "/logo/android-icon.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

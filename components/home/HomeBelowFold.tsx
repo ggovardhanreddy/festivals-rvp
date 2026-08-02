@@ -1,107 +1,92 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import type { Album, MediaWithAlbum } from "@/lib/types";
+import { useEffect, useState } from "react";
+import type { MediaWithAlbum, Member, SiteEvent } from "@/lib/types";
+import type { TimelineEntry } from "@/lib/timeline";
+import { dobMonthDay, monthDay } from "@/lib/dates";
 import { Reveal } from "@/components/Reveal";
-import { TimelineStrip } from "@/components/TimelineStrip";
-import { YearGrid } from "@/components/YearGrid";
-import { AppleHomeStage } from "./AppleHomeStage";
-
-const InteractiveVillageMap = dynamic(
-  () =>
-    import("@/components/experience/InteractiveVillageMap").then(
-      (m) => m.InteractiveVillageMap,
-    ),
-  {
-    loading: () => <div className="map-canvas" aria-hidden />,
-  },
-);
-
-const YouthPortrait = dynamic(
-  () => import("@/components/YouthPortrait").then((m) => m.YouthPortrait),
-);
-
-const MemoryWall = dynamic(
-  () => import("@/components/MemoryWall").then((m) => m.MemoryWall),
-);
-
-const VillageStory = dynamic(
-  () => import("@/components/VillageStory").then((m) => m.VillageStory),
-);
+import { StatsOverview } from "./StatsOverview";
+import { AboutTeaser } from "./AboutTeaser";
+import { HomeGallery } from "./HomeGallery";
+import { UpcomingEventsStrip } from "./UpcomingEventsStrip";
+import { FestivalCalendar } from "./FestivalCalendar";
+import { TodayBirthdays } from "./TodayBirthdays";
+import { UpcomingBirthdays } from "./UpcomingBirthdays";
+import { LocationHomeNote } from "@/components/location/LocationHomeNote";
 
 export function HomeBelowFold({
-  featuredAlbums,
-  media,
-  galleryTeaser,
+  galleryItems,
   yearList,
+  members,
+  upcomingEvents,
+  festivals,
+  liveSlugs = [],
+  stats,
 }: {
-  featuredAlbums: Album[];
-  media: MediaWithAlbum[];
-  galleryTeaser: MediaWithAlbum[];
+  galleryItems: MediaWithAlbum[];
   yearList: string[];
+  members: Member[];
+  upcomingEvents: SiteEvent[];
+  festivals: SiteEvent[];
+  timeline?: TimelineEntry[];
+  liveSlugs?: string[];
+  stats: {
+    value: number;
+    label: string;
+    icon: "legacy" | "core" | "nextgen" | "total";
+  }[];
 }) {
+  const [todayMembers, setTodayMembers] = useState<Member[]>([]);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const key = monthDay(new Date());
+      setTodayMembers(
+        members.filter((m) => dobMonthDay(m.dob) === key),
+      );
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [members]);
+
   return (
-    <div className="experience-page experience-page--apple">
-      {/* SSR this stage so mobile still has content if JS is slow */}
-      <AppleHomeStage
-        featuredAlbums={featuredAlbums}
-        media={media}
-        galleryTeaser={galleryTeaser}
-      />
+    <div className="page home-redesign" id="home-start">
+      <LocationHomeNote />
 
-      <div className="page apple-rest">
-        <Reveal className="section" id="map">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Kondreddigaripalli · Ramalayam</p>
-              <h2>Fly through the village</h2>
-              <p className="lede">
-                Aerial of home, lifted into depth — hover to glow, visit
-                Ramalayam, open the memories each place still holds.
-              </p>
-            </div>
-          </div>
-          <InteractiveVillageMap slides={galleryTeaser} />
-        </Reveal>
+      <Reveal>
+        <TodayBirthdays members={todayMembers} />
+      </Reveal>
 
-        <Reveal>
-          <YouthPortrait />
-        </Reveal>
+      <StatsOverview stats={stats} />
+      <AboutTeaser />
 
-        <TimelineStrip years={yearList.slice(0, 8)} />
+      <Reveal>
+        <UpcomingBirthdays members={members} />
+      </Reveal>
 
-        <Reveal className="section" id="years">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Years</p>
-              <h2>Choose a year</h2>
-            </div>
-            <Link className="btn ghost" href="/timeline/">
-              Full timeline
-            </Link>
-          </div>
-          <YearGrid years={yearList} />
-        </Reveal>
+      <Reveal>
+        <UpcomingEventsStrip events={upcomingEvents} liveSlugs={liveSlugs} />
+      </Reveal>
 
-        <MemoryWall items={media.slice(0, 24)} />
+      <FestivalCalendar festivals={festivals} liveSlugs={liveSlugs} />
 
-        <VillageStory compact />
+      <HomeGallery items={galleryItems} years={yearList} />
 
-        <Reveal className="section">
-          <div className="glass-card about-cta" style={{ padding: "1.6rem" }}>
-            <p className="eyebrow">About</p>
-            <h2>RVP Youth</h2>
-            <p className="muted">
-              An immersive digital village museum for Sankranthi, Vinayaka Chavithi,
-              birthdays, and journeys — curated by Govardhan Reddy.
+      <Reveal className="section" id="members-teaser">
+        <div className="members-teaser-card">
+          <div>
+            <p className="eyebrow">Community</p>
+            <h2>Members</h2>
+            <p className="lede">
+              The member directory is protected. Sign in with your first name to
+              view profiles — missing photos show a placeholder until added.
             </p>
-            <Link className="btn" href="/about/" style={{ marginTop: "1rem" }}>
-              Read our story
-            </Link>
           </div>
-        </Reveal>
-      </div>
+          <Link className="btn" href="/login/?next=/members/">
+            Member sign in
+          </Link>
+        </div>
+      </Reveal>
     </div>
   );
 }

@@ -3,34 +3,75 @@
 import dynamic from "next/dynamic";
 import { ThemeProvider } from "next-themes";
 import { LazyMotion, domAnimation } from "framer-motion";
+import { useEffect, useState } from "react";
 import { AudioDeckProvider } from "./media/AudioDeck";
 import { MusicProvider } from "./music/MusicProvider";
 import { GlassMusicPlayer } from "./music/GlassMusicPlayer";
 import { MusicRouteSync } from "./music/MusicRouteSync";
+import { InstallAppPrompt } from "./pwa/InstallAppPrompt";
+import { ServiceWorkerManager } from "./pwa/ServiceWorkerManager";
+import { UpdateAvailablePrompt } from "./pwa/UpdateAvailablePrompt";
+import { NotificationProvider } from "./notifications/NotificationProvider";
+import { MemberAuthProvider } from "./auth/MemberAuthProvider";
+import { LocationProvider } from "./location/LocationProvider";
+import { LocationConsentDialog } from "./location/LocationConsentDialog";
+import { AutoDayNightSync } from "./Theme";
+import type { Announcement, Member, SiteEvent } from "@/lib/types";
+import membersData from "@/content/data/members.json";
+import eventsData from "@/content/data/events.json";
+import announcementsData from "@/content/data/announcements.json";
 
 const SmoothScroll = dynamic(
   () => import("./experience/SmoothScroll").then((m) => m.SmoothScroll),
   { ssr: false },
 );
 
-const LiquidCursor = dynamic(
-  () => import("./experience/LiquidCursor").then((m) => m.LiquidCursor),
-  { ssr: false },
-);
+function DesktopExtras() {
+  const [desktop, setDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: fine) and (min-width: 821px)");
+    const sync = () => setDesktop(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  if (!desktop) return null;
+  return <SmoothScroll />;
+}
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      storageKey="rvp-theme"
+      disableTransitionOnChange={false}
+    >
       <LazyMotion features={domAnimation}>
-        <MusicProvider>
-          <AudioDeckProvider>
-            <MusicRouteSync />
-            <SmoothScroll />
-            <LiquidCursor />
-            {children}
-            <GlassMusicPlayer />
-          </AudioDeckProvider>
-        </MusicProvider>
+        <AutoDayNightSync />
+        <MemberAuthProvider members={membersData as Member[]}>
+          <LocationProvider>
+            <NotificationProvider
+              members={membersData as Member[]}
+              events={eventsData as SiteEvent[]}
+              announcements={announcementsData as Announcement[]}
+            >
+              <MusicProvider>
+                <AudioDeckProvider>
+                  <MusicRouteSync />
+                  <DesktopExtras />
+                  <ServiceWorkerManager />
+                  <UpdateAvailablePrompt />
+                  {children}
+                  <GlassMusicPlayer />
+                  <InstallAppPrompt />
+                  <LocationConsentDialog />
+                </AudioDeckProvider>
+              </MusicProvider>
+            </NotificationProvider>
+          </LocationProvider>
+        </MemberAuthProvider>
       </LazyMotion>
     </ThemeProvider>
   );

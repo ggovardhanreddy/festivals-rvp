@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
-import { mediaDisplaySrc } from "@/lib/media-src";
+import { mediaDisplaySrc, prefetchImage } from "@/lib/media-src";
+import { useFinePointer, useLowPowerDevice } from "@/lib/client";
 
 const HOVER_INTERVAL_MS = 900;
+const TOUCH_INTERVAL_MS = 1400;
 
 export function HoverSlideshowTile({
   cover,
@@ -15,6 +17,7 @@ export function HoverSlideshowTile({
   onHoverChange,
   onOpen,
   size = "md",
+  autoPlayInView = false,
 }: {
   cover: Media;
   frames: Media[];
@@ -23,24 +26,58 @@ export function HoverSlideshowTile({
   onHoverChange?: (hovered: boolean) => void;
   onOpen?: () => void;
   size?: "sm" | "md" | "lg" | "xl";
+  /** Mobile: cycle frames when scrolled into view */
+  autoPlayInView?: boolean;
 }) {
   const reduce = useReducedMotion();
+  const lowPower = useLowPowerDevice();
+  const finePointer = useFinePointer();
+  const rootRef = useRef<HTMLButtonElement>(null);
+
   const images = useMemo(() => {
-    const list = [cover, ...frames.filter((f) => f.id !== cover.id && f.type === "image")];
-    return list.filter((item) => item.type === "image").slice(0, 12);
-  }, [cover, frames]);
+    const list = [
+      cover,
+      ...frames.filter((f) => f.id !== cover.id && f.type === "image"),
+    ];
+    const max = lowPower ? 5 : 12;
+    return list.filter((item) => item.type === "image").slice(0, max);
+  }, [cover, frames, lowPower]);
 
   const [active, setActive] = useState(false);
   const [index, setIndex] = useState(0);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    if (!active || reduce || images.length < 2) return;
+    if (!autoPlayInView || finePointer || !rootRef.current) return;
+    const el = rootRef.current;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(Boolean(entry?.isIntersecting)),
+      { threshold: 0.45 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [autoPlayInView, finePointer]);
+
+  const playing =
+    !reduce &&
+    images.length > 1 &&
+    (active || (autoPlayInView && !finePointer && inView));
+
+  useEffect(() => {
+    if (!playing) return;
+    const ms = finePointer ? HOVER_INTERVAL_MS : TOUCH_INTERVAL_MS;
     const id = window.setInterval(
       () => setIndex((value) => (value + 1) % images.length),
-      HOVER_INTERVAL_MS,
+      ms,
     );
     return () => window.clearInterval(id);
-  }, [active, reduce, images.length]);
+  }, [playing, images.length, finePointer]);
+
+  useEffect(() => {
+    if (!playing) return;
+    const next = images[(index + 1) % images.length];
+    if (next) prefetchImage(mediaDisplaySrc(next));
+  }, [playing, index, images]);
 
   const current = images[index] ?? cover;
 
@@ -55,29 +92,34 @@ export function HoverSlideshowTile({
     onHoverChange?.(false);
   };
 
+  const onClick = () => {
+    onOpen?.();
+  };
+
   return (
     <button
+      ref={rootRef}
       type="button"
-      className={`hover-slide-tile hover-slide-tile--${size}${active ? " is-active" : ""}`}
-      onMouseEnter={start}
-      onMouseLeave={stop}
-      onFocus={start}
-      onBlur={stop}
-      onClick={() => onOpen?.()}
+      className={`hover-slide-tile hover-slide-tile--${size}${playing ? " is-active" : ""}`}
+      onMouseEnter={finePointer ? start : undefined}
+      onMouseLeave={finePointer ? stop : undefined}
+      onFocus={finePointer ? start : undefined}
+      onBlur={finePointer ? stop : undefined}
+      onClick={onClick}
       aria-label={title || cover.title || "Open memory"}
     >
       <div className="hover-slide-tile-media">
-        <AnimatePresence mode="sync">
+        <AnimatePresence mode="popLayout" initial={false}>
           <m.img
             key={current.id}
             src={mediaDisplaySrc(current)}
             alt={current.title || title || "Memory"}
-            initial={reduce || !active ? false : { opacity: 0 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={reduce || !active ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.35 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: lowPower ? 0.25 : 0.35 }}
             draggable={false}
-            loading="lazy"
+            loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
           />
         </AnimatePresence>

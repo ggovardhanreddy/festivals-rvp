@@ -57,40 +57,33 @@ function IntroStages() {
 
   useEffect(() => {
     if (!client) return;
-    if (reduce) {
+    // Phones / reduced-motion: skip cinematic lock — show content immediately
+    if (reduce || lowPower) {
       const frame = window.requestAnimationFrame(() => complete());
       return () => window.cancelAnimationFrame(frame);
     }
-    // Phones: short brand open so Explore appears quickly
-    const timeline: { phase: IntroPhase; at: number }[] = lowPower
-      ? [
-          { phase: "sky", at: 180 },
-          { phase: "logo", at: 420 },
-          { phase: "ready", at: 900 },
-        ]
-      : [
-          { phase: "sky", at: 800 },
-          { phase: "logo", at: 1500 },
-          { phase: "ready", at: 3200 },
-        ];
+    const timeline: { phase: IntroPhase; at: number }[] = [
+      { phase: "sky", at: 800 },
+      { phase: "logo", at: 1500 },
+      { phase: "ready", at: 3200 },
+    ];
     const timers = timeline.map((step) =>
       window.setTimeout(() => setPhase(step.phase), step.at),
     );
-    // Failsafe — never leave mobile stuck on a black locked intro
     const failsafe = window.setTimeout(() => {
       if (!document.documentElement.classList.contains("intro-active")) return;
-      complete();
+      beginExplore();
       document.documentElement.classList.remove(
         "intro-active",
         "intro-locked",
         "intro-pending",
       );
-      window.dispatchEvent(new CustomEvent("rvp:intro-complete"));
-    }, lowPower ? 7000 : 14000);
+    }, 14000);
     return () => {
       timers.forEach((id) => window.clearTimeout(id));
       window.clearTimeout(failsafe);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client, reduce, lowPower, setPhase, complete]);
 
   useEffect(() => {

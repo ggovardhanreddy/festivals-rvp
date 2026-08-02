@@ -19,11 +19,26 @@ export const IMAGE_SOURCE_EXTS = new Set([
 
 export const IMAGE_EXTS = new Set([...IMAGE_SOURCE_EXTS, ".avif"]);
 
-/** Browser-friendly video containers. */
-export const VIDEO_EXTS = new Set([".mp4", ".mov", ".webm", ".m4v", ".ogv"]);
+/** Already browser-friendly video containers (copy as-is). */
+export const VIDEO_PLAYABLE_EXTS = new Set([".mp4", ".webm", ".ogv"]);
 
-/** Convert via ffmpeg when available. */
-export const VIDEO_CONVERT_EXTS = new Set([".mkv", ".avi", ".wmv", ".flv"]);
+/** Transcode to MP4 (H.264 + AAC) when ffmpeg is available. */
+export const VIDEO_CONVERT_EXTS = new Set([
+  ".mov",
+  ".m4v",
+  ".mkv",
+  ".avi",
+  ".wmv",
+  ".flv",
+  ".3gp",
+  ".mpeg",
+  ".mpg",
+]);
+
+export const VIDEO_EXTS = new Set([
+  ...VIDEO_PLAYABLE_EXTS,
+  ...VIDEO_CONVERT_EXTS,
+]);
 
 export const AUDIO_EXTS = new Set([
   ".mp3",
@@ -37,15 +52,24 @@ export const AUDIO_EXTS = new Set([
 
 export const DOCUMENT_EXTS = new Set([".pdf", ".txt", ".md", ".markdown"]);
 
-export function detectMediaKind(ext: string): MediaType | "skip" | "convert-video" {
+export function detectMediaKind(
+  ext: string,
+): MediaType | "skip" | "convert-video" {
   const e = ext.toLowerCase();
   if (e === ".avif") return "skip"; // derivative only
   if (IMAGE_SOURCE_EXTS.has(e)) return "image";
-  if (VIDEO_EXTS.has(e)) return "video";
+  if (VIDEO_PLAYABLE_EXTS.has(e)) return "video";
   if (VIDEO_CONVERT_EXTS.has(e)) return "convert-video";
   if (AUDIO_EXTS.has(e)) return "audio";
   if (DOCUMENT_EXTS.has(e)) return "document";
   return "skip";
+}
+
+/** True when a public URL is safe to use as an <img> cover/thumb. */
+export function isDisplayableImageUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  const clean = url.split("?")[0]!.toLowerCase();
+  return /\.(webp|jpg|jpeg|png|gif|avif|svg)$/.test(clean);
 }
 
 export function mimeForExt(ext: string): string {
@@ -57,11 +81,25 @@ export function mimeForExt(ext: string): string {
     ".webp": "image/webp",
     ".avif": "image/avif",
     ".svg": "image/svg+xml",
+    ".heic": "image/heic",
+    ".heif": "image/heif",
+    ".tif": "image/tiff",
+    ".tiff": "image/tiff",
+    ".bmp": "image/bmp",
+    ".ico": "image/x-icon",
+    ".jxl": "image/jxl",
     ".mp4": "video/mp4",
     ".mov": "video/quicktime",
     ".webm": "video/webm",
     ".m4v": "video/x-m4v",
     ".ogv": "video/ogg",
+    ".mkv": "video/x-matroska",
+    ".avi": "video/x-msvideo",
+    ".wmv": "video/x-ms-wmv",
+    ".flv": "video/x-flv",
+    ".3gp": "video/3gpp",
+    ".mpeg": "video/mpeg",
+    ".mpg": "video/mpeg",
     ".mp3": "audio/mpeg",
     ".wav": "audio/wav",
     ".aac": "audio/aac",

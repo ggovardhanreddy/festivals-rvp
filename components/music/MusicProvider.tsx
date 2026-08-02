@@ -412,11 +412,20 @@ export function MusicProvider({ children }: { children: ReactNode }) {
         });
     };
 
-    // Defer network until after first paint / intro sky
+    // Phones: never auto-fetch multi‑MB audio — wait for an explicit tap
+    const mobile =
+      window.matchMedia("(max-width: 820px)").matches ||
+      /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    if (mobile) {
+      setNeedsGesture(true);
+      return;
+    }
+
+    // Desktop: defer network until after first paint / intro sky
     let cancelled = false;
     const timer = window.setTimeout(() => {
       if (!cancelled) start();
-    }, 900);
+    }, 1800);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);

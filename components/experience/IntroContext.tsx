@@ -40,6 +40,11 @@ function finishExplore(
 ) {
   setFlyProgress(1);
   setPhase("done");
+  document.documentElement.classList.remove(
+    "intro-active",
+    "intro-locked",
+    "intro-pending",
+  );
   window.dispatchEvent(new CustomEvent("rvp:intro-complete"));
   window.requestAnimationFrame(() => {
     window.setTimeout(() => {
@@ -59,9 +64,7 @@ export function IntroProvider({ children }: { children: ReactNode }) {
   const complete = useCallback(() => {
     animating.current = false;
     progressRef.current = 1;
-    setFlyProgress(1);
-    setPhase("done");
-    window.dispatchEvent(new CustomEvent("rvp:intro-complete"));
+    finishExplore(setPhase, setFlyProgress);
   }, []);
 
   const runFly = useCallback(() => {

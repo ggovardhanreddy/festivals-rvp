@@ -1,0 +1,28 @@
+[
+  {
+    "id": "sri-ramalayam-reconstruction",
+    "title": "Sri Ramalayam Reconstruction",
+    "description": "The heart of Kondreddigaripalli — Sri Ramalayam — is being lovingly restored. Generations have gathered here for Sri Rama Navami, daily prayers, and village milestones. This reconstruction strengthens the sanctum, renovates the mandapam, and preserves the temple for decades to come. Every contribution of skill, time, and devotion brings us closer to welcoming Rama back to a renewed home.",
+    "status": "ongoing",
+    "startDate": "2025-01-01",
+    "progress": 45,
+    "images": ["/brand/rama-navami-hero.webp"],
+    "milestones": [
+      {
+        "date": "2025-01-01",
+        "title": "Project inaugurated",
+        "description": "Community blessings and planning with elders and the temple committee."
+      },
+      {
+        "date": "2025-04-15",
+        "title": "Foundation work complete",
+        "description": "Structural assessment and foundation reinforcement finished."
+      },
+      {
+        "date": "2025-08-01",
+        "title": "Mandapam renovation underway",
+        "description": "Roof and pillar restoration in progress."
+      }
+    ]
+  }
+]

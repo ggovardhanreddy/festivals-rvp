@@ -58,15 +58,15 @@ export const VILLAGE_COORDS = {
   labelTe: "రామాలయం",
 } as const;
 
+/** Primary nav — keep compact and scannable. */
 export const NAV = [
   { href: "/", label: "Home" },
-  { href: "/sankranthi/", label: "Sankranthi" },
-  { href: "/vinayaka-chavithi/", label: "Vinayaka Chavithi" },
-  { href: "/rvp-birthdays/", label: "RVP Birthdays" },
-  { href: "/fun-trips/", label: "Fun Trips" },
-  { href: "/timeline/", label: "Timeline" },
-  { href: "/search/", label: "Search" },
-  { href: "/about/", label: "About" },
+  { href: "/gallery/", label: "Gallery" },
+  { href: "/events/", label: "Events" },
+  { href: "/developments/", label: "Developments" },
+  { href: "/suggestions/", label: "Suggestions" },
+  { href: "/members/", label: "Members" },
+  { href: "/contact/", label: "Contact" },
 ] as const;
 
 export const BUCKETS = [
@@ -89,6 +89,33 @@ export const BUCKETS = [
       "Vinayaka Chavithi fills the house with clay idols, lamp glow, and first prayers — a tender beginning renewed each monsoon season.",
   },
   {
+    key: "mathamma-jathara" as const,
+    href: "/mathamma-jathara/",
+    title: "Mathamma Jathara",
+    eyebrow: "Village · Devotion",
+    blurb: "The village gathers for Mathamma — drums, offerings, and shared faith.",
+    story:
+      "Mathamma Jathara brings the village into one rhythm — processions, offerings, and the living bond between people and place.",
+  },
+  {
+    key: "devapatlamma-jathara" as const,
+    href: "/devapatlamma-jathara/",
+    title: "Devapatlamma Jathara",
+    eyebrow: "Faith · Community",
+    blurb: "Devapatlamma’s festival — lamps, community, and ancestral blessing.",
+    story:
+      "Devapatlamma Jathara is the village’s vow kept — temple light, shared meals, and the blessing of generations.",
+  },
+  {
+    key: "sri-rama-navami" as const,
+    href: "/sri-rama-navami/",
+    title: "Sri Rama Navami",
+    eyebrow: "Ramalayam · Grace",
+    blurb: "Rama Navami at the village temple — hymns, color, and quiet devotion.",
+    story:
+      "Sri Rama Navami fills Ramalayam with hymns and flowers — a day of grace at the heart of Kondreddigaripalli.",
+  },
+  {
     key: "rvp-birthdays" as const,
     href: "/rvp-birthdays/",
     title: "RVP Birthdays",
@@ -100,20 +127,24 @@ export const BUCKETS = [
   {
     key: "fun-trips" as const,
     href: "/fun-trips/",
-    title: "Fun Trips",
-    eyebrow: "Journeys & moments",
-    blurb: "Memories on the move — roads, laughter, and unexpected stops.",
+    title: "Fun Fest",
+    eyebrow: "Members only",
+    blurb: "Protected memories on the move — roads, laughter, and unexpected stops.",
     story:
-      "Fun trips are the open chapters — buses, roadsides, shared snacks, and the freedom of leaving home only to remember it more clearly.",
+      "Fun Fest holds the open chapters — buses, roadsides, shared snacks, and the freedom of leaving home only to remember it more clearly.",
   },
 ] as const;
 
 export type BucketKey = (typeof BUCKETS)[number]["key"];
 
-/** Festival chapter hero plates (never leave bucket pages blank). */
+/** Festival chapter hero plates (from Downloads brand ingest). */
 export const FESTIVAL_HEROES: Partial<Record<BucketKey, string>> = {
   "vinayaka-chavithi": "/brand/vinayaka-hero.webp",
-  sankranthi: "/brand/og-banner.jpg",
+  sankranthi: "/brand/sankranthi-hero.webp",
+  "mathamma-jathara": "/brand/mathamma-hero.webp",
+  "devapatlamma-jathara": "/brand/devapatlamma-hero.webp",
+  "sri-rama-navami": "/brand/rama-navami-hero.webp",
+  "fun-trips": "/brand/funfest-hero.webp",
 };
 
 export const FESTIVALS: {
@@ -137,6 +168,27 @@ export const FESTIVALS: {
     eyebrow: "Devotion · Beginnings",
     blurb: "Clay, lamp light, and prayers that mark a beloved beginning each year.",
   },
+  {
+    key: "mathamma-jathara",
+    slug: "mathamma-jathara",
+    title: "Mathamma Jathara",
+    eyebrow: "Village · Devotion",
+    blurb: "The village gathers for Mathamma — drums, offerings, and shared faith.",
+  },
+  {
+    key: "devapatlamma-jathara",
+    slug: "devapatlamma-jathara",
+    title: "Devapatlamma Jathara",
+    eyebrow: "Faith · Community",
+    blurb: "Devapatlamma’s festival — lamps, community, and ancestral blessing.",
+  },
+  {
+    key: "sri-rama-navami",
+    slug: "sri-rama-navami",
+    title: "Sri Rama Navami",
+    eyebrow: "Ramalayam · Grace",
+    blurb: "Rama Navami at the village temple — hymns, color, and quiet devotion.",
+  },
 ];
 
 export function festivalBySlug(slug: string) {
@@ -158,11 +210,17 @@ export function albumHref(album: Album) {
   if (album.bucket === "fun-trips" || album.slug === "fun-trips") {
     return `/fun-trips/${album.year}/`;
   }
-  if (album.festival === "vinayaka-chavithi" || album.slug === "vinayaka-chavithi") {
-    return `/vinayaka-chavithi/${album.year}/`;
-  }
-  if (album.festival === "sankranthi" || album.slug === "sankranthi") {
-    return `/sankranthi/${album.year}/`;
+  const festivalBuckets = [
+    "vinayaka-chavithi",
+    "sankranthi",
+    "mathamma-jathara",
+    "devapatlamma-jathara",
+    "sri-rama-navami",
+  ] as const;
+  for (const key of festivalBuckets) {
+    if (album.festival === key || album.slug === key || album.bucket === key) {
+      return `/${key}/${album.year}/`;
+    }
   }
   return `/${slugify(album.category)}/${album.year}/${album.slug}/`;
 }

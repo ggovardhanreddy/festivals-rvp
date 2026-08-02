@@ -18,13 +18,18 @@ export function FloatingTileField({
 
   return (
     <div className="float-field" onMouseLeave={() => onHoverChange?.(false)}>
-      {BUCKETS.map((bucket, index) => {
+      {BUCKETS.filter((bucket) =>
+        albums.some((a) => a.bucket === bucket.key && (a.media?.length ?? 0) > 0),
+      ).map((bucket, index) => {
         const hero =
           FESTIVAL_HEROES[bucket.key] ||
+          albums.find((a) => a.bucket === bucket.key && a.cover)?.cover ||
           featured[index % Math.max(featured.length, 1)]?.cover ||
           "/brand/og-banner.jpg";
         const size =
-          bucket.key === "sankranthi" || bucket.key === "vinayaka-chavithi"
+          bucket.key === "sankranthi" ||
+          bucket.key === "vinayaka-chavithi" ||
+          bucket.key === "mathamma-jathara"
             ? "lg"
             : "md";
 

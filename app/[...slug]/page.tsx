@@ -16,7 +16,14 @@ import {
   VILLAGE_NAME,
   type BucketKey,
 } from "@/lib/site";
+import { loadMembers } from "@/lib/members";
+import { pastEvents, upcomingEvents } from "@/lib/events";
+import { loadDevelopments } from "@/lib/developments";
+import { loadSuggestionsSeed } from "@/lib/suggestions";
 import { YouthPortrait } from "@/components/YouthPortrait";
+import { MembersGrid } from "@/components/members/MembersGrid";
+import { EventsCalendar } from "@/components/events/EventsCalendar";
+import { GalleryHub } from "@/components/gallery/GalleryHub";
 import { VillageDepthMap } from "@/components/VillageDepthMap";
 import { FestivalIdolBanner } from "@/components/FestivalIdolBanner";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -33,6 +40,16 @@ import { SearchClient } from "@/components/SearchClient";
 import { VillageStory } from "@/components/VillageStory";
 import { YearGrid } from "@/components/YearGrid";
 import { AppleBucketStage } from "@/components/home/AppleBucketStage";
+import { HistoryTimeline } from "@/components/home/HistoryTimeline";
+import { buildHistoryTimeline } from "@/lib/timeline";
+import { ContactPage } from "@/components/contact/ContactPage";
+import { SettingsPage } from "@/components/settings/SettingsPage";
+import { DevelopmentsPage } from "@/components/developments/DevelopmentsPage";
+import { SuggestionsPage } from "@/components/suggestions/SuggestionsPage";
+import { MembersChat } from "@/components/chat/MembersChat";
+import { RequireAuth } from "@/components/auth/RequireAuth";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { Suspense, type ReactNode } from "react";
 
 const BUCKET_ACCENT: Record<
   BucketKey,
@@ -40,6 +57,9 @@ const BUCKET_ACCENT: Record<
 > = {
   sankranthi: "sankranthi",
   "vinayaka-chavithi": "vinayaka",
+  "mathamma-jathara": "default",
+  "devapatlamma-jathara": "default",
+  "sri-rama-navami": "default",
   "rvp-birthdays": "birthday",
   "fun-trips": "trips",
 };
@@ -47,23 +67,47 @@ const BUCKET_ACCENT: Record<
 const BUCKET_ROUTES: BucketKey[] = [
   "sankranthi",
   "vinayaka-chavithi",
+  "mathamma-jathara",
+  "devapatlamma-jathara",
+  "sri-rama-navami",
   "rvp-birthdays",
   "fun-trips",
 ];
 
 export function generateStaticParams() {
   const paths: { slug: string[] }[] = [
-    { slug: ["timeline"] },
     { slug: ["search"] },
     { slug: ["about"] },
     { slug: ["years"] },
     { slug: ["admin"] },
     { slug: ["offline"] },
+    { slug: ["members"] },
+    { slug: ["events"] },
+    { slug: ["gallery"] },
+    { slug: ["timeline"] },
+    { slug: ["contact"] },
+    { slug: ["login"] },
+    { slug: ["settings"] },
+    { slug: ["developments"] },
+    { slug: ["suggestions"] },
+    { slug: ["chat"] },
+    // Always publish Fun Fest route so auth gating can redirect to login
+    { slug: ["fun-trips"] },
   ];
 
+  const published = publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
+  const bucketsWithContent = new Set(published.map((a) => a.bucket));
+
   for (const bucket of BUCKET_ROUTES) {
-    paths.push({ slug: [bucket] });
-    for (const year of years()) {
+    // Hide empty CMS folders until images are uploaded (except fun-trips shell)
+    if (!bucketsWithContent.has(bucket) && bucket !== "fun-trips") continue;
+    if (!paths.some((p) => p.slug.length === 1 && p.slug[0] === bucket)) {
+      paths.push({ slug: [bucket] });
+    }
+    const yearsForBucket = [
+      ...new Set(published.filter((a) => a.bucket === bucket).map((a) => a.year)),
+    ];
+    for (const year of yearsForBucket) {
       paths.push({ slug: [bucket, year] });
     }
   }
@@ -72,7 +116,7 @@ export function generateStaticParams() {
     paths.push({ slug: ["years", year] });
   }
 
-  for (const album of publicAlbums()) {
+  for (const album of published) {
     if (album.bucket === "rvp-birthdays") {
       paths.push({ slug: ["rvp-birthdays", album.year, album.slug] });
     }
@@ -92,17 +136,18 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
     FESTIVAL_HEROES[bucket] ||
     albums.find((a) => a.cover)?.cover ||
     images[0]?.file;
+  if (!albums.length && !heroImage && bucket !== "fun-trips") notFound();
 
-  return (
+  const page = (
     <main className="experience-page experience-page--apple">
       <AppleBucketStage
         bucket={bucket}
-        title={meta.title}
+        title={bucket === "fun-trips" ? "Fun Fest" : meta.title}
         eyebrow={meta.eyebrow}
         blurb={meta.blurb}
         story={meta.story}
         albums={albums}
-        heroImage={heroImage}
+        heroImage={heroImage || FESTIVAL_HEROES["fun-trips"]}
       />
 
       {bucket === "vinayaka-chavithi" && (
@@ -112,24 +157,26 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
       )}
 
       <div className="page apple-rest">
-        <Reveal className="section">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Village Scene</p>
-              <h2>Step into this chapter</h2>
+        {images.length ? (
+          <Reveal className="section">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Village Scene</p>
+                <h2>Step into this chapter</h2>
+              </div>
             </div>
-          </div>
-          <InteractiveVillageMap
-            accent={BUCKET_ACCENT[bucket]}
-            slides={images.slice(0, 18)}
-          />
-        </Reveal>
+            <InteractiveVillageMap
+              accent={BUCKET_ACCENT[bucket]}
+              slides={images.slice(0, 18)}
+            />
+          </Reveal>
+        ) : null}
 
         {!albums.length && (
           <Reveal className="section">
             <EmptyState
-              title="No albums yet"
-              description={`Add photos under content/<YEAR>/${bucket}/ and push to main.`}
+              title="Photos coming soon"
+              description={`Add photos under content/<YEAR>/${bucket}/ and rebuild.`}
               actionHref="/admin/"
               actionLabel="CMS guide"
             />
@@ -150,6 +197,12 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
       </div>
     </main>
   );
+
+  if (bucket === "fun-trips") {
+    return <RequireAuth>{page}</RequireAuth>;
+  }
+
+  return page;
 }
 
 export default async function ArchiveRoute({
@@ -169,13 +222,16 @@ export default async function ArchiveRoute({
     const bucket = slug[0] as BucketKey;
     const year = slug[1]!;
     const album = findYearBucketAlbum(bucket, year);
+    const gate = (node: ReactNode) =>
+      bucket === "fun-trips" ? <RequireAuth>{node}</RequireAuth> : <>{node}</>;
+
     if (!album) {
       const matches = albumsByBucket(bucket).filter((a) => a.year === year);
       if (!matches.length) notFound();
-      return (
+      return gate(
         <main className="page">
           <MemoryHero
-            eyebrow={`${bucket} · ${year}`}
+            eyebrow={`${bucket === "fun-trips" ? "Fun Fest" : bucket} · ${year}`}
             title={year}
             lede="Memories from this year."
             primaryHref={`/${bucket}/`}
@@ -187,10 +243,10 @@ export default async function ArchiveRoute({
             ))}
           </div>
           <Gallery items={matches.flatMap((a) => a.media)} />
-        </main>
+        </main>,
       );
     }
-    return <AlbumView album={album} />;
+    return gate(<AlbumView album={album} />);
   }
 
   if (slug[0] === "rvp-birthdays" && slug.length === 3) {
@@ -202,31 +258,171 @@ export default async function ArchiveRoute({
   }
 
   if (path === "timeline") {
-    const ordered = [...media].sort((a, b) => b.date.localeCompare(a.date));
     return (
       <main className="page">
         <MemoryHero
           eyebrow="Timeline"
-          title="A living ribbon of memory."
-          lede="Move through RVP Youth celebrations in the order they were lived."
-          primaryHref="/sankranthi/"
-          primaryLabel="Sankranthi"
-          secondaryHref="/fun-trips/"
-          secondaryLabel="Fun Trips"
+          title="Our history"
+          lede="Walk through the years that shaped Kondreddigaripalli."
+          primaryHref="/years/"
+          primaryLabel="All years"
+          secondaryHref="/gallery/"
+          secondaryLabel="Gallery"
         />
-        <Reveal className="section">
-          <div className="timeline">
-            {ordered.map((item) => (
-              <div className="timeline-item glass-card" key={item.id}>
-                <p className="eyebrow">
-                  {item.date} · {item.album.bucket || item.album.category}
+        <HistoryTimeline entries={buildHistoryTimeline(24)} />
+      </main>
+    );
+  }
+
+  if (path === "members") {
+    const members = loadMembers();
+    return (
+      <RequireAuth>
+        <main className="page">
+          <MemoryHero
+            eyebrow="RVP Youth"
+            title="Members"
+            lede="Legacy Circle, Core Members, and NextGen — the people who keep Kondreddigaripalli celebrations alive."
+            primaryHref="/chat/"
+            primaryLabel="Community chat"
+            secondaryHref="/events/"
+            secondaryLabel="Events"
+          />
+          <Reveal className="section">
+            <div className="members-teaser-card">
+              <div>
+                <p className="eyebrow">Stay connected</p>
+                <h2>Members chat</h2>
+                <p className="muted">
+                  Share updates, photos, and quick notes with fellow members.
                 </p>
-                <h3>{item.title}</h3>
-                <p className="muted">{item.album.title}</p>
               </div>
-            ))}
-          </div>
-        </Reveal>
+              <a className="btn" href="/chat/">
+                Open chat
+              </a>
+            </div>
+          </Reveal>
+          <MembersGrid
+            members={members}
+            eyebrow="Community"
+            title="Our circles"
+            lede="Elders, active members, and the next generation — organized by experience and age."
+          />
+        </main>
+      </RequireAuth>
+    );
+  }
+
+  if (path === "chat") {
+    return (
+      <RequireAuth>
+        <main className="page">
+          <MembersChat />
+        </main>
+      </RequireAuth>
+    );
+  }
+
+  if (path === "developments") {
+    return (
+      <main className="page">
+        <DevelopmentsPage developments={loadDevelopments()} />
+      </main>
+    );
+  }
+
+  if (path === "suggestions") {
+    return (
+      <main className="page">
+        <Suspense
+          fallback={
+            <div className="suggestions-page">
+              <p className="muted">Loading suggestions…</p>
+            </div>
+          }
+        >
+          <SuggestionsPage seed={loadSuggestionsSeed()} />
+        </Suspense>
+      </main>
+    );
+  }
+
+  if (path === "contact") {
+    return (
+      <main className="page">
+        <ContactPage />
+      </main>
+    );
+  }
+
+  if (path === "settings") {
+    return (
+      <main className="page">
+        <SettingsPage />
+      </main>
+    );
+  }
+
+  if (path === "login") {
+    return (
+      <main className="page page--login">
+        <Suspense
+          fallback={
+            <div className="auth-gate">
+              <p className="muted">Loading sign in…</p>
+            </div>
+          }
+        >
+          <LoginForm />
+        </Suspense>
+      </main>
+    );
+  }
+
+  if (path === "events") {
+    const liveSlugs = [
+      ...new Set(
+        publicAlbums()
+          .filter((a) => (a.media?.length ?? 0) > 0)
+          .map((a) => a.bucket)
+          .filter(Boolean),
+      ),
+    ] as string[];
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow="Village calendar"
+          title="Events"
+          lede="Festivals, jatharas, and the next gatherings — with countdowns and archive."
+          primaryHref="/gallery/"
+          primaryLabel="Gallery"
+          secondaryHref="/members/"
+          secondaryLabel="Members"
+        />
+        <EventsCalendar
+          upcoming={upcomingEvents(5)}
+          archive={pastEvents()}
+          liveSlugs={liveSlugs}
+          members={loadMembers()}
+        />
+      </main>
+    );
+  }
+
+  if (path === "gallery") {
+    const albums = publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow="Archive"
+          title="Gallery"
+          lede="Events, celebrations, historical photos, and year-wise collections."
+          primaryHref="/events/"
+          primaryLabel="Events"
+          secondaryHref="/years/"
+          secondaryLabel="Years"
+        />
+        <GalleryHub albums={albums} media={media} years={years()} />
       </main>
     );
   }
@@ -238,7 +434,7 @@ export default async function ArchiveRoute({
           <p className="eyebrow">Search</p>
           <h1>Find a memory</h1>
           <p className="lede">
-            Search across Sankranthi, Vinayaka Chavithi, RVP Birthdays, and Fun Trips.
+            Search across festivals, jatharas, birthdays, and fun trips.
           </p>
         </div>
         <SearchClient items={media} />
@@ -270,8 +466,9 @@ export default async function ArchiveRoute({
               </p>
             ))}
             <p className="muted" style={{ marginTop: "0.75rem" }}>
-              Sankranthi, Vinayaka Chavithi, RVP Birthdays, and Fun Trips — curated as a
-              living memory book for {VILLAGE_NAME}, not a generic gallery.
+              Sankranthi, Vinayaka Chavithi, Mathamma & Devapatlamma Jathara, Sri Rama
+              Navami, members, and Fun Trips — a premium digital village archive for{" "}
+              {VILLAGE_NAME}.
             </p>
             <p className="muted" style={{ marginTop: "0.75rem" }}>
               {VILLAGE_ADDRESS_LINE}
@@ -315,8 +512,8 @@ export default async function ArchiveRoute({
           eyebrow={`The ${year} chapter`}
           title={year}
           lede="Everything gathered from this year."
-          primaryHref="/timeline/"
-          primaryLabel="Timeline"
+          primaryHref="/years/"
+          primaryLabel="All years"
         />
         <div className="grid-cards section">
           {matches.map((album, index) => (

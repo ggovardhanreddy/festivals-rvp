@@ -147,8 +147,8 @@ export function AppleBucketStage({
               <p className="eyebrow">Seasons</p>
               <h2>Browse the years</h2>
             </div>
-            <Link className="btn ghost" href="/timeline/">
-              Timeline
+            <Link className="btn ghost" href="/years/">
+              Years
             </Link>
           </div>
           <div className="apple-year-tiles">

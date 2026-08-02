@@ -9,7 +9,7 @@ export const tokens = {
     forest: "#1f3d2e",
     dawn: "#f0d7a0",
     ink: "#13241b",
-    bg: "#eef3ef",
+    bg: "#fafaf8",
   },
   motion: {
     fast: 0.16,

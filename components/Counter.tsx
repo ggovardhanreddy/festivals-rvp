@@ -28,16 +28,8 @@ export function Counter({ value, label }: { value: number; label: string }) {
   }, [inView, value, reduce]);
 
   return (
-    <div ref={ref} className="glass-card" style={{ padding: "1.2rem 1.3rem" }}>
-      <strong
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "2.2rem",
-          display: "block",
-        }}
-      >
-        {n}
-      </strong>
+    <div ref={ref} className="stat-counter">
+      <strong>{n.toLocaleString()}</strong>
       <span className="muted">{label}</span>
     </div>
   );

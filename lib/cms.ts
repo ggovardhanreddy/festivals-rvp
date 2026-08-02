@@ -1,14 +1,25 @@
-import type { BucketKey } from "./types";
+import type { BucketKey, FestivalKey } from "./types";
 
 /** Only these album folders are valid under content/<year>/ */
 export const CMS_ALBUMS: BucketKey[] = [
   "sankranthi",
   "vinayaka-chavithi",
+  "mathamma-jathara",
+  "devapatlamma-jathara",
+  "sri-rama-navami",
   "rvp-birthdays",
   "fun-trips",
 ];
 
 export const CMS_ALBUM_SET = new Set<string>(CMS_ALBUMS);
+
+export const FESTIVAL_BUCKETS: FestivalKey[] = [
+  "sankranthi",
+  "vinayaka-chavithi",
+  "mathamma-jathara",
+  "devapatlamma-jathara",
+  "sri-rama-navami",
+];
 
 export const CMS_IGNORE_NAMES = new Set([
   ".ds_store",
@@ -27,10 +38,17 @@ export function isCmsAlbum(name: string): name is BucketKey {
   return CMS_ALBUM_SET.has(name);
 }
 
+export function isFestivalBucket(name: string): name is FestivalKey {
+  return (FESTIVAL_BUCKETS as string[]).includes(name);
+}
+
 export function albumMetaDefaults(year: string, bucket: BucketKey, slug: string) {
   const titles: Record<BucketKey, string> = {
     sankranthi: `Sankranthi ${year}`,
     "vinayaka-chavithi": `Vinayaka Chavithi ${year}`,
+    "mathamma-jathara": `Mathamma Jathara ${year}`,
+    "devapatlamma-jathara": `Devapatlamma Jathara ${year}`,
+    "sri-rama-navami": `Sri Rama Navami ${year}`,
     "rvp-birthdays":
       slug === "rvp-birthdays" ? `RVP Birthdays ${year}` : `${titleCase(slug)} · ${year}`,
     "fun-trips": `Fun Trips ${year}`,
@@ -51,8 +69,7 @@ export function albumMetaDefaults(year: string, bucket: BucketKey, slug: string)
     published: true,
     order: 0,
     bucket,
-    festival:
-      bucket === "sankranthi" || bucket === "vinayaka-chavithi" ? bucket : undefined,
+    festival: isFestivalBucket(bucket) ? bucket : undefined,
     personName:
       bucket === "rvp-birthdays" && slug !== "rvp-birthdays"
         ? titleCase(slug)

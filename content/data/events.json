@@ -1,0 +1,103 @@
+[
+  {
+    "id": "sankranthi-2026",
+    "title": "Sankranthi",
+    "date": "2026-01-14",
+    "endDate": "2026-01-15",
+    "image": "/brand/sankranthi-hero.webp",
+    "description": "Harvest light, rangoli, and the village gathering to begin the year together.",
+    "category": "festival",
+    "slug": "sankranthi",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "sri-rama-navami-2026",
+    "title": "Sri Rama Navami",
+    "date": "2026-03-27",
+    "image": "/brand/rama-navami-hero.webp",
+    "description": "Hymns and flowers at Ramalayam — a day of grace in Kondreddigaripalli.",
+    "category": "festival",
+    "slug": "sri-rama-navami",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "mathamma-jathara-2026",
+    "title": "Mathamma Jathara",
+    "date": "2026-05-01",
+    "image": "/brand/mathamma-hero.webp",
+    "description": "The village gathers for Mathamma — drums, offerings, and shared faith. Update this date in content/data/events.json when confirmed.",
+    "category": "festival",
+    "slug": "mathamma-jathara",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "devapatlamma-jathara-2026",
+    "title": "Devapatlamma Jathara",
+    "date": "2026-06-01",
+    "image": "/brand/devapatlamma-hero.webp",
+    "description": "Devapatlamma’s festival — temple light, community, and ancestral blessing. Update this date in content/data/events.json when confirmed.",
+    "category": "festival",
+    "slug": "devapatlamma-jathara",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "vinayaka-chavithi-2026",
+    "title": "Vinayaka Chavithi",
+    "date": "2026-09-14",
+    "image": "/brand/vinayaka-hero.webp",
+    "description": "Clay idols, lamp glow, and first prayers — a beloved beginning each monsoon season.",
+    "category": "festival",
+    "slug": "vinayaka-chavithi",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "sankranthi-2027",
+    "title": "Sankranthi",
+    "date": "2027-01-14",
+    "endDate": "2027-01-15",
+    "image": "/brand/sankranthi-hero.webp",
+    "description": "Harvest light, rangoli, and the village gathering to begin the year together.",
+    "category": "festival",
+    "slug": "sankranthi",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "sri-rama-navami-2027",
+    "title": "Sri Rama Navami",
+    "date": "2027-03-17",
+    "image": "/brand/rama-navami-hero.webp",
+    "description": "Hymns and flowers at Ramalayam — a day of grace in Kondreddigaripalli.",
+    "category": "festival",
+    "slug": "sri-rama-navami",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "mathamma-jathara-2027",
+    "title": "Mathamma Jathara",
+    "date": "2027-05-01",
+    "image": "/brand/mathamma-hero.webp",
+    "description": "The village gathers for Mathamma — drums, offerings, and shared faith.",
+    "category": "festival",
+    "slug": "mathamma-jathara",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  },
+  {
+    "id": "devapatlamma-jathara-2027",
+    "title": "Devapatlamma Jathara",
+    "date": "2027-06-01",
+    "image": "/brand/devapatlamma-hero.webp",
+    "description": "Devapatlamma’s festival — temple light, community, and ancestral blessing.",
+    "category": "festival",
+    "slug": "devapatlamma-jathara",
+    "reminderDaysBefore": 7,
+    "recurring": true
+  }
+]

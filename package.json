@@ -21,6 +21,8 @@
     "generate": "tsx scripts/generate-all.ts",
     "publish": "tsx scripts/publish.ts",
     "admin-hash": "tsx scripts/admin-hash.ts",
+    "admin:api": "tsx scripts/admin-server.ts",
+    "migrate:media": "CMS_FORCE_MEDIA=1 tsx scripts/sync-cms.ts",
     "sample-data": "tsx scripts/sample-data.ts",
     "ensure-folders": "tsx scripts/ensure-folders.ts",
     "migrate:cms": "tsx scripts/migrate-cms-layout.ts",

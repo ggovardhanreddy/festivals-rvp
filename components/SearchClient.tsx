@@ -108,7 +108,9 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
               aria-label="Filter by festival or album type"
             >
               <option value="all">All collections</option>
-              {BUCKETS.map((b) => (
+              {BUCKETS.filter((b) =>
+                items.some((i) => i.album.bucket === b.key),
+              ).map((b) => (
                 <option key={b.key} value={b.key}>
                   {b.title}
                 </option>

@@ -33,7 +33,7 @@ export const VILLAGE_SPOTS: VillageSpot[] = [
     blurb: "Chalk dust and childhood — the first lessons of belonging.",
     x: 48,
     y: 42,
-    href: "/rvp-birthdays/",
+    href: "/about/",
     memoryHint: "Growing years",
   },
   {
@@ -51,7 +51,7 @@ export const VILLAGE_SPOTS: VillageSpot[] = [
     blurb: "Still water holding the village sky — a place to pause.",
     x: 78,
     y: 34,
-    href: "/timeline/",
+    href: "/years/",
     memoryHint: "Quiet frames",
   },
   {
@@ -60,7 +60,7 @@ export const VILLAGE_SPOTS: VillageSpot[] = [
     blurb: "The ribbon that ties farms, homes, and festival routes together.",
     x: 52,
     y: 78,
-    href: "/timeline/",
+    href: "/fun-trips/",
     memoryHint: "Through the years",
   },
   {
