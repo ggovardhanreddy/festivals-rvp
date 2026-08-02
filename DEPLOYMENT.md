@@ -19,10 +19,27 @@ Set in the GitHub repository:
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
 
+## Custom domain (Hostinger → Cloudflare Pages)
+
+Primary URL: **https://www.reddyvaripalli.com**
+
+In Hostinger DNS for `reddyvaripalli.com`, set:
+
+| Type | Name | Target / value |
+|---|---|---|
+| CNAME | `www` | `festivals-rvp.pages.dev` |
+| CNAME or ALIAS | `@` (root) | `festivals-rvp.pages.dev` |
+
+If Hostinger does not allow CNAME/ALIAS on `@`, use Cloudflare’s recommended A/AAAA records from the Pages custom-domain screen, or point Hostinger nameservers to Cloudflare.
+
+Both `www.reddyvaripalli.com` and `reddyvaripalli.com` are attached to the `festivals-rvp` Pages project.
+
 ## Manual deploy
 
 ```bash
 npm ci
+export NEXT_PUBLIC_SITE_URL=https://www.reddyvaripalli.com
+export NEXT_PUBLIC_BASE_PATH=
 npm run prepare:site
 npm run validate
 npx next build

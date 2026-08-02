@@ -5,7 +5,7 @@ import { BUCKETS, albumHref } from "../lib/site";
 
 const root = process.cwd();
 const url =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://ggovardhanreddy.github.io/festivals-rvp";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.reddyvaripalli.com";
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const albums = publicAlbums();
 const media = allMedia();

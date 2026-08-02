@@ -1,0 +1,4 @@
+# Prefer www as the canonical host once DNS is live
+https://reddyvaripalli.com/* https://www.reddyvaripalli.com/:splat 301
+http://reddyvaripalli.com/* https://www.reddyvaripalli.com/:splat 301
+http://www.reddyvaripalli.com/* https://www.reddyvaripalli.com/:splat 301

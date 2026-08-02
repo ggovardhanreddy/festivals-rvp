@@ -4,7 +4,8 @@
 
 | Target | URL | Workflow |
 |---|---|---|
-| Cloudflare Pages (primary) | https://festivals-rvp.pages.dev | `.github/workflows/deploy-cloudflare.yml` |
+| Custom domain (primary) | https://www.reddyvaripalli.com | Hostinger DNS → Cloudflare Pages |
+| Cloudflare Pages | https://festivals-rvp.pages.dev | `.github/workflows/deploy-cloudflare.yml` |
 | GitHub Pages (mirror) | https://ggovardhanreddy.github.io/festivals-rvp/ | `.github/workflows/deploy.yml` |
 
 Deploy branch: **`main`**.
@@ -35,11 +36,18 @@ Project name: `festivals-rvp`.
 
 ## Environment variables
 
-| Variable | Cloudflare | GitHub Pages |
+| Variable | Cloudflare / custom domain | GitHub Pages |
 |---|---|---|
 | `NEXT_PUBLIC_BASE_PATH` | `""` | `/festivals-rvp` |
-| `NEXT_PUBLIC_SITE_URL` | `https://festivals-rvp.pages.dev` | `https://ggovardhanreddy.github.io/festivals-rvp` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.reddyvaripalli.com` | `https://ggovardhanreddy.github.io/festivals-rvp` |
 | `CMS_READ_EXIF` | `1` in CI | `1` in CI |
+
+### Hostinger DNS
+
+Point the domain at Cloudflare Pages project `festivals-rvp`:
+
+- `www` → CNAME `festivals-rvp.pages.dev`
+- `@` → CNAME/ALIAS `festivals-rvp.pages.dev` (or Cloudflare A/AAAA guidance)
 
 ## Manual deployment
 
