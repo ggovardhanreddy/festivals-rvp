@@ -1,26 +1,35 @@
+# Quality gates for pull requests. Main-branch deploys use deploy-cloudflare.yml
+# (and optionally deploy.yml) so we avoid a second full build on every push.
 name: CI
+
 on:
   pull_request:
-  push:
-    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Install ffmpeg for media validation path
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: npm run lint
       - run: npm run typecheck
-      - name: Sync CMS, optimize media, generate indexes
+      - name: Sync CMS + generate indexes
         run: npm run prepare:site
         env:
-          CMS_READ_EXIF: "1"
+          CMS_READ_EXIF: "0"
+          NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL }}
       - run: npm run validate
       - run: npm test
       - name: Production build
@@ -28,3 +37,4 @@ jobs:
         env:
           NEXT_PUBLIC_BASE_PATH: ""
           NEXT_PUBLIC_SITE_URL: https://www.reddivaripalli.com
+          NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL }}

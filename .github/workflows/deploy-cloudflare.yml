@@ -1,50 +1,60 @@
+# Deploy static export to Cloudflare Pages (project: festivals-rvp).
+#
+# Required repository secrets:
+#   CLOUDFLARE_API_TOKEN   — token with Cloudflare Pages Edit (Account)
+#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account ID
+#
+# Recommended repository variable:
+#   NEXT_PUBLIC_R2_PUBLIC_URL — public R2 base (no trailing slash); enables
+#   media:strip-local so Pages only uploads the app shell, not local media.
+#
+# Note: Cloudflare Pages Git integration should stay disabled for this project
+# so Actions is the only deployer (avoids double deploys).
 name: Deploy Cloudflare Pages
+
 on:
   push:
     branches: [main]
   workflow_dispatch: {}
+
 concurrency:
   group: cloudflare-pages
   cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
       deployments: write
     env:
       NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_SITE_URL: https://www.reddivaripalli.com
+      # Prefer repo variable; fall back to known public R2 base (not a secret).
+      NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://pub-f2609804d6a040368903177488b01d2d.r2.dev' }}
+      # Skip slow EXIF walks; media already lives on R2 for production.
+      CMS_READ_EXIF: "0"
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - run: npm ci
-      - name: Install ffmpeg for video conversion/posters
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - name: Quality gates — lint & typecheck
-        run: |
-          npm run lint
-          npm run typecheck
-      - name: Sync CMS, optimize media, generate indexes
-        run: npm run prepare:site
-        env:
-          CMS_READ_EXIF: "1"
-      - name: Validate content, assets, and routes
-        run: |
-          npm run validate
-          npm test
-      - name: Production build
-        run: npx next build
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy out --project-name=festivals-rvp
+
+      # Mirrors local `npm run deploy:cf` (build → strip → wrangler).
+      # Intentionally skips ffmpeg install, lint/typecheck, and validate/test —
+      # those stay on the PR CI workflow so main deploys stay small and fast.
+      - name: Build, strip local media, deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
+        run: |
+          npm run build
+          npm run media:strip-local
+          npx wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true

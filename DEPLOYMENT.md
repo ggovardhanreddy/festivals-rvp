@@ -6,11 +6,12 @@ Primary documentation lives in [docs/08-DEPLOYMENT.md](./docs/08-DEPLOYMENT.md).
 
 Push to `main` → GitHub Actions:
 
-1. Typecheck + lint
-2. Sync CMS + optimize media + generate indexes
-3. Validate site
-4. Static export
-5. Deploy to **Cloudflare Pages** and **GitHub Pages**
+1. **Cloudflare Pages** (`.github/workflows/deploy-cloudflare.yml`): `npm ci` → `build` → `media:strip-local` → `wrangler pages deploy`
+2. **GitHub Pages** mirror (`.github/workflows/deploy.yml`) — optional secondary host
+
+PR quality gates live in `.github/workflows/ci.yml` (lint / typecheck / validate / test / build).
+
+Keep Cloudflare Pages **Git integration off** so Actions is the only CF deployer.
 
 ## Cloudflare secrets
 
@@ -18,6 +19,10 @@ Set in the GitHub repository:
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
+
+Repository variable (recommended):
+
+- `NEXT_PUBLIC_R2_PUBLIC_URL` — enables media strip so Pages uploads stay small
 
 ## Custom domain (Hostinger → Cloudflare Pages)
 

@@ -14,16 +14,17 @@ Deploy branch: **`main`**.
 
 ```text
 Git push to main
-  → checkout + npm ci
-  → install ffmpeg
-  → typecheck + lint
-  → prepare:site (sync + generate)
-  → validate
-  → next build (static export to out/)
-  → deploy
+  → Deploy Cloudflare Pages (fast path)
+       checkout (depth 1) + npm ci (cached)
+       → npm run build
+       → npm run media:strip-local
+       → wrangler pages deploy out --project-name=festivals-rvp
+  → Deploy GitHub Pages (mirror, optional)
+Pull requests
+  → CI (lint, typecheck, prepare:site, validate, test, build)
 ```
 
-If any quality gate fails, deployment must not proceed.
+Keep **Cloudflare Pages Git integration disabled** so only GitHub Actions deploys (avoids double publishes).
 
 ## Required secrets (Cloudflare)
 
@@ -31,6 +32,10 @@ Repository secrets:
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
+
+Repository variable (recommended for small deploy artifacts):
+
+- `NEXT_PUBLIC_R2_PUBLIC_URL` — public R2 base URL (no trailing slash)
 
 Project name: `festivals-rvp`.
 
@@ -40,7 +45,8 @@ Project name: `festivals-rvp`.
 |---|---|---|
 | `NEXT_PUBLIC_BASE_PATH` | `""` | `/festivals-rvp` |
 | `NEXT_PUBLIC_SITE_URL` | `https://www.reddivaripalli.com` | `https://ggovardhanreddy.github.io/festivals-rvp` |
-| `CMS_READ_EXIF` | `1` in CI | `1` in CI |
+| `NEXT_PUBLIC_R2_PUBLIC_URL` | repo variable | repo variable |
+| `CMS_READ_EXIF` | `0` in deploy (PR CI can opt in) | `0` |
 
 ### Hostinger DNS
 

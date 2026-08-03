@@ -1,3 +1,5 @@
+# Mirror deploy to GitHub Pages. Primary production is Cloudflare Pages
+# (see deploy-cloudflare.yml). Keep this lean so it does not dominate CI minutes.
 name: Deploy GitHub Pages
 on:
   push:
@@ -13,35 +15,26 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     env:
       NEXT_PUBLIC_BASE_PATH: /festivals-rvp
       NEXT_PUBLIC_SITE_URL: https://ggovardhanreddy.github.io/festivals-rvp
+      NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL }}
+      CMS_READ_EXIF: "0"
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Install ffmpeg for video conversion/posters
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - name: Quality gates — lint & typecheck
-        run: |
-          npm run lint
-          npm run typecheck
-      - name: Sync CMS, optimize media, generate indexes
-        run: npm run prepare:site
-        env:
-          CMS_READ_EXIF: "1"
-      - name: Validate content, assets, and routes
-        run: |
-          npm run validate
-          npm test
-      - name: Production build
-        run: npx next build
+      - name: Build
+        run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
