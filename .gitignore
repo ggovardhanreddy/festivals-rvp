@@ -40,3 +40,4 @@ generated/
 .vscode/
 .idea/
 
+.wrangler/

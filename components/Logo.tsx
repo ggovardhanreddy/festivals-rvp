@@ -12,13 +12,12 @@ type LogoVariant =
   | "black"
   | "mark"
   | "loading"
-  | "vertical"
-  | "watermark";
+  | "vertical";
 
 /**
  * Always renders the provided brand artwork (Downloads logo.png → logo-master).
  * SVG variants are kept only for tiny mark / favicon use cases.
- * Gloss: CSS specular sheen on a glass-finish shell (header, hero, watermark).
+ * Gloss: CSS specular sheen on a glass-finish shell.
  */
 export function Logo({
   className = "",
@@ -33,8 +32,7 @@ export function Logo({
   /** Soft glass/gloss sheen. Default on for brand consistency. */
   glossy?: boolean;
 }) {
-  const watermark = variant === "watermark";
-  const vertical = variant === "vertical" || watermark;
+  const vertical = variant === "vertical";
 
   const src = withBase(
     markOnly || variant === "mark"
@@ -50,7 +48,6 @@ export function Logo({
         "brand-logo-shell",
         glossy ? "brand-logo-shell--gloss" : "",
         vertical ? "brand-logo-shell--vertical" : "",
-        watermark ? "brand-logo-shell--watermark" : "",
       ]
         .filter(Boolean)
         .join(" ")}
@@ -58,12 +55,11 @@ export function Logo({
       <img
         className={`brand-logo ${vertical ? "brand-logo-vertical" : ""} ${className}`.trim()}
         src={src}
-        alt={watermark ? "" : "RVP Youth — Reddivaripalli"}
+        alt="RVP Youth — Reddivaripalli"
         width={markOnly ? 40 : vertical ? 120 : 168}
         height={markOnly ? 40 : vertical ? 98 : 48}
         draggable={false}
         decoding="async"
-        aria-hidden={watermark || undefined}
       />
       {glossy ? (
         <span className="brand-logo-gloss-clip" aria-hidden>

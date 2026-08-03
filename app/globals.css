@@ -201,58 +201,29 @@ select {
   mix-blend-mode: soft-light;
 }
 
-/* Quiet the corner mark on home — hero carries its own large watermark */
-body:has(.home-hero) .logo-watermark:not(.home-hero-watermark) {
+/* Quiet the corner mark on home — hero already has a strong logo */
+body:has(.home-hero) .logo-watermark {
   opacity: 0.035;
 }
 
-html.dark body:has(.home-hero) .logo-watermark:not(.home-hero-watermark) {
+html.dark body:has(.home-hero) .logo-watermark {
   opacity: 0.05;
 }
 
-/* Section watermark inside homepage hero */
-.home-hero-watermark.logo-watermark {
-  position: absolute;
-  inset: auto;
-  top: 46%;
-  left: 50%;
-  right: auto;
-  bottom: auto;
-  z-index: 1;
-  width: min(70vw, 380px);
-  transform: translate(-50%, -50%);
-  opacity: 0.12;
-  mix-blend-mode: soft-light;
-}
-
-.dark .home-hero-watermark.logo-watermark {
-  opacity: 0.16;
-  mix-blend-mode: soft-light;
-}
-
 @media (max-width: 820px) {
-  .logo-watermark:not(.home-hero-watermark) {
+  .logo-watermark {
     width: min(32vw, 132px);
     opacity: 0.05;
   }
 
-  body:has(.home-hero) .logo-watermark:not(.home-hero-watermark) {
+  body:has(.home-hero) .logo-watermark {
     opacity: 0.03;
-  }
-
-  .home-hero-watermark.logo-watermark {
-    width: min(78vw, 280px);
-    opacity: 0.1;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .logo-watermark:not(.home-hero-watermark) {
+  .logo-watermark {
     opacity: 0.04;
-  }
-
-  .home-hero-watermark.logo-watermark {
-    opacity: 0.08;
   }
 }
 
