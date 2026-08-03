@@ -6445,6 +6445,13 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   margin-inline: auto;
 }
 
+.footer-copy .footer-build {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  opacity: 0.72;
+  letter-spacing: 0.02em;
+}
+
 /* Softer glass cards site-wide for redesign cohesion */
 .glass-card {
   background: var(--color-bg-elevated);

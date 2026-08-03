@@ -7,11 +7,13 @@ Official documentation for the **Reddivaripalli Gram Panchayat** digital identit
 | Live site | [https://www.reddivaripalli.com](https://www.reddivaripalli.com) |
 | Cloudflare Pages | [https://festivals-rvp.pages.dev](https://festivals-rvp.pages.dev) |
 | Repository | [github.com/ggovardhanreddy/festivals-rvp](https://github.com/ggovardhanreddy/festivals-rvp) |
-| Version | **1.2.0** (`package.json`) |
+| Version | **1.4.2** (`package.json`) |
 
 ## Project summary
 
 This is a **Next.js static export** (App Router) deployed to **Cloudflare Pages**, with large media and live community JSON stored in **Cloudflare R2**. GitHub remains the CMS for annual festival albums under `content/<YEAR>/<album>/`. Super Admin manages members, directory, documents, approvals, and R2 uploads via Pages Functions. Fun Fest (`/fun-trips/`) is member-gated with first-name style credentials.
+
+**Routine content updates:** see **[CONTENT_PIPELINE.md](./CONTENT_PIPELINE.md)** (members SSOT, R2 gallery discovery, Admin upload + reindex, Actions deploy).
 
 ## Documentation index
 
@@ -19,6 +21,7 @@ This is a **Next.js static export** (App Router) deployed to **Cloudflare Pages*
 
 | Doc | Description |
 |---|---|
+| [CONTENT_PIPELINE.md](./CONTENT_PIPELINE.md) | **Data-driven updates** — members, gallery, upload, deploy, backup |
 | [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md) | Mission, audiences, what the portal includes |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | System layers, data flow, key modules |
 | [SYSTEM_DIAGRAMS.md](./SYSTEM_DIAGRAMS.md) | Mermaid diagrams (architecture, auth, deploy, media) |

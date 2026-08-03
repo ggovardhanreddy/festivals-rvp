@@ -1,3 +1,11 @@
+/**
+ * Members single source of truth (Git seed):
+ *   content/data/members.json
+ *
+ * Runtime overlay: R2 `community/members.json` via /api/community/members,
+ * merged with the seed (see mergeMemberRosters). Fun Fest auth hashes are
+ * generated from this seed on every prepare:site (scripts/generate-member-auth.ts).
+ */
 import fs from "node:fs";
 import path from "node:path";
 import type { Member, MemberGroup } from "./types";
@@ -20,7 +28,10 @@ export {
   MEMBER_GROUP_AGE_HINT,
 } from "./member-groups";
 
-const DATA_PATH = path.join(process.cwd(), "content", "data", "members.json");
+/** Canonical Git path for the members roster seed. */
+export const MEMBERS_SEED_PATH = "content/data/members.json";
+
+const DATA_PATH = path.join(process.cwd(), MEMBERS_SEED_PATH);
 
 let cache: Member[] | null = null;
 

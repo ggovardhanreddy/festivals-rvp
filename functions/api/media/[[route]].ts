@@ -2,9 +2,19 @@
  * Media API (Cloudflare Pages Function)
  *
  * POST /api/media/upload — admin upload to R2
+ * POST /api/media/reindex — rebuild catalog/albums.json from R2 listing
  * GET  /api/media/sign?key= — short-lived signed URL for private objects
  * GET  /api/media/object?key= — stream object via R2 binding
  */
+
+import {
+  buildAlbumsFromR2Keys,
+  isProtectedHeroKey,
+  mediaCountOf,
+  R2_ALBUMS_CATALOG_KEY,
+  type R2ObjectRef,
+} from "../../../lib/r2-catalog";
+import { isCmsAlbum, isYearDir } from "../../../lib/cms";
 
 interface Env {
   MEDIA?: R2Bucket;
@@ -13,6 +23,9 @@ interface Env {
   MEMBER_SESSION_SECRET?: string;
   MEDIA_SIGNING_SECRET?: string;
   R2_PUBLIC_BASE?: string;
+  /** Optional: GitHub PAT with `repo` scope to trigger repository_dispatch */
+  GITHUB_DISPATCH_TOKEN?: string;
+  GITHUB_REPO?: string;
 }
 
 type MediaR2Range =
@@ -128,6 +141,52 @@ function cors(origin: string) {
     "access-control-allow-credentials": "true",
     "access-control-allow-headers": "content-type, authorization",
     "access-control-allow-methods": "GET,POST,OPTIONS",
+  };
+}
+
+async function listAllKeys(
+  bucket: R2Bucket,
+  prefixes: string[],
+): Promise<R2ObjectRef[]> {
+  const out: R2ObjectRef[] = [];
+  for (const prefix of prefixes) {
+    let cursor: string | undefined;
+    do {
+      const page = await bucket.list({ prefix, cursor, limit: 1000 });
+      for (const obj of page.objects) {
+        out.push({
+          key: obj.key,
+          uploaded: obj.uploaded,
+          size: obj.size,
+        });
+      }
+      cursor = page.truncated ? page.cursor : undefined;
+    } while (cursor);
+  }
+  return out;
+}
+
+async function maybeDispatchGithub(env: Env, reason: string) {
+  const token = env.GITHUB_DISPATCH_TOKEN;
+  const repo = env.GITHUB_REPO || "ggovardhanreddy/festivals-rvp";
+  if (!token) return { dispatched: false as const, reason: "no token" };
+  const res = await fetch(`https://api.github.com/repos/${repo}/dispatches`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      accept: "application/vnd.github+json",
+      "content-type": "application/json",
+      "user-agent": "festivals-rvp-reindex",
+    },
+    body: JSON.stringify({
+      event_type: "content-sync",
+      client_payload: { reason, source: "admin-reindex" },
+    }),
+  });
+  return {
+    dispatched: res.ok || res.status === 204,
+    status: res.status,
+    reason,
   };
 }
 
@@ -333,6 +392,15 @@ async function handleMedia({
     const width = String(form.get("width") || "");
     const height = String(form.get("height") || "");
     const duration = String(form.get("duration") || "");
+    const year = String(form.get("year") || "").trim();
+    const album = String(form.get("album") || form.get("bucket") || "")
+      .trim()
+      .toLowerCase();
+    const person = String(form.get("person") || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]+/g, "-");
+    const preserveOriginal = String(form.get("preserveOriginal") || "1") !== "0";
 
     if (!(file instanceof File)) {
       return json({ error: "file required" }, 400, headers);
@@ -357,11 +425,53 @@ async function handleMedia({
       return json({ error: "Unsupported file type" }, 400, headers);
     }
 
-    const key = `${category}/${Date.now()}-${originalName}`;
+    // Structured gallery path when year + album provided → discoverable by reindex.
+    let keyPrefix = category;
+    if (
+      (category === "gallery" || category === "videos" || category === "funfest") &&
+      year &&
+      album
+    ) {
+      if (!isYearDir(year)) {
+        return json({ error: "year must be YYYY" }, 400, headers);
+      }
+      if (!isCmsAlbum(album)) {
+        return json(
+          { error: `album must be a CMS bucket (e.g. vinayaka-chavithi)` },
+          400,
+          headers,
+        );
+      }
+      const personSeg =
+        album === "rvp-birthdays" && person ? `${person}/` : "";
+      if (category === "gallery") {
+        keyPrefix = `gallery/${year}/${album}/${personSeg}`.replace(/\/+$/, "");
+      } else if (category === "videos") {
+        keyPrefix = `videos/${year}/${album}/${personSeg}`.replace(/\/+$/, "");
+      } else {
+        keyPrefix = `funfest/${year}/${album}/${personSeg}`.replace(/\/+$/, "");
+      }
+    }
+
+    const key = `${keyPrefix}/${Date.now()}-${originalName}`;
+
+    // Never overwrite official festival/brand heroes.
+    if (isProtectedHeroKey(key) || /\/hero\.(webp|jpg|jpeg|png)$/i.test(key)) {
+      return json(
+        {
+          error:
+            "Refusing to overwrite protected hero.webp assets. Update festival heroes via Git content/public/festivals only.",
+        },
+        400,
+        headers,
+      );
+    }
+
     const uploadedAt = new Date().toISOString();
     const privateObject = isPrivateKey(key);
+    const bytes = new Uint8Array(await file.arrayBuffer());
 
-    await env.MEDIA.put(key, file.stream(), {
+    await env.MEDIA.put(key, bytes, {
       httpMetadata: { contentType: mime },
       customMetadata: {
         fileName: originalName,
@@ -370,17 +480,44 @@ async function handleMedia({
         uploadedAt,
         mime,
         size: String(file.size),
+        ...(year ? { year } : {}),
+        ...(album ? { album } : {}),
         ...(width ? { width } : {}),
         ...(height ? { height } : {}),
         ...(duration ? { duration } : {}),
       },
     });
 
+    // Preserve HEIC/originals alongside the primary key when requested.
+    let originalKey: string | null = null;
+    const ext = extOf(originalName);
+    if (
+      preserveOriginal &&
+      (ext === "heic" || ext === "heif" || ext === "mov" || ext === "dng")
+    ) {
+      originalKey = `originals/${key}`;
+      await env.MEDIA.put(originalKey, bytes, {
+        httpMetadata: { contentType: mime },
+        customMetadata: {
+          fileName: originalName,
+          originalName,
+          category: "originals",
+          pairedKey: key,
+          uploadedAt,
+        },
+      });
+    }
+
     const publicBase = (env.R2_PUBLIC_BASE || "").replace(/\/$/, "");
     const publicUrl =
       privateObject || !publicBase
         ? `/api/media/object?key=${encodeURIComponent(key)}`
         : `${publicBase}/${key}`;
+
+    const heicNote =
+      ext === "heic" || ext === "heif"
+        ? "HEIC stored as-is (Workers cannot convert). Prefer local import (HEIC→WebP) or export JPEG/WebP before upload for gallery display."
+        : null;
 
     return json(
       {
@@ -397,6 +534,79 @@ async function handleMedia({
         width: width || null,
         height: height || null,
         duration: duration || null,
+        year: year || null,
+        album: album || null,
+        originalKey,
+        note: heicNote,
+        next: year && album
+          ? "Call POST /api/media/reindex (or click Reindex gallery) so albums.json picks up this path."
+          : "Flat category upload — not auto-indexed into Festival→Year albums unless year+album were set.",
+      },
+      200,
+      headers,
+    );
+  }
+
+  if (route === "reindex" && request.method === "POST") {
+    if (!(await requireAdmin(request, env))) {
+      return json({ error: "Unauthorized" }, 401, headers);
+    }
+
+    const publicBase = (env.R2_PUBLIC_BASE || "").replace(/\/$/, "");
+    const objects = await listAllKeys(env.MEDIA, [
+      "gallery/",
+      "videos/",
+      "audio/",
+      "funfest/",
+    ]);
+    const albums = await buildAlbumsFromR2Keys(objects, { publicBase });
+    const payload = {
+      version: 1,
+      generatedAt: new Date().toISOString(),
+      source: "api/media/reindex",
+      objectCount: objects.length,
+      mediaCount: mediaCountOf(albums),
+      albums,
+    };
+
+    await env.MEDIA.put(R2_ALBUMS_CATALOG_KEY, JSON.stringify(payload), {
+      httpMetadata: { contentType: "application/json" },
+      customMetadata: {
+        generatedAt: payload.generatedAt,
+        mediaCount: String(payload.mediaCount),
+      },
+    });
+
+    // Also store bare array for sync-cms fetchPublicAlbumsCatalog convenience
+    await env.MEDIA.put(
+      "catalog/albums.array.json",
+      JSON.stringify(albums),
+      {
+        httpMetadata: { contentType: "application/json" },
+      },
+    );
+
+    const body = await request.json().catch(() => ({} as { dispatch?: boolean }));
+    const dispatch =
+      body && typeof body === "object" && "dispatch" in body
+        ? Boolean((body as { dispatch?: boolean }).dispatch)
+        : true;
+    const gh = dispatch
+      ? await maybeDispatchGithub(env, "gallery-reindex")
+      : { dispatched: false as const, reason: "skipped" };
+
+    return json(
+      {
+        ok: true,
+        catalogKey: R2_ALBUMS_CATALOG_KEY,
+        albums: albums.length,
+        media: payload.mediaCount,
+        objects: objects.length,
+        publicUrl: publicBase
+          ? `${publicBase}/${R2_ALBUMS_CATALOG_KEY}`
+          : null,
+        github: gh,
+        note: "Hero assets under festivals/*/hero.webp are never modified. Commit generated/albums.json on the next deploy (or wait for content-sync dispatch).",
       },
       200,
       headers,
@@ -404,7 +614,11 @@ async function handleMedia({
   }
 
   return json(
-    { error: "Not found", routes: ["upload", "sign", "object"], route },
+    {
+      error: "Not found",
+      routes: ["upload", "reindex", "sign", "object"],
+      route,
+    },
     404,
     headers,
   );

@@ -660,12 +660,15 @@ function GuidePanel() {
       <h3>Admin quick guide</h3>
       <ol className="cms-steps">
         <li>
-          <strong>Members</strong> — update <code>content/data/members.json</code>{" "}
-          (or sync scripts), then deploy. Birthdays drive homepage celebrations.
+          <strong>Members</strong> — Git seed{" "}
+          <code>content/data/members.json</code> is the build SSOT (Fun Fest
+          auth, search). Admin Save writes R2 <code>community/members.json</code>{" "}
+          for live merge; sync important edits back to Git when you can.
         </li>
         <li>
-          <strong>Media</strong> — use Media/R2 tab for uploads; run local HEIC
-          import when needed; gallery albums stay year/festival organized.
+          <strong>Media</strong> — Media/R2 tab: set Year + Festival, upload,
+          then <strong>Reindex gallery</strong>. Prefer WebP/MP4 (local import
+          for HEIC). Official <code>hero.webp</code> is never overwritten.
         </li>
         <li>
           <strong>Events &amp; notifications</strong> — edit{" "}

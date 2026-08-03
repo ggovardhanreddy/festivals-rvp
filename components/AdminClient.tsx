@@ -63,10 +63,15 @@ export function AdminClient() {
   const [error, setError] = useState<string | null>(null);
 
   const [category, setCategory] = useState<R2Category>("gallery");
+  const [uploadYear, setUploadYear] = useState(String(new Date().getFullYear()));
+  const [uploadAlbum, setUploadAlbum] = useState<(typeof ALBUMS)[number] | "">(
+    "vinayaka-chavithi",
+  );
   const [uploadPct, setUploadPct] = useState(0);
   const [uploadBusy, setUploadBusy] = useState(false);
   const [uploadMsg, setUploadMsg] = useState<string | null>(null);
   const [uploadErr, setUploadErr] = useState<string | null>(null);
+  const [reindexBusy, setReindexBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function importFolder() {
@@ -139,6 +144,16 @@ export function AdminClient() {
         form.append("file", file);
         form.append("category", category);
         form.append("originalName", file.name);
+        if (
+          uploadYear &&
+          uploadAlbum &&
+          (category === "gallery" ||
+            category === "videos" ||
+            category === "funfest")
+        ) {
+          form.append("year", uploadYear);
+          form.append("album", uploadAlbum);
+        }
         const { ok, status, data } = await uploadWithProgress(
           withBase("/api/media/upload"),
           form,
@@ -165,7 +180,10 @@ export function AdminClient() {
         );
       }
       setUploadMsg(
-        `Success — uploaded ${uploaded.length} file(s) to R2 (${category}/). Gallery will refresh.`,
+        `Success — uploaded ${uploaded.length} file(s) to R2. ` +
+          (uploadYear && uploadAlbum
+            ? `Path uses ${uploadYear}/${uploadAlbum}. Click “Reindex gallery” to refresh the catalog.`
+            : `Flat ${category}/ upload — set Year + Festival for Festival→Year indexing.`),
       );
       if (input) input.value = "";
       router.refresh();
@@ -177,6 +195,43 @@ export function AdminClient() {
       );
     } finally {
       setUploadBusy(false);
+    }
+  }
+
+  async function reindexGallery() {
+    setReindexBusy(true);
+    setUploadErr(null);
+    setUploadMsg("Reindexing gallery from R2…");
+    try {
+      const res = await fetch(withBase("/api/media/reindex"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ dispatch: true }),
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        albums?: number;
+        media?: number;
+        github?: { dispatched?: boolean };
+        note?: string;
+      };
+      if (!res.ok) throw new Error(data.error || `Reindex failed (${res.status})`);
+      setUploadMsg(
+        `Reindex OK — ${data.albums ?? 0} albums / ${data.media ?? 0} media written to catalog/albums.json.` +
+          (data.github?.dispatched
+            ? " GitHub content-sync dispatched."
+            : " (No GitHub dispatch token — push/deploy still picks up catalog on next build.)") +
+          (data.note ? ` ${data.note}` : ""),
+      );
+    } catch (err) {
+      setUploadErr(
+        err instanceof Error ? err.message : "Gallery reindex failed.",
+      );
+      setUploadMsg(null);
+    } finally {
+      setReindexBusy(false);
     }
   }
 
@@ -194,14 +249,16 @@ export function AdminClient() {
         <h3>Upload to Cloudflare R2</h3>
         <p className="muted">
           Requires admin session + R2 binding <code>MEDIA</code>. Prefer
-          browser-ready WebP/MP4 files (run local import first for HEIC/MOV).
+          browser-ready WebP/MP4 (local import converts HEIC→WebP and keeps
+          originals). Official <code>festivals/*/hero.webp</code> files are
+          never overwritten.
         </p>
         <label className="admin-path-label">
           Category
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as R2Category)}
-            disabled={uploadBusy}
+            disabled={uploadBusy || reindexBusy}
           >
             {R2_CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -210,6 +267,41 @@ export function AdminClient() {
             ))}
           </select>
         </label>
+        {category === "gallery" ||
+        category === "videos" ||
+        category === "funfest" ? (
+          <div className="btn-row" style={{ gap: "0.75rem", flexWrap: "wrap" }}>
+            <label className="admin-path-label">
+              Year
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="\d{4}"
+                value={uploadYear}
+                onChange={(e) => setUploadYear(e.target.value)}
+                disabled={uploadBusy || reindexBusy}
+                placeholder="2026"
+              />
+            </label>
+            <label className="admin-path-label">
+              Festival / album
+              <select
+                value={uploadAlbum}
+                onChange={(e) =>
+                  setUploadAlbum(e.target.value as (typeof ALBUMS)[number] | "")
+                }
+                disabled={uploadBusy || reindexBusy}
+              >
+                <option value="">(flat upload — not auto-indexed)</option>
+                {ALBUMS.map((a) => (
+                  <option key={a} value={a}>
+                    {a}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        ) : null}
         <label className="admin-path-label">
           Files
           <input
@@ -217,7 +309,7 @@ export function AdminClient() {
             type="file"
             accept={MEDIA_ACCEPT}
             multiple
-            disabled={uploadBusy}
+            disabled={uploadBusy || reindexBusy}
           />
         </label>
         {uploadBusy ? (
@@ -235,13 +327,21 @@ export function AdminClient() {
           <button
             type="button"
             className="btn"
-            disabled={uploadBusy}
+            disabled={uploadBusy || reindexBusy}
             onClick={() => void uploadToR2()}
           >
             {uploadBusy ? `Uploading ${uploadPct}%` : "Upload to R2"}
           </button>
+          <button
+            type="button"
+            className="btn ghost"
+            disabled={uploadBusy || reindexBusy}
+            onClick={() => void reindexGallery()}
+          >
+            {reindexBusy ? "Reindexing…" : "Reindex gallery"}
+          </button>
           <Link className="btn ghost" href="/gallery/">
-            Refresh gallery
+            Open gallery
           </Link>
         </div>
       </section>

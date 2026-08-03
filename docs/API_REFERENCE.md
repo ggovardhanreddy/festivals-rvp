@@ -58,9 +58,21 @@ Requires R2 binding `MEDIA` (else `503`).
 ### `POST /api/media/upload`
 
 - Auth: **admin** cookie
-- `multipart/form-data`: `file`, `category`, optional `originalName`, `width`, `height`, `duration`
+- `multipart/form-data`: `file`, `category`, optional `originalName`, `width`, `height`, `duration`, **`year`**, **`album`** / `bucket`, `person`, `preserveOriginal`
+- When `year` + `album` are set (gallery/videos/funfest), key is structured: `gallery/{year}/{album}/…` (discoverable by reindex)
+- Rejects protected `hero.webp` keys (festival/brand heroes)
+- HEIC/MOV: stored as-is; optional `originals/` paired copy — Workers do not convert formats
 - Categories: see [CLOUDFLARE_R2.md](./CLOUDFLARE_R2.md)
-- Response: `{ ok, key, publicUrl, private, size, mime, … }`
+- Response: `{ ok, key, publicUrl, private, size, mime, originalKey, note, next, … }`
+
+### `POST /api/media/reindex`
+
+- Auth: **admin** cookie
+- Lists R2 `gallery/`, `videos/`, `audio/`, `funfest/` via binding
+- Writes `catalog/albums.json` (+ `catalog/albums.array.json`)
+- Optional JSON body `{ "dispatch": true }` → GitHub `repository_dispatch` `content-sync` when `GITHUB_DISPATCH_TOKEN` is configured
+- Does **not** modify festival hero objects
+- Response: `{ ok, catalogKey, albums, media, objects, github, … }`
 
 ### `GET /api/media/sign?key=`
 

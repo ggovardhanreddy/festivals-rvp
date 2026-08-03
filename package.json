@@ -12,6 +12,7 @@
     "auth:members": "tsx scripts/generate-member-auth.ts",
     "auth:members:force": "MEMBER_AUTH_FORCE=1 tsx scripts/generate-member-auth.ts",
     "sync": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts",
+    "sync:r2": "CMS_MERGE_R2=1 npm run sync",
     "validate": "tsx scripts/validate-site.ts",
     "test": "tsx scripts/smoke-test.ts",
     "typecheck": "tsc --noEmit",

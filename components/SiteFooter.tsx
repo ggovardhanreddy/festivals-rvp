@@ -14,6 +14,7 @@ import {
   VILLAGE_MAPS_URL,
   VILLAGE_NAME,
 } from "@/lib/site";
+import { BUILD_ID } from "@/lib/build-id";
 import { useMemberAuth } from "./auth/MemberAuthProvider";
 import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
 
@@ -91,6 +92,9 @@ export function SiteFooter() {
         <p>
           © {year} {OFFICIAL_TITLE}. Stewards: {SITE_NAME}. {VILLAGE_ALSO_KNOWN_AS} ·{" "}
           {VILLAGE_NAME}.
+        </p>
+        <p className="footer-build" title="Build id from public/version.json / generate-all">
+          Build {BUILD_ID}
         </p>
       </div>
       <FunFestLoginDialog

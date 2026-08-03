@@ -5,7 +5,12 @@
  * optimizes into public/images + public/thumbs,
  * writes generated/albums.json for the site.
  *
- * No upload API. No database. Folders in Git are the CMS.
+ * When the local scan is empty (CI sparse checkout), discovery order is:
+ *   1. Public R2 catalog at catalog/albums.json (written by /api/media/reindex)
+ *   2. Live R2 ListObjectsV2 (when R2_ACCESS_KEY_ID + secret are set)
+ *   3. Preserve committed generated/albums.json
+ *
+ * Festival chapter heroes (festivals/<folder>/hero.webp) are never overwritten.
  */
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -44,6 +49,16 @@ import {
 import { isDisplayableImageUrl } from "../lib/media-formats";
 import type { Album, BucketKey, Media } from "../lib/types";
 import { titleCase } from "../lib/slug";
+import {
+  buildAlbumsFromR2Keys,
+  mediaCountOf,
+  mergeAlbumCatalogs,
+} from "../lib/r2-catalog";
+import {
+  fetchPublicAlbumsCatalog,
+  listR2Objects,
+  r2ListCredentialsPresent,
+} from "./r2-list-objects";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
@@ -740,10 +755,6 @@ async function buildAlbumFromPublicDerivatives(
   };
 }
 
-function mediaCountOf(albums: Album[]) {
-  return albums.reduce((n, album) => n + (album.media?.length ?? 0), 0);
-}
-
 /** When CI omits binaries, keep the last good R2-backed catalog instead of wiping the gallery. */
 function loadPreviousAlbumsCatalog(): Album[] | null {
   if (!fs.existsSync(ALBUMS_OUT)) return null;
@@ -752,6 +763,56 @@ function loadPreviousAlbumsCatalog(): Album[] | null {
     if (!Array.isArray(prev) || mediaCountOf(prev) === 0) return null;
     return prev;
   } catch {
+    return null;
+  }
+}
+
+/**
+ * Discover gallery albums from R2 when local content/public media is absent.
+ * Never replaces a healthier previous catalog with an empty discovery result.
+ */
+async function discoverAlbumsFromR2(
+  previous: Album[] | null,
+): Promise<Album[] | null> {
+  const publicBase = (
+    process.env.NEXT_PUBLIC_R2_PUBLIC_URL ||
+    process.env.R2_PUBLIC_BASE ||
+    ""
+  ).replace(/\/$/, "");
+
+  // 1) Prefetched catalog written by Admin reindex (no listing credentials).
+  const fromCatalog = await fetchPublicAlbumsCatalog(publicBase);
+  if (fromCatalog && mediaCountOf(fromCatalog) > 0) {
+    console.log(
+      `  R2 catalog: catalog/albums.json → ${fromCatalog.length} albums, ${mediaCountOf(fromCatalog)} media`,
+    );
+    return mergeAlbumCatalogs(fromCatalog, previous);
+  }
+
+  // 2) Live list when R2 S3 API tokens are available (optional CI secrets).
+  if (!r2ListCredentialsPresent()) {
+    console.log(
+      "  R2 discovery skipped (no catalog/albums.json and no R2_ACCESS_KEY_ID).",
+    );
+    return null;
+  }
+
+  try {
+    console.log("  Listing R2 objects for gallery discovery…");
+    const objects = await listR2Objects();
+    const discovered = await buildAlbumsFromR2Keys(objects, { publicBase });
+    if (mediaCountOf(discovered) === 0) {
+      warnings.push("R2 list returned keys but no album-shaped media paths.");
+      return null;
+    }
+    console.log(
+      `  R2 list: ${objects.length} keys → ${discovered.length} albums, ${mediaCountOf(discovered)} media`,
+    );
+    return mergeAlbumCatalogs(discovered, previous);
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    warnings.push(`R2 discovery failed: ${msg}`);
+    console.warn(`  R2 discovery failed: ${msg}`);
     return null;
   }
 }
@@ -818,16 +879,36 @@ async function main() {
 
   albums.sort((a, b) => b.year.localeCompare(a.year) || a.order - b.order);
 
-  // Production CI uses sparse checkout (no content/public binaries). Never replace a
-  // healthy R2-backed catalog with an empty scan — that ships "No gallery photos yet".
-  if (mediaCountOf(albums) === 0 && previous) {
-    console.warn(
-      `Sync found 0 media files — preserving previous generated/albums.json (${previous.length} albums, ${mediaCountOf(previous)} media).`,
-    );
-    albums = previous;
-    warnings.push(
-      "Preserved previous albums.json because this sync found no local media (sparse checkout / R2-only).",
-    );
+  // Production CI uses sparse checkout (no content/public binaries). Prefer R2
+  // discovery, then preserve the committed catalog — never ship an empty gallery.
+  if (mediaCountOf(albums) === 0) {
+    const fromR2 = await discoverAlbumsFromR2(previous);
+    if (fromR2 && mediaCountOf(fromR2) > 0) {
+      console.warn(
+        `Sync found 0 local media — using R2 discovery (${fromR2.length} albums, ${mediaCountOf(fromR2)} media).`,
+      );
+      albums = fromR2;
+      warnings.push(
+        "Rebuilt albums.json from R2 discovery because the local content scan was empty.",
+      );
+    } else if (previous) {
+      console.warn(
+        `Sync found 0 media files — preserving previous generated/albums.json (${previous.length} albums, ${mediaCountOf(previous)} media).`,
+      );
+      albums = previous;
+      warnings.push(
+        "Preserved previous albums.json because this sync found no local media (sparse checkout / R2-only).",
+      );
+    }
+  } else if (process.env.CMS_MERGE_R2 === "1") {
+    // Optional: merge R2-discovered albums into a healthy local scan (new Admin uploads).
+    const fromR2 = await discoverAlbumsFromR2(albums);
+    if (fromR2 && mediaCountOf(fromR2) > mediaCountOf(albums)) {
+      console.log(
+        `Merged R2 discovery into local scan (${mediaCountOf(albums)} → ${mediaCountOf(fromR2)} media).`,
+      );
+      albums = fromR2;
+    }
   }
 
   fs.mkdirSync(GENERATED_DIR, { recursive: true });

@@ -39,6 +39,13 @@ function hashPassword(password: string): string {
 }
 
 function main() {
+  if (!fs.existsSync(MEMBERS_PATH)) {
+    console.error(`Members seed missing: ${path.relative(ROOT, MEMBERS_PATH)}`);
+    process.exit(1);
+  }
+  console.log(
+    `Fun Fest auth ← ${path.relative(ROOT, MEMBERS_PATH)} (single source of truth)`,
+  );
   const members = JSON.parse(fs.readFileSync(MEMBERS_PATH, "utf8")) as Member[];
   const usernames = assignMemberUsernames(members);
   const existing = (

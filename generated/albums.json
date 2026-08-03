@@ -33,6 +33,36 @@
   {
     "year": "2026",
     "category": "Festivals",
+    "slug": "vinayaka-chavithi",
+    "title": "Vinayaka Chavithi 2026",
+    "description": "Vinayaka Chavithi 2026 memories.",
+    "published": true,
+    "order": 0,
+    "bucket": "vinayaka-chavithi",
+    "festival": "vinayaka-chavithi",
+    "media": [
+      {
+        "id": "69e0c4980555d2a2",
+        "file": "https://pub-f2609804d6a040368903177488b01d2d.r2.dev/videos/2026/vinayaka-chavithi/1e7bb855-c6a4-4c07-873b-b0c7a1a47ba2-mp4.mp4",
+        "thumb": "https://pub-f2609804d6a040368903177488b01d2d.r2.dev/gallery/thumbs/2026/vinayaka-chavithi/1e7bb855-c6a4-4c07-873b-b0c7a1a47ba2-mp4.webp",
+        "poster": "https://pub-f2609804d6a040368903177488b01d2d.r2.dev/gallery/thumbs/2026/vinayaka-chavithi/1e7bb855-c6a4-4c07-873b-b0c7a1a47ba2-mp4.webp",
+        "type": "video",
+        "title": "1e7bb855 C6a4 4c07 873b B0c7a1a47ba2 Mp4",
+        "date": "2026-08-02",
+        "tags": [
+          "vinayaka-chavithi",
+          "2026",
+          "vinayaka-chavithi",
+          "video"
+        ],
+        "mime": "video/mp4"
+      }
+    ],
+    "cover": "https://pub-f2609804d6a040368903177488b01d2d.r2.dev/gallery/thumbs/2026/vinayaka-chavithi/1e7bb855-c6a4-4c07-873b-b0c7a1a47ba2-mp4.webp"
+  },
+  {
+    "year": "2026",
+    "category": "Festivals",
     "slug": "mathamma-jathara",
     "title": "Mathamma Jathara 2026",
     "description": "Mathamma Jathara 2026 memories.",

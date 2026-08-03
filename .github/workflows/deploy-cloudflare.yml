@@ -8,6 +8,16 @@
 #   NEXT_PUBLIC_R2_PUBLIC_URL — public R2 base (no trailing slash); enables
 #   media:strip-local so Pages only uploads the app shell, not local media.
 #
+# Optional secrets for live R2 gallery discovery during sync-cms (when local
+# content binaries are sparse-checked-out and catalog/albums.json is missing):
+#   R2_ACCESS_KEY_ID       — R2 S3 API token Access Key ID
+#   R2_SECRET_ACCESS_KEY   — R2 S3 API token Secret Access Key
+#   R2_BUCKET              — default reddivaripalli (optional)
+#
+# Optional Pages Function secrets (set via wrangler / dashboard, not Actions):
+#   GITHUB_DISPATCH_TOKEN  — PAT to fire repository_dispatch after Admin reindex
+#   GITHUB_REPO            — owner/repo (default ggovardhanreddy/festivals-rvp)
+#
 # Note: Cloudflare Pages Git integration should stay disabled for this project
 # so Actions is the only deployer (avoids double deploys).
 name: Deploy Cloudflare Pages
@@ -15,7 +25,16 @@ name: Deploy Cloudflare Pages
 on:
   push:
     branches: [main]
-  workflow_dispatch: {}
+    # Content + app paths all deploy. Docs-only pushes still rebuild (cheap);
+    # there is no paths-ignore that would skip content updates.
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why this deploy was triggered"
+        required: false
+        default: "manual"
+  repository_dispatch:
+    types: [content-sync]
 
 concurrency:
   group: cloudflare-pages
@@ -24,7 +43,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     permissions:
       contents: read
       deployments: write
@@ -35,11 +54,16 @@ jobs:
       NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://pub-f2609804d6a040368903177488b01d2d.r2.dev' }}
       # Skip slow EXIF walks; media already lives on R2 for production.
       CMS_READ_EXIF: "0"
+      # Optional R2 listing for sync-cms discovery (safe when unset).
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
     steps:
       # Skip ~2GiB of media blobs already served from R2. Non-cone patterns keep
       # content/*/metadata.json + generated/albums.json while omitting heavy
-      # originals. sync-cms preserves the committed albums catalog when no local
-      # media is present (otherwise the live gallery ships empty).
+      # originals. sync-cms prefers R2 catalog/list, then preserves the committed
+      # albums catalog when no local media is present.
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
@@ -81,16 +105,56 @@ jobs:
 
       - run: npm ci
 
+      - name: Validate content JSON
+        run: |
+          node --input-type=module <<'EOF'
+          import fs from "node:fs";
+          import path from "node:path";
+          const root = "content/data";
+          if (!fs.existsSync(root)) {
+            console.log("No content/data — skip JSON validate");
+            process.exit(0);
+          }
+          let failed = 0;
+          for (const name of fs.readdirSync(root)) {
+            if (!name.endsWith(".json")) continue;
+            const file = path.join(root, name);
+            try {
+              JSON.parse(fs.readFileSync(file, "utf8"));
+              console.log("OK", file);
+            } catch (e) {
+              failed += 1;
+              console.error("INVALID JSON", file, e.message);
+            }
+          }
+          const members = path.join(root, "members.json");
+          if (!fs.existsSync(members)) {
+            failed += 1;
+            console.error("Missing members seed:", members);
+          } else {
+            const list = JSON.parse(fs.readFileSync(members, "utf8"));
+            if (!Array.isArray(list) || list.length === 0) {
+              failed += 1;
+              console.error("members.json must be a non-empty array");
+            } else {
+              console.log(`Members seed: ${list.length} rows`);
+            }
+          }
+          if (failed) process.exit(1);
+          EOF
+
       # Mirrors local `npm run deploy:cf` (build → strip → wrangler).
-      # Intentionally skips ffmpeg install, lint/typecheck, and validate/test —
-      # those stay on the PR CI workflow so main deploys stay small and fast.
+      # prepare:site runs sync-cms (R2 discovery) → member-auth → generate-all → rewrite.
       - name: Build, strip local media, deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GITHUB_SHA: ${{ github.sha }}
         run: |
+          echo "Deploy trigger: ${{ github.event_name }} ${{ github.event.client_payload.reason || github.event.inputs.reason || 'push' }}"
           npm run build
           npm run media:strip-local
           # Confirm artifact stayed small (media should already be on R2).
           du -sh out
+          test -f out/version.json && cat out/version.json
           npx wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true
