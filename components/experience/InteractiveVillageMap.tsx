@@ -14,7 +14,8 @@ import {
 import { useIsClient, useLowPowerDevice } from "@/lib/client";
 import { VillageMap } from "@/components/VillageMap";
 import { VILLAGE_MAPS_URL } from "@/lib/site";
-import { mediaDisplaySrc, prefetchImage } from "@/lib/media-src";
+import { ResolvedMediaImage } from "@/components/media/ResolvedMediaImage";
+import { prefetchMedia } from "@/lib/use-media-url";
 import type { Media } from "@/lib/types";
 
 const VillageCanvas = dynamic(
@@ -50,7 +51,7 @@ function MapViewportSlideshow({
   useEffect(() => {
     if (!slides.length) return;
     const next = slides[(index + 1) % slides.length];
-    if (next) prefetchImage(mediaDisplaySrc(next));
+    if (next) prefetchMedia(next.thumb || next.file);
   }, [index, slides]);
 
   if (!slides.length) return null;
@@ -65,19 +66,22 @@ function MapViewportSlideshow({
       aria-label="Village memory slideshow"
     >
       <AnimatePresence mode="sync">
-        <m.img
+        <m.div
           key={current.id}
-          className="map-viewport-slideshow-img"
-          src={mediaDisplaySrc(current)}
-          alt={current.title || "Village memory"}
+          className="map-viewport-slideshow-img-wrap"
           initial={reduce ? false : { opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: reduce ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
-          draggable={false}
-          decoding="async"
-          loading="eager"
-        />
+        >
+          <ResolvedMediaImage
+            className="map-viewport-slideshow-img"
+            src={current.thumb || current.file}
+            alt={current.title || "Village memory"}
+            draggable={false}
+            loading="eager"
+          />
+        </m.div>
       </AnimatePresence>
       <div className="map-viewport-slideshow-veil" aria-hidden />
       <div className="map-viewport-slideshow-caption">

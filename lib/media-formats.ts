@@ -69,7 +69,15 @@ export function detectMediaKind(
 export function isDisplayableImageUrl(url: string | null | undefined): boolean {
   if (!url) return false;
   const clean = url.split("?")[0]!.toLowerCase();
-  return /\.(webp|jpg|jpeg|png|gif|avif|svg)$/.test(clean);
+  // HEIC/HEIF are ingested to WebP — not browser-displayable as source URLs
+  return /\.(webp|jpg|jpeg|png|gif|avif|svg|bmp)$/.test(clean);
+}
+
+/** Browser-playable video/audio extensions for gallery filters & viewers. */
+export function isPlayableMediaUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  const clean = url.split("?")[0]!.toLowerCase();
+  return /\.(mp4|webm|mov|ogv|mp3|wav|aac|m4a|ogg)$/.test(clean);
 }
 
 export function mimeForExt(ext: string): string {

@@ -190,7 +190,8 @@ self.addEventListener("fetch",e=>{
   if(url.origin!==self.location.origin)return;
   // Never cache APIs / version / SW / manifest — always network
   if(url.pathname.includes("/api/")||url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")){
-    e.respondWith(fetch(new Request(req,{cache:"no-store"})).catch(()=>caches.match(req)));
+    // Preserve credentials/cookies — do not reconstruct Request
+    e.respondWith(fetch(req,{cache:"no-store"}).catch(()=>caches.match(req)));
     return;
   }
   // Hashed Next assets are immutable — cache-first so flaky mobile/PWA nets don't blank pages

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import { Menu, Pencil, X } from "lucide-react";
@@ -11,6 +11,8 @@ import { ThemeToggle } from "./Theme";
 import { Logo } from "./Logo";
 import { NotificationBell } from "./notifications/NotificationBell";
 import { useEditMode } from "@/lib/use-super-admin";
+import { useMemberAuth } from "./auth/MemberAuthProvider";
+import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
 
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
@@ -42,10 +44,36 @@ export function SiteHeader() {
   const btnRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const { ready, isAdmin, editMode, toggleEditMode } = useEditMode();
+  const { session: memberSession, ready: memberReady } = useMemberAuth();
+  const router = useRouter();
+  const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const onFunFestNav = (event: MouseEvent<HTMLAnchorElement>) => {
+    unlockBodyScroll();
+    setOpen(false);
+    if (!memberReady) {
+      event.preventDefault();
+      return;
+    }
+    if (!memberSession) {
+      event.preventDefault();
+      setFunFestLoginOpen(true);
+      return;
+    }
+    if (isMobileShell()) {
+      event.preventDefault();
+      window.setTimeout(() => {
+        window.location.assign(withBase("/fun-trips/"));
+      }, 0);
+      return;
+    }
+    event.preventDefault();
+    router.push("/fun-trips/");
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -164,7 +192,7 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link href="/fun-trips/" onClick={(event) => onDrawerNav(event, "/fun-trips/")}>
+          <Link href="/fun-trips/" onClick={onFunFestNav}>
             Fun Fest
           </Link>
           <Link href="/search/" onClick={(event) => onDrawerNav(event, "/search/")}>
@@ -269,6 +297,11 @@ export function SiteHeader() {
 
       {/* Portal escapes page stacking contexts so the drawer stays tappable */}
       {mounted ? createPortal(drawer, document.body) : drawer}
+      <FunFestLoginDialog
+        open={funFestLoginOpen}
+        onClose={() => setFunFestLoginOpen(false)}
+        next="/fun-trips/"
+      />
     </>
   );
 }

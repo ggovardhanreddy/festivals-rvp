@@ -62,21 +62,15 @@ async function hasMemberSession(
   return Boolean(payload?.memberId && payload.exp && Date.now() <= payload.exp);
 }
 
-function isFunFestPath(pathname: string) {
-  if (pathname === "/fun-trips" || pathname.startsWith("/fun-trips/")) {
-    return true;
-  }
-  // Private Fun Fest media under public/videos|images|thumbs
-  if (
+/** Edge-protect only stripped local media paths — HTML uses client login dialog. */
+function isFunFestMediaPath(pathname: string) {
+  return (
     pathname.includes("/fun-trips/") &&
     (pathname.startsWith("/videos/") ||
       pathname.startsWith("/images/") ||
       pathname.startsWith("/thumbs/") ||
-      pathname.startsWith("/festivals/"))
-  ) {
-    return true;
-  }
-  return false;
+      pathname.startsWith("/audio/"))
+  );
 }
 
 export async function onRequest(context: MiddlewareContext) {
@@ -88,10 +82,16 @@ export async function onRequest(context: MiddlewareContext) {
     return Response.redirect(url.toString(), 301);
   }
 
-  if (isFunFestPath(url.pathname) && !(await hasMemberSession(context.request, context.env))) {
+  if (
+    isFunFestMediaPath(url.pathname) &&
+    !(await hasMemberSession(context.request, context.env))
+  ) {
     const next = `${url.pathname}${url.search}`;
     const login = new URL("/login/", url.origin);
-    login.searchParams.set("next", next.endsWith("/") || next.includes(".") ? next : `${next}/`);
+    login.searchParams.set(
+      "next",
+      next.endsWith("/") || next.includes(".") ? next : `${next}/`,
+    );
     return Response.redirect(login.toString(), 302);
   }
 

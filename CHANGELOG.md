@@ -2,6 +2,20 @@
 
 All notable changes to **RVP Youth — Digital Village Experience** are documented here.
 
+## [1.3.0] — 2026-08-03
+
+### Fixed
+
+- Fun Fest media after strip-local: slideshows and map tiles now use signed `/api/media` URLs (not stripped local paths)
+- Private media signing no longer depends on `NEXT_PUBLIC_R2_PUBLIC_URL`; friendly placeholders replace broken images
+- Service worker preserves credentials on `/api/*` fetches so member-signed media keeps working in the PWA
+
+### Changed
+
+- Fun Fest stays visible in nav/footer; click opens a members-only login dialog (username = first name, password matches)
+- Public Gallery is festival-first (festival → year → photos/videos) instead of year-first
+- Media lightbox adds fullscreen (`F` key) and signed object responses support HEAD/Range for video
+
 ## [1.2.0] — 2026-08-03
 
 ### Fixed

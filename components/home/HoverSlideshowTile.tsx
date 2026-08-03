@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
-import { mediaDisplaySrc, prefetchImage } from "@/lib/media-src";
+import { ResolvedMediaImage } from "@/components/media/ResolvedMediaImage";
+import { prefetchMedia } from "@/lib/use-media-url";
 import { useFinePointer, useLowPowerDevice } from "@/lib/client";
 
 const HOVER_INTERVAL_MS = 900;
@@ -76,7 +77,7 @@ export function HoverSlideshowTile({
   useEffect(() => {
     if (!playing) return;
     const next = images[(index + 1) % images.length];
-    if (next) prefetchImage(mediaDisplaySrc(next));
+    if (next) prefetchMedia(next.thumb || next.file);
   }, [playing, index, images]);
 
   const current = images[index] ?? cover;
@@ -110,18 +111,21 @@ export function HoverSlideshowTile({
     >
       <div className="hover-slide-tile-media">
         <AnimatePresence mode="popLayout" initial={false}>
-          <m.img
+          <m.div
             key={current.id}
-            src={mediaDisplaySrc(current)}
-            alt={current.title || title || "Memory"}
+            className="hover-slide-tile-frame"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: lowPower ? 0.25 : 0.35 }}
-            draggable={false}
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-          />
+          >
+            <ResolvedMediaImage
+              src={current.thumb || current.file}
+              alt={current.title || title || "Memory"}
+              draggable={false}
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </m.div>
         </AnimatePresence>
       </div>
       {(title || meta) && (

@@ -1,31 +1,47 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { Logo } from "@/components/Logo";
+import { FormEvent, useEffect, useId, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Dialog } from "@/components/ui/dialog";
 import { useMemberAuth } from "./MemberAuthProvider";
 import { SITE_NAME } from "@/lib/site";
 
-export function LoginForm() {
+export function FunFestLoginDialog({
+  open,
+  onClose,
+  next = "/fun-trips/",
+}: {
+  open: boolean;
+  onClose: () => void;
+  next?: string;
+}) {
   const { login, session, ready } = useMemberAuth();
   const router = useRouter();
-  const params = useSearchParams();
-  const nextParam = params.get("next") || "/fun-trips/";
-  const next =
-    nextParam.startsWith("/fun-trips")
-      ? nextParam
-      : "/fun-trips/";
+  const formId = useId();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
+  const destination =
+    next.startsWith("/fun-trips") ? next : "/fun-trips/";
+
   useEffect(() => {
+    if (!open) return;
     if (ready && session) {
-      router.replace(next);
+      onClose();
+      router.push(destination);
     }
-  }, [ready, session, router, next]);
+  }, [open, ready, session, router, destination, onClose]);
+
+  useEffect(() => {
+    if (!open) {
+      setUsername("");
+      setPassword("");
+      setError("");
+      setPending(false);
+    }
+  }, [open]);
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -37,21 +53,31 @@ export function LoginForm() {
       setError(result.error);
       return;
     }
-    router.replace(next);
+    onClose();
+    router.push(destination);
   };
 
   return (
-    <section className="login-panel">
-      <div className="login-card">
-        <Logo variant="vertical" className="login-logo" />
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title="Fun Fest member sign in"
+      className="funfest-login-dialog"
+    >
+      <div className="login-card login-card--dialog">
         <p className="eyebrow">Fun Fest</p>
-        <h1>Member sign in</h1>
+        <h2>Members only</h2>
         <p className="lede">
-          Fun Fest photos and videos are private to {SITE_NAME} members.
-          Username and password are case-sensitive.
+          Fun Fest photos and videos are private to {SITE_NAME} members. Sign
+          in with your first name — username and password match (case-sensitive).
         </p>
 
-        <form className="login-form" onSubmit={(e) => void onSubmit(e)} noValidate>
+        <form
+          id={formId}
+          className="login-form"
+          onSubmit={(e) => void onSubmit(e)}
+          noValidate
+        >
           <label>
             <span>Username</span>
             <input
@@ -65,6 +91,7 @@ export function LoginForm() {
               required
               spellCheck={false}
               autoCapitalize="off"
+              autoFocus
             />
           </label>
           <label>
@@ -87,23 +114,28 @@ export function LoginForm() {
               {error}
             </p>
           ) : null}
-          <button className="btn" type="submit" disabled={pending}>
-            {pending ? "Signing in…" : "Enter Fun Fest"}
-          </button>
+          <div className="btn-row" style={{ justifyContent: "stretch" }}>
+            <button className="btn" type="submit" disabled={pending}>
+              {pending ? "Signing in…" : "Enter Fun Fest"}
+            </button>
+            <button
+              className="btn ghost"
+              type="button"
+              onClick={onClose}
+              disabled={pending}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
 
         <p className="muted login-hint">
-          Username is your first name (case-sensitive); password matches.
           Examples: <strong>Raja</strong>/<strong>Raja</strong>,{" "}
           <strong>Rajesh</strong>/<strong>Rajesh</strong>,{" "}
-          <strong>Govardhan</strong>/<strong>Govardhan</strong>. Spaces are
-          trimmed. Duplicate first names use a letter prefix (for example{" "}
-          <strong>KBalaji</strong>).
-        </p>
-        <p className="muted">
-          <Link href="/">Back to home</Link>
+          <strong>Govardhan</strong>/<strong>Govardhan</strong>. Trim spaces;
+          both fields are case-sensitive.
         </p>
       </div>
-    </section>
+    </Dialog>
   );
 }

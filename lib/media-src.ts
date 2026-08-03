@@ -8,13 +8,19 @@ import {
   r2Enabled,
 } from "./media-url";
 
-/** Prefer CMS thumb for slideshows / tiles — much smaller than full webp. */
+/**
+ * Prefer CMS thumb for public slideshows / tiles.
+ * Do not use for Fun Fest / private paths — use `useMediaUrl` / `ResolvedMediaImage`.
+ */
 export function mediaDisplaySrc(media: Pick<Media, "thumb" | "file">) {
   const raw = media.thumb || media.file;
+  if (isPrivateMediaPath(raw)) {
+    // Unsigned local path would 404 after media:strip-local
+    return withBase(raw);
+  }
   const resolved = resolveMediaUrl(raw);
   const path = /^https?:\/\//i.test(resolved) ? resolved : withBase(resolved);
   if (!path) return path;
-  // Absolute R2 URLs already version via object keys; still allow soft bust
   const sep = path.includes("?") ? "&" : "?";
   return `${path}${sep}v=${encodeURIComponent(BUILD_ID)}`;
 }

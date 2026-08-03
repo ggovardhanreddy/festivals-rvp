@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useState, type MouseEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import {
   OFFICIAL_SUBTITLE,
@@ -10,9 +14,28 @@ import {
   VILLAGE_MAPS_URL,
   VILLAGE_NAME,
 } from "@/lib/site";
+import { useMemberAuth } from "./auth/MemberAuthProvider";
+import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
+  const router = useRouter();
+  const { session, ready } = useMemberAuth();
+  const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
+
+  const onFunFest = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!ready) {
+      event.preventDefault();
+      return;
+    }
+    if (!session) {
+      event.preventDefault();
+      setFunFestLoginOpen(true);
+      return;
+    }
+    event.preventDefault();
+    router.push("/fun-trips/");
+  };
 
   return (
     <footer className="site-footer" id="contact">
@@ -44,7 +67,9 @@ export function SiteFooter() {
             <Link href="/timeline/">Timeline</Link>
             <Link href="/search/">Search</Link>
             <Link href="/contact/">Contact</Link>
-            <Link href="/fun-trips/">Fun Fest</Link>
+            <Link href="/fun-trips/" onClick={onFunFest}>
+              Fun Fest
+            </Link>
             <Link href="/settings/">Settings</Link>
           </div>
         </div>
@@ -68,6 +93,11 @@ export function SiteFooter() {
           {VILLAGE_NAME}.
         </p>
       </div>
+      <FunFestLoginDialog
+        open={funFestLoginOpen}
+        onClose={() => setFunFestLoginOpen(false)}
+        next="/fun-trips/"
+      />
     </footer>
   );
 }

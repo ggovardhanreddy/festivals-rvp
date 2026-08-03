@@ -5,7 +5,6 @@ import { withBase } from "./base";
 import {
   isPrivateMediaPath,
   pathToR2Key,
-  r2Enabled,
   resolveMediaUrl,
 } from "./media-url";
 
@@ -18,24 +17,79 @@ async function fetchSignedUrl(path: string): Promise<string> {
 
   const res = await fetch(
     withBase(`/api/media/sign?key=${encodeURIComponent(key)}`),
-    { credentials: "include" },
+    { credentials: "include", cache: "no-store" },
   );
   if (!res.ok) {
-    throw new Error(
+    const err = new Error(
       res.status === 401
         ? "Sign in to view private media."
         : `Could not sign media URL (${res.status})`,
-    );
+    ) as Error & { status?: number };
+    err.status = res.status;
+    throw err;
   }
   const data = (await res.json()) as { url?: string; exp?: number };
   if (!data.url) throw new Error("Signed URL missing from response.");
-  signCache.set(key, { url: data.url, exp: data.exp || Date.now() + 15 * 60_000 });
-  return data.url;
+  // Prefer same-origin relative signed paths so SW / basePath stay correct
+  const signed =
+    data.url.startsWith("http") && typeof window !== "undefined"
+      ? (() => {
+          try {
+            const u = new URL(data.url);
+            if (u.origin === window.location.origin) {
+              return `${u.pathname}${u.search}`;
+            }
+          } catch {
+            /* keep absolute */
+          }
+          return data.url;
+        })()
+      : data.url;
+  signCache.set(key, {
+    url: signed,
+    exp: data.exp || Date.now() + 15 * 60_000,
+  });
+  return signed;
+}
+
+/** Resolve any media path (public R2 or signed private) for img/video/audio. */
+export async function resolveMediaPath(
+  path: string | undefined | null,
+): Promise<string> {
+  const raw = path || "";
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  if (!isPrivateMediaPath(raw)) {
+    return withBase(resolveMediaUrl(raw));
+  }
+  try {
+    return await fetchSignedUrl(raw);
+  } catch (err) {
+    const status = (err as { status?: number }).status;
+    if (status === 401) throw err;
+    // Local next / missing Functions — fall back to site path
+    return withBase(raw);
+  }
+}
+
+export function prefetchMedia(path: string | undefined | null) {
+  if (typeof window === "undefined" || !path) return;
+  void resolveMediaPath(path)
+    .then((url) => {
+      if (!url) return;
+      const img = new Image();
+      img.decoding = "async";
+      img.src = url;
+    })
+    .catch(() => {
+      /* ignore prefetch failures */
+    });
 }
 
 /**
  * Resolve a media path for display. Public R2 URLs are sync;
- * private Fun Fest / documents fetch a short-lived signed URL.
+ * private Fun Fest / documents always fetch a short-lived signed URL
+ * (independent of NEXT_PUBLIC_R2_PUBLIC_URL — strip-local removes local files).
  */
 export function useMediaUrl(path: string | undefined | null): {
   url: string;
@@ -43,7 +97,7 @@ export function useMediaUrl(path: string | undefined | null): {
   error: string | null;
 } {
   const raw = path || "";
-  const needsSign = Boolean(raw) && r2Enabled() && isPrivateMediaPath(raw);
+  const needsSign = Boolean(raw) && isPrivateMediaPath(raw);
   const publicUrl = raw
     ? /^https?:\/\//i.test(raw)
       ? raw
@@ -70,16 +124,20 @@ export function useMediaUrl(path: string | undefined | null): {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    void fetchSignedUrl(raw)
+    void resolveMediaPath(raw)
       .then((signed) => {
         if (!cancelled) {
           setUrl(signed);
           setLoading(false);
+          setError(null);
         }
       })
       .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load media");
+          setError(
+            err instanceof Error ? err.message : "Failed to load media",
+          );
+          setUrl("");
           setLoading(false);
         }
       });

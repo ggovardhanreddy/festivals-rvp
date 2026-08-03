@@ -1,4 +1,4 @@
-const CACHE="rvp-youth-mscwlk2m",BUILD="mscwlk2m",BASE="";
+const CACHE="rvp-youth-mscy4m1l",BUILD="mscy4m1l",BASE="";
 async function clearAllCaches(){const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)));}
 self.addEventListener("message",e=>{
   const type=e.data&&e.data.type;
@@ -14,7 +14,8 @@ self.addEventListener("fetch",e=>{
   if(url.origin!==self.location.origin)return;
   // Never cache APIs / version / SW / manifest — always network
   if(url.pathname.includes("/api/")||url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")){
-    e.respondWith(fetch(new Request(req,{cache:"no-store"})).catch(()=>caches.match(req)));
+    // Preserve credentials/cookies — do not reconstruct Request
+    e.respondWith(fetch(req,{cache:"no-store"}).catch(()=>caches.match(req)));
     return;
   }
   // Hashed Next assets are immutable — cache-first so flaky mobile/PWA nets don't blank pages

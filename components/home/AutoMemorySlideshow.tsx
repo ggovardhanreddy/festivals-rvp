@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
-import { mediaDisplaySrc, prefetchImage } from "@/lib/media-src";
+import { ResolvedMediaImage } from "@/components/media/ResolvedMediaImage";
+import { prefetchMedia } from "@/lib/use-media-url";
 import { useLowPowerDevice } from "@/lib/client";
 
 export function AutoMemorySlideshow({
@@ -42,7 +43,7 @@ export function AutoMemorySlideshow({
   useEffect(() => {
     if (!slides.length) return;
     const next = slides[(index + 1) % slides.length];
-    if (next) prefetchImage(mediaDisplaySrc(next));
+    if (next) prefetchMedia(next.thumb || next.file);
   }, [index, slides]);
 
   if (!slides.length) return null;
@@ -65,12 +66,11 @@ export function AutoMemorySlideshow({
           exit={{ opacity: 0 }}
           transition={{ duration: lightMotion ? 0.35 : 0.65, ease: "easeOut" }}
         >
-          <img
-            src={mediaDisplaySrc(current)}
+          <ResolvedMediaImage
+            src={current.thumb || current.file}
             alt={current.title || "Memory"}
             className="apple-slideshow-img"
             draggable={false}
-            decoding="async"
             fetchPriority={index === 0 ? "high" : "auto"}
           />
         </m.div>

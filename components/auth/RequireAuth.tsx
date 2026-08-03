@@ -1,25 +1,19 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useMemo, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { useMemberAuth } from "./MemberAuthProvider";
+import { FunFestLoginDialog } from "./FunFestLoginDialog";
 
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { session, ready } = useMemberAuth();
-  const router = useRouter();
   const pathname = usePathname() || "/";
+  const [dismissed, setDismissed] = useState(false);
 
-  useEffect(() => {
-    if (!ready) return;
-    if (!session) {
-      const next = pathname.includes("/fun-trips")
-        ? pathname.endsWith("/")
-          ? pathname
-          : `${pathname}/`
-        : "/fun-trips/";
-      router.replace(`/login/?next=${encodeURIComponent(next)}`);
-    }
-  }, [ready, session, router, pathname]);
+  const next = useMemo(() => {
+    if (!pathname.includes("/fun-trips")) return "/fun-trips/";
+    return pathname.endsWith("/") ? pathname : `${pathname}/`;
+  }, [pathname]);
 
   if (!ready) {
     return (
@@ -31,9 +25,27 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 
   if (!session) {
     return (
-      <div className="auth-gate" aria-busy="true">
-        <p className="muted">Redirecting to sign in…</p>
-      </div>
+      <>
+        <div className="auth-gate">
+          <p className="eyebrow">Fun Fest</p>
+          <h1>Members only</h1>
+          <p className="lede">
+            Sign in with your first name to open the private Fun Fest gallery.
+          </p>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => setDismissed(false)}
+          >
+            Sign in
+          </button>
+        </div>
+        <FunFestLoginDialog
+          open={!dismissed}
+          onClose={() => setDismissed(true)}
+          next={next}
+        />
+      </>
     );
   }
 

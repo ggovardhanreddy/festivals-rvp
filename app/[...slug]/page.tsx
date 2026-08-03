@@ -592,26 +592,19 @@ export default async function ArchiveRoute({
       (a) => a.bucket !== "fun-trips" && (a.media?.length ?? 0) > 0,
     );
     const galleryMedia = media.filter((m) => m.album.bucket !== "fun-trips");
-    const galleryYears = [
-      ...new Set(albums.map((a) => a.year)),
-    ].sort((a, b) => b.localeCompare(a));
     return (
       <main className="page">
         <MemoryHero
           eyebrow="Archive"
           title="Gallery"
-          lede="Events, celebrations, historical photos, and year-wise collections."
+          lede="Festivals first — then year, then photos and videos from every celebration."
           primaryHref="/events/"
           primaryLabel="Events"
           secondaryHref="/years/"
           secondaryLabel="Years"
           vantaEffect="fog"
         />
-        <GalleryHub
-          albums={albums}
-          media={galleryMedia}
-          years={galleryYears}
-        />
+        <GalleryHub albums={albums} media={galleryMedia} />
       </main>
     );
   }

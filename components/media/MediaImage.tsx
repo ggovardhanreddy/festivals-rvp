@@ -17,32 +17,60 @@ export function MediaImage({
   fallback = null,
   alt = "",
   onError,
+  className,
   ...rest
 }: Props) {
   const [useFallback, setUseFallback] = useState(false);
+  const [broken, setBroken] = useState(false);
   const active = useFallback && fallback ? fallback : src;
   const { url, loading, error } = useMediaUrl(active);
 
   if (!url) {
     if (loading) {
-      return <div className="media-image-skeleton" aria-hidden />;
+      return (
+        <div
+          className={`media-image-skeleton${className ? ` ${className}` : ""}`}
+          aria-hidden
+        />
+      );
     }
-    if (error || !active) {
-      return <div className="media-image-empty" aria-hidden />;
-    }
-    return null;
+    return (
+      <div
+        className={`media-image-empty${className ? ` ${className}` : ""}`}
+        role="img"
+        aria-label={error || alt || "Media unavailable"}
+      >
+        <span className="media-image-empty-label">
+          {error?.includes("Sign in") ? "Sign in to view" : "Photo unavailable"}
+        </span>
+      </div>
+    );
+  }
+
+  if (broken) {
+    return (
+      <div
+        className={`media-image-empty${className ? ` ${className}` : ""}`}
+        role="img"
+        aria-label={alt || "Media unavailable"}
+      >
+        <span className="media-image-empty-label">Photo unavailable</span>
+      </div>
+    );
   }
 
   return (
     <img
       src={url}
       alt={alt}
+      className={className}
       decoding="async"
       onError={(event) => {
         if (!useFallback && fallback && fallback !== src) {
           setUseFallback(true);
           return;
         }
+        setBroken(true);
         onError?.(event);
       }}
       {...rest}

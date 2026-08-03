@@ -15,6 +15,10 @@ interface Env {
   R2_PUBLIC_BASE?: string;
 }
 
+type MediaR2Range =
+  | { offset: number; length?: number }
+  | { suffix: number };
+
 interface FunctionContext {
   request: Request;
   env: Env;
@@ -253,7 +257,10 @@ async function handleMedia({
     return json({ url: signed, exp }, 200, headers);
   }
 
-  if (route === "object" && request.method === "GET") {
+  if (
+    route === "object" &&
+    (request.method === "GET" || request.method === "HEAD")
+  ) {
     const key = url.searchParams.get("key") || "";
     const exp = Number(url.searchParams.get("exp") || "0");
     const sig = url.searchParams.get("sig") || "";
@@ -268,18 +275,47 @@ async function handleMedia({
         return new Response("Unauthorized", { status: 401, headers });
       }
     }
-    const obj = await env.MEDIA.get(key);
+
+    const rangeHeader = request.headers.get("range");
+    let range: MediaR2Range | undefined;
+    if (rangeHeader) {
+      const m = /^bytes=(\d*)-(\d*)$/i.exec(rangeHeader.trim());
+      if (m) {
+        const start = m[1] ? Number(m[1]) : undefined;
+        const end = m[2] ? Number(m[2]) : undefined;
+        if (start !== undefined && !Number.isNaN(start)) {
+          range =
+            end !== undefined && !Number.isNaN(end)
+              ? { offset: start, length: end - start + 1 }
+              : { offset: start };
+        } else if (end !== undefined && !Number.isNaN(end)) {
+          range = { suffix: end };
+        }
+      }
+    }
+
+    const obj = await env.MEDIA.get(key, range ? { range } : undefined);
     if (!obj) return new Response("Not found", { status: 404, headers });
     const responseHeaders = new Headers(headers);
     obj.writeHttpMetadata(responseHeaders);
     responseHeaders.set("etag", obj.httpEtag);
+    responseHeaders.set("accept-ranges", "bytes");
     responseHeaders.set(
       "cache-control",
       isPrivateKey(key)
         ? "private, max-age=300"
         : "public, max-age=31536000, immutable",
     );
-    return new Response(obj.body, { headers: responseHeaders });
+    if (request.method === "HEAD") {
+      return new Response(null, {
+        status: range ? 206 : 200,
+        headers: responseHeaders,
+      });
+    }
+    return new Response(obj.body, {
+      status: range ? 206 : 200,
+      headers: responseHeaders,
+    });
   }
 
   if (route === "upload" && request.method === "POST") {
