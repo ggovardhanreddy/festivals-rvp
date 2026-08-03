@@ -3,6 +3,7 @@ import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { LogoWatermark } from "@/components/LogoWatermark";
 import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { withBase } from "@/lib/base";
@@ -287,6 +288,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Providers>
           <LoadingScreen />
           <div className="site-shell">
+            <LogoWatermark />
             <SiteHeader />
             <div id="main-content">{children}</div>
             <SiteFooter />

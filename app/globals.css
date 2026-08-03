@@ -89,6 +89,56 @@ select {
   display: block;
 }
 
+/* Soft fixed brand watermark — below nav/drawer, never captures pointer */
+.logo-watermark {
+  position: fixed;
+  right: max(0.75rem, 2.5vw);
+  bottom: max(0.85rem, 2.5vh);
+  z-index: 2;
+  width: min(38vw, 200px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+}
+
+.logo-watermark-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dark .logo-watermark {
+  opacity: 0.08;
+  mix-blend-mode: soft-light;
+}
+
+/* Home hero already carries a strong logo — keep watermark quieter there */
+body:has(.home-hero) .logo-watermark {
+  opacity: 0.035;
+}
+
+html.dark body:has(.home-hero) .logo-watermark {
+  opacity: 0.05;
+}
+
+@media (max-width: 820px) {
+  .logo-watermark {
+    width: min(32vw, 132px);
+    opacity: 0.05;
+  }
+
+  body:has(.home-hero) .logo-watermark {
+    opacity: 0.03;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .logo-watermark {
+    opacity: 0.04;
+  }
+}
+
 .hero-logo {
   height: 54px;
   width: auto;
