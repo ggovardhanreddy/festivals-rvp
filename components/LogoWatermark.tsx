@@ -3,7 +3,7 @@
 import { Logo } from "@/components/Logo";
 
 /**
- * Decorative fixed brand watermark — atmospheric only.
+ * Full-viewport decorative brand watermark — atmospheric only.
  * Non-interactive so it never blocks nav, drawers, or CTAs.
  */
 export function LogoWatermark() {
