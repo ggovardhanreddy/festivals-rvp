@@ -2,3 +2,8 @@
 https://reddivaripalli.com/* https://www.reddivaripalli.com/:splat 301
 http://reddivaripalli.com/* https://www.reddivaripalli.com/:splat 301
 http://www.reddivaripalli.com/* https://www.reddivaripalli.com/:splat 301
+
+# Removed features — keep bookmarks from breaking
+/blood-donors / 301
+/blood-donors/ / 301
+/blood-donors/* / 301
