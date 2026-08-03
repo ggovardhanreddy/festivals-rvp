@@ -238,7 +238,7 @@
   {
     "id": "c-narendra-ck",
     "name": "C Narendra (CK)",
-    "photo": null,
+    "photo": "/members/narendra-ck.webp",
     "dob": "02-17",
     "group": "core",
     "designation": "Mechanical Engineer"
@@ -255,7 +255,7 @@
     "id": "c-avinash",
     "name": "C Avinash",
     "photo":  "/members/avinash.webp",
-    "dob": "",
+    "dob": "03-24",
     "group": "core",
     "designation": "Veterinary Professional"
   },
@@ -326,8 +326,8 @@
   {
     "id": "j-niranjan",
     "name": "J Niranjan",
-    "photo": "/members/Sreekanth.webp",
-    "dob": null,
+    "photo": "/members/niranjan.webp",
+    "dob": "09-11",
     "group": "core",
     "designation": "Indian Army"
   },
