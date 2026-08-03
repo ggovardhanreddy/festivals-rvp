@@ -2,6 +2,12 @@
 
 All notable changes to the Reddivaripalli Village Portal are documented here.
 
+## [1.3.2] — 2026-08-03
+
+### Fixed
+
+- Homepage hero title keeps **Reddivaripalli** on one line (`nowrap` + responsive `clamp`)
+
 ## [1.3.1] — 2026-08-03
 
 ### Fixed

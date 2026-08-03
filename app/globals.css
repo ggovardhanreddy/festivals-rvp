@@ -6945,10 +6945,11 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 }
 
 /* Locked homepage hero — Vanta Birds only (no festival image overlays) */
+.clean-hero.home-hero,
 .home-hero {
   min-height: 100vh;
   min-height: 100svh;
-  /* Parent .clean-hero uses overflow:hidden; allow title glyphs to paint fully */
+  /* Beat .clean-hero { overflow:hidden } so title glyphs / gradient never clip */
   overflow: visible;
 }
 
@@ -7021,20 +7022,24 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 }
 
 .home-hero-title {
+  display: block;
   margin: 0.2rem auto 0.85rem;
-  max-width: 100%;
-  /* Slightly under global --text-hero so "Reddivaripalli" never clips */
-  font-size: clamp(2.35rem, 7.2vw, 4.6rem);
-  line-height: 1.08;
+  width: max-content;
+  max-width: none;
+  /* Scale down on narrow viewports so the full word fits on one line */
+  font-size: clamp(1.55rem, 9.8vw, 4.6rem);
+  line-height: 1.15;
   font-weight: 700;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   /* Side padding: background-clip + letter-spacing otherwise trims final glyphs */
-  padding-inline: 0.12em;
+  padding-inline: 0.2em;
   box-sizing: content-box;
   overflow: visible;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: keep-all;
+  /* Never wrap or mid-word-break "Reddivaripalli" */
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
   /* Rainbow brand treatment — echoes the colorful RVP Youth logo */
   background: linear-gradient(
     100deg,
@@ -7053,6 +7058,14 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   /* Avoid filter+clip stacking which crops last letters under overflow:hidden */
   filter: none;
   text-shadow: none;
+}
+
+@media (max-width: 360px) {
+  .home-hero-title {
+    font-size: clamp(1.4rem, 8.6vw, 2rem);
+    letter-spacing: 0;
+    padding-inline: 0.16em;
+  }
 }
 
 .home-hero-address {

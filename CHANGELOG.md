@@ -2,6 +2,12 @@
 
 All notable changes to **RVP Youth — Digital Village Experience** are documented here.
 
+## [1.3.2] — 2026-08-03
+
+### Fixed
+
+- Homepage hero title keeps **Reddivaripalli** on a single line (`nowrap` + responsive `clamp`) without mid-word wrap or clipped letters
+
 ## [1.3.1] — 2026-08-03
 
 ### Fixed
