@@ -1,8 +1,10 @@
 # System Diagrams
 
-Mermaid sources also live in [`diagrams/`](./diagrams/) (`.mmd`). Render instructions: [README.md](./README.md#diagrams).
+Mermaid sources and rendered PNG/SVG live in [`diagrams/`](./diagrams/). Render instructions: [README.md](./README.md#diagrams).
 
 ## Architecture
+
+![Architecture](./diagrams/architecture.png)
 
 ```mermaid
 flowchart LR
@@ -22,6 +24,8 @@ flowchart LR
 
 ## Deployment
 
+![Deployment](./diagrams/deployment.png)
+
 ```mermaid
 flowchart TD
   Push[Push to main] --> Sparse[Sparse checkout exclude media blobs]
@@ -34,6 +38,8 @@ flowchart TD
 ```
 
 ## Authentication
+
+![Authentication](./diagrams/authentication.png)
 
 ```mermaid
 sequenceDiagram
@@ -49,6 +55,8 @@ sequenceDiagram
 
 ## Notification flow
 
+![Notification flow](./diagrams/notification-flow.png)
+
 ```mermaid
 flowchart TD
   Data[members + events + developments + announcements]
@@ -63,6 +71,8 @@ flowchart TD
 
 ## Upload flow (Super Admin)
 
+![Upload flow](./diagrams/upload-flow.png)
+
 ```mermaid
 sequenceDiagram
   participant Admin
@@ -75,6 +85,8 @@ sequenceDiagram
 ```
 
 ## Gallery / CMS flow
+
+![Gallery flow](./diagrams/gallery-flow.png)
 
 ```mermaid
 flowchart TD
@@ -89,9 +101,11 @@ flowchart TD
 
 ## Admin workflow
 
+![Admin workflow](./diagrams/admin-workflow.png)
+
 ```mermaid
 flowchart TD
-  Login[/admin/ login] --> Hub[AdminHub tabs]
+  Login["/admin/ login"] --> Hub[AdminHub tabs]
   Hub --> Members[Members / Edit Mode]
   Hub --> Media[Media R2 upload]
   Hub --> Community[Directory Docs Heritage LostFound]
@@ -103,6 +117,8 @@ flowchart TD
 ```
 
 ## Project structure
+
+![Project structure](./diagrams/project-structure.png)
 
 ```mermaid
 flowchart TB
@@ -120,13 +136,13 @@ flowchart TB
 
 ## File map
 
-| Diagram | Source |
-|---|---|
-| Architecture | [diagrams/architecture.mmd](./diagrams/architecture.mmd) |
-| Deployment | [diagrams/deployment.mmd](./diagrams/deployment.mmd) |
-| Authentication | [diagrams/authentication.mmd](./diagrams/authentication.mmd) |
-| Notifications | [diagrams/notification-flow.mmd](./diagrams/notification-flow.mmd) |
-| Upload | [diagrams/upload-flow.mmd](./diagrams/upload-flow.mmd) |
-| Gallery | [diagrams/gallery-flow.mmd](./diagrams/gallery-flow.mmd) |
-| Admin | [diagrams/admin-workflow.mmd](./diagrams/admin-workflow.mmd) |
-| Structure | [diagrams/project-structure.mmd](./diagrams/project-structure.mmd) |
+| Diagram | Source | PNG |
+|---|---|---|
+| Architecture | [architecture.mmd](./diagrams/architecture.mmd) | [architecture.png](./diagrams/architecture.png) |
+| Deployment | [deployment.mmd](./diagrams/deployment.mmd) | [deployment.png](./diagrams/deployment.png) |
+| Authentication | [authentication.mmd](./diagrams/authentication.mmd) | [authentication.png](./diagrams/authentication.png) |
+| Notifications | [notification-flow.mmd](./diagrams/notification-flow.mmd) | [notification-flow.png](./diagrams/notification-flow.png) |
+| Upload | [upload-flow.mmd](./diagrams/upload-flow.mmd) | [upload-flow.png](./diagrams/upload-flow.png) |
+| Gallery | [gallery-flow.mmd](./diagrams/gallery-flow.mmd) | [gallery-flow.png](./diagrams/gallery-flow.png) |
+| Admin | [admin-workflow.mmd](./diagrams/admin-workflow.mmd) | [admin-workflow.png](./diagrams/admin-workflow.png) |
+| Structure | [project-structure.mmd](./diagrams/project-structure.mmd) | [project-structure.png](./diagrams/project-structure.png) |

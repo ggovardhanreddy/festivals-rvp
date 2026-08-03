@@ -64,38 +64,54 @@ This is a **Next.js static export** (App Router) deployed to **Cloudflare Pages*
 
 ### Diagrams
 
-Sources and renders live in [`diagrams/`](./diagrams/):
+Sources and renders live in [`diagrams/`](./diagrams/) (`.mmd` + committed `.png` / `.svg`):
 
 | File | Topic |
 |---|---|
-| `architecture.mmd` / `.svg` | High-level system |
-| `deployment.mmd` / `.svg` | CI → Pages deploy |
-| `authentication.mmd` / `.svg` | Admin + member sessions |
-| `notification-flow.mmd` / `.svg` | Client notification build |
-| `upload-flow.mmd` / `.svg` | Admin → R2 upload |
-| `gallery-flow.mmd` / `.svg` | Git CMS → albums |
-| `admin-workflow.mmd` / `.svg` | Super Admin tasks |
-| `project-structure.mmd` / `.svg` | Repo layout |
+| `architecture.mmd` / `.png` / `.svg` | High-level system |
+| `deployment.mmd` / `.png` / `.svg` | CI → Pages deploy |
+| `authentication.mmd` / `.png` / `.svg` | Admin + member sessions |
+| `notification-flow.mmd` / `.png` / `.svg` | Client notification build |
+| `upload-flow.mmd` / `.png` / `.svg` | Admin → R2 upload |
+| `gallery-flow.mmd` / `.png` / `.svg` | Git CMS → albums |
+| `admin-workflow.mmd` / `.png` / `.svg` | Super Admin tasks |
+| `project-structure.mmd` / `.png` / `.svg` | Repo layout |
 
-**Render Mermaid locally** (if SVG/PNG are missing or outdated):
+**Preview**
+
+![Architecture](./diagrams/architecture.png)
+
+![Deployment](./diagrams/deployment.png)
+
+![Authentication](./diagrams/authentication.png)
+
+![Notification flow](./diagrams/notification-flow.png)
+
+![Upload flow](./diagrams/upload-flow.png)
+
+![Gallery flow](./diagrams/gallery-flow.png)
+
+![Admin workflow](./diagrams/admin-workflow.png)
+
+![Project structure](./diagrams/project-structure.png)
+
+**Render Mermaid locally** (if PNG/SVG are missing or outdated). `-p` must be a Puppeteer JSON config (not the Chrome binary path):
 
 ```bash
-npx --yes @mermaid-js/mermaid-cli \
-  -i docs/diagrams/architecture.mmd \
-  -o docs/diagrams/architecture.svg \
-  -p /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
-```
+cat > /tmp/mmdc-puppeteer.json <<'EOF'
+{
+  "executablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+}
+EOF
 
-Repeat for each `.mmd` in `docs/diagrams/`, or use:
-
-```bash
 for f in docs/diagrams/*.mmd; do
-  npx --yes @mermaid-js/mermaid-cli -i "$f" -o "${f%.mmd}.svg" \
-    -p "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  npx --yes @mermaid-js/mermaid-cli -i "$f" -o "${f%.mmd}.png" -b transparent -p /tmp/mmdc-puppeteer.json -s 2
+  npx --yes @mermaid-js/mermaid-cli -i "$f" -o "${f%.mmd}.svg" -b transparent -p /tmp/mmdc-puppeteer.json
 done
 ```
 
-Diagrams are also embedded as Mermaid in [SYSTEM_DIAGRAMS.md](./SYSTEM_DIAGRAMS.md) and [ARCHITECTURE.md](./ARCHITECTURE.md).
+Diagrams are also embedded as PNGs (and Mermaid source) in [SYSTEM_DIAGRAMS.md](./SYSTEM_DIAGRAMS.md) and [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ### Design & governance (numbered legacy docs)
 
