@@ -1,0 +1,9 @@
+sequenceDiagram
+  participant U as User
+  participant A as /api/admin or /api/auth
+  participant R as Cookie jar
+  U->>A: POST login credentials
+  A->>A: PBKDF2 verify 100k
+  A->>R: Set HttpOnly cookie + HMAC
+  U->>A: GET session credentials include
+  A-->>U: ok + role/username

@@ -1,0 +1,10 @@
+flowchart TD
+  Login[/admin/ login] --> Hub[AdminHub tabs]
+  Hub --> Members[Members / Edit Mode]
+  Hub --> Media[Media R2 upload]
+  Hub --> Community[Directory Docs Heritage LostFound]
+  Hub --> Approvals[Approve pending]
+  Hub --> Backup[Backup JSON]
+  Members --> R2m[community/members.json]
+  Community --> R2c[community/*.json]
+  Media --> R2b[R2 object keys]

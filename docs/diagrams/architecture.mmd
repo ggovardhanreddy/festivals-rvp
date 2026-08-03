@@ -1,0 +1,13 @@
+flowchart LR
+  User((Visitor / Member / Admin))
+  CF[Cloudflare Pages]
+  FN[Pages Functions]
+  R2[(R2 MEDIA)]
+  GH[GitHub main]
+  User --> CF
+  CF --> FN
+  FN --> R2
+  GH -->|Actions build+deploy| CF
+  GH -->|content CMS| Build[prepare:site]
+  Build --> CF
+  R2 -->|media + community JSON| User

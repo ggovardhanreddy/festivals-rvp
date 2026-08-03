@@ -1,0 +1,8 @@
+sequenceDiagram
+  participant Admin
+  participant API as /api/media/upload
+  participant R2 as R2 MEDIA
+  Admin->>API: multipart file + category
+  API->>API: requireAdmin cookie
+  API->>R2: put category/timestamp-name
+  API-->>Admin: key + publicUrl or object path

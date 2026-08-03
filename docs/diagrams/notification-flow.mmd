@@ -1,0 +1,9 @@
+flowchart TD
+  Data[members + events + developments + announcements]
+  Prefs[localStorage prefs]
+  Build[buildNotifications]
+  UI[Notification center / banners / popups]
+  Data --> Build
+  Prefs --> Build
+  Build --> UI
+  UI -->|optional| Perm[Notification.requestPermission]

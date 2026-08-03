@@ -1,0 +1,8 @@
+flowchart TD
+  Folders[content/YEAR/bucket media]
+  Sync[scripts/sync-cms.ts]
+  Albums[generated/albums.json]
+  Rewrite[rewrite-albums-r2.ts]
+  Site[Gallery + festival pages]
+  Folders --> Sync --> Albums --> Rewrite --> Site
+  R2[(R2 public URLs)] -.-> Rewrite

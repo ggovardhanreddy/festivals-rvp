@@ -11,7 +11,8 @@ The official digital home of **Reddivaripalli (Kondreddigaripalli)** — a livin
 | Repo | https://github.com/ggovardhanreddy/festivals-rvp |
 | Live site | https://www.reddivaripalli.com |
 | Cloudflare Pages | https://festivals-rvp.pages.dev |
-| Admin guide | [docs/14-ADMIN_GUIDE.md](./docs/14-ADMIN_GUIDE.md) |
+| Documentation | [docs/README.md](./docs/README.md) |
+| Admin guide | [docs/ADMIN_GUIDE.md](./docs/ADMIN_GUIDE.md) |
 
 ## GitHub is the CMS
 
@@ -26,7 +27,7 @@ content/<YEAR>/fun-trips/
 
 Push to `main` → Actions sync, optimize, validate, build, and deploy.
 
-Guides: [docs/14-ADMIN_GUIDE.md](./docs/14-ADMIN_GUIDE.md) · [CONTENT_GUIDE.md](./CONTENT_GUIDE.md) · [CONTENT.md](./CONTENT.md)
+Guides: [docs/ADMIN_GUIDE.md](./docs/ADMIN_GUIDE.md) · [docs/README.md](./docs/README.md) · [CONTENT_GUIDE.md](./CONTENT_GUIDE.md) · [CONTENT.md](./CONTENT.md)
 
 ## Stack
 
@@ -34,7 +35,7 @@ Next.js App Router · TypeScript · Tailwind · Sharp · Framer Motion · GSAP �
 
 ## Version
 
-**1.1.0** — 2026-08-03 · see [CHANGELOG.md](./CHANGELOG.md)
+**1.2.0** — 2026-08-03 · see [CHANGELOG.md](./CHANGELOG.md) · [docs/CHANGELOG.md](./docs/CHANGELOG.md)
 
 ## Local development
 
@@ -77,7 +78,7 @@ Large gallery/video files are stored in **Cloudflare R2** (`reddivaripalli` buck
 4. Bind the bucket as `MEDIA` in `wrangler.toml` (already configured)
 5. `npm run media:migrate:r2` then `npm run deploy:cf`
 
-Full guide: [docs/13-R2_MEDIA.md](./docs/13-R2_MEDIA.md) · env template: [.env.example](./.env.example)
+Full guide: [docs/CLOUDFLARE_R2.md](./docs/CLOUDFLARE_R2.md) · [docs/13-R2_MEDIA.md](./docs/13-R2_MEDIA.md) · env template: [.env.example](./.env.example)
 
 ## SEO
 
@@ -85,23 +86,9 @@ Homepage metadata targets natural discovery for Reddivaripalli / Devapatla / Sam
 
 ## Documentation
 
-Governance and engineering docs live in [`/docs`](./docs):
+Full documentation index: **[`/docs/README.md`](./docs/README.md)** (overview, architecture, deploy, admin/member guides, API, R2, PWA, diagrams).
 
-- [00 Master Prompt](./docs/00-MASTER_PROMPT.md)
-- [01 Architecture](./docs/01-ARCHITECTURE.md)
-- [02 Design System](./docs/02-DESIGN_SYSTEM.md)
-- [03 UI/UX](./docs/03-UI_UX.md)
-- [04 Animations](./docs/04-ANIMATIONS.md)
-- [05 3D Experience](./docs/05-3D_EXPERIENCE.md)
-- [06 Gallery](./docs/06-GALLERY.md)
-- [07 Media Pipeline](./docs/07-MEDIA_PIPELINE.md)
-- [08 Deployment](./docs/08-DEPLOYMENT.md)
-- [09 Coding Standards](./docs/09-CODING_STANDARDS.md)
-- [10 Testing](./docs/10-TESTING.md)
-- [11 Future Roadmap](./docs/11-FUTURE_ROADMAP.md)
-- [12 Acceptance Criteria](./docs/12-ACCEPTANCE_CRITERIA.md)
-- [13 R2 Media](./docs/13-R2_MEDIA.md)
-- [14 Admin Guide](./docs/14-ADMIN_GUIDE.md)
+Design & governance (numbered legacy): [00](./docs/00-MASTER_PROMPT.md)–[14](./docs/14-ADMIN_GUIDE.md) under [`/docs`](./docs).
 
 Operator docs: [CONTRIBUTING](./CONTRIBUTING.md) · [DEPLOYMENT](./DEPLOYMENT.md) · [TROUBLESHOOTING](./TROUBLESHOOTING.md) · [CHANGELOG](./CHANGELOG.md) · [LICENSE](./LICENSE)
 

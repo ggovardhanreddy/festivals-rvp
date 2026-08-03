@@ -1,0 +1,8 @@
+flowchart TD
+  Push[Push to main] --> Sparse[Sparse checkout exclude media blobs]
+  Sparse --> CI[npm ci]
+  CI --> Build[npm run build]
+  Build --> Strip[npm run media:strip-local]
+  Strip --> Deploy[wrangler pages deploy out]
+  Deploy --> Live[www.reddivaripalli.com]
+  PR[Pull request] --> Quality[ci.yml: lint typecheck validate test build]
