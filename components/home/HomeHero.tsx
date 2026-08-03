@@ -93,6 +93,7 @@ export function HomeHero() {
       >
         <span>Scroll</span>
         <span className="clean-hero-scroll-line" aria-hidden />
+        <span className="clean-hero-scroll-chevron" aria-hidden />
       </a>
     </section>
   );
