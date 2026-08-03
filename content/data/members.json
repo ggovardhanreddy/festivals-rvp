@@ -223,15 +223,15 @@
     "id": "y-chenna-keshava",
     "name": "Y Chenna Keshava",
     "photo": "/members/keshava.webp",
-    "dob": null,
+    "dob": "06-15",
     "group": "core",
     "designation": "Business (Poultry)"
   },
   {
     "id": "g-sreekanth",
     "name": "G Sreekanth",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/Sreekanth.webp",
+    "dob": "06-04",
     "group": "core",
     "designation": "E-commerce Manager (Delivery)"
   },
@@ -239,14 +239,14 @@
     "id": "c-narendra-ck",
     "name": "C Narendra (CK)",
     "photo": null,
-    "dob": null,
+    "dob": "02-17",
     "group": "core",
     "designation": "Mechanical Engineer"
   },
   {
     "id": "c-hari",
     "name": "C Hari",
-    "photo": null,
+    "photo": "/members/chari.webp",
     "dob": "08-15",
     "group": "core",
     "designation": "Bank Employee (Loan Department)"
@@ -254,24 +254,24 @@
   {
     "id": "c-avinash",
     "name": "C Avinash",
-    "photo": null,
-    "dob": null,
+    "photo":  "/members/avinash.webp",
+    "dob": "",
     "group": "core",
     "designation": "Veterinary Professional"
   },
   {
     "id": "c-ganesh",
     "name": "C Ganesh",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/ganesh.webp",
+    "dob": "01-02",
     "group": "core",
     "designation": "Electrical Engineer (UAE)"
   },
   {
     "id": "j-bhanu",
     "name": "J Bhanu",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/bhanu.webp",
+    "dob": "10-08",
     "group": "core",
     "designation": "Software Engineer"
   },
@@ -279,14 +279,14 @@
     "id": "k-balaji",
     "name": "K Balaji",
     "photo": "/members/k-balaji.webp",
-    "dob": null,
+    "dob": "07-09",
     "group": "core",
     "designation": "Software Engineer"
   },
   {
     "id": "y-krishna-mohan",
     "name": "Y Krishna Mohan",
-    "photo": null,
+    "photo": "/members/krishnamohan.webp",
     "dob": null,
     "group": "core",
     "designation": "Software Engineer"
@@ -294,39 +294,39 @@
   {
     "id": "d-shantha-kumar",
     "name": "Dr. D Shantha Kumar",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/santha.webp",,
+    "dob": "12-15",
     "group": "core",
     "designation": "Doctor (General Surgeon, MD)"
   },
   {
     "id": "u-nagendra",
     "name": "U Nagendra",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/nagendra.webp",
+    "dob": "06-05",
     "group": "core",
     "designation": "Business"
   },
   {
     "id": "u-guru",
     "name": "U Guru",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/guru.webp",
+    "dob": "09-02",
     "group": "core",
     "designation": "Software Engineer"
   },
   {
     "id": "u-guru-mahesh-puli",
     "name": "U Guru Mahesh (Puli)",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/gurumahesh.webp",
+    "dob": "10-06",
     "group": "core",
     "designation": "GRT Employee"
   },
   {
     "id": "j-niranjan",
     "name": "J Niranjan",
-    "photo": null,
+    "photo": "/members/Sreekanth.webp",
     "dob": null,
     "group": "core",
     "designation": "Indian Army"
@@ -335,15 +335,15 @@
     "id": "d-akhil-reddy",
     "name": "D Akhil Reddy",
     "photo": "/members/akhil.webp",
-    "dob": null,
+    "dob": "08-12",
     "group": "nextgen",
     "designation": "Software Engineer"
   },
   {
     "id": "d-anil-reddy",
     "name": "D Anil Reddy",
-    "photo": null,
-    "dob": null,
+    "photo": "/members/anil.webp",
+    "dob": "05-22",
     "group": "nextgen",
     "designation": "Government Employee – Post Office"
   },
@@ -382,7 +382,7 @@
   {
     "id": "c-narasimha",
     "name": "C Narasimha",
-    "photo": null,
+    "photo": "/members/narasimha.webp",
     "dob": "11-12",
     "group": "nextgen",
     "designation": "Software Engineer"
