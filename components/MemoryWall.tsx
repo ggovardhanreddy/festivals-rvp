@@ -6,7 +6,7 @@ import { m, useReducedMotion } from "framer-motion";
 import type { MediaWithAlbum } from "@/lib/types";
 import { VILLAGE_QUOTES } from "@/lib/village";
 import { albumHref } from "@/lib/site";
-import { withBase } from "@/lib/base";
+import { MediaImage } from "@/components/media/MediaImage";
 import { Reveal } from "./Reveal";
 
 function pickWallItems(items: MediaWithAlbum[], count: number) {
@@ -57,8 +57,8 @@ export function MemoryWall({ items }: { items: MediaWithAlbum[] }) {
             transition={{ delay: Math.min(index * 0.05, 0.3) }}
           >
             <Link href={albumHref(item.album)}>
-              <img
-                src={withBase(item.thumb || item.file)}
+              <MediaImage
+                src={item.thumb || item.file}
                 alt={item.title}
                 loading="lazy"
                 draggable={false}

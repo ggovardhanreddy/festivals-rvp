@@ -1,4 +1,4 @@
-const CACHE="rvp-youth-4e579412799fc60a2d2c2ef91a3d7d0c4fbafb9d",BUILD="4e579412799fc60a2d2c2ef91a3d7d0c4fbafb9d",BASE="";
+const CACHE="rvp-youth-mscwe6wt",BUILD="mscwe6wt",BASE="";
 async function clearAllCaches(){const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)));}
 self.addEventListener("message",e=>{
   const type=e.data&&e.data.type;

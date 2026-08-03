@@ -22,6 +22,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  scroll-padding-top: 5.75rem;
 }
 
 body {
@@ -169,16 +170,16 @@ select {
   }
 }
 
-/* Full-viewport brand watermark — below nav/drawer, never captures pointer */
+/* Full-viewport brand watermark — over Vanta, under hero text; never captures pointer */
 .logo-watermark {
   position: fixed;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   display: grid;
   place-items: center;
   pointer-events: none;
   user-select: none;
-  opacity: 0.055;
+  opacity: 0.11;
   mix-blend-mode: multiply;
 }
 
@@ -198,17 +199,17 @@ select {
 }
 
 .dark .logo-watermark {
-  opacity: 0.06;
+  opacity: 0.12;
   mix-blend-mode: soft-light;
 }
 
-/* Soften on home so the hero logo stays dominant */
+/* On home, keep watermark over Vanta but below hero copy */
 body:has(.home-hero) .logo-watermark {
-  opacity: 0.032;
+  opacity: 0.1;
 }
 
 html.dark body:has(.home-hero) .logo-watermark {
-  opacity: 0.04;
+  opacity: 0.12;
 }
 
 @media (max-width: 820px) {
@@ -218,17 +219,17 @@ html.dark body:has(.home-hero) .logo-watermark {
   }
 
   .logo-watermark {
-    opacity: 0.045;
+    opacity: 0.1;
   }
 
   body:has(.home-hero) .logo-watermark {
-    opacity: 0.028;
+    opacity: 0.09;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .logo-watermark {
-    opacity: 0.03;
+    opacity: 0.08;
   }
 }
 
@@ -5163,6 +5164,73 @@ html.intro-active .glass-music {
   align-items: baseline;
 }
 
+.gallery-year-groups {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+  margin-top: 1.25rem;
+}
+
+.gallery-year-heading {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+}
+
+.gallery-album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 1rem;
+}
+
+.gallery-album-card {
+  display: grid;
+  gap: 0.65rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform var(--motion-base) var(--ease-out);
+}
+
+.gallery-album-card:hover {
+  transform: translateY(-3px);
+}
+
+.gallery-album-cover {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-forest) 12%, var(--color-bg));
+}
+
+.gallery-album-cover img,
+.gallery-album-cover .media-image-skeleton,
+.gallery-album-cover .media-image-empty {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-album-meta .eyebrow {
+  margin: 0;
+}
+
+.gallery-album-meta h4 {
+  margin: 0.15rem 0 0.2rem;
+  font-size: 1.05rem;
+}
+
+.gallery-album-meta .muted {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.media-image-skeleton,
+.media-image-empty {
+  width: 100%;
+  height: 100%;
+  min-height: 8rem;
+  background: color-mix(in srgb, var(--color-forest) 10%, var(--color-bg));
+}
+
 .gallery-chapters {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
@@ -5339,8 +5407,16 @@ html.intro-active .glass-music {
    Homepage redesign — clean hero, stats, timeline, gallery, festivals
    ============================================================================= */
 
+#overview,
+#home-start,
+#gallery,
+#main-content > main > .page,
+.home-redesign .section[id] {
+  scroll-margin-top: 5.75rem;
+}
+
 .home-redesign {
-  padding-top: 2.5rem;
+  padding-top: 3.25rem;
 }
 
 .home-redesign .section {
@@ -5546,10 +5622,10 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 
 .clean-hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   pointer-events: auto;
   text-align: center;
-  padding: 6rem var(--page-gutter) 5rem;
+  padding: clamp(6.5rem, 14vh, 8.5rem) var(--page-gutter) 5rem;
   max-width: 48rem;
 }
 
@@ -6837,8 +6913,29 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 }
 
 .home-hero-content {
-  z-index: 2;
+  z-index: 3;
   max-width: 42rem;
+}
+
+.home-hero-title {
+  margin: 0.2rem 0 0.85rem;
+}
+
+.home-hero-address {
+  list-style: none;
+  margin: 0 auto 1.75rem;
+  padding: 0;
+  display: grid;
+  gap: 0.28rem;
+  max-width: 28rem;
+  font-size: clamp(1rem, 2.1vw, 1.2rem);
+  line-height: 1.45;
+  color: color-mix(in srgb, #fff 88%, transparent);
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.home-hero-address li {
+  margin: 0;
 }
 
 .home-hero-logo-wrap {
@@ -7498,6 +7595,7 @@ body {
 .section-head h2,
 .gallery-hub h2,
 .gallery-hub h3,
+.gallery-hub h4,
 .members-group-title,
 .event-card h3,
 .tile span:not(.tile-badge),

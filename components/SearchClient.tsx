@@ -138,7 +138,6 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
               <option value="development">Developments</option>
               <option value="document">Documents</option>
               <option value="heritage">Heritage</option>
-              <option value="blood-donor">Blood donors</option>
             </select>
           </label>
           <label>

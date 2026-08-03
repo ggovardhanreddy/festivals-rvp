@@ -270,21 +270,6 @@ export type LostFoundItem = {
   submittedBy?: string;
 };
 
-export type BloodDonor = {
-  id: string;
-  name: string;
-  bloodGroup: BloodGroup;
-  mobile: string;
-  village: string;
-  availability: string;
-  lastDonationDate?: string;
-  status: ApprovalStatus;
-  /** When false, mobile is hidden from public list */
-  showContactPublicly?: boolean;
-  submittedAt: string;
-  submittedBy?: string;
-};
-
 export type PanchayatDocCategory =
   | "Panchayat Notices"
   | "Meeting Minutes"

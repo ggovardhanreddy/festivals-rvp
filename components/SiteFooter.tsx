@@ -36,7 +36,6 @@ export function SiteFooter() {
             <Link href="/events/">Events</Link>
             <Link href="/heritage/">Heritage Archive</Link>
             <Link href="/directory/">Village Directory</Link>
-            <Link href="/blood-donors/">Blood Donors</Link>
             <Link href="/documents/">Panchayat Documents</Link>
             <Link href="/developments/">Developments</Link>
             <Link href="/suggestions/">Suggestions</Link>

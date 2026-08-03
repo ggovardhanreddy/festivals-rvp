@@ -5,19 +5,20 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { m, useReducedMotion } from "framer-motion";
 import { Logo } from "@/components/Logo";
-import {
-  OFFICIAL_MISSION,
-  OFFICIAL_SUBTITLE,
-  SITE_NAME,
-  SITE_TAGLINE_LANDING,
-  VILLAGE_ALSO_KNOWN_AS,
-  VILLAGE_NAME,
-} from "@/lib/site";
+import { VILLAGE_ALSO_KNOWN_AS } from "@/lib/site";
 
 const VantaBirds = dynamic(
   () => import("./VantaBirds").then((m) => m.VantaBirds),
   { ssr: false },
 );
+
+const HERO_LINES = [
+  "Gram Panchayat",
+  "Devapatla Post",
+  "Sambepalle Mandal",
+  "Annamayya District",
+  "Andhra Pradesh – 516215",
+] as const;
 
 /**
  * Locked homepage hero — Vanta Birds background only.
@@ -49,42 +50,29 @@ export function HomeHero() {
         >
           <Logo variant="vertical" className="home-hero-logo" />
         </m.div>
-        <m.p
-          className="eyebrow clean-hero-eyebrow"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.12 }}
-        >
-          {OFFICIAL_SUBTITLE} · {VILLAGE_ALSO_KNOWN_AS} · {VILLAGE_NAME}
-        </m.p>
         <m.h1
+          className="home-hero-title"
           initial={reduce ? false : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.2 }}
+          transition={{ duration: 0.65, delay: 0.15 }}
         >
           {VILLAGE_ALSO_KNOWN_AS}
         </m.h1>
-        <m.p
-          className="clean-hero-lede"
+        <m.ul
+          className="home-hero-address"
           initial={reduce ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.3 }}
+          transition={{ duration: 0.55, delay: 0.28 }}
         >
-          {SITE_TAGLINE_LANDING}
-        </m.p>
-        <m.p
-          className="home-hero-intro"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.38 }}
-        >
-          {OFFICIAL_MISSION} Stewards: {SITE_NAME}.
-        </m.p>
+          {HERO_LINES.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </m.ul>
         <m.div
           className="clean-hero-cta home-hero-cta"
           initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.46 }}
+          transition={{ duration: 0.5, delay: 0.42 }}
         >
           <Link className="btn" href="/gallery/">
             Gallery

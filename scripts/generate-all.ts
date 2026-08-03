@@ -6,7 +6,6 @@ import { loadMembers } from "../lib/members";
 import { loadEvents } from "../lib/events";
 import { loadDevelopments } from "../lib/developments";
 import {
-  loadBloodDonorsSeed,
   loadDirectorySeed,
   loadHeritageSeed,
   loadPanchayatDocsSeed,
@@ -37,7 +36,6 @@ const routes = [
   "timeline",
   "directory",
   "lost-found",
-  "blood-donors",
   "documents",
   "heritage",
   // Public festival chapters with media (exclude private fun-trips from SEO)
@@ -59,17 +57,19 @@ const routes = [
 ];
 
 const searchIndex = [
-  ...media.map((item) => ({
-    title: item.title,
-    date: item.date,
-    tags: item.tags,
-    type: item.type,
-    kind: "media",
-    album: item.album.title,
-    bucket: item.album.bucket,
-    year: item.album.year,
-    url: `${base}${albumHref(item.album)}`,
-  })),
+  ...media
+    .filter((item) => item.album.bucket !== "fun-trips")
+    .map((item) => ({
+      title: item.title,
+      date: item.date,
+      tags: item.tags,
+      type: item.type,
+      kind: "media",
+      album: item.album.title,
+      bucket: item.album.bucket,
+      year: item.album.year,
+      url: `${base}${albumHref(item.album)}`,
+    })),
   ...loadMembers().map((m) => ({
     title: m.name,
     kind: "member",
@@ -116,15 +116,6 @@ const searchIndex = [
       tags: [h.category],
       body: h.description,
       url: `${base}/heritage/`,
-    })),
-  ...loadBloodDonorsSeed()
-    .filter((d) => d.status === "approved")
-    .map((d) => ({
-      title: d.name,
-      kind: "blood-donor",
-      tags: [d.bloodGroup, d.village],
-      body: `${d.bloodGroup} · ${d.village}`,
-      url: `${base}/blood-donors/`,
     })),
 ];
 

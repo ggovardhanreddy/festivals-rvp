@@ -10,7 +10,7 @@ import {
 } from "framer-motion";
 import type { Album } from "@/lib/types";
 import { albumHref } from "@/lib/site";
-import { withBase } from "@/lib/base";
+import { MediaImage } from "@/components/media/MediaImage";
 
 export function AlbumCard({
   album,
@@ -60,9 +60,9 @@ export function AlbumCard({
         style={{ display: "block" }}
       >
         {album.cover ? (
-          <img
+          <MediaImage
             className="card-media"
-            src={withBase(album.cover)}
+            src={album.cover}
             alt={album.title}
             loading="lazy"
           />
@@ -72,7 +72,11 @@ export function AlbumCard({
         <div className="card-body">
           <p className="eyebrow">{meta || `${album.year} · ${album.category}`}</p>
           <h3>{album.title}</h3>
-          <p className="muted">{album.description}</p>
+          <p className="muted">
+            {album.media?.length ?? 0}{" "}
+            {(album.media?.length ?? 0) === 1 ? "item" : "items"}
+            {album.description ? ` · ${album.description}` : ""}
+          </p>
         </div>
       </Link>
     </m.div>

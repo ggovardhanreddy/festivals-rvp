@@ -31,7 +31,7 @@ export function LoginForm() {
     event.preventDefault();
     setPending(true);
     setError("");
-    const result = await login(username, password);
+    const result = await login(username.trim(), password.trim());
     setPending(false);
     if (!result.ok) {
       setError(result.error);
@@ -58,7 +58,10 @@ export function LoginForm() {
               name="username"
               autoComplete="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (error) setError("");
+              }}
               required
               spellCheck={false}
               autoCapitalize="off"
@@ -71,7 +74,10 @@ export function LoginForm() {
               type="password"
               autoComplete="current-password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (error) setError("");
+              }}
               required
               spellCheck={false}
             />

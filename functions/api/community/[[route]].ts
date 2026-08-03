@@ -22,7 +22,6 @@ const COLLECTIONS = new Set([
   "directory",
   "members",
   "lost-found",
-  "blood-donors",
   "panchayat-docs",
   "heritage",
   "site-settings",
@@ -30,11 +29,7 @@ const COLLECTIONS = new Set([
   "audit",
 ]);
 
-const APPROVAL_COLLECTIONS = new Set([
-  "lost-found",
-  "blood-donors",
-  "heritage",
-]);
+const APPROVAL_COLLECTIONS = new Set(["lost-found", "heritage"]);
 
 const encoder = new TextEncoder();
 
@@ -124,11 +119,6 @@ function asItems(data: unknown): Record<string, unknown>[] {
     return (data as { items: Record<string, unknown>[] }).items;
   }
   return [];
-}
-
-function publicizeBloodDonor(item: Record<string, unknown>, admin: boolean) {
-  if (admin || item.showContactPublicly) return item;
-  return { ...item, mobile: item.status === "approved" ? "Available on request" : "" };
 }
 
 export const onRequest = async ({ request, env, params }: FunctionContext) => {
@@ -236,9 +226,6 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
       }
       if (APPROVAL_COLLECTIONS.has(collection) && !(admin && adminQuery)) {
         items = items.filter((i) => i.status === "approved");
-      }
-      if (collection === "blood-donors") {
-        items = items.map((i) => publicizeBloodDonor(i, admin && adminQuery));
       }
       return json({ items, source: "r2" }, 200, headers);
     }

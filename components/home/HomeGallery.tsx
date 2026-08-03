@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { m, useReducedMotion } from "framer-motion";
 import { Gallery } from "@/components/Gallery";
 import { Reveal } from "@/components/Reveal";
-import { withBase } from "@/lib/base";
+import { MediaImage } from "@/components/media/MediaImage";
 import type { MediaWithAlbum } from "@/lib/types";
 
 const MotionLink = m.create(Link);
@@ -57,12 +57,9 @@ function matchesFilter(item: MediaWithAlbum, key: FilterKey): boolean {
     case "temple":
       return (TEMPLE_BUCKETS as readonly string[]).includes(bucket);
     case "village":
-      return bucket === "fun-trips";
+      return !(KNOWN_BUCKETS as readonly string[]).includes(bucket);
     case "events":
-      return (
-        (FESTIVAL_BUCKETS as readonly string[]).includes(bucket) ||
-        bucket === "fun-trips"
-      );
+      return (FESTIVAL_BUCKETS as readonly string[]).includes(bucket);
     case "historical":
       return Boolean(year && year <= 2018);
     case "other":
@@ -86,6 +83,7 @@ export function HomeGallery({
   const filtered = useMemo(() => {
     return items.filter((item) => {
       if (item.type !== "image") return false;
+      if (item.album.bucket === "fun-trips") return false;
       if (!matchesFilter(item, filter)) return false;
       if (year !== "all" && item.album.year !== year) return false;
       return true;
@@ -162,11 +160,10 @@ export function HomeGallery({
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.25) }}
             >
-              <img
-                src={withBase(item.thumb || item.file)}
+              <MediaImage
+                src={item.thumb || item.file}
                 alt={item.title || "Memory"}
                 loading="lazy"
-                decoding="async"
               />
             </MotionLink>
           ))}

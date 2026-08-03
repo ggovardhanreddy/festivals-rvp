@@ -4,11 +4,9 @@ import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { withBase } from "@/lib/base";
 import {
-  BLOOD_GROUPS,
   DIRECTORY_CATEGORIES,
   HERITAGE_CATEGORIES,
   LOST_FOUND_CATEGORIES,
-  loadBloodDonorsSeed,
   loadDirectorySeed,
   loadHeritageSeed,
   loadLostFoundSeed,
@@ -20,7 +18,6 @@ import {
 import { useCommunityList } from "@/lib/use-community";
 import type {
   ApprovalStatus,
-  BloodDonor,
   DirectoryEntry,
   HeritageItem,
   LostFoundItem,
@@ -228,10 +225,8 @@ function DirectoryManager() {
 
 function ApprovalsManager() {
   const lfSeed = useMemo(() => loadLostFoundSeed(), []);
-  const bdSeed = useMemo(() => loadBloodDonorsSeed(), []);
   const hSeed = useMemo(() => loadHeritageSeed(), []);
   const lf = useCommunityList<LostFoundItem>("lost-found", lfSeed, { admin: true });
-  const bd = useCommunityList<BloodDonor>("blood-donors", bdSeed, { admin: true });
   const heritage = useCommunityList<HeritageItem>("heritage", hSeed, {
     admin: true,
   });
@@ -260,29 +255,6 @@ function ApprovalsManager() {
         {!lf.raw.length ? <p className="muted">No submissions.</p> : null}
       </section>
       <section>
-        <h3>Blood donors</h3>
-        {bd.raw.map((item) => (
-          <article key={item.id} className="glass-card admin-manage-card">
-            <strong>
-              {item.name} · {item.bloodGroup}
-            </strong>
-            <p className="muted">
-              {item.mobile} · {item.village}
-            </p>
-            <StatusButtons
-              status={item.status}
-              onChange={(status) => {
-                const next = bd.raw.map((i) =>
-                  i.id === item.id ? { ...i, status } : i,
-                );
-                void bd.saveAll(next);
-              }}
-            />
-          </article>
-        ))}
-        {!bd.raw.length ? <p className="muted">No registrations.</p> : null}
-      </section>
-      <section>
         <h3>Heritage submissions</h3>
         {heritage.raw.map((item) => (
           <article key={item.id} className="glass-card admin-manage-card">
@@ -304,8 +276,8 @@ function ApprovalsManager() {
         ))}
       </section>
       <p className="muted">
-        Categories reference: Lost/Found ({LOST_FOUND_CATEGORIES.length}), Blood (
-        {BLOOD_GROUPS.join(", ")}), Heritage ({HERITAGE_CATEGORIES.length}).
+        Categories reference: Lost/Found ({LOST_FOUND_CATEGORIES.length}),
+        Heritage ({HERITAGE_CATEGORIES.length}).
       </p>
     </div>
   );
@@ -570,7 +542,6 @@ function BackupPanel() {
     "directory",
     "members",
     "lost-found",
-    "blood-donors",
     "panchayat-docs",
     "heritage",
     "site-settings",
@@ -706,12 +677,12 @@ function GuidePanel() {
           Documents tabs; Save writes to R2 without code changes.
         </li>
         <li>
-          <strong>Approvals</strong> — review Lost &amp; Found, blood donors, and
-          heritage submissions before they go public.
+          <strong>Approvals</strong> — review Lost &amp; Found and heritage
+          submissions before they go public.
         </li>
         <li>
           <strong>Privacy</strong> — Settings tab: hide contacts by default;
-          donors must opt in to show mobile numbers.
+          directory contacts stay private unless opted in.
         </li>
         <li>
           <strong>Backups</strong> — Backup tab: download JSON regularly and test
@@ -843,9 +814,6 @@ export function AdminHub() {
               </Link>
               <Link className="btn ghost" href="/lost-found/">
                 Lost &amp; Found
-              </Link>
-              <Link className="btn ghost" href="/blood-donors/">
-                Blood donors
               </Link>
               <Link className="btn ghost" href="/documents/">
                 Documents

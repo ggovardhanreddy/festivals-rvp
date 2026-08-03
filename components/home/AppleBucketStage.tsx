@@ -6,7 +6,7 @@ import { m, useReducedMotion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import type { Album, Media, MediaWithAlbum } from "@/lib/types";
 import { albumHref, type BucketKey } from "@/lib/site";
-import { withBase } from "@/lib/base";
+import { MediaImage } from "@/components/media/MediaImage";
 import { AutoMemorySlideshow } from "./AutoMemorySlideshow";
 import { HoverSlideshowTile } from "./HoverSlideshowTile";
 
@@ -76,12 +76,11 @@ export function AppleBucketStage({
       >
         {heroImage ? (
           <div className="apple-festival-hero">
-            <img
-              src={withBase(heroImage)}
+            <MediaImage
+              src={heroImage}
               alt=""
               className="apple-festival-hero-img"
               fetchPriority="high"
-              decoding="async"
             />
             <div className="apple-festival-hero-veil" aria-hidden />
             <div className="apple-festival-hero-copy">
@@ -129,8 +128,8 @@ export function AppleBucketStage({
             >
               <Link href={albumHref(album)} className="float-tile-link">
                 {album.cover ? (
-                  <img
-                    src={withBase(album.cover)}
+                  <MediaImage
+                    src={album.cover}
                     alt=""
                     className="float-tile-bg"
                     loading="lazy"
@@ -141,7 +140,7 @@ export function AppleBucketStage({
                 <div className="float-tile-shade" />
                 <div className="float-tile-copy">
                   <p className="eyebrow">
-                    {album.year} · {album.category}
+                    {album.year} · {album.media?.length ?? 0} items
                   </p>
                   <h3>{album.title}</h3>
                 </div>

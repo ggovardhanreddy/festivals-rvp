@@ -137,7 +137,6 @@ export const NAV = [
 /** Secondary community links (drawer / footer). */
 export const COMMUNITY_NAV = [
   { href: "/heritage/", label: "Heritage Archive" },
-  { href: "/blood-donors/", label: "Blood Donors" },
   { href: "/documents/", label: "Panchayat Documents" },
   { href: "/suggestions/", label: "Suggestions" },
   { href: "/timeline/", label: "Timeline" },

@@ -2,6 +2,21 @@
 
 All notable changes to **RVP Youth — Digital Village Experience** are documented here.
 
+## [1.2.0] — 2026-08-03
+
+### Fixed
+
+- Fun Fest media after deploy: album covers and tiles now use signed R2 URLs instead of stripped local paths
+- Fun Fest login trims username/password and clears field errors while typing
+- Sticky header scroll offset so homepage sections are not hidden under the nav
+- JSON-LD logo URLs no longer double-prefix the R2 public domain
+
+### Changed
+
+- Homepage hero shows Reddivaripalli address stack over Vanta Birds with a stronger logo watermark
+- Gallery hub groups albums by year, then festival, with cover / name / year / media count
+- Removed Blood Donor directory (nav, footer, routes, admin, search, community API)
+
 ## [1.1.0] — 2026-08-03
 
 ### Added

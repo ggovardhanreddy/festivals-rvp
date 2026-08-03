@@ -6,7 +6,9 @@ import { HomeBelowFold } from "@/components/home/HomeBelowFold";
 
 export default function HomePage() {
   const media = allMedia();
-  const galleryItems = media.filter((m) => m.type === "image");
+  const galleryItems = media.filter(
+    (m) => m.type === "image" && m.album.bucket !== "fun-trips",
+  );
   const yearList = years();
   const members = loadMembers();
   const nextEvents = upcomingEvents(5);

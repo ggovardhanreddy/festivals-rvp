@@ -20,8 +20,8 @@ export const onRequestPost: PagesFunction<AuthEnv> = async ({ request, env }) =>
     username?: string;
     password?: string;
   };
-  const username = body.username ?? "";
-  const password = body.password ?? "";
+  const username = (body.username ?? "").trim();
+  const password = (body.password ?? "").trim();
   const record = authMembers().find((m) => m.username === username);
   if (!record || !(await passwordMatches(password, record.passwordHash))) {
     return json(

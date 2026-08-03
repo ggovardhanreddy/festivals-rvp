@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { LogoWatermark } from "@/components/LogoWatermark";
 import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { withBase } from "@/lib/base";
+import { absoluteUrl, withBase } from "@/lib/base";
 import {
   SEO_DESCRIPTION,
   SEO_KEYWORDS,
@@ -140,7 +140,7 @@ const jsonLd = [
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: `${siteUrl}${withBase("/logo/logo-master.png")}`,
+        url: absoluteUrl("/logo/logo-master.png", siteUrl),
       },
     },
     potentialAction: {
@@ -157,7 +157,7 @@ const jsonLd = [
     url: siteUrl,
     logo: {
       "@type": "ImageObject",
-      url: `${siteUrl}${withBase("/logo/logo-master.png")}`,
+      url: absoluteUrl("/logo/logo-master.png", siteUrl),
       width: 512,
       height: 512,
     },
@@ -261,8 +261,8 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "ImageObject",
-    contentUrl: `${siteUrl}${withBase("/logo/social-banner.png")}`,
-    url: `${siteUrl}${withBase("/logo/logo-master.png")}`,
+    contentUrl: absoluteUrl("/logo/social-banner.png", siteUrl),
+    url: absoluteUrl("/logo/logo-master.png", siteUrl),
     name: `${VILLAGE_ALSO_KNOWN_AS} — ${SITE_NAME}`,
     description: `Official logo and social preview for ${VILLAGE_ALSO_KNOWN_AS} village digital archive.`,
     creditText: SITE_NAME,

@@ -69,10 +69,12 @@ export function authenticateMember(
   password: string,
   members: Member[],
 ): Member | null {
-  if (!username || username !== password) return null;
+  const user = username.trim();
+  const pass = password.trim();
+  if (!user || user !== pass) return null;
   const usernames = assignMemberUsernames(members);
   for (const member of members) {
-    if (usernames.get(member.id) === username) return member;
+    if (usernames.get(member.id) === user) return member;
   }
   return null;
 }

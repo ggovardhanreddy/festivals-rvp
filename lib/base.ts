@@ -18,3 +18,14 @@ export function withBase(path: string): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
   return `${basePath}${normalized}`;
 }
+
+/** Absolute URL for metadata / JSON-LD — never double-prefix R2 URLs. */
+export function absoluteUrl(
+  path: string,
+  siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.reddivaripalli.com",
+): string {
+  const resolved = withBase(path);
+  if (/^https?:\/\//i.test(resolved)) return resolved;
+  const origin = siteUrl.replace(/\/$/, "");
+  return `${origin}${resolved.startsWith("/") ? resolved : `/${resolved}`}`;
+}

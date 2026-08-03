@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Gallery } from "@/components/Gallery";
-import { withBase } from "@/lib/base";
-import { FESTIVAL_HEROES, BUCKETS } from "@/lib/site";
+import { MediaImage } from "@/components/media/MediaImage";
+import { albumHref, BUCKETS } from "@/lib/site";
 import type { Album, MediaWithAlbum } from "@/lib/types";
 
 type CategoryKey =
@@ -42,7 +42,6 @@ function categoryForAlbum(album: Album): CategoryKey[] {
   const yearNum = Number(album.year);
 
   if (bucket === "rvp-birthdays") keys.push("birthdays");
-  if (bucket === "fun-trips") keys.push("village", "events");
   if (FESTIVAL_BUCKETS.includes(bucket)) {
     keys.push("festivals", "events");
   }
@@ -57,11 +56,17 @@ function categoryForAlbum(album: Album): CategoryKey[] {
   if (yearNum && yearNum <= 2018) keys.push("historical");
   if (
     !bucket ||
-    ![...FESTIVAL_BUCKETS, "rvp-birthdays", "fun-trips"].includes(bucket)
+    ![...FESTIVAL_BUCKETS, "rvp-birthdays"].includes(bucket)
   ) {
-    keys.push("other");
+    keys.push("other", "village");
   }
   return keys;
+}
+
+function albumTitle(album: Album): string {
+  const bucket = BUCKETS.find((b) => b.key === album.bucket);
+  if (bucket) return bucket.title;
+  return album.title.replace(/\s+\d{4}$/, "") || album.title;
 }
 
 const FALLBACK = "/brand/village-aerial.webp";
@@ -78,8 +83,37 @@ export function GalleryHub({
   const [cat, setCat] = useState<CategoryKey>("all");
   const [year, setYear] = useState<string>("all");
 
+  const publicAlbums = useMemo(
+    () =>
+      albums.filter(
+        (a) =>
+          a.bucket !== "fun-trips" &&
+          (a.media?.length ?? 0) > 0 &&
+          (cat === "all" || categoryForAlbum(a).includes(cat)) &&
+          (year === "all" || a.year === year),
+      ),
+    [albums, cat, year],
+  );
+
+  const byYear = useMemo(() => {
+    const map = new Map<string, Album[]>();
+    for (const album of publicAlbums) {
+      const list = map.get(album.year) || [];
+      list.push(album);
+      map.set(album.year, list);
+    }
+    for (const list of map.values()) {
+      list.sort((a, b) => {
+        const at = albumTitle(a).localeCompare(albumTitle(b));
+        return at || a.slug.localeCompare(b.slug);
+      });
+    }
+    return [...map.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+  }, [publicAlbums]);
+
   const filteredMedia = useMemo(() => {
     return media.filter((item) => {
+      if (item.album.bucket === "fun-trips") return false;
       if (item.type !== "image" && item.type !== "video" && item.type !== "audio") {
         return false;
       }
@@ -91,11 +125,7 @@ export function GalleryHub({
     });
   }, [media, cat, year]);
 
-  const chapters = BUCKETS.filter((b) =>
-    albums.some((a) => a.bucket === b.key && (a.media?.length ?? 0) > 0),
-  );
-
-  if (!chapters.length && !media.length) {
+  if (!publicAlbums.length && !filteredMedia.length) {
     return (
       <section className="section">
         <p className="muted">
@@ -111,45 +141,8 @@ export function GalleryHub({
       <section className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Chapters</p>
-            <h2>Browse by festival & trip</h2>
-          </div>
-        </div>
-        <div className="gallery-chapters">
-          {chapters.map((bucket) => {
-            const hero =
-              FESTIVAL_HEROES[bucket.key] ||
-              albums.find((a) => a.bucket === bucket.key)?.cover ||
-              FALLBACK;
-            return (
-              <Link
-                key={bucket.key}
-                href={bucket.href}
-                className="gallery-chapter-card"
-              >
-                <img
-                  src={withBase(hero)}
-                  alt=""
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.src = withBase(FALLBACK);
-                  }}
-                />
-                <div>
-                  <p className="eyebrow">{bucket.eyebrow}</p>
-                  <h3>{bucket.title}</h3>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Gallery</p>
-            <h2>All memories</h2>
+            <p className="eyebrow">Albums</p>
+            <h2>Browse by year &amp; festival</h2>
           </div>
         </div>
         <div className="gallery-filters" role="tablist" aria-label="Gallery categories">
@@ -187,6 +180,55 @@ export function GalleryHub({
               {y}
             </button>
           ))}
+        </div>
+
+        {byYear.length ? (
+          <div className="gallery-year-groups">
+            {byYear.map(([yr, yearAlbums]) => (
+              <div key={yr} className="gallery-year-group">
+                <h3 className="gallery-year-heading">{yr}</h3>
+                <div className="gallery-album-grid">
+                  {yearAlbums.map((album) => {
+                    const count = album.media?.length ?? 0;
+                    return (
+                      <Link
+                        key={`${album.year}-${album.bucket}-${album.slug}`}
+                        href={albumHref(album)}
+                        className="gallery-album-card"
+                      >
+                        <div className="gallery-album-cover">
+                          <MediaImage
+                            src={album.cover}
+                            fallback={FALLBACK}
+                            alt=""
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="gallery-album-meta">
+                          <p className="eyebrow">{album.year}</p>
+                          <h4>{albumTitle(album)}</h4>
+                          <p className="muted">
+                            {count} {count === 1 ? "item" : "items"}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="muted">No albums match these filters yet.</p>
+        )}
+      </section>
+
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">All media</p>
+            <h2>Every frame</h2>
+          </div>
         </div>
         {filteredMedia.length ? (
           <Gallery items={filteredMedia} />

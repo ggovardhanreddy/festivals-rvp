@@ -56,7 +56,6 @@ import { DevelopmentsPage } from "@/components/developments/DevelopmentsPage";
 import { SuggestionsPage } from "@/components/suggestions/SuggestionsPage";
 import { DirectoryPage } from "@/components/directory/DirectoryPage";
 import { LostFoundPage } from "@/components/lost-found/LostFoundPage";
-import { BloodDonorsPage } from "@/components/blood/BloodDonorsPage";
 import { PanchayatDocsPage } from "@/components/documents/PanchayatDocsPage";
 import { HeritagePage } from "@/components/heritage/HeritagePage";
 import { MembersChat } from "@/components/chat/MembersChat";
@@ -113,7 +112,6 @@ export function generateStaticParams() {
     { slug: ["suggestions"] },
     { slug: ["directory"] },
     { slug: ["lost-found"] },
-    { slug: ["blood-donors"] },
     { slug: ["documents"] },
     { slug: ["heritage"] },
     { slug: ["chat"] },
@@ -241,10 +239,6 @@ export async function generateMetadata({
     "lost-found": {
       title: "Lost & Found",
       description: `Community lost and found notices for ${VILLAGE_ALSO_KNOWN_AS}.`,
-    },
-    "blood-donors": {
-      title: "Blood Donor Directory",
-      description: `Voluntary blood donor directory for ${VILLAGE_ALSO_KNOWN_AS}.`,
     },
     documents: {
       title: "Panchayat Documents",
@@ -513,14 +507,6 @@ export default async function ArchiveRoute({
     );
   }
 
-  if (path === "blood-donors") {
-    return (
-      <main className="page">
-        <BloodDonorsPage />
-      </main>
-    );
-  }
-
   if (path === "documents") {
     return (
       <main className="page">
@@ -602,7 +588,13 @@ export default async function ArchiveRoute({
   }
 
   if (path === "gallery") {
-    const albums = publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
+    const albums = publicAlbums().filter(
+      (a) => a.bucket !== "fun-trips" && (a.media?.length ?? 0) > 0,
+    );
+    const galleryMedia = media.filter((m) => m.album.bucket !== "fun-trips");
+    const galleryYears = [
+      ...new Set(albums.map((a) => a.year)),
+    ].sort((a, b) => b.localeCompare(a));
     return (
       <main className="page">
         <MemoryHero
@@ -615,7 +607,11 @@ export default async function ArchiveRoute({
           secondaryLabel="Years"
           vantaEffect="fog"
         />
-        <GalleryHub albums={albums} media={media} years={years()} />
+        <GalleryHub
+          albums={albums}
+          media={galleryMedia}
+          years={galleryYears}
+        />
       </main>
     );
   }
@@ -628,7 +624,7 @@ export default async function ArchiveRoute({
           <h1>Search the village</h1>
           <p className="lede">
             Find members, festivals, photos, videos, developments, temple
-            records, documents, doctors, teachers, and blood donors.
+            records, documents, doctors, and teachers.
           </p>
         </div>
         <SearchClient items={media} />

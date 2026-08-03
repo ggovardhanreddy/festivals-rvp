@@ -4,7 +4,7 @@ import Link from "next/link";
 import { m, useReducedMotion } from "framer-motion";
 import type { Album } from "@/lib/types";
 import { BUCKETS, FESTIVAL_HEROES, albumHref } from "@/lib/site";
-import { withBase } from "@/lib/base";
+import { MediaImage } from "@/components/media/MediaImage";
 
 export function FloatingTileField({
   albums,
@@ -44,8 +44,8 @@ export function FloatingTileField({
             onMouseEnter={() => onHoverChange?.(true)}
           >
             <Link href={bucket.href} className="float-tile-link">
-              <img
-                src={withBase(hero)}
+              <MediaImage
+                src={hero}
                 alt=""
                 className="float-tile-bg"
                 loading="lazy"
@@ -78,8 +78,8 @@ export function FloatingTileField({
         >
           <Link href={albumHref(album)} className="float-tile-link">
             {album.cover ? (
-              <img
-                src={withBase(album.cover)}
+              <MediaImage
+                src={album.cover}
                 alt=""
                 className="float-tile-bg"
                 loading="lazy"
@@ -91,7 +91,7 @@ export function FloatingTileField({
             <div className="float-tile-shade" />
             <div className="float-tile-copy">
               <p className="eyebrow">
-                {album.year} · {album.category}
+                {album.year} · {album.media?.length ?? 0} items
               </p>
               <h3>{album.title}</h3>
             </div>

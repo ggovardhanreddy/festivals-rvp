@@ -76,12 +76,14 @@ export function MemberAuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(async (username: string, password: string) => {
+    const user = username.trim();
+    const pass = password.trim();
     try {
       const res = await fetch(withBase("/api/auth/login"), {
         method: "POST",
         credentials: "include",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: user, password: pass }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         ok?: boolean;

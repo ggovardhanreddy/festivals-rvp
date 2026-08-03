@@ -1,6 +1,5 @@
 import type {
   ApprovalStatus,
-  BloodDonor,
   BloodGroup,
   DirectoryCategory,
   DirectoryEntry,
@@ -14,7 +13,6 @@ import type {
 } from "./types";
 import directorySeed from "@/content/data/directory.json";
 import lostFoundSeed from "@/content/data/lost-found.json";
-import bloodDonorsSeed from "@/content/data/blood-donors.json";
 import panchayatDocsSeed from "@/content/data/panchayat-docs.json";
 import heritageSeed from "@/content/data/heritage.json";
 import siteSettingsSeed from "@/content/data/site-settings.json";
@@ -23,7 +21,6 @@ export const COMMUNITY_COLLECTIONS = [
   "directory",
   "members",
   "lost-found",
-  "blood-donors",
   "panchayat-docs",
   "heritage",
   "site-settings",
@@ -98,10 +95,6 @@ export function loadDirectorySeed(): DirectoryEntry[] {
 
 export function loadLostFoundSeed(): LostFoundItem[] {
   return lostFoundSeed as LostFoundItem[];
-}
-
-export function loadBloodDonorsSeed(): BloodDonor[] {
-  return bloodDonorsSeed as BloodDonor[];
 }
 
 export function loadPanchayatDocsSeed(): PanchayatDocument[] {

@@ -11,7 +11,6 @@ export const ROLE_CAPABILITIES = {
     "submit-suggestions",
     "submit-heritage",
     "submit-lost-found",
-    "register-blood-donor",
     "access-funfest",
   ],
   admin: [
