@@ -10,7 +10,7 @@
   {
     "id": "g-hemanth-kumar-reddy",
     "name": "G Hemanth Kumar Reddy",
-    "photo": null,
+    "photo": "/members/hemanth.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Cyber Security Head (Software Engineer)"
@@ -18,7 +18,7 @@
   {
     "id": "dr-g-uma-maheshwar-reddy",
     "name": "Dr. G Uma Maheshwar Reddy",
-    "photo": null,
+    "photo": "/members/g-uma.webp"
     "dob": null,
     "group": "legacy",
     "designation": "Doctor (Orthopaedic MD)"
@@ -42,7 +42,7 @@
   {
     "id": "g-rana-pathap-reddy",
     "name": "G Rana Prathap Reddy",
-    "photo": null,
+    "photo": "/members/rana.webp"
     "dob": null,
     "group": "legacy",
     "designation": "Software Engineer"
@@ -50,7 +50,7 @@
   {
     "id": "g-jayachandra-reddy",
     "name": "G Jayachandra Reddy",
-    "photo": null,
+    "photo": "/members/jayareddy.webp"
     "dob": null,
     "group": "legacy",
     "designation": "Farmer"
@@ -84,7 +84,7 @@
   {
     "id": "d-rammohan-reddy",
     "name": "D Rammohan Reddy",
-    "photo": null,
+    "photo": "/members/d--rammohana.webp"
     "dob": null,
     "group": "legacy",
     "designation": "Farmer",
@@ -110,7 +110,7 @@
   {
     "id": "g-raja",
     "name": "G Raja",
-    "photo": null,
+    "photo": "/members/g-raja.webp"
     "dob": null,
     "group": "legacy",
     "designation": "Real Estate"
@@ -150,7 +150,7 @@
   {
     "id": "j-shiva",
     "name": "J Shiva",
-    "photo": null,
+    "photo": "/members/j-shiva.webp"
     "dob": null,
     "group": "legacy",
     "designation": "Government Teacher (Mathematics)"
@@ -158,7 +158,7 @@
   {
     "id": "j-balaji",
     "name": "J Balaji",
-    "photo": null,
+    "photo": "/members/j-balaji.webp"
     "dob": null,
     "group": "legacy",
     "designation": "Farmer"
@@ -230,7 +230,7 @@
   {
     "id": "g-sreekanth",
     "name": "G Sreekanth",
-    "photo": "/members/Sreekanth.webp",
+    "photo": "/members/sreekanth.webp",
     "dob": "06-04",
     "group": "core",
     "designation": "E-commerce Manager (Delivery)"
@@ -270,7 +270,7 @@
   {
     "id": "j-bhanu",
     "name": "J Bhanu",
-    "photo": "/members/bhanu.webp",
+    "photo": "/members/j-bhanu.webp",
     "dob": "10-08",
     "group": "core",
     "designation": "Software Engineer"
@@ -286,7 +286,7 @@
   {
     "id": "y-krishna-mohan",
     "name": "Y Krishna Mohan",
-    "photo": "/members/krishnamohan.webp",
+    "photo": "/members/kittu.webp",
     "dob": null,
     "group": "core",
     "designation": "Software Engineer"
@@ -294,7 +294,7 @@
   {
     "id": "d-shantha-kumar",
     "name": "Dr. D Shantha Kumar",
-    "photo": "/members/santha.webp",,
+    "photo": "/members/shantha.webp",,
     "dob": "12-15",
     "group": "core",
     "designation": "Doctor (General Surgeon, MD)"
@@ -310,7 +310,7 @@
   {
     "id": "u-guru",
     "name": "U Guru",
-    "photo": "/members/guru.webp",
+    "photo": "/members/gurumahesh.webp",
     "dob": "09-02",
     "group": "core",
     "designation": "Software Engineer"
@@ -318,7 +318,7 @@
   {
     "id": "u-guru-mahesh-puli",
     "name": "U Guru Mahesh (Puli)",
-    "photo": "/members/gurumahesh.webp",
+    "photo": "/members/guru.webp",
     "dob": "10-06",
     "group": "core",
     "designation": "GRT Employee"
@@ -342,7 +342,7 @@
   {
     "id": "d-anil-reddy",
     "name": "D Anil Reddy",
-    "photo": "/members/anil.webp",
+    "photo": "/members/laddu.webp",
     "dob": "05-22",
     "group": "nextgen",
     "designation": "Government Employee – Post Office"
