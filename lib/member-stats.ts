@@ -39,8 +39,8 @@ export function matchProfession(
         d,
       );
     case "government":
-      // Bank staff stay in Other Professionals (not government sector)
-      return /government|vro|vigilance|post office|headmaster|priest|indian army/.test(
+      // Bank staff and temple priests stay in Other Professionals
+      return /government|vro|vigilance|post office|headmaster|indian army/.test(
         d,
       );
     case "teachers":
