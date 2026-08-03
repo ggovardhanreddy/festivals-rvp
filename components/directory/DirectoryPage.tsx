@@ -8,19 +8,61 @@ import {
   loadDirectorySeed,
   sortByName,
 } from "@/lib/community";
+import { mergeMemberRosters } from "@/lib/member-stats";
 import { useCommunityList } from "@/lib/use-community";
-import type { DirectoryCategory, DirectoryEntry, SiteSettings } from "@/lib/types";
+import type {
+  DirectoryCategory,
+  DirectoryEntry,
+  Member,
+  SiteSettings,
+} from "@/lib/types";
 import { Reveal } from "@/components/Reveal";
+import { MediaImage } from "@/components/media/MediaImage";
+import membersSeed from "@/content/data/members.json";
 
 const SEED = loadDirectorySeed();
+const MEMBER_SEED = membersSeed as Member[];
+
+/** Keep parenthetical suffixes (CG/CK) so similarly named people do not collide. */
+function directoryNameKey(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/^dr\.?\s+/i, "")
+    .replace(/[^a-z0-9()]+/g, "");
+}
+
+function memberPhotoByName(members: Member[]): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const member of members) {
+    if (!member.photo) continue;
+    map.set(directoryNameKey(member.name), member.photo);
+  }
+  return map;
+}
+
+/** Fill missing directory photos from the members roster (same person, same portrait). */
+function applyMemberPhotos(
+  entries: DirectoryEntry[],
+  members: Member[],
+): DirectoryEntry[] {
+  const photos = memberPhotoByName(members);
+  if (!photos.size) return entries;
+  return entries.map((entry) => {
+    if (entry.photo) return entry;
+    const photo = photos.get(directoryNameKey(entry.name));
+    return photo ? { ...entry, photo } : entry;
+  });
+}
 
 function mergeDirectory(
   seed: DirectoryEntry[],
   remote: DirectoryEntry[],
+  members: Member[],
 ): DirectoryEntry[] {
-  if (!remote.length) return seed;
+  const base = applyMemberPhotos(seed, members);
+  if (!remote.length) return base;
   const map = new Map<string, DirectoryEntry>();
-  for (const item of seed) map.set(item.id, item);
+  for (const item of base) map.set(item.id, item);
   for (const item of remote) {
     const prev = map.get(item.id);
     map.set(item.id, {
@@ -36,7 +78,7 @@ function mergeDirectory(
   // Keep seed order, then append remote-only entries
   const seen = new Set<string>();
   const out: DirectoryEntry[] = [];
-  for (const item of seed) {
+  for (const item of base) {
     const merged = map.get(item.id);
     if (merged) {
       out.push(merged);
@@ -46,12 +88,20 @@ function mergeDirectory(
   for (const item of remote) {
     if (!seen.has(item.id) && map.has(item.id)) out.push(map.get(item.id)!);
   }
-  return out;
+  return applyMemberPhotos(out, members);
 }
 
 export function DirectoryPage() {
   const { raw, loading } = useCommunityList<DirectoryEntry>("directory", SEED);
-  const items = useMemo(() => mergeDirectory(SEED, raw), [raw]);
+  const { raw: memberRaw } = useCommunityList<Member>("members", MEMBER_SEED);
+  const members = useMemo(
+    () => mergeMemberRosters(MEMBER_SEED, memberRaw),
+    [memberRaw],
+  );
+  const items = useMemo(
+    () => mergeDirectory(SEED, raw, members),
+    [raw, members],
+  );
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<DirectoryCategory | "all">("all");
   const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
@@ -146,8 +196,8 @@ export function DirectoryPage() {
                       data-placeholder={!person.photo || undefined}
                     >
                       {person.photo ? (
-                        <img
-                          src={withBase(person.photo)}
+                        <MediaImage
+                          src={person.photo}
                           alt={person.name}
                           loading="lazy"
                           draggable={false}

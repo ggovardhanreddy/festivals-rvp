@@ -5,7 +5,7 @@
     "category": "Doctors",
     "profession": "Veterinary",
     "designation": "Veterinary Professional",
-    "photo": null
+    "photo": "/members/avinash.webp"
   },
   {
     "id": "dir-d-shantha-kumar",
@@ -13,7 +13,7 @@
     "category": "Doctors",
     "profession": "Doctor",
     "designation": "Doctor (General Surgeon, MD)",
-    "photo": null
+    "photo": "/members/shantha.webp"
   },
   {
     "id": "dir-dr-g-uma-maheshwar-reddy",
@@ -21,7 +21,7 @@
     "category": "Doctors",
     "profession": "Doctor",
     "designation": "Doctor (Orthopaedic MD)",
-    "photo": null
+    "photo": "/members/g-uma.webp"
   },
   {
     "id": "dir-dr-u-reddy-prasad",
@@ -45,7 +45,7 @@
     "category": "Teachers",
     "profession": "Government Employee",
     "designation": "Government Teacher (Mathematics)",
-    "photo": null
+    "photo": "/members/j-shiva.webp"
   },
   {
     "id": "dir-c-hari",
@@ -53,7 +53,7 @@
     "category": "Other Professionals",
     "profession": "Banking",
     "designation": "Bank Employee (Loan Department)",
-    "photo": null
+    "photo": "/members/chari.webp"
   },
   {
     "id": "dir-d-anil-reddy",
@@ -61,7 +61,7 @@
     "category": "Government Employees",
     "profession": "Government Employee",
     "designation": "Government Employee – Post Office",
-    "photo": null
+    "photo": "/members/laddu.webp"
   },
   {
     "id": "dir-d-raja-reddy",
@@ -93,7 +93,7 @@
     "category": "Government Employees",
     "profession": "Defence",
     "designation": "Indian Army",
-    "photo": null
+    "photo": "/members/niranjan.webp"
   },
   {
     "id": "dir-y-naveen",
@@ -109,7 +109,7 @@
     "category": "Other Professionals",
     "profession": "Engineer",
     "designation": "Electrical Engineer (UAE)",
-    "photo": null
+    "photo": "/members/ganesh.webp"
   },
   {
     "id": "dir-c-ganu",
@@ -125,7 +125,7 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Software Engineer",
-    "photo": null
+    "photo": "/members/narasimha.webp"
   },
   {
     "id": "dir-c-narendra-cg",
@@ -141,7 +141,7 @@
     "category": "Other Professionals",
     "profession": "Engineer",
     "designation": "Mechanical Engineer",
-    "photo": null
+    "photo": "/members/narendra-ck.webp"
   },
   {
     "id": "dir-d-akhil-reddy",
@@ -189,7 +189,7 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Cyber Security Head (Software Engineer)",
-    "photo": null
+    "photo": "/members/hemanth.webp"
   },
   {
     "id": "dir-g-jayachandra-reddy",
@@ -197,7 +197,7 @@
     "category": "Other Professionals",
     "profession": "Agriculture",
     "designation": "Farmer",
-    "photo": null
+    "photo": "/members/jayachandra.webp"
   },
   {
     "id": "dir-g-pushyanth-reddy",
@@ -213,7 +213,7 @@
     "category": "Other Professionals",
     "profession": "Business",
     "designation": "Real Estate",
-    "photo": null
+    "photo": "/members/g-raja.webp"
   },
   {
     "id": "dir-g-rana-pathap-reddy",
@@ -221,7 +221,7 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Software Engineer",
-    "photo": null
+    "photo": "/members/rana.webp"
   },
   {
     "id": "dir-g-ravi-kumar-reddy",
@@ -237,7 +237,7 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "E-commerce Manager (Delivery)",
-    "photo": null
+    "photo": "/members/sreekanth.webp"
   },
   {
     "id": "dir-g-vijay-kumar-reddy",
@@ -253,7 +253,7 @@
     "category": "Other Professionals",
     "profession": "Agriculture",
     "designation": "Farmer",
-    "photo": null
+    "photo": "/members/j-balaji.webp"
   },
   {
     "id": "dir-j-bhanu",
@@ -261,7 +261,7 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Software Engineer",
-    "photo": null
+    "photo": "/members/j-bhanu.webp"
   },
   {
     "id": "dir-j-eswar-reddy",
@@ -301,7 +301,7 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Software Engineer",
-    "photo": null
+    "photo": "/members/gurumahesh.webp"
   },
   {
     "id": "dir-u-guru-mahesh-puli",
@@ -309,7 +309,7 @@
     "category": "Other Professionals",
     "profession": "Business",
     "designation": "GRT Employee",
-    "photo": null
+    "photo": "/members/guru.webp"
   },
   {
     "id": "dir-u-nagendra",
@@ -317,7 +317,7 @@
     "category": "Other Professionals",
     "profession": "Business",
     "designation": "Business",
-    "photo": null
+    "photo": "/members/nagendra.webp"
   },
   {
     "id": "dir-u-nagesh",
@@ -341,7 +341,7 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Software Engineer",
-    "photo": null
+    "photo": "/members/kittu.webp"
   },
   {
     "id": "dir-y-ramesh",
