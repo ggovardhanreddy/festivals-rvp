@@ -8,22 +8,73 @@ const SESSION_KEY = "rvp-member-session";
  * "G Ramesh Kumar Reddy" → "Ramesh".
  */
 export function memberUsername(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const parts = name
+    .replace(/[()]/g, " ")
+    .replace(/\bDr\.?\b/gi, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
   if (!parts.length) return name;
+  // Skip single-letter initials ("G", "M") — prefer first significant word.
   const significant = parts.find((part) => part.length > 1);
   return significant || parts[parts.length - 1]!;
 }
 
+/**
+ * Assign unique Fun Fest usernames across the roster.
+ * Duplicates get a leading initial (K Balaji → KBalaji) or a numeric suffix.
+ */
+export function assignMemberUsernames(
+  members: Member[],
+): Map<string, string> {
+  const used = new Set<string>();
+  const map = new Map<string, string>();
+
+  for (const member of members) {
+    const parts = member.name
+      .replace(/[()]/g, " ")
+      .replace(/\bDr\.?\b/gi, " ")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    let candidate = memberUsername(member.name);
+
+    if (used.has(candidate)) {
+      const initial = (parts[0]?.[0] || "").toUpperCase();
+      const withInitial = `${initial}${candidate}`;
+      if (initial && !used.has(withInitial)) {
+        candidate = withInitial;
+      } else {
+        const extras = parts.filter((p) => p.length > 1 && p !== candidate);
+        const joined = extras.slice(0, 2).join("") || candidate;
+        candidate = used.has(joined) ? `${candidate}2` : joined;
+        let n = 2;
+        while (used.has(candidate)) {
+          candidate = `${memberUsername(member.name)}${n}`;
+          n += 1;
+        }
+      }
+    }
+
+    used.add(candidate);
+    map.set(member.id, candidate);
+  }
+
+  return map;
+}
+
+/** @deprecated Client must not verify passwords — use /api/auth/login */
 export function authenticateMember(
   username: string,
   password: string,
   members: Member[],
 ): Member | null {
-  // Exact case-sensitive match — "rajesh" must not match "Rajesh"
   if (!username || username !== password) return null;
-  return (
-    members.find((member) => memberUsername(member.name) === username) || null
-  );
+  const usernames = assignMemberUsernames(members);
+  for (const member of members) {
+    if (usernames.get(member.id) === username) return member;
+  }
+  return null;
 }
 
 export type MemberSession = {
@@ -44,16 +95,11 @@ export function readSession(): MemberSession | null {
   }
 }
 
-export function writeSession(member: Member): MemberSession {
-  const session: MemberSession = {
-    memberId: member.id,
-    username: memberUsername(member.name),
-    name: member.name,
-    at: Date.now(),
-  };
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+export function writeSession(session: MemberSession): MemberSession {
+  const next = { ...session, at: Date.now() };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(next));
   window.dispatchEvent(new CustomEvent("rvp:auth-change"));
-  return session;
+  return next;
 }
 
 export function clearSession() {

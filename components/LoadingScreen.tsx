@@ -5,35 +5,43 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { withBase } from "@/lib/base";
 
-/** Brief soft splash — on home, stay black so the cinematic intro owns the open. */
+/**
+ * Soft route splash. Must never trap taps or block pages if JS is slow —
+ * CSS auto-hides as a hard fallback, and the React timer always clears.
+ */
 export function LoadingScreen() {
   const pathname = usePathname() || "/";
   const isHome = pathname === "/";
   const reduce = useReducedMotion();
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (isHome || reduce) {
-      const frame = window.requestAnimationFrame(() => setShow(false));
-      return () => window.cancelAnimationFrame(frame);
+      setShow(false);
+      return;
     }
-    const timer = window.setTimeout(() => setShow(false), 480);
-    return () => window.clearTimeout(timer);
-  }, [isHome, reduce]);
 
-  if (isHome) return null;
+    setShow(true);
+    const timer = window.setTimeout(() => setShow(false), 420);
+    return () => window.clearTimeout(timer);
+  }, [pathname, isHome, reduce]);
+
+  if (isHome || reduce) return null;
 
   return (
     <AnimatePresence>
-      {show && (
+      {show ? (
         <m.div
           className="loader-screen landing-loader"
           initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
+          transition={{ duration: 0.28, ease: "easeOut" }}
           role="status"
           aria-live="polite"
           aria-label="Loading RVP Youth"
+          // Never intercept taps while fading / if stuck
+          style={{ pointerEvents: "none" }}
         >
           <img
             src={withBase("/brand/rvp-youth-festival.webp")}
@@ -49,7 +57,7 @@ export function LoadingScreen() {
             className="landing-loader-logo"
           />
         </m.div>
-      )}
+      ) : null}
     </AnimatePresence>
   );
 }

@@ -12,7 +12,11 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!ready) return;
     if (!session) {
-      const next = pathname.endsWith("/") ? pathname : `${pathname}/`;
+      const next = pathname.includes("/fun-trips")
+        ? pathname.endsWith("/")
+          ? pathname
+          : `${pathname}/`
+        : "/fun-trips/";
       router.replace(`/login/?next=${encodeURIComponent(next)}`);
     }
   }, [ready, session, router, pathname]);

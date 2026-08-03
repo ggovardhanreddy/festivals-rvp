@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
-import { withBase } from "@/lib/base";
 import { isDisplayableImageUrl } from "@/lib/media-formats";
+import { useMediaUrl } from "@/lib/use-media-url";
 
 const VideoPlayer = dynamic(
   () => import("./media/VideoPlayer").then((m) => m.VideoPlayer),
@@ -30,13 +30,30 @@ function previewUrl(media: Media): string | null {
   return null;
 }
 
+function DownloadLink({ file }: { file: string }) {
+  const { url } = useMediaUrl(file);
+  if (!url) return null;
+  return (
+    <a
+      className="btn ghost"
+      href={url}
+      download
+      target="_blank"
+      rel="noreferrer"
+    >
+      Download
+    </a>
+  );
+}
+
 function TilePreview({ media }: { media: Media }) {
   const src = previewUrl(media);
-  if (src) {
+  const { url } = useMediaUrl(src);
+  if (src && url) {
     return (
       <>
         <img
-          src={withBase(src)}
+          src={url}
           alt={media.title || "Memory"}
           loading="lazy"
           decoding="async"
@@ -80,23 +97,30 @@ function ImageLightbox({
   const drag = useRef<{ x: number; y: number; px: number; py: number } | null>(
     null,
   );
-  const src = isDisplayableImageUrl(media.file)
+  const raw = isDisplayableImageUrl(media.file)
     ? media.file
     : media.thumb && isDisplayableImageUrl(media.thumb)
       ? media.thumb
       : null;
+  const { url: src, loading, error } = useMediaUrl(raw);
 
-  if (!src) {
+  if (!raw) {
     return (
       <p className="media-error">
         This image is not available in a browser-friendly format yet.
       </p>
     );
   }
+  if (loading) {
+    return <p className="muted">Loading image…</p>;
+  }
+  if (error || !src) {
+    return <p className="media-error">{error || "Image unavailable."}</p>;
+  }
 
   return (
     <div
-      className="lightbox-image-stage"
+      className="lightbox-image-stage protected-media"
       onPointerDown={(e) => {
         if (zoom <= 1) return;
         (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
@@ -117,9 +141,11 @@ function ImageLightbox({
       onPointerUp={() => {
         drag.current = null;
       }}
+      onContextMenu={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
     >
       <img
-        src={withBase(src)}
+        src={src}
         alt={media.title || "Memory photograph"}
         style={{
           transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
@@ -129,6 +155,9 @@ function ImageLightbox({
         draggable={false}
         onContextMenu={(e) => e.preventDefault()}
       />
+      <span className="protected-media-mark" aria-hidden>
+        Reddivaripalli Village
+      </span>
     </div>
   );
 }
@@ -382,15 +411,7 @@ export function Gallery({
                   </>
                 )}
                 {allowDownload && isDisplayableImageUrl(current.file) ? (
-                  <a
-                    className="btn ghost"
-                    href={withBase(current.file)}
-                    download
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Download
-                  </a>
+                  <DownloadLink file={current.file} />
                 ) : null}
                 <button className="btn ghost" type="button" onClick={close}>
                   Close

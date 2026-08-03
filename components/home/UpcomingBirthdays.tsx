@@ -91,7 +91,7 @@ export function UpcomingBirthdays({
                   {age != null ? ` · turns ${age + 1}` : ""}
                 </p>
                 {!hasPhoto ? (
-                  <p className="member-photo-soon">Photo will be added soon.</p>
+                  <p className="member-photo-soon">Photo Coming Soon</p>
                 ) : null}
               </div>
             </article>

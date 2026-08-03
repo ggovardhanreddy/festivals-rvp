@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useNotifications } from "./NotificationProvider";
+import { trackAnalyticsHit } from "@/lib/use-community";
 
 export function NotificationBell() {
   const { items, unread, markRead, markAllRead, requestBrowserPermission, permission } =
@@ -61,8 +62,16 @@ export function NotificationBell() {
                     onClick={() => {
                       markRead(item.id);
                       setOpen(false);
+                      void trackAnalyticsHit({
+                        path: item.href || "/events/",
+                        kind: "notif-click",
+                        meta: item.kind,
+                      });
                     }}
                   >
+                    {item.banner ? (
+                      <span className="notif-item-banner">{item.banner}</span>
+                    ) : null}
                     <strong>{item.title}</strong>
                     <span className="muted">{item.body}</span>
                   </Link>

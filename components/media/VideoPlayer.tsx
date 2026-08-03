@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { withBase } from "@/lib/base";
+import { useMediaUrl } from "@/lib/use-media-url";
 
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2] as const;
 
@@ -20,12 +20,15 @@ export function VideoPlayer({
   const [speed, setSpeed] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [pipSupported, setPipSupported] = useState(false);
+  const media = useMediaUrl(src);
+  const posterMedia = useMediaUrl(poster);
 
   useEffect(() => {
     setPipSupported(
       typeof document !== "undefined" && "pictureInPictureEnabled" in document,
     );
   }, []);
+
   const mime = src.toLowerCase().endsWith(".webm")
     ? "video/webm"
     : src.toLowerCase().endsWith(".ogv")
@@ -38,6 +41,18 @@ export function VideoPlayer({
     el.playbackRate = speed;
   }, [speed]);
 
+  useEffect(() => {
+    if (media.error) setError(media.error);
+  }, [media.error]);
+
+  if (media.loading) {
+    return (
+      <div className={`media-video-wrap ${className}`.trim()}>
+        <p className="muted">Loading video…</p>
+      </div>
+    );
+  }
+
   return (
     <div className={`media-video-wrap ${className}`.trim()}>
       <video
@@ -46,7 +61,7 @@ export function VideoPlayer({
         controls
         playsInline
         preload="metadata"
-        poster={poster ? withBase(poster) : undefined}
+        poster={posterMedia.url || undefined}
         aria-label={title}
         controlsList="nodownload"
         onError={() =>
@@ -54,7 +69,7 @@ export function VideoPlayer({
         }
         onLoadedData={() => setError(null)}
       >
-        <source src={withBase(src)} type={mime} />
+        {media.url ? <source src={media.url} type={mime} /> : null}
         Your browser cannot play this video.
       </video>
       {error ? <p className="media-error muted">{error}</p> : null}

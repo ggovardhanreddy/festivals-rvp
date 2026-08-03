@@ -1,3 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /fun-trips/
+Disallow: /chat/
+Disallow: /login/
+Disallow: /admin/
+Disallow: /settings/
+Disallow: /api/
+Disallow: /api/media/
 Sitemap: https://www.reddivaripalli.com/sitemap.xml

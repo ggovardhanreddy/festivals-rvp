@@ -1,21 +1,26 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { m } from "framer-motion";
 import type { MediaWithAlbum } from "@/lib/types";
 import { BUCKETS } from "@/lib/site";
 import { withBase } from "@/lib/base";
+import { trackAnalyticsHit } from "@/lib/use-community";
 import { Gallery } from "./Gallery";
 import { Input } from "./ui/input";
 
 type SearchDoc = {
   title: string;
-  date: string;
+  date?: string;
   tags?: string[];
   type?: string;
-  album: string;
+  kind?: string;
+  album?: string;
   bucket?: string;
+  year?: string;
   url: string;
+  body?: string;
 };
 
 export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
@@ -23,6 +28,7 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
   const [year, setYear] = useState("all");
   const [bucket, setBucket] = useState("all");
   const [type, setType] = useState("all");
+  const [kind, setKind] = useState("all");
   const [index, setIndex] = useState<SearchDoc[] | null>(null);
 
   useEffect(() => {
@@ -34,6 +40,19 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
       .catch(() => setIndex(null));
   }, []);
 
+  useEffect(() => {
+    const q = query.trim();
+    if (q.length < 2) return;
+    const t = window.setTimeout(() => {
+      void trackAnalyticsHit({
+        path: "/search/",
+        kind: "search",
+        meta: q.slice(0, 80),
+      });
+    }, 900);
+    return () => window.clearTimeout(t);
+  }, [query]);
+
   const years = useMemo(
     () =>
       [...new Set(items.map((item) => item.album.year))]
@@ -42,15 +61,34 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
     [items],
   );
 
+  const communityHits = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!index) return [] as SearchDoc[];
+    return index.filter((doc) => {
+      if (!doc.kind || doc.kind === "media") return false;
+      if (kind !== "all" && doc.kind !== kind) return false;
+      if (!q) return kind !== "all";
+      const hay = [doc.title, doc.body, doc.kind, ...(doc.tags || [])]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }, [index, query, kind]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    if (kind !== "all" && kind !== "media") return [];
     return items.filter((item) => {
       if (year !== "all" && item.album.year !== year) return false;
       if (bucket !== "all" && item.album.bucket !== bucket) return false;
       if (type !== "all" && item.type !== type) return false;
       if (!q) return true;
       const fromIndex = index?.find(
-        (doc) => doc.title === item.title && doc.date === item.date,
+        (doc) =>
+          (!doc.kind || doc.kind === "media") &&
+          doc.title === item.title &&
+          doc.date === item.date,
       );
       const hay = [
         item.title,
@@ -69,7 +107,7 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
         .toLowerCase();
       return hay.includes(q);
     });
-  }, [items, query, year, bucket, type, index]);
+  }, [items, query, year, bucket, type, index, kind]);
 
   return (
     <div>
@@ -81,10 +119,28 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search year, festival, album, keyword…"
-          aria-label="Search memories"
+          placeholder="Search members, festivals, photos, doctors, documents…"
+          aria-label="Search the village portal"
         />
         <div className="search-filters">
+          <label>
+            <span className="sr-only">Kind</span>
+            <select
+              value={kind}
+              onChange={(e) => setKind(e.target.value)}
+              aria-label="Filter by kind"
+            >
+              <option value="all">Everything</option>
+              <option value="media">Gallery media</option>
+              <option value="member">Members</option>
+              <option value="directory">Directory</option>
+              <option value="event">Events</option>
+              <option value="development">Developments</option>
+              <option value="document">Documents</option>
+              <option value="heritage">Heritage</option>
+              <option value="blood-donor">Blood donors</option>
+            </select>
+          </label>
           <label>
             <span className="sr-only">Year</span>
             <select
@@ -133,11 +189,35 @@ export function SearchClient({ items }: { items: MediaWithAlbum[] }) {
           </label>
         </div>
       </m.div>
-      <p className="muted" style={{ margin: "1rem 0 1.5rem" }}>
-        {filtered.length} memor{filtered.length === 1 ? "y" : "ies"}
-        {index ? " · index ready" : ""}
-      </p>
-      <Gallery items={filtered} />
+
+      {communityHits.length ? (
+        <section className="search-community" style={{ margin: "1.25rem 0" }}>
+          <h2 style={{ fontSize: "1.1rem" }}>
+            Village records ({communityHits.length})
+          </h2>
+          <ul className="search-community-list">
+            {communityHits.slice(0, 40).map((doc) => (
+              <li key={`${doc.kind}-${doc.url}-${doc.title}`}>
+                <Link href={doc.url}>
+                  <span className="eyebrow">{doc.kind}</span>
+                  <strong>{doc.title}</strong>
+                  {doc.body ? <span className="muted">{doc.body}</span> : null}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {(kind === "all" || kind === "media") && (
+        <>
+          <p className="muted" style={{ margin: "1rem 0 1.5rem" }}>
+            {filtered.length} memor{filtered.length === 1 ? "y" : "ies"}
+            {index ? " · index ready" : ""}
+          </p>
+          <Gallery items={filtered} />
+        </>
+      )}
     </div>
   );
 }

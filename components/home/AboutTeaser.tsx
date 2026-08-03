@@ -5,6 +5,9 @@ import {
   VILLAGE_NAME,
   VILLAGE_ALSO_KNOWN_AS,
   SITE_NAME,
+  OFFICIAL_TITLE,
+  OFFICIAL_MISSION,
+  VILLAGE_ADDRESS,
   VILLAGE_ADDRESS_LINE,
 } from "@/lib/site";
 
@@ -15,48 +18,55 @@ export function AboutTeaser() {
     <Reveal className="section home-about" id="about">
       <div className="about-teaser">
         <div className="about-teaser-copy">
-          <p className="eyebrow">Our village</p>
-          <h2>About {VILLAGE_NAME}</h2>
-          <p className="lede">
-            Welcome to {VILLAGE_NAME} — also known as {VILLAGE_ALSO_KNOWN_AS} —
-            a village rooted in heritage, greenery, and the warmth of people who
-            still greet one another by name.
-          </p>
+          <p className="eyebrow">{OFFICIAL_TITLE}</p>
+          <h2>About {VILLAGE_ALSO_KNOWN_AS}</h2>
+          <p className="lede">{OFFICIAL_MISSION}</p>
           <div className="about-teaser-body">
             <p>
-              Nestled in Annamayya District, Andhra Pradesh, our home carries a
-              rich history shaped by farmers, temple bells, and generations who
-              chose to stay close to the land. Fields and trees frame daily life;
-              the Ramalayam stands as a quiet centre of faith and gathering.
+              Also known as {VILLAGE_NAME}, the village is known for its rich
+              cultural heritage, strong community values, agricultural
+              traditions, beautiful greenery, annual festivals, and the warm
+              hospitality of its residents. Fields and temple bells frame daily
+              life, while Sri Ramalayam stands as a quiet centre of faith and
+              gathering.
             </p>
             <p>
-              What makes this place special is not only its beauty, but its
-              people — welcoming, hardworking, and bound by strong community
-              values. We celebrate cultural traditions with sincerity: Sankranthi
-              harvests, Vinayaka beginnings, Jatharas, Sri Rama Navami, and the
-              joyful evenings that follow. Agriculture still guides the seasons,
-              while unity and harmony keep households connected through every
-              festival and every ordinary day.
+              Families celebrate Vinayaka Chavithi, Varalakshmi Vratam,
+              Sankranti, Sri Rama Navami, Mathamma Jathara, Devapatlamma
+              Jathara, Ugadi, Deepavali, and Dasara with sincerity — traditions
+              that bind the {VILLAGE_ADDRESS.region} and Sambepalle together
+              across generations.
             </p>
             <p>
-              {SITE_NAME} exists to honour that identity — preserving memories as
-              we grow, so the next generation can feel the same pride in{" "}
-              {VILLAGE_ALSO_KNOWN_AS} that we carry today. {VILLAGE_ADDRESS_LINE}.
+              This portal is built to still be useful in ten years: annual
+              archives, heritage records, developments, and community services.
+              {SITE_NAME} stewards the site so the next generation can feel the
+              same pride in {VILLAGE_ALSO_KNOWN_AS} that we carry today.
+            </p>
+            <p className="muted">
+              {VILLAGE_ADDRESS_LINE}. Part of {VILLAGE_ADDRESS.district},{" "}
+              {VILLAGE_ADDRESS.state}, India.
             </p>
           </div>
           <div className="btn-row">
-            <Link className="btn" href="/developments/">
-              Village developments
+            <Link className="btn" href="/years/">
+              Annual Archive
+            </Link>
+            <Link className="btn ghost" href="/heritage/">
+              Heritage
             </Link>
             <Link className="btn ghost" href="/contact/">
               Contact us
+            </Link>
+            <Link className="btn ghost" href="/gallery/">
+              Gallery
             </Link>
           </div>
         </div>
         <div className="about-teaser-media">
           <img
             src={withBase(ABOUT_IMAGE)}
-            alt={`${VILLAGE_NAME} from above`}
+            alt={`${VILLAGE_ALSO_KNOWN_AS} village greenery near Devapatla, Sambepalle, YSR Kadapa`}
             width={960}
             height={720}
             loading="lazy"

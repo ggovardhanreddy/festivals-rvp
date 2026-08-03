@@ -60,28 +60,23 @@ export function groupFromAge(age: number): MemberGroup {
   return "nextgen";
 }
 
-/** Effective category — age wins when computable, else stored manual group. */
-export function resolveMemberGroup(
-  member: Member,
-  from = new Date(),
-): MemberGroup {
-  const age = memberAge(member, from);
-  if (age != null) return groupFromAge(age);
+/** Effective category from members.json (manual community list). */
+export function resolveMemberGroup(member: Member): MemberGroup {
   return normalizeStoredGroup(member.group);
 }
 
 export const MEMBER_GROUP_LABELS: Record<MemberGroup, string> = {
   legacy: "Legacy Circle",
   core: "Core Members",
-  nextgen: "NextGen",
+  nextgen: "Next Generation",
 };
 
 export const MEMBER_GROUP_DESCRIPTIONS: Record<MemberGroup, string> = {
   legacy:
-    "The respected elders and senior members whose experience, wisdom, and guidance form the foundation of our community.",
-  core: "The active members who contribute to the growth, development, and day-to-day activities of our community.",
+    "The Legacy Circle honors the senior members who have significantly contributed to the growth, unity, traditions, and development of Reddivaripalli Village. Their experience and lifelong service continue to inspire future generations.",
+  core: "The Core Members are the active contributors leading community initiatives, organizing festivals, supporting village development, and preserving the traditions of Reddivaripalli.",
   nextgen:
-    "The younger generation who will shape the future of our community with fresh ideas, innovation, and energy.",
+    "The Next Generation represents the future of Reddivaripalli—young professionals, entrepreneurs, public servants, and innovators who will carry forward the village's legacy with dedication and fresh ideas.",
 };
 
 export const MEMBER_GROUP_ORDER: MemberGroup[] = [
@@ -90,8 +85,27 @@ export const MEMBER_GROUP_ORDER: MemberGroup[] = [
   "nextgen",
 ];
 
+/** Short label for badges (no age bands). */
 export const MEMBER_GROUP_AGE_HINT: Record<MemberGroup, string> = {
-  legacy: "40 years and above",
-  core: "28 to 39 years",
-  nextgen: "Below 28 years",
+  legacy: "Senior stewards",
+  core: "Active leaders",
+  nextgen: "Rising generation",
 };
+
+export function memberInitials(name: string): string {
+  return name
+    .replace(/^Dr\.?\s+/i, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0])
+    .join("")
+    .toUpperCase();
+}
+
+export function isMemorial(member: Member): boolean {
+  return Boolean(
+    member.memorial ||
+      /loving memory|forever remembered/i.test(member.status || ""),
+  );
+}

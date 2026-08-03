@@ -9,9 +9,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Member } from "@/lib/types";
+import { withBase } from "@/lib/base";
 import {
-  authenticateMember,
   clearSession,
   readSession,
   writeSession,
@@ -21,50 +20,108 @@ import {
 type AuthContextValue = {
   session: MemberSession | null;
   ready: boolean;
-  login: (username: string, password: string) => { ok: true } | { ok: false; error: string };
-  logout: () => void;
+  login: (
+    username: string,
+    password: string,
+  ) => Promise<{ ok: true } | { ok: false; error: string }>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function MemberAuthProvider({
-  members,
-  children,
-}: {
-  members: Member[];
-  children: ReactNode;
-}) {
+export function MemberAuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<MemberSession | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+    const hydrate = async () => {
+      try {
+        const res = await fetch(withBase("/api/auth/session"), {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = (await res.json()) as {
+            ok?: boolean;
+            session?: { memberId: string; username: string; name: string };
+          };
+          if (data.ok && data.session) {
+            const next = writeSession({
+              memberId: data.session.memberId,
+              username: data.session.username,
+              name: data.session.name,
+              at: Date.now(),
+            });
+            if (!cancelled) setSession(next);
+            if (!cancelled) setReady(true);
+            return;
+          }
+        }
+      } catch {
+        /* offline / local next without Functions */
+      }
+      if (!cancelled) {
+        setSession(readSession());
+        setReady(true);
+      }
+    };
+
     const sync = () => setSession(readSession());
-    sync();
-    setReady(true);
+    void hydrate();
     window.addEventListener("rvp:auth-change", sync);
-    window.addEventListener("storage", sync);
     return () => {
+      cancelled = true;
       window.removeEventListener("rvp:auth-change", sync);
-      window.removeEventListener("storage", sync);
     };
   }, []);
 
-  const login = useCallback(
-    (username: string, password: string) => {
-      const member = authenticateMember(username, password, members);
-      if (!member) {
+  const login = useCallback(async (username: string, password: string) => {
+    try {
+      const res = await fetch(withBase("/api/auth/login"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        session?: { memberId: string; username: string; name: string };
+      };
+      if (!res.ok || !data.ok || !data.session) {
         return {
           ok: false as const,
-          error: "Invalid username or password. Both are case-sensitive.",
+          error:
+            data.error ||
+            "Invalid username or password. Both are case-sensitive.",
         };
       }
-      setSession(writeSession(member));
+      const next = writeSession({
+        memberId: data.session.memberId,
+        username: data.session.username,
+        name: data.session.name,
+        at: Date.now(),
+      });
+      setSession(next);
       return { ok: true as const };
-    },
-    [members],
-  );
+    } catch {
+      return {
+        ok: false as const,
+        error:
+          "Sign-in service is unavailable. Deploy with Cloudflare Pages Functions, then try again.",
+      };
+    }
+  }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await fetch(withBase("/api/auth/logout"), {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {
+      /* ignore */
+    }
     clearSession();
     setSession(null);
   }, []);

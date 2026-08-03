@@ -304,6 +304,14 @@ async function buildMediaFromFile(
   const relPosix = relNoExt.replace(/\\/g, "/");
 
   const stat = fs.statSync(source);
+  // Cloudflare Pages asset limit is 25 MiB — skip oversized originals early.
+  const MAX_ASSET_BYTES = 24 * 1024 * 1024;
+  if (stat.size > MAX_ASSET_BYTES) {
+    warnings.push(
+      `Skipped oversized media (>24 MiB): ${path.relative(process.cwd(), source)}`,
+    );
+    return null;
+  }
   const sha256 = crypto
     .createHash("sha256")
     .update(`${source}:${stat.size}:${stat.mtimeMs}`)

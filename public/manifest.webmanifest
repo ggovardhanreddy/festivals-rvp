@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "RVP Youth",
+  "name": "RVP Youth · Reddivaripalli",
   "short_name": "RVP Youth",
-  "description": "Where Every Celebration Becomes a Legacy. Our Village. Our Heritage. Our Memories.",
+  "description": "Install the Reddivaripalli App for faster access, offline support, and instant notifications.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -19,7 +19,7 @@
     "photo",
     "entertainment"
   ],
-  "background_color": "#0f1a14",
+  "background_color": "#fafaf8",
   "theme_color": "#1f3d2e",
   "prefer_related_applications": false,
   "icons": [
@@ -56,9 +56,31 @@
   ],
   "shortcuts": [
     {
-      "name": "Sankranthi",
-      "short_name": "Sankranthi",
-      "url": "/sankranthi/",
+      "name": "Gallery",
+      "short_name": "Gallery",
+      "url": "/gallery/",
+      "icons": [
+        {
+          "src": "/logo/android-icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Developments",
+      "short_name": "Developments",
+      "url": "/developments/",
+      "icons": [
+        {
+          "src": "/logo/android-icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "short_name": "Events",
+      "url": "/events/",
       "icons": [
         {
           "src": "/logo/android-icon.png",

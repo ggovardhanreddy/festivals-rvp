@@ -4,11 +4,31 @@ import { useNotifications } from "./NotificationProvider";
 import type { NotificationPrefKey } from "@/lib/notifications";
 
 const LABELS: { key: NotificationPrefKey; label: string; hint: string }[] = [
-  { key: "birthdays", label: "Birthdays", hint: "Celebration alerts on member birthdays" },
-  { key: "festivals", label: "Festivals", hint: "2 days before, 1 day before, and on the day" },
-  { key: "events", label: "Events", hint: "1 day before and on the event day" },
-  { key: "developments", label: "Developments", hint: "Village project updates" },
-  { key: "announcements", label: "Announcements", hint: "General community notices" },
+  {
+    key: "birthdays",
+    label: "Birthday notifications",
+    hint: "Push and in-app celebration alerts on member birthdays",
+  },
+  {
+    key: "festivals",
+    label: "Festival notifications",
+    hint: "Reminders 2 days before, 1 day before, and on the festival day",
+  },
+  {
+    key: "events",
+    label: "Event reminders",
+    hint: "Countdowns and day-of alerts for village events",
+  },
+  {
+    key: "developments",
+    label: "Development updates",
+    hint: "Village project and construction progress",
+  },
+  {
+    key: "announcements",
+    label: "General announcements",
+    hint: "Community notices from RVP Youth",
+  },
 ];
 
 export function NotificationPrefs() {

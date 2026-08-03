@@ -1,0 +1,24 @@
+[
+  {
+    "id": "heritage-village-intro",
+    "title": "Kondreddigaripalli — our village story",
+    "description": "A living memory of Reddivaripalli: temples, festivals, and the people who keep traditions alive across generations.",
+    "category": "Village History",
+    "date": "2020-01-01",
+    "mediaUrl": "/brand/rama-navami-hero.webp",
+    "mediaType": "image",
+    "status": "approved",
+    "submittedAt": "2020-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "heritage-ramalayam",
+    "title": "Sri Ramalayam",
+    "description": "The spiritual heart of the village — hymns, festivals, and community gatherings at Ramalayam.",
+    "category": "Temple History",
+    "date": "2020-01-01",
+    "mediaUrl": "/brand/rama-navami-hero.webp",
+    "mediaType": "image",
+    "status": "approved",
+    "submittedAt": "2020-01-01T00:00:00.000Z"
+  }
+]

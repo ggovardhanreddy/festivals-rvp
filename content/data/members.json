@@ -4,503 +4,387 @@
     "name": "G Ramesh Kumar Reddy",
     "photo": "/members/g-ramesh-kumar-reddy.webp",
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Government Employee"
   },
   {
     "id": "g-hemanth-kumar-reddy",
     "name": "G Hemanth Kumar Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Cyber Security Head (Software Engineer)"
+  },
+  {
+    "id": "dr-g-uma-maheshwar-reddy",
+    "name": "Dr. G Uma Maheshwar Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Orthopedic Doctor (MD)"
   },
   {
     "id": "g-dhanunjaya-reddy",
     "name": "G Dhanunjaya Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Government Employee – Vigilance Department"
   },
   {
     "id": "g-vijay-kumar-reddy",
-    "name": "G Vijay kumar reddy",
+    "name": "G Vijay Kumar Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Business"
   },
   {
     "id": "g-rana-pathap-reddy",
-    "name": "G rana Pathap Reddy",
+    "name": "G Rana Prathap Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "g-giridhar-gopal-reddy",
-    "name": "G Giridhar Gopal Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "d-venkataswami-reddy",
-    "name": "D Venkataswami reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "j-raghava-reddy",
-    "name": "J Raghava Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "d-rammohan-reddy",
-    "name": "D Rammohan Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "d-raja-reddy",
-    "name": "D Raja Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "d-madan-mohan-reddy",
-    "name": "D Madan Mohan Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "d-sivareddy",
-    "name": "D SivaReddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "d-harimukunda-reddy",
-    "name": "D Harimukunda Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Software Engineer"
   },
   {
     "id": "g-jayachandra-reddy",
-    "name": "G JayaChandra Reddy",
+    "name": "G Jayachandra Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Farmer"
   },
   {
     "id": "g-vasudeva-reddy",
-    "name": "G VasuDeva Reddy",
+    "name": "G Vasudeva Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Farmer",
+    "memorial": true,
+    "status": "In Loving Memory"
   },
   {
     "id": "g-ravi-kumar-reddy",
     "name": "G Ravi Kumar Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Medical Shop"
   },
   {
-    "id": "j-krishna-reddy",
-    "name": "J Krishna Reddy",
+    "id": "g-giridhar-gopal-reddy",
+    "name": "G Giridhar Gopal Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Farmer"
   },
   {
-    "id": "j-eswar-reddy",
-    "name": "J Eswar Reddy",
+    "id": "d-rammohan-reddy",
+    "name": "D Rammohan Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Farmer",
+    "memorial": true,
+    "status": "In Loving Memory"
   },
   {
-    "id": "reddenna",
-    "name": "Reddenna",
+    "id": "d-raja-reddy",
+    "name": "D Raja Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Priest (Devapatlamma Temple)"
   },
   {
-    "id": "d-ratnam",
-    "name": "D Ratnam",
+    "id": "d-harinatha",
+    "name": "D Harinatha",
     "photo": null,
     "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "y-ramesh",
-    "name": "Y Ramesh",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "y-naveen",
-    "name": "Y Naveen",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "y-satheesh",
-    "name": "Y Satheesh",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "y-uma",
-    "name": "Y Uma",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "g-krishna-reddy",
-    "name": "G Krishna Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "k-venugopal-reddy",
-    "name": "K Venugopal Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "kumari-akka",
-    "name": "Kumari Akka",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "gurunadha",
-    "name": "Gurunadha",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "k-chinna-bal-reddy",
-    "name": "K Chinna Bal Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "u-adinarayana",
-    "name": "U Adinarayana",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "k-peddabali-reddy",
-    "name": "K Peddabali reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "u-guruppa",
-    "name": "U Guruppa",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "u-guruppanna",
-    "name": "U Guruppanna",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "j-ramesh",
-    "name": "J Ramesh",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "j-shiva",
-    "name": "J Shiva",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "j-balaji",
-    "name": "J Balaji",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "c-rajagopal",
-    "name": "C RajaGopal",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "c-suresh",
-    "name": "C Suresh",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
-  },
-  {
-    "id": "c-rammohana",
-    "name": "C Rammohana",
-    "photo": null,
-    "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Headmaster, Government School"
   },
   {
     "id": "g-raja",
     "name": "G Raja",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Real Estate"
   },
   {
-    "id": "d-harinatha",
-    "name": "D HArinatha",
+    "id": "y-ramesh",
+    "name": "Y Ramesh",
     "photo": null,
     "dob": null,
-    "group": "legacy"
+    "group": "legacy",
+    "designation": "Farmer"
   },
   {
-    "id": "m-rajesh",
-    "name": "M Rajesh",
-    "photo": "/members/rajesh.webp",
-    "dob": "10-06",
-    "group": "core"
+    "id": "y-naveen",
+    "name": "Y Naveen",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Village Revenue Officer (VRO)"
+  },
+  {
+    "id": "y-satheesh",
+    "name": "Y Satheesh",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Business (Retail Shop)"
+  },
+  {
+    "id": "y-uma",
+    "name": "Y Uma",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Farmer"
+  },
+  {
+    "id": "j-shiva",
+    "name": "J Shiva",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Government Teacher (Mathematics)"
+  },
+  {
+    "id": "j-balaji",
+    "name": "J Balaji",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Farmer"
+  },
+  {
+    "id": "j-krishna-reddy",
+    "name": "J Krishna Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Farmer"
+  },
+  {
+    "id": "j-eswar-reddy",
+    "name": "J Eswar Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Farmer"
+  },
+  {
+    "id": "dr-u-reddy-prasad",
+    "name": "Dr. U Reddy Prasad",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Orthopedic Doctor"
   },
   {
     "id": "g-govardhan-reddy",
     "name": "G Govardhan Reddy",
     "photo": "/members/govardhan.webp",
     "dob": "11-11",
-    "group": "core"
+    "group": "core",
+    "designation": "Software Engineer"
   },
   {
     "id": "g-pushyanth-reddy",
     "name": "G Pushyanth Reddy",
     "photo": null,
     "dob": "08-17",
-    "group": "core"
-  },
-  {
-    "id": "g-dheeraj-reddy",
-    "name": "G Dheeraj Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Software Engineer"
   },
   {
     "id": "c-narendra-cg",
     "name": "C Narendra (CG)",
     "photo": "/members/c-narendra-cg.webp",
     "dob": "10-10",
-    "group": "core"
+    "group": "core",
+    "designation": "GRT Manager"
   },
   {
-    "id": "c-narendra-ck",
-    "name": "C Narendra (CK)",
-    "photo": null,
-    "dob": null,
-    "group": "core"
+    "id": "m-rajesh",
+    "name": "M Rajesh",
+    "photo": "/members/rajesh.webp",
+    "dob": "10-06",
+    "group": "core",
+    "designation": "Sales Manager"
   },
   {
     "id": "y-chenna-keshava",
     "name": "Y Chenna Keshava",
     "photo": "/members/keshava.webp",
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Poultry Business"
   },
   {
     "id": "g-sreekanth",
     "name": "G Sreekanth",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "E-commerce Delivery Manager"
+  },
+  {
+    "id": "c-narendra-ck",
+    "name": "C Narendra (CK)",
+    "photo": null,
+    "dob": null,
+    "group": "core",
+    "designation": "Mechanical Engineer"
   },
   {
     "id": "c-hari",
     "name": "C Hari",
     "photo": null,
     "dob": "08-15",
-    "group": "core"
+    "group": "core",
+    "designation": "Bank Employee (Loan Department)"
   },
   {
     "id": "c-avinash",
     "name": "C Avinash",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Veterinary Professional"
   },
   {
     "id": "c-ganesh",
     "name": "C Ganesh",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Electrical Engineer (UAE)"
   },
   {
     "id": "j-bhanu",
     "name": "J Bhanu",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Software Engineer"
   },
   {
     "id": "k-balaji",
     "name": "K Balaji",
-    "photo": null,
+    "photo": "/members/k-balaji.webp",
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Software Engineer"
   },
   {
     "id": "y-krishna-mohan",
     "name": "Y Krishna Mohan",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Software Engineer"
   },
   {
     "id": "d-shantha-kumar",
     "name": "D Shantha Kumar",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "General Surgeon (MD)"
   },
   {
     "id": "u-nagendra",
     "name": "U Nagendra",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "Business"
   },
   {
-    "id": "u-guru-mahesh",
-    "name": "U Guru Mahesh",
+    "id": "u-guru",
+    "name": "U Guru",
     "photo": null,
-    "dob": "10-05",
-    "group": "core"
+    "dob": null,
+    "group": "core",
+    "designation": "Software Engineer"
   },
   {
     "id": "u-guru-mahesh-puli",
     "name": "U Guru Mahesh (Puli)",
     "photo": null,
     "dob": null,
-    "group": "core"
+    "group": "core",
+    "designation": "GRT Employee"
   },
   {
     "id": "j-niranjan",
     "name": "J Niranjan",
     "photo": null,
     "dob": null,
-    "group": "core"
-  },
-  {
-    "id": "u-nagesh",
-    "name": "U Nagesh",
-    "photo": "/members/nagesh.webp",
-    "dob": null,
-    "group": "nextgen"
-  },
-  {
-    "id": "c-ganu",
-    "name": "C Ganu",
-    "photo": "/members/ganu.webp",
-    "dob": null,
-    "group": "nextgen"
-  },
-  {
-    "id": "c-narasimha",
-    "name": "C Narasimha",
-    "photo": null,
-    "dob": null,
-    "group": "nextgen"
-  },
-  {
-    "id": "k-prem-kumar",
-    "name": "K Prem kumar",
-    "photo": null,
-    "dob": null,
-    "group": "nextgen"
-  },
-  {
-    "id": "k-chandu",
-    "name": "K Chandu",
-    "photo": null,
-    "dob": null,
-    "group": "nextgen"
-  },
-  {
-    "id": "y-yogi",
-    "name": "Y Yogi",
-    "photo": null,
-    "dob": null,
-    "group": "nextgen"
+    "group": "core",
+    "designation": "Indian Army"
   },
   {
     "id": "d-akhil-reddy",
     "name": "D Akhil Reddy",
     "photo": "/members/akhil.webp",
     "dob": null,
-    "group": "nextgen"
+    "group": "nextgen",
+    "designation": "Software Engineer"
   },
   {
     "id": "d-anil-reddy",
     "name": "D Anil Reddy",
     "photo": null,
     "dob": null,
-    "group": "nextgen"
+    "group": "nextgen",
+    "designation": "Government Employee (Post Office)"
   },
   {
     "id": "d-santhosh-reddy",
     "name": "D Santhosh Reddy",
     "photo": "/members/santhosh.webp",
-    "dob": null,
-    "group": "nextgen"
+    "dob": "08-16",
+    "group": "nextgen",
+    "designation": "Software Engineer"
   },
   {
     "id": "d-shiva-shankar-reddy",
     "name": "D Shiva Shankar Reddy",
     "photo": "/members/d-shiva.webp",
-    "dob": null,
-    "group": "nextgen"
+    "dob": "01-06",
+    "group": "nextgen",
+    "designation": "Agriculture Manager"
   },
   {
-    "id": "v-sai",
-    "name": "V Sai",
-    "photo": null,
-    "dob": null,
-    "group": "nextgen"
+    "id": "u-nagesh",
+    "name": "U Nagesh",
+    "photo": "/members/u-nagesh.webp",
+    "dob": "12-09",
+    "group": "nextgen",
+    "designation": "Software Engineer"
   },
   {
-    "id": "v-vamsi",
-    "name": "V Vamsi",
+    "id": "c-ganu",
+    "name": "C Ganu",
+    "photo": "/members/ganu.webp",
+    "dob": "06-15",
+    "group": "nextgen",
+    "designation": "Software Engineer"
+  },
+  {
+    "id": "c-narasimha",
+    "name": "C Narasimha",
     "photo": null,
-    "dob": null,
-    "group": "nextgen"
+    "dob": "11-12",
+    "group": "nextgen",
+    "designation": "Software Engineer"
   }
 ]

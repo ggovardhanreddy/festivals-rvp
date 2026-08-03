@@ -2,26 +2,34 @@
   {
     "id": "sri-ramalayam-reconstruction",
     "title": "Sri Ramalayam Reconstruction",
-    "description": "The heart of Kondreddigaripalli — Sri Ramalayam — is being lovingly restored. Generations have gathered here for Sri Rama Navami, daily prayers, and village milestones. This reconstruction strengthens the sanctum, renovates the mandapam, and preserves the temple for decades to come. Every contribution of skill, time, and devotion brings us closer to welcoming Rama back to a renewed home.",
-    "status": "ongoing",
+    "description": "The proposed reconstruction of Sri Ramalayam is currently in the planning and decision-making phase. Community discussions, planning, fundraising, and approvals are underway. This is a significant project for the village, and collective participation from all villagers will help move it from planning to execution. Once the necessary approvals, resources, and commitments are in place, construction will begin.",
+    "status": "critical-decision",
     "startDate": "2025-01-01",
-    "progress": 45,
+    "currentStage": "community-discussion",
+    "stages": [
+      "planning",
+      "community-discussion",
+      "fundraising",
+      "approval",
+      "construction",
+      "completion"
+    ],
     "images": ["/brand/rama-navami-hero.webp"],
     "milestones": [
       {
         "date": "2025-01-01",
-        "title": "Project inaugurated",
-        "description": "Community blessings and planning with elders and the temple committee."
+        "title": "Planning conversations begin",
+        "description": "Elders, the temple committee, and villagers open discussions about the future of Sri Ramalayam."
       },
       {
-        "date": "2025-04-15",
-        "title": "Foundation work complete",
-        "description": "Structural assessment and foundation reinforcement finished."
+        "date": "2025-06-01",
+        "title": "Community coordination",
+        "description": "Village-wide conversations continue on needs, priorities, and how everyone can contribute."
       },
       {
         "date": "2025-08-01",
-        "title": "Mandapam renovation underway",
-        "description": "Roof and pillar restoration in progress."
+        "title": "Critical decision stage",
+        "description": "The project remains in planning — awaiting collective commitments, fundraising clarity, and formal approvals before any construction begins."
       }
     ]
   }

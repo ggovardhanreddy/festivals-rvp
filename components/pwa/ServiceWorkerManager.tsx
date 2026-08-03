@@ -2,12 +2,14 @@
 
 import { useEffect } from "react";
 import { withBase } from "@/lib/base";
-
-const BUILD_KEY = "rvp-app-build";
+import {
+  PWA_BUILD_KEY,
+  announcePwaUpdate,
+} from "@/lib/pwa-update";
 
 /**
- * Registers the service worker and auto-applies new deploys
- * (pages + images + JSON) when version.json changes.
+ * Registers the service worker and detects new deploys.
+ * Surfaces updates via UpdateAvailablePrompt instead of silent reload.
  */
 export function ServiceWorkerManager() {
   useEffect(() => {
@@ -15,27 +17,13 @@ export function ServiceWorkerManager() {
 
     const swUrl = withBase("/sw.js");
     const versionUrl = withBase("/version.json");
-    let refreshing = false;
 
-    const onControllerChange = () => {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
-    };
-
-    navigator.serviceWorker.addEventListener(
-      "controllerchange",
-      onControllerChange,
-    );
-
-    const forceUpdate = async (reg: ServiceWorkerRegistration) => {
-      try {
-        await reg.update();
-      } catch {
-        /* ignore */
-      }
-      if (reg.waiting) {
-        reg.waiting.postMessage({ type: "SKIP_WAITING" });
+    const notifyWaiting = (reg: ServiceWorkerRegistration) => {
+      if (reg.waiting && navigator.serviceWorker.controller) {
+        announcePwaUpdate({
+          buildId: `sw-${Date.now()}`,
+          reason: "service-worker",
+        });
       }
     };
 
@@ -47,18 +35,35 @@ export function ServiceWorkerManager() {
         if (!res.ok) return;
         const data = (await res.json()) as { buildId?: string };
         if (!data.buildId) return;
-        const prev = sessionStorage.getItem(BUILD_KEY);
+
+        let prev: string | null = null;
+        try {
+          prev =
+            localStorage.getItem(PWA_BUILD_KEY) ||
+            sessionStorage.getItem(PWA_BUILD_KEY);
+        } catch {
+          prev = null;
+        }
+
         if (prev && prev !== data.buildId) {
-          // New deploy detected — pull SW + reload so app data refreshes
-          if (reg) await forceUpdate(reg);
-          sessionStorage.setItem(BUILD_KEY, data.buildId);
-          if (!refreshing) {
-            refreshing = true;
-            window.location.reload();
+          announcePwaUpdate({ buildId: data.buildId, reason: "version" });
+          if (reg) {
+            try {
+              await reg.update();
+            } catch {
+              /* ignore */
+            }
+            notifyWaiting(reg);
           }
           return;
         }
-        sessionStorage.setItem(BUILD_KEY, data.buildId);
+
+        try {
+          localStorage.setItem(PWA_BUILD_KEY, data.buildId);
+          sessionStorage.setItem(PWA_BUILD_KEY, data.buildId);
+        } catch {
+          /* ignore */
+        }
       } catch {
         /* offline */
       }
@@ -72,8 +77,9 @@ export function ServiceWorkerManager() {
         });
 
         const check = () => {
-          void forceUpdate(reg);
+          void reg.update().catch(() => undefined);
           void checkDeployVersion(reg);
+          notifyWaiting(reg);
         };
 
         check();
@@ -81,12 +87,7 @@ export function ServiceWorkerManager() {
           if (document.visibilityState === "visible") check();
         });
         window.addEventListener("online", check);
-        // Poll while the installed app stays open
-        const interval = window.setInterval(check, 60 * 1000);
-
-        if (reg.waiting) {
-          reg.waiting.postMessage({ type: "SKIP_WAITING" });
-        }
+        const interval = window.setInterval(check, 45 * 1000);
 
         reg.addEventListener("updatefound", () => {
           const worker = reg.installing;
@@ -96,7 +97,10 @@ export function ServiceWorkerManager() {
               worker.state === "installed" &&
               navigator.serviceWorker.controller
             ) {
-              worker.postMessage({ type: "SKIP_WAITING" });
+              announcePwaUpdate({
+                buildId: `sw-${Date.now()}`,
+                reason: "service-worker",
+              });
             }
           });
         });
@@ -122,10 +126,6 @@ export function ServiceWorkerManager() {
 
     return () => {
       cleanup?.();
-      navigator.serviceWorker.removeEventListener(
-        "controllerchange",
-        onControllerChange,
-      );
     };
   }, []);
 

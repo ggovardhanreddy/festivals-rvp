@@ -1,18 +1,37 @@
 "use client";
 
-import { withBase } from "@/lib/base";
+import { useMediaUrl } from "@/lib/use-media-url";
 
 export function DocumentCard({
   src,
   title,
   mime,
+  allowDownload = false,
 }: {
   src: string;
   title: string;
   mime?: string;
+  allowDownload?: boolean;
 }) {
-  const href = withBase(src);
-  const isPdf = (mime || "").includes("pdf") || src.toLowerCase().endsWith(".pdf");
+  const { url: href, loading, error } = useMediaUrl(src);
+  const isPdf =
+    (mime || "").includes("pdf") || src.toLowerCase().endsWith(".pdf");
+
+  if (loading) {
+    return (
+      <div className="doc-card glass-card">
+        <p className="muted">Loading document…</p>
+      </div>
+    );
+  }
+
+  if (error || !href) {
+    return (
+      <div className="doc-card glass-card">
+        <p className="media-error">{error || "Document unavailable."}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="doc-card glass-card">
@@ -26,15 +45,17 @@ export function DocumentCard({
           loading="lazy"
         />
       ) : (
-        <p className="muted">Open or download this memory document.</p>
+        <p className="muted">Open this document in a new tab.</p>
       )}
       <div className="btn-row">
         <a className="btn" href={href} target="_blank" rel="noreferrer">
           Open
         </a>
-        <a className="btn ghost" href={href} download>
-          Download
-        </a>
+        {allowDownload ? (
+          <a className="btn ghost" href={href} download>
+            Download
+          </a>
+        ) : null}
       </div>
     </div>
   );

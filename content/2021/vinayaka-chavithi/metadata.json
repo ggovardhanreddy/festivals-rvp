@@ -6,26 +6,7 @@
   "description": "Vinayaka Chavithi 2021 memories.",
   "published": true,
   "order": 0,
-  "media": [
-    {
-      "id": "ecefc74500af9e8c",
-      "file": "/images/2021/vinayaka-chavithi/img20210917205504.webp",
-      "thumb": "/thumbs/2021/vinayaka-chavithi/img20210917205504.webp",
-      "type": "image",
-      "title": "Img20210917205504",
-      "date": "2021-09-17",
-      "tags": [
-        "vinayaka-chavithi",
-        "2021"
-      ],
-      "favorite": false,
-      "width": 6528,
-      "height": 3680,
-      "blurDataURL": "data:image/webp;base64,UklGRsAAAABXRUJQVlA4ILQAAABwBACdASoYAA4APu1iqU2ppaOiMAgBMB2JYwDCoExgwA5C2YQLqNfmGS8cAAD+tyHciH6d618eGhc2gAeUYIIe8P5uEcNnjDS9IqgTajhAWk0JJqWuo4XKRq/lUSbESXDUj1yJ+9xj9VU6mH2YByW7i2DT1LsONb35y9jMRsLkN5HbJCm13WUN1n5COP3/rO2cQaipPCnTkhbvXFFuXHiym26Wec1iZywQxpXKZ6v4sZUAAAA=",
-      "sha256": "ecefc74500af9e8cca6f78f025646cee9c6168afa173a5d0acde66c2319e31c5"
-    }
-  ],
+  "media": [],
   "bucket": "vinayaka-chavithi",
-  "festival": "vinayaka-chavithi",
-  "cover": "/thumbs/2021/vinayaka-chavithi/img20210917205504.webp"
+  "festival": "vinayaka-chavithi"
 }

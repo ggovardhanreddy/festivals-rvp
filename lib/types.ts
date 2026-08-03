@@ -5,19 +5,24 @@ export type FestivalKey =
   | "vinayaka-chavithi"
   | "mathamma-jathara"
   | "devapatlamma-jathara"
-  | "sri-rama-navami";
+  | "sri-rama-navami"
+  | "varalakshmi-vratam"
+  | "ugadi"
+  | "deepavali"
+  | "dasara";
 
 export type BucketKey =
-  | "sankranthi"
-  | "vinayaka-chavithi"
-  | "mathamma-jathara"
-  | "devapatlamma-jathara"
-  | "sri-rama-navami"
+  | FestivalKey
   | "rvp-birthdays"
   | "fun-trips";
 
-/** Member circles: Legacy (≥40) · Core (28–39) · NextGen (<28) */
+/** Member circles: Legacy Circle · Core Members · Next Generation */
 export type MemberGroup = "legacy" | "core" | "nextgen";
+
+export type MemberSocialLink = {
+  label: string;
+  href: string;
+};
 
 export type Member = {
   id: string;
@@ -25,16 +30,19 @@ export type Member = {
   photo: string | null;
   /** Month-day as MM-DD, full ISO YYYY-MM-DD, or null when unknown */
   dob: string | null;
-  /**
-   * Manual category when age cannot be computed.
-   * When birthYear / full DOB is present, display group is derived from age.
-   */
+  /** Community category (Legacy Circle / Core / Next Generation) */
   group: MemberGroup;
   designation?: string;
-  /** Four-digit birth year — enables automatic age-based categorization */
+  /** Four-digit birth year — optional */
   birthYear?: number | null;
   /** Optional year the member joined the community */
   joinYear?: number | null;
+  /** Memorial recognition — In Loving Memory */
+  memorial?: boolean;
+  status?: string;
+  archived?: boolean;
+  achievements?: string[];
+  social?: MemberSocialLink[];
 };
 
 export type SiteEventCategory = "festival" | "village" | "birthday" | "other";
@@ -105,7 +113,22 @@ export type Album = {
 
 export type MediaWithAlbum = Media & { album: Album };
 
-export type DevelopmentStatus = "planned" | "ongoing" | "completed" | "paused";
+export type DevelopmentStatus =
+  | "proposed"
+  | "planning"
+  | "critical-decision"
+  | "fundraising"
+  | "under-construction"
+  | "ongoing"
+  | "completed";
+
+export type DevelopmentWorkflowStage =
+  | "planning"
+  | "community-discussion"
+  | "fundraising"
+  | "approval"
+  | "construction"
+  | "completion";
 
 export type DevelopmentMilestone = {
   date: string;
@@ -123,6 +146,10 @@ export type Development = {
   progress: number;
   images?: string[];
   milestones?: DevelopmentMilestone[];
+  stages?: DevelopmentWorkflowStage[];
+  currentStage?: DevelopmentWorkflowStage;
+  highlight?: boolean;
+  summary?: string;
 };
 
 export type SuggestionCategory =
@@ -159,4 +186,143 @@ export type ChatMessage = {
   editedAt?: number;
   replyToId?: string;
   deleted?: boolean;
+};
+
+/** Site roles for permission checks */
+export type SiteRole = "guest" | "member" | "admin";
+
+export type ApprovalStatus = "pending" | "approved" | "rejected";
+
+export type DirectoryCategory =
+  | "Doctors"
+  | "Teachers"
+  | "Government Employees"
+  | "Other Professionals";
+
+export type DirectoryEntry = {
+  id: string;
+  name: string;
+  category: DirectoryCategory;
+  profession: string;
+  designation?: string;
+  photo?: string | null;
+  phone?: string;
+  email?: string;
+  availability?: string;
+  updatedAt?: string;
+};
+
+export type LostFoundCategory =
+  | "Lost Documents"
+  | "Lost Mobile Phones"
+  | "Lost Keys"
+  | "Lost Wallets"
+  | "Found Items"
+  | "Missing Livestock"
+  | "Other Community Notices";
+
+export type LostFoundItem = {
+  id: string;
+  title: string;
+  description: string;
+  category: LostFoundCategory;
+  date: string;
+  location: string;
+  image?: string | null;
+  contact: string;
+  status: ApprovalStatus;
+  submittedAt: string;
+  submittedBy?: string;
+};
+
+export type BloodGroup =
+  | "A+"
+  | "A-"
+  | "B+"
+  | "B-"
+  | "AB+"
+  | "AB-"
+  | "O+"
+  | "O-";
+
+export type BloodDonor = {
+  id: string;
+  name: string;
+  bloodGroup: BloodGroup;
+  mobile: string;
+  village: string;
+  availability: string;
+  lastDonationDate?: string;
+  status: ApprovalStatus;
+  /** When false, mobile is hidden from public list */
+  showContactPublicly?: boolean;
+  submittedAt: string;
+  submittedBy?: string;
+};
+
+export type PanchayatDocCategory =
+  | "Panchayat Notices"
+  | "Meeting Minutes"
+  | "Development Plans"
+  | "Government Schemes"
+  | "Public Forms"
+  | "Circulars"
+  | "Announcements";
+
+export type PanchayatDocument = {
+  id: string;
+  title: string;
+  description?: string;
+  category: PanchayatDocCategory;
+  date: string;
+  fileKey: string;
+  mime?: string;
+  updatedAt?: string;
+};
+
+export type HeritageCategory =
+  | "Historical Photographs"
+  | "Temple History"
+  | "Village History"
+  | "Cultural Traditions"
+  | "Oral Histories"
+  | "Festival Memories"
+  | "Old Documents"
+  | "Audio Recordings"
+  | "Videos";
+
+export type HeritageItem = {
+  id: string;
+  title: string;
+  description: string;
+  category: HeritageCategory;
+  date?: string;
+  mediaUrl?: string | null;
+  mediaType?: "image" | "video" | "audio" | "document";
+  status: ApprovalStatus;
+  submittedAt: string;
+  submittedBy?: string;
+  submittedName?: string;
+};
+
+export type SiteSettings = {
+  watermarkEnabled: boolean;
+  watermarkText: string;
+  allowPublicMediaDownload: boolean;
+  /** Hide phone/email on directory cards unless explicitly set public */
+  hideDirectoryContactsByDefault?: boolean;
+  /** Require consent before publishing personal contact data */
+  requireConsentForPersonalData?: boolean;
+  /** Soft maintenance banner / lock for public writes */
+  maintenanceMode?: boolean;
+};
+
+export type AnalyticsHit = {
+  path: string;
+  ts: number;
+  device?: string;
+  browser?: string;
+  referrer?: string;
+  kind?: "pageview" | "notif-click" | "search" | "upload";
+  meta?: string;
 };

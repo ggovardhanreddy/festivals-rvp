@@ -52,30 +52,51 @@ async function main() {
     });
   }
 
-  // Prefer high-res existing vinayaka assets over tiny Downloads backgrounds
-  const vinJpg = path.join(BRAND, "vinayaka-hero.jpg");
-  const vinSrc = path.join(BRAND, "vinayaka-hero-source.webp");
-  if (fs.existsSync(vinJpg)) {
-    await toWebp(vinJpg, path.join(BRAND, "vinayaka-hero.webp"), {
-      width: 2000,
-      height: 2000,
-      fit: "inside",
-    });
-  } else if (fs.existsSync(vinSrc)) {
-    await toWebp(vinSrc, path.join(BRAND, "vinayaka-hero.webp"), {
-      width: 2000,
-      height: 2000,
-      fit: "inside",
-    });
+  // Locked brand plates are authoritative — never regenerate/overwrite them
+  const lockedHeroes = [
+    "vinayaka-hero-locked.webp",
+    "sankranthi-hero-locked.webp",
+    "mathamma-hero-locked.webp",
+    "devapatlamma-hero-locked.webp",
+    "rama-navami-hero-locked.webp",
+    "funfest-hero-locked.webp",
+  ];
+  for (const name of lockedHeroes) {
+    const locked = path.join(BRAND, name);
+    if (!fs.existsSync(locked)) continue;
+    const alias = name.replace("-locked.webp", ".webp");
+    const aliasPath = path.join(BRAND, alias);
+    fs.copyFileSync(locked, aliasPath);
+    if (name.startsWith("vinayaka")) {
+      fs.copyFileSync(locked, path.join(BRAND, "vinayaka-hero-v3.webp"));
+      fs.copyFileSync(locked, path.join(BRAND, "vinayaka-hero-v2.webp"));
+    }
+    console.log("Hero locked — synced alias:", alias);
   }
 
-  const sank = path.join(HOME, "Downloads/Photos/Sankranthi/sankranthi .jpg");
-  if (fs.existsSync(sank)) {
-    await toWebp(sank, path.join(BRAND, "sankranthi-hero.webp"), {
-      width: 2000,
-      height: 2000,
+  // Prefer high-res existing vinayaka assets over tiny Downloads backgrounds
+  const vinLocked = path.join(BRAND, "vinayaka-hero-locked.webp");
+  if (!fs.existsSync(vinLocked)) {
+  const vinJpg = path.join(BRAND, "vinayaka-hero.jpg");
+  const vinSrc = path.join(BRAND, "vinayaka-hero-source.webp");
+  const vinDest = path.join(BRAND, "vinayaka-hero-v3.webp");
+  const vinLegacy = path.join(BRAND, "vinayaka-hero.webp");
+  const vinJpgSource = path.join(BRAND, "vinayaka-hero-source.jpg");
+  const preferred =
+    (fs.existsSync(vinJpgSource) && vinJpgSource) ||
+    (fs.existsSync(vinJpg) && vinJpg) ||
+    (fs.existsSync(vinSrc) && vinSrc) ||
+    null;
+  if (preferred) {
+    await toWebp(preferred, vinDest, {
+      width: 2400,
+      height: 1600,
       fit: "inside",
     });
+    fs.copyFileSync(vinDest, vinLegacy);
+    // Keep v2 alias in sync for any lingering refs
+    fs.copyFileSync(vinDest, path.join(BRAND, "vinayaka-hero-v2.webp"));
+  }
   }
 
   // For other festivals: pick largest image from imported content years
@@ -100,6 +121,38 @@ async function main() {
     walk(dir);
     return best;
   };
+
+  // Sankranthi: prefer largest album photo over the small Downloads background.
+  if (!fs.existsSync(path.join(BRAND, "sankranthi-hero-locked.webp"))) {
+  {
+    let best: string | null = null;
+    let bestSize = 0;
+    const contentRoot = path.join(ROOT, "content");
+    if (fs.existsSync(contentRoot)) {
+      for (const year of fs.readdirSync(contentRoot)) {
+        const dir = path.join(contentRoot, year, "sankranthi");
+        if (!fs.existsSync(dir)) continue;
+        const candidate = pickLargest(dir);
+        if (!candidate) continue;
+        const size = fs.statSync(candidate).size;
+        if (size > bestSize) {
+          bestSize = size;
+          best = candidate;
+        }
+      }
+    }
+    const sank = path.join(HOME, "Downloads/Photos/Sankranthi/sankranthi .jpg");
+    const src =
+      best || (fs.existsSync(sank) && fs.statSync(sank).size > 40_000 ? sank : null);
+    if (src) {
+      await toWebp(src, path.join(BRAND, "sankranthi-hero.webp"), {
+        width: 2000,
+        height: 2000,
+        fit: "inside",
+      });
+    }
+  }
+  }
 
   const contentHeroes: [string, string][] = [
     ["content", "mathamma-jathara", "mathamma-hero.webp"],
@@ -133,6 +186,11 @@ async function main() {
     ["sri-rama-navami", "rama-navami-hero.webp"],
   ];
   for (const [bucket, destName] of buckets) {
+    const lockedName = destName.replace(/\.webp$/i, "-locked.webp");
+    if (fs.existsSync(path.join(BRAND, lockedName))) {
+      console.log("Hero locked — skip content pick:", destName);
+      continue;
+    }
     let best: string | null = null;
     let bestSize = 0;
     const contentRoot = path.join(ROOT, "content");

@@ -11,6 +11,7 @@ import { AboutTeaser } from "./AboutTeaser";
 import { HomeGallery } from "./HomeGallery";
 import { UpcomingEventsStrip } from "./UpcomingEventsStrip";
 import { FestivalCalendar } from "./FestivalCalendar";
+import { CultureTraditions } from "./CultureTraditions";
 import { TodayBirthdays } from "./TodayBirthdays";
 import { UpcomingBirthdays } from "./UpcomingBirthdays";
 import { LocationHomeNote } from "@/components/location/LocationHomeNote";
@@ -60,6 +61,8 @@ export function HomeBelowFold({
       <StatsOverview stats={stats} />
       <AboutTeaser />
 
+      <CultureTraditions />
+
       <Reveal>
         <UpcomingBirthdays members={members} />
       </Reveal>
@@ -78,12 +81,12 @@ export function HomeBelowFold({
             <p className="eyebrow">Community</p>
             <h2>Members</h2>
             <p className="lede">
-              The member directory is protected. Sign in with your first name to
-              view profiles — missing photos show a placeholder until added.
+              Meet RVP Youth as Legacy Circle, Core Members, and NextGen — open for everyone to
+              explore.
             </p>
           </div>
-          <Link className="btn" href="/login/?next=/members/">
-            Member sign in
+          <Link className="btn" href="/members/">
+            View members
           </Link>
         </div>
       </Reveal>

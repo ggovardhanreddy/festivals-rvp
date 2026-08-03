@@ -1,0 +1,10 @@
+# Google Search Console verification
+#
+# 1. Go to https://search.google.com/search-console
+# 2. Add property: https://www.reddivaripalli.com
+# 3. Choose "HTML tag" or "HTML file" verification
+# 4. If using an HTML file, place it in /public and rebuild
+# 5. Submit sitemap: https://www.reddivaripalli.com/sitemap.xml
+#
+# Optional: set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION in .env.local
+# to inject the meta verification content automatically (wire in layout if needed).

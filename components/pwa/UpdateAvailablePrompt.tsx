@@ -2,21 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { withBase } from "@/lib/base";
-
-const BUILD_KEY = "rvp-app-build";
+import {
+  PWA_BUILD_KEY,
+  PWA_UPDATE_EVENT,
+  applyPwaUpdate,
+  type PwaUpdateDetail,
+} from "@/lib/pwa-update";
 
 /**
- * Friendly update prompt when a new deploy is detected via version.json / SW.
+ * One-click update banner when a new deploy / service worker is ready.
  */
 export function UpdateAvailablePrompt() {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [buildId, setBuildId] = useState<string | undefined>();
 
   useEffect(() => {
-    if (!("serviceWorker" in navigator)) return;
+    const onUpdate = (event: Event) => {
+      const detail = (event as CustomEvent<PwaUpdateDetail>).detail;
+      if (detail?.buildId) setBuildId(detail.buildId);
+      setOpen(true);
+    };
+    window.addEventListener(PWA_UPDATE_EVENT, onUpdate);
 
     const versionUrl = withBase("/version.json");
-
     const check = async () => {
       try {
         const res = await fetch(`${versionUrl}?t=${Date.now()}`, {
@@ -25,12 +34,13 @@ export function UpdateAvailablePrompt() {
         if (!res.ok) return;
         const data = (await res.json()) as { buildId?: string };
         if (!data.buildId) return;
-        const prev = localStorage.getItem(BUILD_KEY);
+        const prev = localStorage.getItem(PWA_BUILD_KEY);
         if (prev && prev !== data.buildId) {
+          setBuildId(data.buildId);
           setOpen(true);
           return;
         }
-        if (!prev) localStorage.setItem(BUILD_KEY, data.buildId);
+        if (!prev) localStorage.setItem(PWA_BUILD_KEY, data.buildId);
       } catch {
         /* offline */
       }
@@ -41,8 +51,10 @@ export function UpdateAvailablePrompt() {
       if (document.visibilityState === "visible") void check();
     };
     document.addEventListener("visibilitychange", onVisible);
-    const id = window.setInterval(() => void check(), 90_000);
+    const id = window.setInterval(() => void check(), 60_000);
+
     return () => {
+      window.removeEventListener(PWA_UPDATE_EVENT, onUpdate);
       document.removeEventListener("visibilitychange", onVisible);
       window.clearInterval(id);
     };
@@ -50,31 +62,26 @@ export function UpdateAvailablePrompt() {
 
   const updateNow = async () => {
     setBusy(true);
+    let nextBuild = buildId;
     try {
-      const versionUrl = withBase("/version.json");
-      const res = await fetch(`${versionUrl}?t=${Date.now()}`, {
+      const res = await fetch(`${withBase("/version.json")}?t=${Date.now()}`, {
         cache: "no-store",
       });
       if (res.ok) {
         const data = (await res.json()) as { buildId?: string };
-        if (data.buildId) localStorage.setItem(BUILD_KEY, data.buildId);
+        if (data.buildId) nextBuild = data.buildId;
       }
-      const reg = await navigator.serviceWorker.getRegistration();
-      if (reg?.waiting) {
-        reg.waiting.postMessage({ type: "SKIP_WAITING" });
-      }
-      await reg?.update();
     } catch {
-      /* continue to reload */
+      /* use known buildId */
     }
-    window.location.reload();
+    await applyPwaUpdate(nextBuild);
   };
 
   if (!open) return null;
 
   return (
-    <div className="update-banner" role="status">
-      <p>A new version is available. Update now?</p>
+    <div className="update-banner" role="status" aria-live="polite">
+      <p>A new version of the Reddivaripalli App is available.</p>
       <div className="btn-row">
         <button
           type="button"
@@ -82,7 +89,7 @@ export function UpdateAvailablePrompt() {
           disabled={busy}
           onClick={() => void updateNow()}
         >
-          {busy ? "Updating…" : "Update now"}
+          {busy ? "Updating…" : "Update Now"}
         </button>
         <button
           type="button"

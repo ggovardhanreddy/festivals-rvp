@@ -3,23 +3,26 @@
 import { useMemo, useState } from "react";
 import { withBase } from "@/lib/base";
 import { parseIsoDate } from "@/lib/dates";
-import type { Development, DevelopmentStatus } from "@/lib/types";
+import {
+  DEVELOPMENT_STATUSES,
+  STATUS_META,
+  WORKFLOW_STAGES,
+  stageLabel,
+} from "@/lib/development-status";
+import type {
+  Development,
+  DevelopmentStatus,
+  DevelopmentWorkflowStage,
+} from "@/lib/types";
 import { Reveal } from "@/components/Reveal";
 
 const STATUS_FILTERS: { key: DevelopmentStatus | "all"; label: string }[] = [
   { key: "all", label: "All" },
-  { key: "ongoing", label: "Ongoing" },
-  { key: "planned", label: "Planned" },
-  { key: "completed", label: "Completed" },
-  { key: "paused", label: "Paused" },
+  ...DEVELOPMENT_STATUSES.map((s) => ({
+    key: s.key,
+    label: `${s.icon} ${s.shortLabel}`,
+  })),
 ];
-
-const STATUS_LABELS: Record<DevelopmentStatus, string> = {
-  planned: "Planned",
-  ongoing: "Ongoing",
-  completed: "Completed",
-  paused: "Paused",
-};
 
 function formatDate(iso: string) {
   return parseIsoDate(iso).toLocaleDateString(undefined, {
@@ -29,11 +32,60 @@ function formatDate(iso: string) {
   });
 }
 
+function StageWorkflow({
+  stages,
+  currentStage,
+}: {
+  stages: DevelopmentWorkflowStage[];
+  currentStage: DevelopmentWorkflowStage;
+}) {
+  const currentIndex = Math.max(0, stages.indexOf(currentStage));
+  const labels = stages.map(
+    (key) => WORKFLOW_STAGES.find((s) => s.key === key)?.label ?? stageLabel(key),
+  );
+
+  return (
+    <div className="dev-stage-workflow" aria-label="Project stage">
+      <p className="dev-stage-workflow-label">
+        Current stage · <strong>{labels[currentIndex]}</strong>
+      </p>
+      <ol className="dev-stage-list">
+        {stages.map((key, index) => {
+          const state =
+            index < currentIndex
+              ? "done"
+              : index === currentIndex
+                ? "current"
+                : "upcoming";
+          return (
+            <li key={key} className="dev-stage-item" data-state={state}>
+              <span className="dev-stage-marker" aria-hidden>
+                {state === "done" ? "✓" : state === "current" ? "●" : "○"}
+              </span>
+              <span className="dev-stage-name">{labels[index]}</span>
+              {index < stages.length - 1 ? (
+                <span className="dev-stage-arrow" aria-hidden>
+                  ↓
+                </span>
+              ) : null}
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
 function DevelopmentCard({ item }: { item: Development }) {
   const hero = item.images?.[0];
+  const meta = STATUS_META[item.status];
   const milestones = [...(item.milestones ?? [])].sort((a, b) =>
     a.date.localeCompare(b.date),
   );
+  const stages = item.stages?.length
+    ? item.stages
+    : (WORKFLOW_STAGES.map((s) => s.key) as DevelopmentWorkflowStage[]);
+  const currentStage = item.currentStage ?? stages[0]!;
 
   return (
     <article className="dev-card" data-status={item.status}>
@@ -45,34 +97,39 @@ function DevelopmentCard({ item }: { item: Development }) {
       <div className="dev-card-body">
         <div className="dev-card-head">
           <h3>{item.title}</h3>
-          <span className="dev-status-badge" data-status={item.status}>
-            {STATUS_LABELS[item.status]}
+          <span
+            className="dev-status-badge"
+            data-status={item.status}
+            data-tone={meta.tone}
+          >
+            <span aria-hidden>{meta.icon}</span> {meta.label}
           </span>
         </div>
         <p className="muted">{item.description}</p>
-        <div className="dev-progress">
-          <div className="dev-progress-label">
-            <span>Progress</span>
-            <span>{item.progress}%</span>
-          </div>
-          <div className="dev-progress-bar" role="progressbar" aria-valuenow={item.progress} aria-valuemin={0} aria-valuemax={100}>
-            <div className="dev-progress-fill" style={{ width: `${item.progress}%` }} />
-          </div>
-        </div>
+
+        <StageWorkflow stages={stages} currentStage={currentStage} />
+
         <p className="dev-dates muted">
-          Started {formatDate(item.startDate)}
+          Project opened {formatDate(item.startDate)}
           {item.endDate ? ` · Target ${formatDate(item.endDate)}` : ""}
+          {item.status === "under-construction" ||
+          item.status === "ongoing" ||
+          item.status === "completed"
+            ? ""
+            : " · Construction has not started"}
         </p>
         {milestones.length ? (
           <div className="dev-timeline">
-            <p className="eyebrow">Timeline</p>
+            <p className="eyebrow">Updates</p>
             <ol className="dev-timeline-list">
               {milestones.map((m) => (
                 <li key={`${m.date}-${m.title}`}>
                   <time dateTime={m.date}>{formatDate(m.date)}</time>
                   <div>
                     <strong>{m.title}</strong>
-                    {m.description ? <p className="muted">{m.description}</p> : null}
+                    {m.description ? (
+                      <p className="muted">{m.description}</p>
+                    ) : null}
                   </div>
                 </li>
               ))}
@@ -92,6 +149,13 @@ export function DevelopmentsPage({ developments }: { developments: Development[]
     return developments.filter((d) => d.status === filter);
   }, [developments, filter]);
 
+  const activeStatuses = useMemo(() => {
+    const present = new Set(developments.map((d) => d.status));
+    return STATUS_FILTERS.filter(
+      (f) => f.key === "all" || present.has(f.key as DevelopmentStatus),
+    );
+  }, [developments]);
+
   return (
     <div className="developments-page">
       <Reveal className="section">
@@ -100,14 +164,14 @@ export function DevelopmentsPage({ developments }: { developments: Development[]
             <p className="eyebrow">Village progress</p>
             <h1>Developments</h1>
             <p className="lede">
-              Temple restoration, infrastructure, and community projects shaping
-              Kondreddigaripalli.
+              Community projects for Kondreddigaripalli — from early planning and
+              decisions through construction and completion.
             </p>
           </div>
         </div>
 
         <div className="dev-filters" role="tablist" aria-label="Filter by status">
-          {STATUS_FILTERS.map(({ key, label }) => (
+          {activeStatuses.map(({ key, label }) => (
             <button
               key={key}
               type="button"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { withBase } from "@/lib/base";
+import { useMediaUrl } from "@/lib/use-media-url";
 import { useAudioDeck } from "./AudioDeck";
 
 function formatTime(seconds: number) {
@@ -29,6 +29,8 @@ export function AudioPlayer({
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const active = currentId === id && playing;
+  const media = useMediaUrl(src);
+  const art = useMediaUrl(artwork || "/brand/icon-512.png");
 
   useEffect(() => {
     const el = audioRef.current;
@@ -54,11 +56,15 @@ export function AudioPlayer({
     };
   }, []);
 
+  useEffect(() => {
+    if (media.error) setError(media.error);
+  }, [media.error]);
+
   return (
     <div className={`audio-card ${active ? "is-active" : ""}`}>
       <img
         className="audio-art"
-        src={withBase(artwork || "/brand/icon-512.png")}
+        src={art.url || ""}
         alt=""
         loading="lazy"
       />
@@ -77,6 +83,7 @@ export function AudioPlayer({
             className="btn"
             onClick={() => playTrack(id)}
             aria-pressed={active}
+            disabled={media.loading || !media.url}
           >
             {active ? "Pause" : "Play"}
           </button>
@@ -85,10 +92,8 @@ export function AudioPlayer({
       <audio
         ref={audioRef}
         preload="metadata"
-        src={withBase(src)}
-        onError={() =>
-          setError("This audio file could not be played.")
-        }
+        src={media.url || undefined}
+        onError={() => setError("This audio file could not be played.")}
       />
     </div>
   );

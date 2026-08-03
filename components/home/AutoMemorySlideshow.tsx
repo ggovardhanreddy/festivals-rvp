@@ -9,9 +9,11 @@ import { useLowPowerDevice } from "@/lib/client";
 export function AutoMemorySlideshow({
   items,
   paused = false,
+  eyebrow = "Memories",
 }: {
   items: Media[];
   paused?: boolean;
+  eyebrow?: string;
 }) {
   const reduce = useReducedMotion();
   const lowPower = useLowPowerDevice();
@@ -77,7 +79,7 @@ export function AutoMemorySlideshow({
       <div className="apple-slideshow-veil" aria-hidden />
 
       <div className="apple-slideshow-caption">
-        <p className="eyebrow">Memories</p>
+        <p className="eyebrow">{eyebrow}</p>
         <h2 className="apple-slideshow-title">{current.title || "From home"}</h2>
         {yearHint ? <p className="apple-slideshow-meta">{yearHint}</p> : null}
       </div>

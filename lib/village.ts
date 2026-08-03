@@ -92,8 +92,8 @@ export const VILLAGE_STORY = {
       body: "Respect, togetherness, and the quiet dignity of Annamayya district village life — passed hand to hand, generation to generation.",
     },
     {
-      title: "Our Festivals",
-      body: "Sankranthi harvests and Vinayaka beginnings mark the year with color, prayer, and shared tables.",
+      title: "Our Culture & Traditions",
+      body: "Reddivaripalli is a village where festivals are celebrated with immense joy, devotion, and unity — Vinayaka Chavithi, Varalakshmi Vratam, Sankranti, Sri Rama Navami, Mathamma Jathara, Devapatlamma Jathara, Ugadi, Deepavali, and Dasara.",
     },
     {
       title: "Our Traditions",

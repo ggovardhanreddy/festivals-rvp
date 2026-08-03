@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Member, MemberGroup } from "./types";
 import { monthDay } from "./dates";
+import { resolveMediaUrl } from "./media-url";
 import {
   normalizeStoredGroup,
   resolveMemberGroup,
@@ -30,11 +31,17 @@ function readMembers(): Member[] {
   >;
   return raw.map((m) => ({
     ...m,
-    photo: m.photo || null,
+    photo: m.photo ? resolveMediaUrl(m.photo) : null,
     dob: m.dob || null,
     birthYear: m.birthYear ?? null,
     joinYear: m.joinYear ?? null,
     group: normalizeStoredGroup(m.group),
+    memorial: Boolean(m.memorial),
+    archived: Boolean(m.archived),
+    achievements: m.achievements || undefined,
+    social: m.social || undefined,
+    status: m.status || undefined,
+    designation: m.designation || undefined,
   }));
 }
 
@@ -54,14 +61,14 @@ export function membersByGroup(group?: MemberGroup): Member[] {
   return all.filter((m) => resolveMemberGroup(m) === group);
 }
 
-export function countByGroup(from = new Date()): Record<MemberGroup, number> {
+export function countByGroup(): Record<MemberGroup, number> {
   const counts: Record<MemberGroup, number> = {
     legacy: 0,
     core: 0,
     nextgen: 0,
   };
   for (const member of loadMembers()) {
-    counts[resolveMemberGroup(member, from)] += 1;
+    counts[resolveMemberGroup(member)] += 1;
   }
   return counts;
 }

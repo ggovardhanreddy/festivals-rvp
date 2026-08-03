@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   m,
   useMotionValue,
@@ -14,6 +15,13 @@ import { Clouds } from "./atmosphere/Clouds";
 import { Birds } from "./atmosphere/Birds";
 import { SunRays } from "./atmosphere/SunRays";
 import { withBase } from "@/lib/base";
+import type { VantaEffectName } from "@/components/vanta/VantaBackground";
+
+const VantaBackground = dynamic(
+  () =>
+    import("@/components/vanta/VantaBackground").then((m) => m.VantaBackground),
+  { ssr: false },
+);
 
 export function MemoryHero({
   eyebrow,
@@ -28,6 +36,7 @@ export function MemoryHero({
   showLogo = false,
   fullBleed = false,
   atmosphere = false,
+  vantaEffect,
 }: {
   eyebrow: string;
   title: string;
@@ -41,6 +50,8 @@ export function MemoryHero({
   showLogo?: boolean;
   fullBleed?: boolean;
   atmosphere?: boolean;
+  /** Fixed identity Vanta background — never replace with festival hero images. */
+  vantaEffect?: VantaEffectName;
 }) {
   const reduce = useReducedMotion();
   const x = useMotionValue(0);
@@ -49,12 +60,13 @@ export function MemoryHero({
   const sy = useSpring(y, { stiffness: 40, damping: 20 });
   const moveX = useTransform(sx, [-40, 40], [-14, 14]);
   const moveY = useTransform(sy, [-40, 40], [-12, 12]);
+  const useVanta = Boolean(vantaEffect);
 
   return (
     <section
-      className={fullBleed ? "hero hero-fullbleed" : "hero"}
+      className={`${fullBleed ? "hero hero-fullbleed" : "hero"}${useVanta ? " hero--vanta" : ""}`}
       onMouseMove={(event) => {
-        if (reduce) return;
+        if (reduce || useVanta) return;
         const rect = event.currentTarget.getBoundingClientRect();
         x.set(event.clientX - rect.left - rect.width / 2);
         y.set(event.clientY - rect.top - rect.height / 2);
@@ -64,40 +76,51 @@ export function MemoryHero({
         y.set(0);
       }}
     >
-      <m.div
-        className="hero-media"
-        style={{
-          x: moveX,
-          y: moveY,
-          backgroundImage: backgroundImage
-            ? `linear-gradient(180deg, rgba(10,16,12,.2), rgba(10,16,12,.78)), url(${withBase(backgroundImage)})`
-            : undefined,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      {backgroundVideo && (
-        <video
-          className="hero-video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={backgroundImage ? withBase(backgroundImage) : undefined}
-          aria-hidden
-        >
-          <source src={withBase(backgroundVideo)} />
-        </video>
-      )}
-      <div className="aurora" aria-hidden />
-      {atmosphere && (
+      {useVanta && vantaEffect ? (
         <>
-          <SunRays />
-          <Clouds />
-          <Birds />
+          <div className="hero-vanta-media" aria-hidden>
+            <VantaBackground effect={vantaEffect} />
+            <div className="hero-vanta-veil" />
+          </div>
+        </>
+      ) : (
+        <>
+          <m.div
+            className="hero-media"
+            style={{
+              x: moveX,
+              y: moveY,
+              backgroundImage: backgroundImage
+                ? `linear-gradient(180deg, rgba(10,16,12,.2), rgba(10,16,12,.78)), url(${withBase(backgroundImage)})`
+                : undefined,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          {backgroundVideo && (
+            <video
+              className="hero-video"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={backgroundImage ? withBase(backgroundImage) : undefined}
+              aria-hidden
+            >
+              <source src={withBase(backgroundVideo)} />
+            </video>
+          )}
+          <div className="aurora" aria-hidden />
+          {atmosphere && (
+            <>
+              <SunRays />
+              <Clouds />
+              <Birds />
+            </>
+          )}
+          <Particles />
         </>
       )}
-      <Particles />
       <div className="hero-fade" />
       <div className="hero-copy">
         {showLogo && (

@@ -1,0 +1,343 @@
+{
+  "version": 1,
+  "note": "Fun Fest credentials — PBKDF2 hashes only. Update passwordHash to change a password without code changes.",
+  "members": [
+    {
+      "memberId": "g-ramesh-kumar-reddy",
+      "username": "Ramesh",
+      "name": "G Ramesh Kumar Reddy",
+      "passwordHash": "pbkdf2:adab2927933ea40b9c8091a1743a2dd7:25_xv_E8x7oTnO8QE2rsQFKluQHf6EKA1nWtQHOGG3E",
+      "updatedAt": "2026-08-02T16:03:46.055Z"
+    },
+    {
+      "memberId": "g-hemanth-kumar-reddy",
+      "username": "Hemanth",
+      "name": "G Hemanth Kumar Reddy",
+      "passwordHash": "pbkdf2:881309df0ca3a5f05ebc7eba9c6aa760:KbW6a11vPeta7AdUadfPovEASAcNEWvQwi5sDWRdneI",
+      "updatedAt": "2026-08-02T16:03:46.073Z"
+    },
+    {
+      "memberId": "dr-g-uma-maheshwar-reddy",
+      "username": "Uma",
+      "name": "Dr. G Uma Maheshwar Reddy",
+      "passwordHash": "pbkdf2:d31edb21e1e9360befeccf1fbf678f6f:IaJwz1CHl3Ik-uMu8sRUWlCSJ3poMN9aXRrYCJp9huo",
+      "updatedAt": "2026-08-03T04:50:14.664Z"
+    },
+    {
+      "memberId": "g-dhanunjaya-reddy",
+      "username": "Dhanunjaya",
+      "name": "G Dhanunjaya Reddy",
+      "passwordHash": "pbkdf2:4fd0fbd42c9da88fca5d22e32dc3ec09:KS2UKYnZy6v1iV844qa5ZjOfL1Awo9fO3EYMCl4flvM",
+      "updatedAt": "2026-08-02T16:03:46.089Z"
+    },
+    {
+      "memberId": "g-vijay-kumar-reddy",
+      "username": "Vijay",
+      "name": "G Vijay Kumar Reddy",
+      "passwordHash": "pbkdf2:6d5e623ab17c883b75d9f94235a32394:D9u55lpad0N-H0d7wI4qlueL_FywJvh5XDU-NIR5nJ8",
+      "updatedAt": "2026-08-02T16:03:46.105Z"
+    },
+    {
+      "memberId": "g-rana-pathap-reddy",
+      "username": "Rana",
+      "name": "G Rana Prathap Reddy",
+      "passwordHash": "pbkdf2:c43eb5b53dcbb7928fd77956d38bc0ea:qiXCQywY0IRUqvkJXG811qp7vyGWQzjsNf2snWlHkZw",
+      "updatedAt": "2026-08-02T16:03:46.121Z"
+    },
+    {
+      "memberId": "g-jayachandra-reddy",
+      "username": "Jayachandra",
+      "name": "G Jayachandra Reddy",
+      "passwordHash": "pbkdf2:06fe992335cad4765e94dbe186451121:70N5tU5lpWD-z2CScVOU1lDuF1oyzvmtYG_IIS0rp0w",
+      "updatedAt": "2026-08-03T04:48:14.937Z"
+    },
+    {
+      "memberId": "g-vasudeva-reddy",
+      "username": "Vasudeva",
+      "name": "G Vasudeva Reddy",
+      "passwordHash": "pbkdf2:b2fbfb1b31c71f4b652d63a198c274ae:jcOnROpX8PMSaRSYdO5TIn7J5MiVi_FhjY-wObtN8Hw",
+      "updatedAt": "2026-08-03T04:48:14.960Z"
+    },
+    {
+      "memberId": "g-ravi-kumar-reddy",
+      "username": "Ravi",
+      "name": "G Ravi Kumar Reddy",
+      "passwordHash": "pbkdf2:cfec01945c761b5216bbab7536ecc36a:2gRw4wOBtrxeeA1hglnOcCEe5aJMwWEke6N53GAzB-Y",
+      "updatedAt": "2026-08-02T16:03:46.169Z"
+    },
+    {
+      "memberId": "g-giridhar-gopal-reddy",
+      "username": "Giridhar",
+      "name": "G Giridhar Gopal Reddy",
+      "passwordHash": "pbkdf2:393e28538bccf78bc780e0b69d7d9926:8AcSdxMnCZ95VIGFO0b_sfODSk-LNxMa8VXZREvkQ8M",
+      "updatedAt": "2026-08-02T16:03:46.185Z"
+    },
+    {
+      "memberId": "d-rammohan-reddy",
+      "username": "Rammohan",
+      "name": "D Rammohan Reddy",
+      "passwordHash": "pbkdf2:73cd177857410b6e4ce375428e50d70b:781Xp5HIccoh0Qtv3fV-3odKEvUEJSt7U3WcofxXzyU",
+      "updatedAt": "2026-08-02T16:03:46.201Z"
+    },
+    {
+      "memberId": "d-raja-reddy",
+      "username": "Raja",
+      "name": "D Raja Reddy",
+      "passwordHash": "pbkdf2:c40fa1abe0db4765e302834961047958:2DfvprtMvdluJnbu7KCKgQFZgirxLLJ2PZCfRvVXt30",
+      "updatedAt": "2026-08-02T16:03:46.217Z"
+    },
+    {
+      "memberId": "d-harinatha",
+      "username": "Harinatha",
+      "name": "D Harinatha",
+      "passwordHash": "pbkdf2:5da58aa550be3f6cebe10ecde4c318ad:4l9FBKmlYqeOIlUh1amKqqmQsACjhC_c6xe9MOIMs_I",
+      "updatedAt": "2026-08-02T16:03:46.233Z"
+    },
+    {
+      "memberId": "g-raja",
+      "username": "GRaja",
+      "name": "G Raja",
+      "passwordHash": "pbkdf2:5dda65c289001b6b35a76725776cf579:t4l1waB95eAWZxih6vPK7K0UQIx-dOv4rNnSdnvE1p0",
+      "updatedAt": "2026-08-02T16:03:46.249Z"
+    },
+    {
+      "memberId": "y-ramesh",
+      "username": "YRamesh",
+      "name": "Y Ramesh",
+      "passwordHash": "pbkdf2:b3faf1dfa1e08b7fad19c7675cb7fbd4:0ZlStDhc_k2XpEOkty41fH_OIyUCkShzJ1zbnQwjM64",
+      "updatedAt": "2026-08-02T16:03:46.265Z"
+    },
+    {
+      "memberId": "y-naveen",
+      "username": "Naveen",
+      "name": "Y Naveen",
+      "passwordHash": "pbkdf2:425453fc0b7797f48b0e9331ba92c828:K0aiTIRr2DVieknNemG0jClhgWnRjrmq7G34dzKRqMY",
+      "updatedAt": "2026-08-02T16:03:46.281Z"
+    },
+    {
+      "memberId": "y-satheesh",
+      "username": "Satheesh",
+      "name": "Y Satheesh",
+      "passwordHash": "pbkdf2:747a38f1c12a66191153c02070afbb14:YFbsMzucesmFUgMzGPaBPo9zwW3ns7qw8Mnx38OBTu0",
+      "updatedAt": "2026-08-02T16:03:46.297Z"
+    },
+    {
+      "memberId": "y-uma",
+      "username": "YUma",
+      "name": "Y Uma",
+      "passwordHash": "pbkdf2:ee25fa1a464399d6d3a88710e910ffa4:bD7v2At4WWcPs1rj_uOgGuYEhzN5pSyaRd59bHmPcHs",
+      "updatedAt": "2026-08-03T04:50:14.682Z"
+    },
+    {
+      "memberId": "j-shiva",
+      "username": "Shiva",
+      "name": "J Shiva",
+      "passwordHash": "pbkdf2:7b7371800727166259864fee88501900:gz44lL25MrcSeFp8ZxQpKJg2zbym9oZ-jRcHIm_NEKc",
+      "updatedAt": "2026-08-02T16:03:46.329Z"
+    },
+    {
+      "memberId": "j-balaji",
+      "username": "Balaji",
+      "name": "J Balaji",
+      "passwordHash": "pbkdf2:41d54614d38a276e76929576c020aa3b:nV_Dm2FyScBAGD81KbMUMWvL88N1Poo7Z00ChldA888",
+      "updatedAt": "2026-08-02T16:03:46.345Z"
+    },
+    {
+      "memberId": "j-krishna-reddy",
+      "username": "Krishna",
+      "name": "J Krishna Reddy",
+      "passwordHash": "pbkdf2:be9ae71ad985743a2977f164c8acd917:Py9HNqjdlNWKHjYVYMj2wp-_YULdpSc1xiJQztSNh_w",
+      "updatedAt": "2026-08-02T16:03:46.361Z"
+    },
+    {
+      "memberId": "j-eswar-reddy",
+      "username": "Eswar",
+      "name": "J Eswar Reddy",
+      "passwordHash": "pbkdf2:f85a83622c3be6f32375ec4cb0ac6089:GuofsOBashDIcHBHp9GKBfhUyZL4rviYtqdw7GpDEy0",
+      "updatedAt": "2026-08-02T16:03:46.378Z"
+    },
+    {
+      "memberId": "dr-u-reddy-prasad",
+      "username": "Reddy",
+      "name": "Dr. U Reddy Prasad",
+      "passwordHash": "pbkdf2:37ea95597dc612260bab1e9ce63c8b5c:TTrOJRfX8F79gKwnIkq6uQCVIe4nTwv6Jv8SibNLolY",
+      "updatedAt": "2026-08-03T04:50:14.698Z"
+    },
+    {
+      "memberId": "g-govardhan-reddy",
+      "username": "Govardhan",
+      "name": "G Govardhan Reddy",
+      "passwordHash": "pbkdf2:c6f48745e8b647be1bf3146a202d1da5:eMUnI_M_D8Utd8MJL3Ekku7a57ptBzRfELiMakQTOvw",
+      "updatedAt": "2026-08-02T16:03:46.394Z"
+    },
+    {
+      "memberId": "g-pushyanth-reddy",
+      "username": "Pushyanth",
+      "name": "G Pushyanth Reddy",
+      "passwordHash": "pbkdf2:9f88ec2322c4ee7800831596b39bfea9:LH-gxqMxb1ZwhBWOH1pDIw6W02PbEPOOMNps6ZomrdY",
+      "updatedAt": "2026-08-02T16:03:46.411Z"
+    },
+    {
+      "memberId": "c-narendra-cg",
+      "username": "Narendra",
+      "name": "C Narendra (CG)",
+      "passwordHash": "pbkdf2:c2f91e770f9370943fc74b334f9b4fad:h4dcge9_L54e3Zrnda_2t5CvO0o_aRzldvIXxKTWgXc",
+      "updatedAt": "2026-08-02T16:03:46.428Z"
+    },
+    {
+      "memberId": "m-rajesh",
+      "username": "Rajesh",
+      "name": "M Rajesh",
+      "passwordHash": "pbkdf2:2c53f94b2b175b2f7c752da6d61ac1b5:pxYtNzHmkOtMkV5UxsSu388t3EGzGB_1WNAegTp4p7I",
+      "updatedAt": "2026-08-02T16:03:46.444Z"
+    },
+    {
+      "memberId": "y-chenna-keshava",
+      "username": "Chenna",
+      "name": "Y Chenna Keshava",
+      "passwordHash": "pbkdf2:604dc1135e52ffc43c7bc60175eebc56:hguvuwxOb44yF6YlK7wYMryE5pAgznhB0GXtcnUqY4Y",
+      "updatedAt": "2026-08-02T16:03:46.460Z"
+    },
+    {
+      "memberId": "g-sreekanth",
+      "username": "Sreekanth",
+      "name": "G Sreekanth",
+      "passwordHash": "pbkdf2:7d6c0e12f001abb74d6d7374a60dd122:_jjnVWr0prtJo5hS8QG2sANTpdH056t9vhSn8RKeyAI",
+      "updatedAt": "2026-08-02T16:03:46.476Z"
+    },
+    {
+      "memberId": "c-narendra-ck",
+      "username": "CNarendra",
+      "name": "C Narendra (CK)",
+      "passwordHash": "pbkdf2:07d36a8e6a27cc1ade4ae6d4a972b805:d4GIrmEnIEU78kwdn3ifhHrMu1OZBmhNyqaH0m78oRc",
+      "updatedAt": "2026-08-02T16:03:46.492Z"
+    },
+    {
+      "memberId": "c-hari",
+      "username": "Hari",
+      "name": "C Hari",
+      "passwordHash": "pbkdf2:bdc45bff3035d8dcd8f0800ac4acd293:zaItdR8RZqrL5DCpvURnl-jrWYJkN1wWkTMOXZthaoc",
+      "updatedAt": "2026-08-02T16:03:46.508Z"
+    },
+    {
+      "memberId": "c-avinash",
+      "username": "Avinash",
+      "name": "C Avinash",
+      "passwordHash": "pbkdf2:bc72620170d26c554e3d0fbcde150e3f:bJqL0dR-O1iBhVjU0jZB79Ya7fN9d4euL24aGI0CTqo",
+      "updatedAt": "2026-08-02T16:03:46.524Z"
+    },
+    {
+      "memberId": "c-ganesh",
+      "username": "Ganesh",
+      "name": "C Ganesh",
+      "passwordHash": "pbkdf2:c2bdbf0c9c02e0032cb92a920f731c64:fmeDKlbNtP8jI5dUG1fzR9TEr7-S3Qe5kN6YL8aK0yE",
+      "updatedAt": "2026-08-02T16:03:46.540Z"
+    },
+    {
+      "memberId": "j-bhanu",
+      "username": "Bhanu",
+      "name": "J Bhanu",
+      "passwordHash": "pbkdf2:6dfebc76abde409216f66c7a564727fe:cWLQrmAKw-ULdhEEOUlgdbVxVW9gX72iq1Y1MvyYdTw",
+      "updatedAt": "2026-08-02T16:03:46.556Z"
+    },
+    {
+      "memberId": "k-balaji",
+      "username": "KBalaji",
+      "name": "K Balaji",
+      "passwordHash": "pbkdf2:c9e572c2f7eaccadc0f0eb1184283e6b:7eGpMY4rzgZVYX1ab0saLC6yQSnGDPh5aeifkKTN-Zs",
+      "updatedAt": "2026-08-02T16:03:46.572Z"
+    },
+    {
+      "memberId": "y-krishna-mohan",
+      "username": "YKrishna",
+      "name": "Y Krishna Mohan",
+      "passwordHash": "pbkdf2:60bf9e4a5ebe229ab9430d091a7ddded:Htdnd-ImpQmRJGtvOHRnoeC_VsegWrcK8Jp3FAqDH48",
+      "updatedAt": "2026-08-02T16:03:46.588Z"
+    },
+    {
+      "memberId": "d-shantha-kumar",
+      "username": "Shantha",
+      "name": "D Shantha Kumar",
+      "passwordHash": "pbkdf2:a80a2ee03dd08fa67d10b176d6d3cc48:nyf3eoTr09IIJGTyg7aeaOWdlJ3fxUpMmopss0g9pXg",
+      "updatedAt": "2026-08-02T16:03:46.604Z"
+    },
+    {
+      "memberId": "u-nagendra",
+      "username": "Nagendra",
+      "name": "U Nagendra",
+      "passwordHash": "pbkdf2:64e49832e10d514dcef1bc18164cd3a8:39obk3AO0xeUJRhfU6K0Au6IYkofwEEN5RxK7gWow64",
+      "updatedAt": "2026-08-02T16:03:46.620Z"
+    },
+    {
+      "memberId": "u-guru",
+      "username": "Guru",
+      "name": "U Guru",
+      "passwordHash": "pbkdf2:8d13fe99e0cd5bd22a107eb9c1de68bc:kYH5UKeKxEP_UDQq4ct-T2Tv0mvL4UI15mobx6Y5HW4",
+      "updatedAt": "2026-08-02T16:03:46.636Z"
+    },
+    {
+      "memberId": "u-guru-mahesh-puli",
+      "username": "UGuru",
+      "name": "U Guru Mahesh (Puli)",
+      "passwordHash": "pbkdf2:91c145f8e7d08d21aba6776f41fafef4:xzIqSYvqi_7eTd5ZmWxhR9gKC-MkHNOejPqvd0oPvII",
+      "updatedAt": "2026-08-02T16:03:46.652Z"
+    },
+    {
+      "memberId": "j-niranjan",
+      "username": "Niranjan",
+      "name": "J Niranjan",
+      "passwordHash": "pbkdf2:fd88be13613bb82ddd1648db4a047796:Ch7y3vZYIuznDa-FFyI693VnEv9xJuChA7qS8MiK69g",
+      "updatedAt": "2026-08-02T16:03:46.667Z"
+    },
+    {
+      "memberId": "d-akhil-reddy",
+      "username": "Akhil",
+      "name": "D Akhil Reddy",
+      "passwordHash": "pbkdf2:24fec8293aeca34a98a08b5d8fae3c56:doH1MKkiUV1dvFZq3XIG4WRRRcDlc40uDyFRB4XNv30",
+      "updatedAt": "2026-08-02T16:03:46.683Z"
+    },
+    {
+      "memberId": "d-anil-reddy",
+      "username": "Anil",
+      "name": "D Anil Reddy",
+      "passwordHash": "pbkdf2:3bd558c98a5c256c2312444f86385ffc:MNsWviSXl7n9N89HJEfGEfBhr70YM5WsOgLSBsvvneU",
+      "updatedAt": "2026-08-02T16:03:46.699Z"
+    },
+    {
+      "memberId": "d-santhosh-reddy",
+      "username": "Santhosh",
+      "name": "D Santhosh Reddy",
+      "passwordHash": "pbkdf2:f42fea8e353779f01665298a6375b614:UTrYy1B5rkRsxaTC9VyGegL6N9Ec3qMP3d__2tMVqFU",
+      "updatedAt": "2026-08-02T16:03:46.715Z"
+    },
+    {
+      "memberId": "d-shiva-shankar-reddy",
+      "username": "DShiva",
+      "name": "D Shiva Shankar Reddy",
+      "passwordHash": "pbkdf2:26641c0bb51e54bb4db000734921b872:uC5EPEF53lLDUIM6-C084F0essbGKiZGxZV03towyfk",
+      "updatedAt": "2026-08-02T16:03:46.731Z"
+    },
+    {
+      "memberId": "u-nagesh",
+      "username": "Nagesh",
+      "name": "U Nagesh",
+      "passwordHash": "pbkdf2:ceb52fbd00ea8b3bec3f8eefe9b7618b:lYQDJ4KaZybizLjjn2KMxuMXIHtImssrDc1O8GcYK_8",
+      "updatedAt": "2026-08-02T16:03:46.747Z"
+    },
+    {
+      "memberId": "c-ganu",
+      "username": "Ganu",
+      "name": "C Ganu",
+      "passwordHash": "pbkdf2:ae2a7485a96d1a66aeaaf8c14d2081e0:svqMN6O8ziD6Z80h-KJqrbqv2cfn04lY3PiVocFit_g",
+      "updatedAt": "2026-08-02T16:03:46.762Z"
+    },
+    {
+      "memberId": "c-narasimha",
+      "username": "Narasimha",
+      "name": "C Narasimha",
+      "passwordHash": "pbkdf2:825e938f3ec71ac1bdb28a7ab1ae6ab8:8_nq8O86130rXwEkQTU4IdCl5hc0nyoAXneBs2HzCrw",
+      "updatedAt": "2026-08-02T16:03:46.778Z"
+    }
+  ],
+  "generatedAt": "2026-08-03T04:50:14.698Z"
+}

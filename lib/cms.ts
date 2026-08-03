@@ -7,6 +7,10 @@ export const CMS_ALBUMS: BucketKey[] = [
   "mathamma-jathara",
   "devapatlamma-jathara",
   "sri-rama-navami",
+  "varalakshmi-vratam",
+  "ugadi",
+  "deepavali",
+  "dasara",
   "rvp-birthdays",
   "fun-trips",
 ];
@@ -19,6 +23,10 @@ export const FESTIVAL_BUCKETS: FestivalKey[] = [
   "mathamma-jathara",
   "devapatlamma-jathara",
   "sri-rama-navami",
+  "varalakshmi-vratam",
+  "ugadi",
+  "deepavali",
+  "dasara",
 ];
 
 export const CMS_IGNORE_NAMES = new Set([
@@ -44,11 +52,15 @@ export function isFestivalBucket(name: string): name is FestivalKey {
 
 export function albumMetaDefaults(year: string, bucket: BucketKey, slug: string) {
   const titles: Record<BucketKey, string> = {
-    sankranthi: `Sankranthi ${year}`,
+    sankranthi: `Sankranti ${year}`,
     "vinayaka-chavithi": `Vinayaka Chavithi ${year}`,
     "mathamma-jathara": `Mathamma Jathara ${year}`,
     "devapatlamma-jathara": `Devapatlamma Jathara ${year}`,
     "sri-rama-navami": `Sri Rama Navami ${year}`,
+    "varalakshmi-vratam": `Varalakshmi Vratam ${year}`,
+    ugadi: `Ugadi ${year}`,
+    deepavali: `Deepavali ${year}`,
+    dasara: `Dasara ${year}`,
     "rvp-birthdays":
       slug === "rvp-birthdays" ? `RVP Birthdays ${year}` : `${titleCase(slug)} · ${year}`,
     "fun-trips": `Fun Trips ${year}`,

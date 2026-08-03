@@ -15,7 +15,7 @@ const MEMBERS = path.join(ROOT, "public", "members");
 const HEROES: { src: string; dest: string }[] = [
   {
     src: path.join(DOWNLOADS, "Photos/Vinayaka chaviti/Background/vinakyachaviti.jpeg"),
-    dest: "vinayaka-hero.webp",
+    dest: "vinayaka-hero-v3.webp",
   },
   {
     src: path.join(DOWNLOADS, "Photos/Sankranthi/Background"),
@@ -50,6 +50,9 @@ async function resolveFile(src: string): Promise<string | null> {
   return null;
 }
 
+const MIN_HERO_EDGE = 640;
+const MIN_HERO_BYTES = 40_000;
+
 async function toWebp(src: string, dest: string, size = 1920) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   await sharp(src)
@@ -57,6 +60,17 @@ async function toWebp(src: string, dest: string, size = 1920) {
     .resize({ width: size, height: size, fit: "inside", withoutEnlargement: true })
     .webp({ quality: 82 })
     .toFile(dest);
+}
+
+async function isUsableHero(src: string): Promise<boolean> {
+  try {
+    if (fs.statSync(src).size < MIN_HERO_BYTES) return false;
+    const meta = await sharp(src).metadata();
+    const edge = Math.max(meta.width || 0, meta.height || 0);
+    return edge >= MIN_HERO_EDGE;
+  } catch {
+    return false;
+  }
 }
 
 async function main() {
@@ -74,17 +88,42 @@ async function main() {
   }
 
   for (const hero of HEROES) {
+    const dest = path.join(BRAND, hero.dest);
+    const lockedAlias = dest.replace(/\.webp$/i, "-locked.webp");
+    // Never overwrite locked brand plates approved in the product
+    if (
+      hero.dest.includes("-locked") ||
+      fs.existsSync(lockedAlias) ||
+      fs.existsSync(path.join(BRAND, hero.dest.replace(/\.webp$/i, "-locked.webp")))
+    ) {
+      console.log("Hero locked — skip ingest:", hero.dest);
+      continue;
+    }
     const file = await resolveFile(hero.src);
     if (!file) {
       console.warn("Hero missing:", hero.src);
       continue;
     }
-    const dest = path.join(BRAND, hero.dest);
+    if (!(await isUsableHero(file))) {
+      // Keep any existing high-res plate (e.g. vinayaka-hero-source.webp) instead of
+      // overwriting with tiny Downloads/Background thumbnails.
+      if (fs.existsSync(dest) && (await isUsableHero(dest))) {
+        console.warn("Hero skipped (tiny source, kept existing):", hero.dest);
+        continue;
+      }
+      const sourceSibling = dest.replace(/\.webp$/i, "-source.webp");
+      if (fs.existsSync(sourceSibling) && (await isUsableHero(sourceSibling))) {
+        await toWebp(sourceSibling, dest, 2000);
+        console.log("Hero from source plate:", hero.dest);
+        continue;
+      }
+      console.warn("Hero skipped (unusable source):", hero.src);
+      continue;
+    }
     try {
       await toWebp(file, dest, 2000);
       console.log("Hero:", hero.dest);
     } catch (error) {
-      // HEIC / odd formats — copy as jpeg via sharp fail: try raw copy + convert
       console.warn(`Hero convert failed ${hero.dest}:`, error);
     }
   }

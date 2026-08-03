@@ -1,0 +1,85 @@
+[
+  {
+    "id": "dir-dr-uma",
+    "name": "Dr. G Uma Maheshwar Reddy",
+    "category": "Doctors",
+    "profession": "Doctor",
+    "designation": "Physician",
+    "photo": null,
+    "availability": "By appointment"
+  },
+  {
+    "id": "dir-dr-shantha",
+    "name": "Dr. D Shantha Kumar",
+    "category": "Doctors",
+    "profession": "Doctor",
+    "designation": "Physician",
+    "photo": null,
+    "availability": "By appointment"
+  },
+  {
+    "id": "dir-dr-prasad",
+    "name": "Dr. U Reddy Prasad",
+    "category": "Doctors",
+    "profession": "Doctor",
+    "designation": "Physician",
+    "photo": null,
+    "availability": "By appointment"
+  },
+  {
+    "id": "dir-j-shiva",
+    "name": "J Shiva",
+    "category": "Teachers",
+    "profession": "Teacher",
+    "designation": "Teacher",
+    "photo": null
+  },
+  {
+    "id": "dir-d-harinatha",
+    "name": "D Harinatha",
+    "category": "Teachers",
+    "profession": "Teacher",
+    "designation": "Headmaster",
+    "photo": null
+  },
+  {
+    "id": "dir-g-ramesh",
+    "name": "G Ramesh Kumar Reddy",
+    "category": "Government Employees",
+    "profession": "Government Employee",
+    "designation": "Government Employee",
+    "photo": null
+  },
+  {
+    "id": "dir-g-dhanunjaya",
+    "name": "G Dhanunjaya Reddy",
+    "category": "Government Employees",
+    "profession": "Government Employee",
+    "designation": "Government Employee",
+    "photo": null
+  },
+  {
+    "id": "dir-y-naveen",
+    "name": "Y Naveen",
+    "category": "Government Employees",
+    "profession": "Government Employee",
+    "designation": "VRO",
+    "photo": null
+  },
+  {
+    "id": "dir-j-shiva-gov",
+    "name": "J Shiva",
+    "category": "Government Employees",
+    "profession": "Teacher",
+    "designation": "Teacher",
+    "photo": null
+  },
+  {
+    "id": "dir-d-harinatha-gov",
+    "name": "D Harinatha",
+    "category": "Government Employees",
+    "profession": "Teacher",
+    "designation": "Headmaster",
+    "photo": null
+  }
+]

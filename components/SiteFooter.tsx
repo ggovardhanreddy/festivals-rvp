@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import {
+  OFFICIAL_SUBTITLE,
+  OFFICIAL_TITLE,
   SITE_NAME,
   SITE_TAGLINE,
   VILLAGE_ADDRESS_LINE,
@@ -18,7 +20,10 @@ export function SiteFooter() {
         <div className="footer-brand">
           <Logo variant="auto" />
           <p className="footer-village">
-            {VILLAGE_NAME} ({VILLAGE_ALSO_KNOWN_AS})
+            {OFFICIAL_TITLE}
+          </p>
+          <p className="muted footer-tagline">
+            {OFFICIAL_SUBTITLE} · {VILLAGE_NAME} ({VILLAGE_ALSO_KNOWN_AS})
           </p>
           <p className="muted footer-tagline">{SITE_TAGLINE}</p>
         </div>
@@ -27,13 +32,23 @@ export function SiteFooter() {
           <p className="footer-heading">Quick links</p>
           <div className="footer-links">
             <Link href="/">Home</Link>
+            <Link href="/years/">Annual Archive</Link>
             <Link href="/gallery/">Gallery</Link>
             <Link href="/events/">Events</Link>
+            <Link href="/heritage/">Heritage Archive</Link>
+            <Link href="/directory/">Village Directory</Link>
+            <Link href="/lost-found/">Lost &amp; Found</Link>
+            <Link href="/blood-donors/">Blood Donors</Link>
+            <Link href="/documents/">Panchayat Documents</Link>
+            <Link href="/developments/">Developments</Link>
+            <Link href="/suggestions/">Suggestions</Link>
             <Link href="/members/">Members</Link>
+            <Link href="/about/">About Village</Link>
+            <Link href="/timeline/">Timeline</Link>
+            <Link href="/search/">Search</Link>
             <Link href="/contact/">Contact</Link>
-            <Link href="/settings/">Settings</Link>
             <Link href="/fun-trips/">Fun Fest</Link>
-            <Link href="/login/">Member sign in</Link>
+            <Link href="/settings/">Settings</Link>
           </div>
         </div>
 
@@ -52,7 +67,8 @@ export function SiteFooter() {
       </div>
       <div className="footer-copy">
         <p>
-          © {year} {SITE_NAME}. {VILLAGE_ALSO_KNOWN_AS} · {VILLAGE_NAME}.
+          © {year} {OFFICIAL_TITLE}. Stewards: {SITE_NAME}. {VILLAGE_ALSO_KNOWN_AS} ·{" "}
+          {VILLAGE_NAME}.
         </p>
       </div>
     </footer>

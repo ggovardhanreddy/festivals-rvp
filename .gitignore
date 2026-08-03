@@ -31,6 +31,7 @@ originals/**
 review/**
 !review/.gitkeep
 !review/near-duplicates/.gitkeep
+content/_oversized/
 
 # Build-time generated catalogs (rebuilt by prepare:site)
 generated/

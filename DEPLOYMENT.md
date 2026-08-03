@@ -38,17 +38,32 @@ If Hostinger blocks CNAME on `@`, use their **ALIAS/ANAME** for the root, or onl
 
 Both `www.reddivaripalli.com` and `reddivaripalli.com` are attached to the `festivals-rvp` Pages project. SSL becomes Active after DNS is correct.
 
-## Manual deploy
+## Manual deploy (Cloudflare Pages + R2)
 
 ```bash
 npm ci
-export NEXT_PUBLIC_SITE_URL=https://www.reddivaripalli.com
-export NEXT_PUBLIC_BASE_PATH=
-npm run prepare:site
+# Ensure .env.local has NEXT_PUBLIC_SITE_URL + NEXT_PUBLIC_R2_PUBLIC_URL
+npm run typecheck
+npm run lint
+npm run test
 npm run validate
-npx next build
-npx wrangler pages deploy out --project-name=festivals-rvp
+npm run deploy:cf
 ```
+
+`deploy:cf` runs `prepare:site` + `next build`, strips local media folders from `out/` when R2 is configured (keeps `out/members/index.html`), then `wrangler pages deploy`.
+
+### Pages secrets (production)
+
+| Secret | Purpose |
+|---|---|
+| `ADMIN_PASSWORD_HASH` | Super Admin password (pbkdf2, 100k iterations) |
+| `SUPER_ADMIN_USERNAME` | Super Admin username |
+| `ADMIN_SESSION_SECRET` | Admin session HMAC |
+| `MEMBER_SESSION_SECRET` | Fun Fest session HMAC (optional fallback) |
+| `R2_PUBLIC_BASE` | Public R2 base for upload responses |
+| `MEDIA_SIGNING_SECRET` | Signed private media URLs |
+
+Binding: R2 bucket `MEDIA` → `reddivaripalli` (see `wrangler.toml`).
 
 For GitHub Pages builds, set:
 

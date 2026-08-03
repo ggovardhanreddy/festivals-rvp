@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { m } from "framer-motion";
+import { useEffect, useId, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { NAV } from "@/lib/site";
+import { COMMUNITY_NAV, NAV } from "@/lib/site";
 import { ThemeToggle } from "./Theme";
 import { Logo } from "./Logo";
 import { NotificationBell } from "./notifications/NotificationBell";
-import { useMemberAuth } from "./auth/MemberAuthProvider";
 
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
@@ -22,7 +20,9 @@ export function SiteHeader() {
   const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { session, logout, ready } = useMemberAuth();
+  const menuId = useId();
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -31,21 +31,42 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close drawer on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    document.documentElement.classList.toggle("nav-drawer-open", open);
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.classList.remove("nav-drawer-open");
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        btnRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    // Focus first link for keyboard / screen-reader users
+    const first = drawerRef.current?.querySelector<HTMLAnchorElement>("a");
+    first?.focus();
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const close = () => setOpen(false);
+
   return (
     <>
-      <m.header
+      <header
         className="nav nav-sticky"
         data-scrolled={scrolled || undefined}
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       >
         <Link href="/" className="brand-link" aria-label="RVP Youth home">
           <Logo />
@@ -62,43 +83,45 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="nav-actions">
-          {ready && session ? (
-            <>
-              <Link href="/chat/" className="btn ghost nav-auth-btn">
-                Chat
-              </Link>
-              <button
-                type="button"
-                className="btn ghost nav-auth-btn"
-                onClick={logout}
-                title={`Signed in as ${session.username}`}
-              >
-                Sign out
-              </button>
-            </>
-          ) : (
-            <Link href="/login/" className="btn ghost nav-auth-btn">
-              Sign in
-            </Link>
-          )}
           <NotificationBell />
           <ThemeToggle />
+          <Link
+            href="/admin/"
+            className="btn ghost nav-superadmin-btn"
+            aria-label="Super Admin login"
+          >
+            Super Admin
+          </Link>
           <button
+            ref={btnRef}
             type="button"
             className="icon-btn nav-menu-btn"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls={menuId}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X size={20} /> : <Menu size={20} />}
+            {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
-      </m.header>
+      </header>
 
       <div
+        className="nav-drawer-backdrop"
+        data-open={open || undefined}
+        aria-hidden={!open}
+        onClick={close}
+      />
+
+      <div
+        id={menuId}
+        ref={drawerRef}
         className="nav-drawer"
         data-open={open || undefined}
         aria-hidden={!open}
+        role="dialog"
+        aria-modal={open || undefined}
+        aria-label="Site menu"
       >
         <nav className="nav-drawer-links" aria-label="Mobile">
           {NAV.map((item) => (
@@ -106,22 +129,46 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               data-active={isActive(item.href, normalized)}
-              onClick={() => setOpen(false)}
+              onClick={close}
             >
               {item.label}
             </Link>
           ))}
-          <Link href="/search/" onClick={() => setOpen(false)}>
+          {COMMUNITY_NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              data-active={isActive(item.href, normalized)}
+              onClick={close}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <Link href="/timeline/" onClick={close}>
+            Timeline
+          </Link>
+          <Link href="/fun-trips/" onClick={close}>
+            Fun Fest
+          </Link>
+          <Link href="/search/" onClick={close}>
             Search
           </Link>
-          <Link href="/settings/" onClick={() => setOpen(false)}>
+          <Link href="/settings/" onClick={close}>
             Settings
           </Link>
-          {ready && session ? (
-            <Link href="/chat/" onClick={() => setOpen(false)}>
-              Chat
-            </Link>
-          ) : null}
+          <Link href="/admin/" onClick={close} className="nav-drawer-superadmin">
+            Super Admin Login
+          </Link>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              close();
+              window.dispatchEvent(new CustomEvent("rvp:show-install"));
+            }}
+          >
+            Install App
+          </button>
         </nav>
       </div>
     </>

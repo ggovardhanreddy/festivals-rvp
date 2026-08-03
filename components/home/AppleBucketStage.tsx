@@ -74,27 +74,38 @@ export function AppleBucketStage({
         className="apple-chapter apple-chapter--memories"
         aria-label={`${title} memories`}
       >
-        <div className="apple-chapter-head">
-          <p className="eyebrow">{eyebrow}</p>
-          <h2>{title}</h2>
-          <p className="lede apple-chapter-lede">{blurb}</p>
-        </div>
-        {slideshowItems.length ? (
-          <AutoMemorySlideshow items={slideshowItems} paused={tileHovered} />
-        ) : heroImage ? (
-          <div className="apple-slideshow apple-slideshow--static">
+        {heroImage ? (
+          <div className="apple-festival-hero">
             <img
               src={withBase(heroImage)}
-              alt={title}
-              className="apple-slideshow-img"
+              alt=""
+              className="apple-festival-hero-img"
+              fetchPriority="high"
+              decoding="async"
             />
-            <div className="apple-slideshow-veil" aria-hidden />
-            <div className="apple-slideshow-caption">
+            <div className="apple-festival-hero-veil" aria-hidden />
+            <div className="apple-festival-hero-copy">
               <p className="eyebrow">{eyebrow}</p>
-              <h2 className="apple-slideshow-title">{title}</h2>
+              <h1 className="apple-festival-hero-title">{title}</h1>
+              <p className="lede apple-chapter-lede">{blurb}</p>
             </div>
           </div>
-        ) : null}
+        ) : (
+          <>
+            <div className="apple-chapter-head">
+              <p className="eyebrow">{eyebrow}</p>
+              <h2>{title}</h2>
+              <p className="lede apple-chapter-lede">{blurb}</p>
+            </div>
+            {slideshowItems.length ? (
+              <AutoMemorySlideshow
+                items={slideshowItems}
+                paused={tileHovered}
+                eyebrow={eyebrow}
+              />
+            ) : null}
+          </>
+        )}
       </section>
 
       <section className="apple-chapter apple-chapter--gather" aria-label="Story">

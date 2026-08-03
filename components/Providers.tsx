@@ -15,11 +15,13 @@ import { NotificationProvider } from "./notifications/NotificationProvider";
 import { MemberAuthProvider } from "./auth/MemberAuthProvider";
 import { LocationProvider } from "./location/LocationProvider";
 import { LocationConsentDialog } from "./location/LocationConsentDialog";
+import { AnalyticsTracker } from "./analytics/AnalyticsTracker";
 import { AutoDayNightSync } from "./Theme";
-import type { Announcement, Member, SiteEvent } from "@/lib/types";
+import type { Announcement, Development, Member, SiteEvent } from "@/lib/types";
 import membersData from "@/content/data/members.json";
 import eventsData from "@/content/data/events.json";
 import announcementsData from "@/content/data/announcements.json";
+import developmentsData from "@/content/data/developments.json";
 
 const SmoothScroll = dynamic(
   () => import("./experience/SmoothScroll").then((m) => m.SmoothScroll),
@@ -50,12 +52,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <LazyMotion features={domAnimation}>
         <AutoDayNightSync />
-        <MemberAuthProvider members={membersData as Member[]}>
+        <MemberAuthProvider>
           <LocationProvider>
             <NotificationProvider
               members={membersData as Member[]}
               events={eventsData as SiteEvent[]}
               announcements={announcementsData as Announcement[]}
+              developments={developmentsData as Development[]}
             >
               <MusicProvider>
                 <AudioDeckProvider>
@@ -63,6 +66,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                   <DesktopExtras />
                   <ServiceWorkerManager />
                   <UpdateAvailablePrompt />
+                  <AnalyticsTracker />
                   {children}
                   <GlassMusicPlayer />
                   <InstallAppPrompt />

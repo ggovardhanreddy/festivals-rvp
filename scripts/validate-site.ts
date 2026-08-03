@@ -63,6 +63,8 @@ function checkAlbumsAndMedia() {
       continue;
     }
     for (const item of album.media.slice(0, 3)) {
+      // Absolute R2 / CDN URLs are validated by live HTTP, not local disk
+      if (/^https?:\/\//i.test(item.file)) continue;
       const rel = path.join("public", item.file.replace(/^\//, ""));
       if (!exists(rel) && !item.file.startsWith("/brand/")) {
         warnings.push(`Missing media file referenced by album: ${item.file}`);

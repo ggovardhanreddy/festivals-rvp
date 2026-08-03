@@ -1,6 +1,15 @@
-import { VILLAGE_ADDRESS, VILLAGE_ADDRESS_LINE, VILLAGE_MAPS_EMBED, VILLAGE_MAPS_URL, VILLAGE_NAME, VILLAGE_ALSO_KNOWN_AS, SITE_NAME } from "@/lib/site";
+import {
+  VILLAGE_ADDRESS,
+  VILLAGE_ADDRESS_LINE,
+  VILLAGE_MAPS_EMBED,
+  VILLAGE_MAPS_URL,
+  VILLAGE_NAME,
+  VILLAGE_ALSO_KNOWN_AS,
+  SITE_NAME,
+} from "@/lib/site";
 import { Reveal } from "@/components/Reveal";
 import { ContactLocationNote } from "@/components/location/ContactLocationNote";
+import { ContactForm } from "./ContactForm";
 
 export function ContactPage() {
   return (
@@ -18,7 +27,9 @@ export function ContactPage() {
 
         <ContactLocationNote />
 
-        <div className="contact-grid">
+        <div className="contact-grid contact-grid--form">
+          <ContactForm />
+
           <div className="contact-card">
             <h2>Village address</h2>
             <p className="muted">

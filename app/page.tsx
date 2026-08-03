@@ -1,8 +1,7 @@
 import { allMedia, bucketsWithContent, years } from "@/lib/content";
 import { countByGroup, loadMembers } from "@/lib/members";
 import { loadEvents, upcomingEvents } from "@/lib/events";
-import { FESTIVAL_HEROES } from "@/lib/site";
-import { HeroSlideshow } from "@/components/home/HeroSlideshow";
+import { HomeHero } from "@/components/home/HomeHero";
 import { HomeBelowFold } from "@/components/home/HomeBelowFold";
 
 export default function HomePage() {
@@ -14,21 +13,11 @@ export default function HomePage() {
   const festivals = loadEvents().filter((e) => e.category === "festival");
   const liveSlugs = bucketsWithContent();
 
-  const heroSlides = [
-    "/brand/village-aerial.webp",
-    FESTIVAL_HEROES["vinayaka-chavithi"],
-    FESTIVAL_HEROES.sankranthi,
-    FESTIVAL_HEROES["mathamma-jathara"],
-    FESTIVAL_HEROES["sri-rama-navami"],
-    FESTIVAL_HEROES["fun-trips"],
-    ...galleryItems.slice(0, 4).map((m) => m.file),
-  ].filter((src, i, arr): src is string => Boolean(src) && arr.indexOf(src) === i);
-
   const groupCounts = countByGroup();
   const stats = [
     {
       value: groupCounts.legacy,
-      label: "Legacy Circle Members",
+      label: "Legacy Circle",
       icon: "legacy" as const,
     },
     {
@@ -38,7 +27,7 @@ export default function HomePage() {
     },
     {
       value: groupCounts.nextgen,
-      label: "NextGen Members",
+      label: "NextGen",
       icon: "nextgen" as const,
     },
     {
@@ -50,7 +39,7 @@ export default function HomePage() {
 
   return (
     <main>
-      <HeroSlideshow slides={heroSlides} />
+      <HomeHero />
       <HomeBelowFold
         galleryItems={galleryItems}
         yearList={yearList}

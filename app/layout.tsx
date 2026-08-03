@@ -7,13 +7,18 @@ import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { withBase } from "@/lib/base";
 import {
+  SEO_DESCRIPTION,
+  SEO_KEYWORDS,
+  SEO_TITLE,
+  OFFICIAL_TITLE,
   SITE_DESCRIPTOR,
   SITE_NAME,
-  SITE_TAGLINE,
+  VILLAGE_ADDRESS,
   VILLAGE_ADDRESS_LINE,
   VILLAGE_ALSO_KNOWN_AS,
-  VILLAGE_NAME,
   VILLAGE_COORDS,
+  VILLAGE_NAME,
+  VILLAGE_NAME_VARIANTS,
 } from "@/lib/site";
 
 const playfair = Playfair_Display({
@@ -36,29 +41,17 @@ const poppins = Poppins({
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://www.reddivaripalli.com";
 
-const seoTitle = `${VILLAGE_ALSO_KNOWN_AS} (${VILLAGE_NAME}) | ${SITE_NAME}`;
-const seoDescription = `${VILLAGE_ALSO_KNOWN_AS} — also known as ${VILLAGE_NAME}, Annamayya District, Andhra Pradesh. Official ${SITE_NAME} digital village archive: festivals, gallery, members, and events. ${SITE_TAGLINE} ${VILLAGE_ADDRESS_LINE}.`;
+const seoTitle = SEO_TITLE;
+const seoDescription = SEO_DESCRIPTION;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: seoTitle,
-    template: `%s | ${VILLAGE_ALSO_KNOWN_AS} · ${SITE_NAME}`,
+    template: `%s | ${VILLAGE_ALSO_KNOWN_AS} · ${OFFICIAL_TITLE}`,
   },
   description: seoDescription,
-  keywords: [
-    "Reddivaripalli",
-    "Kondreddigaripalli",
-    "RVP Youth",
-    "Annamayya",
-    "Andhra Pradesh",
-    "Sankranthi",
-    "Vinayaka Chavithi",
-    "Mathamma Jathara",
-    "Devapatlamma Jathara",
-    "Sri Rama Navami",
-    "village festivals",
-  ],
+  keywords: [...SEO_KEYWORDS],
   alternates: {
     canonical: "/",
   },
@@ -66,7 +59,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
-    siteName: `${SITE_NAME} · ${VILLAGE_ALSO_KNOWN_AS}`,
+    siteName: `${OFFICIAL_TITLE} · ${VILLAGE_ALSO_KNOWN_AS}`,
     title: seoTitle,
     description: seoDescription,
     images: [
@@ -74,7 +67,7 @@ export const metadata: Metadata = {
         url: withBase("/logo/social-banner.png"),
         width: 1200,
         height: 630,
-        alt: `${VILLAGE_ALSO_KNOWN_AS} — ${SITE_NAME}`,
+        alt: `${OFFICIAL_TITLE} — ${VILLAGE_ALSO_KNOWN_AS}`,
       },
     ],
   },
@@ -99,14 +92,31 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: `${SITE_NAME}`,
+    title: SITE_NAME,
+    startupImage: [
+      {
+        url: withBase("/logo/app-icon.png"),
+        media:
+          "(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)",
+      },
+      {
+        url: withBase("/logo/app-icon.png"),
+      },
+    ],
   },
   formatDetection: {
     telephone: false,
   },
   other: {
     "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-title": SITE_NAME,
+    "apple-mobile-web-app-status-bar-style": "default",
     "theme-color": "#fafaf8",
+    "geo.region": "IN-AP",
+    "geo.placename": `${VILLAGE_ALSO_KNOWN_AS}, ${VILLAGE_ADDRESS.mandal}`,
+    "geo.position": `${VILLAGE_COORDS.lat};${VILLAGE_COORDS.lng}`,
+    ICBM: `${VILLAGE_COORDS.lat}, ${VILLAGE_COORDS.lng}`,
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   category: "community",
@@ -120,16 +130,18 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: `${SITE_NAME} — ${VILLAGE_ALSO_KNOWN_AS}`,
-    alternateName: [
-      VILLAGE_ALSO_KNOWN_AS,
-      VILLAGE_NAME,
-      "Reddivaripalli",
-      "Kondreddigaripalli",
-      SITE_NAME,
-    ],
+    alternateName: [...VILLAGE_NAME_VARIANTS, SITE_NAME],
     url: siteUrl,
     description: seoDescription,
     inLanguage: "en",
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}${withBase("/logo/logo-master.png")}`,
+      },
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: `${siteUrl}/search/?q={search_term_string}`,
@@ -140,37 +152,119 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE_NAME,
+    alternateName: [...VILLAGE_NAME_VARIANTS],
     url: siteUrl,
-    logo: `${siteUrl}${withBase("/logo/logo-master.png")}`,
-    description: `${SITE_DESCRIPTOR} for ${VILLAGE_NAME} (${VILLAGE_ALSO_KNOWN_AS}).`,
+    logo: {
+      "@type": "ImageObject",
+      url: `${siteUrl}${withBase("/logo/logo-master.png")}`,
+      width: 512,
+      height: 512,
+    },
+    description: `${SITE_DESCRIPTOR} for ${VILLAGE_ALSO_KNOWN_AS} (${VILLAGE_NAME}), ${VILLAGE_ADDRESS.gramPanchayat}, ${VILLAGE_ADDRESS.district}, ${VILLAGE_ADDRESS.state}.`,
     address: {
       "@type": "PostalAddress",
-      addressLocality: VILLAGE_NAME,
-      addressRegion: "Andhra Pradesh",
-      postalCode: "516215",
+      addressLocality: VILLAGE_ALSO_KNOWN_AS,
+      addressRegion: VILLAGE_ADDRESS.state,
+      postalCode: VILLAGE_ADDRESS.pincode,
       addressCountry: "IN",
+      streetAddress: VILLAGE_ADDRESS_LINE,
+    },
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: VILLAGE_ADDRESS.district,
     },
   },
   {
     "@context": "https://schema.org",
     "@type": "Place",
-    name: `${VILLAGE_NAME} (${VILLAGE_ALSO_KNOWN_AS})`,
-    alternateName: [VILLAGE_ALSO_KNOWN_AS, "Reddivaripalli"],
-    description: `Village of ${VILLAGE_NAME}, also known as ${VILLAGE_ALSO_KNOWN_AS}, in Annamayya District, Andhra Pradesh, India.`,
+    name: `${VILLAGE_ALSO_KNOWN_AS} Village`,
+    alternateName: [...VILLAGE_NAME_VARIANTS, VILLAGE_NAME],
+    description: seoDescription,
+    url: siteUrl,
     address: {
       "@type": "PostalAddress",
-      streetAddress: VILLAGE_ADDRESS_LINE,
-      addressLocality: VILLAGE_NAME,
-      addressRegion: "Andhra Pradesh",
-      postalCode: "516215",
+      addressLocality: VILLAGE_ALSO_KNOWN_AS,
+      addressRegion: VILLAGE_ADDRESS.state,
+      postalCode: VILLAGE_ADDRESS.pincode,
       addressCountry: "IN",
+      streetAddress: `${VILLAGE_ADDRESS.gramPanchayat}, ${VILLAGE_ADDRESS.mandal}`,
     },
     geo: {
       "@type": "GeoCoordinates",
       latitude: VILLAGE_COORDS.lat,
       longitude: VILLAGE_COORDS.lng,
     },
-    url: siteUrl,
+    containedInPlace: [
+      {
+        "@type": "AdministrativeArea",
+        name: VILLAGE_ADDRESS.gramPanchayat,
+      },
+      {
+        "@type": "AdministrativeArea",
+        name: VILLAGE_ADDRESS.mandal,
+      },
+      {
+        "@type": "AdministrativeArea",
+        name: "YSR Kadapa District",
+      },
+      {
+        "@type": "AdministrativeArea",
+        name: "Annamayya District",
+      },
+      {
+        "@type": "State",
+        name: "Andhra Pradesh",
+      },
+      {
+        "@type": "Country",
+        name: "India",
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${siteUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Gallery",
+        item: `${siteUrl}/gallery/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Events",
+        item: `${siteUrl}/events/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: "Developments",
+        item: `${siteUrl}/developments/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 5,
+        name: "Contact",
+        item: `${siteUrl}/contact/`,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    contentUrl: `${siteUrl}${withBase("/logo/social-banner.png")}`,
+    url: `${siteUrl}${withBase("/logo/logo-master.png")}`,
+    name: `${VILLAGE_ALSO_KNOWN_AS} — ${SITE_NAME}`,
+    description: `Official logo and social preview for ${VILLAGE_ALSO_KNOWN_AS} village digital archive.`,
+    creditText: SITE_NAME,
   },
 ];
 
@@ -184,7 +278,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var d=document.documentElement;var t=localStorage.getItem("rvp-theme");var sys=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=t==="light"||t==="dark"?t:sys;if(r==="dark")d.classList.add("dark");else d.classList.remove("dark");d.style.colorScheme=r;var mobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)||window.matchMedia("(max-width:820px)").matches;d.classList.remove("intro-pending","intro-active","intro-locked");if(mobile)d.classList.add("rvp-mobile");}catch(e){}})();`,
+            __html: `(function(){try{var d=document.documentElement;var t=localStorage.getItem("rvp-theme");var sys=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=t==="light"||t==="dark"?t:sys;if(r==="dark")d.classList.add("dark");else d.classList.remove("dark");d.style.colorScheme=r;var mobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)||window.matchMedia("(max-width:820px)").matches;d.classList.remove("intro-pending","intro-active","intro-locked");if(mobile)d.classList.add("rvp-mobile");window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__rvpDeferredInstall=e;window.dispatchEvent(new CustomEvent("rvp:install-ready"));});}catch(e){}})();`,
           }}
         />
         <a className="skip-link" href="#main-content">

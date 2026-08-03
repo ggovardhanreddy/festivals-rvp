@@ -1,7 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import { publicAlbums, allMedia, years } from "../lib/content";
-import { BUCKETS, albumHref } from "../lib/site";
+import { BUCKETS, albumHref, OFFICIAL_TITLE } from "../lib/site";
+import { loadMembers } from "../lib/members";
+import { loadEvents } from "../lib/events";
+import { loadDevelopments } from "../lib/developments";
+import {
+  loadBloodDonorsSeed,
+  loadDirectorySeed,
+  loadHeritageSeed,
+  loadPanchayatDocsSeed,
+} from "../lib/community";
 
 const root = process.cwd();
 const url =
@@ -19,37 +28,109 @@ const routes = [
   "search",
   "about",
   "years",
-  "members",
   "events",
   "gallery",
-  // Only buckets that have uploaded media — empty CMS folders stay hidden
-  ...bucketsWithContent.map((b) => b.key),
+  "developments",
+  "suggestions",
+  "contact",
+  "members",
+  "timeline",
+  "directory",
+  "lost-found",
+  "blood-donors",
+  "documents",
+  "heritage",
+  // Public festival chapters with media (exclude private fun-trips from SEO)
+  ...bucketsWithContent
+    .filter((b) => b.key !== "fun-trips")
+    .map((b) => b.key),
   ...years().map((year) => `years/${year}`),
-  ...bucketsWithContent.flatMap((b) => {
-    const ys = [
-      ...new Set(live.filter((a) => a.bucket === b.key).map((a) => a.year)),
-    ];
-    return ys.map((year) => `${b.key}/${year}`);
-  }),
-  ...live.map((album) => albumHref(album).replace(/^\/|\/$/g, "")),
+  ...bucketsWithContent
+    .filter((b) => b.key !== "fun-trips")
+    .flatMap((b) => {
+      const ys = [
+        ...new Set(live.filter((a) => a.bucket === b.key).map((a) => a.year)),
+      ];
+      return ys.map((year) => `${b.key}/${year}`);
+    }),
+  ...live
+    .filter((album) => album.bucket !== "fun-trips")
+    .map((album) => albumHref(album).replace(/^\/|\/$/g, "")),
+];
+
+const searchIndex = [
+  ...media.map((item) => ({
+    title: item.title,
+    date: item.date,
+    tags: item.tags,
+    type: item.type,
+    kind: "media",
+    album: item.album.title,
+    bucket: item.album.bucket,
+    year: item.album.year,
+    url: `${base}${albumHref(item.album)}`,
+  })),
+  ...loadMembers().map((m) => ({
+    title: m.name,
+    kind: "member",
+    tags: [m.designation, m.group].filter(Boolean) as string[],
+    body: m.designation || "Village member",
+    url: `${base}/members/`,
+  })),
+  ...loadDirectorySeed().map((d) => ({
+    title: d.name,
+    kind: "directory",
+    tags: [d.category, d.profession, d.designation].filter(Boolean) as string[],
+    body: `${d.profession}${d.designation ? ` · ${d.designation}` : ""}`,
+    url: `${base}/directory/`,
+  })),
+  ...loadEvents().map((e) => ({
+    title: e.title,
+    date: e.date,
+    kind: "event",
+    tags: [e.category, e.slug].filter(Boolean) as string[],
+    body: e.description,
+    url: `${base}${e.slug ? `/${e.slug}/` : "/events/"}`,
+  })),
+  ...loadDevelopments().map((d) => ({
+    title: d.title,
+    kind: "development",
+    tags: [d.status],
+    body: d.description.slice(0, 160),
+    url: `${base}/developments/`,
+  })),
+  ...loadPanchayatDocsSeed().map((d) => ({
+    title: d.title,
+    date: d.date,
+    kind: "document",
+    tags: [d.category],
+    body: d.description || d.category,
+    url: `${base}/documents/`,
+  })),
+  ...loadHeritageSeed()
+    .filter((h) => !h.status || h.status === "approved")
+    .map((h) => ({
+      title: h.title,
+      date: h.date,
+      kind: "heritage",
+      tags: [h.category],
+      body: h.description,
+      url: `${base}/heritage/`,
+    })),
+  ...loadBloodDonorsSeed()
+    .filter((d) => d.status === "approved")
+    .map((d) => ({
+      title: d.name,
+      kind: "blood-donor",
+      tags: [d.bloodGroup, d.village],
+      body: `${d.bloodGroup} · ${d.village}`,
+      url: `${base}/blood-donors/`,
+    })),
 ];
 
 fs.writeFileSync(
   path.join(root, "public", "search-index.json"),
-  JSON.stringify(
-    media.map((item) => ({
-      title: item.title,
-      date: item.date,
-      tags: item.tags,
-      type: item.type,
-      album: item.album.title,
-      bucket: item.album.bucket,
-      year: item.album.year,
-      url: `${base}${albumHref(item.album)}`,
-    })),
-    null,
-    2,
-  ),
+  JSON.stringify(searchIndex, null, 2),
 );
 
 fs.writeFileSync(
@@ -57,13 +138,16 @@ fs.writeFileSync(
   `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[
     ...new Set(routes),
   ]
-    .map((route) => `<url><loc>${url}/${route}</loc></url>`)
+    .map((route) => {
+      const loc = route ? `${url}/${route}/` : `${url}/`;
+      return `<url><loc>${loc}</loc><changefreq>weekly</changefreq></url>`;
+    })
     .join("")}</urlset>`,
 );
 
 fs.writeFileSync(
   path.join(root, "public", "feed.xml"),
-  `<?xml version="1.0"?><rss version="2.0"><channel><title>RVP Youth</title><link>${url}</link><description>Premium memory experience</description>${albums
+  `<?xml version="1.0"?><rss version="2.0"><channel><title>${OFFICIAL_TITLE}</title><link>${url}</link><description>Official digital identity of Reddivaripalli — festivals, heritage, and community</description>${albums
     .map(
       (album) =>
         `<item><title>${album.title}</title><link>${url}${albumHref(album)}</link><description>${album.description}</description></item>`,
@@ -100,7 +184,12 @@ fs.writeFileSync(
 fs.writeFileSync(
   path.join(root, "public", "sw.js"),
   `const CACHE=${JSON.stringify(`rvp-youth-${buildId}`)},BUILD=${JSON.stringify(buildId)},BASE=${JSON.stringify(base || "")};
-self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self.skipWaiting()});
+async function clearAllCaches(){const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)));}
+self.addEventListener("message",e=>{
+  const type=e.data&&e.data.type;
+  if(type==="SKIP_WAITING")self.skipWaiting();
+  if(type==="CLEAR_CACHES")e.waitUntil(clearAllCaches());
+});
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll([BASE+"/",BASE+"/offline/",BASE+"/version.json"]).catch(()=>{})));self.skipWaiting()});
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",e=>{
@@ -108,14 +197,14 @@ self.addEventListener("fetch",e=>{
   const req=e.request;
   const url=new URL(req.url);
   if(url.origin!==self.location.origin)return;
-  // Always hit network for deploy version + SW itself
-  if(url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")){
+  // Always hit network for deploy version + SW + manifest + app shell JS/CSS
+  if(url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")||url.pathname.includes("/_next/static/")){
     e.respondWith(fetch(new Request(req,{cache:"no-store"})).catch(()=>caches.match(req)));
     return;
   }
   const isNav=req.mode==="navigate";
   // Network-first for pages + media so every deploy shows new data/images online
-  if(isNav||/\\.(?:png|jpe?g|webp|avif|gif|svg|json|html?)(?:\\?|$)/i.test(url.pathname)||url.pathname.includes("/media/")||url.pathname.includes("/thumbs/")||url.pathname.includes("/brand/")||url.pathname.includes("/logo/")||url.pathname.includes("/content/")){
+  if(isNav||/\\.(?:png|jpe?g|webp|avif|gif|svg|json|html?|js|css|mp4|webm|mp3|woff2?)(?:\\?|$)/i.test(url.pathname)||url.pathname.includes("/media/")||url.pathname.includes("/thumbs/")||url.pathname.includes("/brand/")||url.pathname.includes("/logo/")||url.pathname.includes("/content/")||url.pathname.includes("/images/")||url.pathname.includes("/videos/")){
     e.respondWith(fetch(req).then(r=>{if(r&&r.ok){const copy=r.clone();caches.open(CACHE).then(c=>c.put(req,copy));}return r}).catch(()=>caches.match(req).then(r=>r||(isNav?caches.match(BASE+"/offline/").then(o=>o||caches.match(BASE+"/")):undefined))));
     return;
   }
@@ -126,7 +215,19 @@ self.addEventListener("fetch",e=>{
 
 fs.writeFileSync(
   path.join(root, "public", "robots.txt"),
-  `User-agent: *\nAllow: /\nSitemap: ${url}/sitemap.xml\n`,
+  [
+    "User-agent: *",
+    "Allow: /",
+    "Disallow: /fun-trips/",
+    "Disallow: /chat/",
+    "Disallow: /login/",
+    "Disallow: /admin/",
+    "Disallow: /settings/",
+    "Disallow: /api/",
+    "Disallow: /api/media/",
+    `Sitemap: ${url}/sitemap.xml`,
+    "",
+  ].join("\n"),
 );
 
 const startUrl = base ? `${base}/` : "/";
@@ -136,10 +237,10 @@ fs.writeFileSync(
   JSON.stringify(
     {
       id: startUrl,
-      name: "RVP Youth",
+      name: "RVP Youth · Reddivaripalli",
       short_name: "RVP Youth",
       description:
-        "Where Every Celebration Becomes a Legacy. Our Village. Our Heritage. Our Memories.",
+        "Install the Reddivaripalli App for faster access, offline support, and instant notifications.",
       start_url: startUrl,
       scope: base || "/",
       display: "standalone",
@@ -148,7 +249,7 @@ fs.writeFileSync(
       lang: "en",
       dir: "ltr",
       categories: ["lifestyle", "photo", "entertainment"],
-      background_color: "#0f1a14",
+      background_color: "#fafaf8",
       theme_color: "#1f3d2e",
       prefer_related_applications: false,
       icons: [
@@ -185,9 +286,31 @@ fs.writeFileSync(
       ],
       shortcuts: [
         {
-          name: "Sankranthi",
-          short_name: "Sankranthi",
-          url: `${base}/sankranthi/`,
+          name: "Gallery",
+          short_name: "Gallery",
+          url: `${base}/gallery/`,
+          icons: [
+            {
+              src: `${iconBase}/logo/android-icon.png`,
+              sizes: "192x192",
+            },
+          ],
+        },
+        {
+          name: "Developments",
+          short_name: "Developments",
+          url: `${base}/developments/`,
+          icons: [
+            {
+              src: `${iconBase}/logo/android-icon.png`,
+              sizes: "192x192",
+            },
+          ],
+        },
+        {
+          name: "Events",
+          short_name: "Events",
+          url: `${base}/events/`,
           icons: [
             {
               src: `${iconBase}/logo/android-icon.png`,

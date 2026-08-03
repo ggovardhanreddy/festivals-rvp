@@ -1,24 +1,40 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
+import { useReducedMotion } from "framer-motion";
 import { withBase } from "@/lib/base";
 import type { Member } from "@/lib/types";
 import { memberAge } from "@/lib/member-groups";
 import { formatBirthdayLabel } from "@/lib/dates";
 
 export function TodayBirthdays({ members }: { members: Member[] }) {
+  const reduce = useReducedMotion();
+  const [celebrate, setCelebrate] = useState(!reduce);
+
+  useEffect(() => {
+    if (reduce) return;
+    setCelebrate(true);
+    const stop = window.setTimeout(() => setCelebrate(false), 4200);
+    return () => window.clearTimeout(stop);
+  }, [reduce, members]);
+
   if (!members.length) return null;
 
   const featured = members[0]!;
 
   return (
-    <section className="section home-birthdays birthday-celebrate" id="todays-birthdays">
-      <div className="birthday-confetti" aria-hidden>
-        {Array.from({ length: 18 }, (_, i) => (
-          <span key={i} style={{ "--i": i } as CSSProperties} />
-        ))}
-      </div>
+    <section
+      className={`section home-birthdays birthday-celebrate${celebrate ? " is-celebrating" : ""}`}
+      id="todays-birthdays"
+    >
+      {celebrate ? (
+        <div className="birthday-confetti" aria-hidden>
+          {Array.from({ length: 18 }, (_, i) => (
+            <span key={i} style={{ "--i": i } as CSSProperties} />
+          ))}
+        </div>
+      ) : null}
       <div className="section-head">
         <div>
           <p className="eyebrow">Today</p>
