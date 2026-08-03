@@ -19,12 +19,45 @@ import {
   VIDEO_EXTS,
   mimeForExt,
 } from "./media-formats";
-import { r2KeyToSitePath } from "./media-url";
 import { titleCase } from "./slug";
 import type { Album, BucketKey, Media, MediaType } from "./types";
 
 /** Public catalog object written by POST /api/media/reindex */
 export const R2_ALBUMS_CATALOG_KEY = "catalog/albums.json";
+
+/**
+ * R2 key → site-relative path (process-free; safe for Pages Functions).
+ * Mirrors lib/media-url.r2KeyToSitePath without importing env-bound modules.
+ */
+function r2KeyToSitePath(key: string): string {
+  if (key.startsWith("funfest/thumbs/")) {
+    return `/thumbs/${key.slice("funfest/thumbs/".length)}`;
+  }
+  if (key.startsWith("funfest/images/")) {
+    return `/images/${key.slice("funfest/images/".length)}`;
+  }
+  if (key.startsWith("funfest/")) {
+    return `/videos/${key.slice("funfest/".length)}`;
+  }
+  if (key.startsWith("gallery/thumbs/")) {
+    return `/thumbs/${key.slice("gallery/thumbs/".length)}`;
+  }
+  if (key.startsWith("gallery/")) return `/images/${key.slice("gallery/".length)}`;
+  if (key.startsWith("videos/")) return `/videos/${key.slice("videos/".length)}`;
+  if (key.startsWith("audio/")) return `/audio/${key.slice("audio/".length)}`;
+  if (key.startsWith("documents/")) {
+    return `/docs/${key.slice("documents/".length)}`;
+  }
+  if (key.startsWith("hero/")) return `/brand/${key.slice("hero/".length)}`;
+  if (key.startsWith("festivals/")) {
+    return `/festivals/${key.slice("festivals/".length)}`;
+  }
+  if (key.startsWith("logos/")) return `/logo/${key.slice("logos/".length)}`;
+  if (key.startsWith("members/")) {
+    return `/members/${key.slice("members/".length)}`;
+  }
+  return `/${key}`;
+}
 
 export type R2ObjectRef = {
   key: string;
