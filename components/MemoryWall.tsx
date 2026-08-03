@@ -51,9 +51,9 @@ export function MemoryWall({ items }: { items: MediaWithAlbum[] }) {
           <m.article
             key={item.id}
             className="memory-card"
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={reduce ? false : { opacity: 1, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
             transition={{ delay: Math.min(index * 0.05, 0.3) }}
           >
             <Link href={albumHref(item.album)}>

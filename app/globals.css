@@ -5247,13 +5247,15 @@ html.intro-active .glass-music {
   z-index: 300;
   background: rgba(8, 12, 10, 0.42);
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none !important;
+  visibility: hidden;
   transition: opacity 0.28s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 .nav-drawer-backdrop[data-open] {
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto !important;
+  visibility: visible;
 }
 
 .nav-drawer {
@@ -5271,7 +5273,7 @@ html.intro-active .glass-music {
   padding: 5.25rem max(1.25rem, env(safe-area-inset-right, 0px))
     calc(1.5rem + env(safe-area-inset-bottom, 0px)) 1.35rem;
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none !important;
   visibility: hidden;
   transform: translateX(12px);
   transition:
@@ -5285,7 +5287,7 @@ html.intro-active .glass-music {
 
 .nav-drawer[data-open] {
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto !important;
   visibility: visible;
   transform: translateX(0);
   transition:
@@ -5343,6 +5345,13 @@ html.nav-drawer-open,
 html.nav-drawer-open body {
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+/* Closed drawer must never keep scroll locked via leftover inline styles alone —
+   class removal is the source of truth; reinforce when class is absent. */
+html:not(.nav-drawer-open):not(.intro-locked) body {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Hide legacy mobile bottom pills when redesign nav is active */

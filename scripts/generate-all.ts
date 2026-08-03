@@ -198,8 +198,23 @@ self.addEventListener("fetch",e=>{
   const url=new URL(req.url);
   if(url.origin!==self.location.origin)return;
   // Never cache APIs / version / SW / manifest — always network
-  if(url.pathname.includes("/api/")||url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")||url.pathname.includes("/_next/static/")){
+  if(url.pathname.includes("/api/")||url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")){
     e.respondWith(fetch(new Request(req,{cache:"no-store"})).catch(()=>caches.match(req)));
+    return;
+  }
+  // Hashed Next assets are immutable — cache-first so flaky mobile/PWA nets don't blank pages
+  if(url.pathname.includes("/_next/static/")){
+    e.respondWith(caches.open(CACHE).then(async c=>{
+      const hit=await c.match(req);
+      if(hit) return hit;
+      try{
+        const r=await fetch(req);
+        if(r&&r.ok) c.put(req,r.clone());
+        return r;
+      }catch{
+        return hit||Response.error();
+      }
+    }));
     return;
   }
   const isNav=req.mode==="navigate";

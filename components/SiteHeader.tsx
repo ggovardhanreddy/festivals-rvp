@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import { Menu, Pencil, X } from "lucide-react";
 import { COMMUNITY_NAV, NAV } from "@/lib/site";
+import { withBase } from "@/lib/base";
 import { ThemeToggle } from "./Theme";
 import { Logo } from "./Logo";
 import { NotificationBell } from "./notifications/NotificationBell";
@@ -19,7 +20,16 @@ function isActive(href: string, normalized: string) {
 
 function unlockBodyScroll() {
   document.body.style.overflow = "";
+  document.documentElement.style.overflow = "";
   document.documentElement.classList.remove("nav-drawer-open");
+}
+
+function isMobileShell() {
+  return (
+    document.documentElement.classList.contains("rvp-mobile") ||
+    window.matchMedia("(max-width: 919px)").matches ||
+    window.matchMedia("(pointer: coarse)").matches
+  );
 }
 
 export function SiteHeader() {
@@ -50,33 +60,69 @@ export function SiteHeader() {
     unlockBodyScroll();
   }, [pathname]);
 
+  // Safety: never leave body scroll locked after bfcache / history / tab return
+  useEffect(() => {
+    const unlock = () => {
+      if (drawerRef.current?.hasAttribute("data-open")) return;
+      unlockBodyScroll();
+    };
+    const onVisible = () => {
+      if (document.visibilityState === "visible") unlock();
+    };
+    window.addEventListener("pageshow", unlock);
+    window.addEventListener("popstate", unlock);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("pageshow", unlock);
+      window.removeEventListener("popstate", unlock);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
+
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     document.documentElement.classList.toggle("nav-drawer-open", open);
+    if (!open) unlockBodyScroll();
     return () => unlockBodyScroll();
   }, [open]);
 
   useEffect(() => {
-    const drawer = drawerRef.current;
-    if (drawer) {
-      if (open) drawer.removeAttribute("inert");
-      else drawer.setAttribute("inert", "");
-    }
     if (!open) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
+        unlockBodyScroll();
         btnRef.current?.focus();
       }
     };
     window.addEventListener("keydown", onKey);
-    const first = drawer?.querySelector<HTMLAnchorElement>("a");
-    first?.focus();
+    // Auto-focus first link only for keyboard users — focus can cancel taps on iOS
+    if (!window.matchMedia("(pointer: coarse)").matches) {
+      drawerRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    }
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const close = () => setOpen(false);
+  const close = () => {
+    setOpen(false);
+    unlockBodyScroll();
+  };
   const toggle = () => setOpen((v) => !v);
+
+  /**
+   * Mobile/PWA: hard-navigate from the drawer.
+   * Soft nav + inert/pointer-events races were leaving pages blank/stuck.
+   */
+  const onDrawerNav = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    unlockBodyScroll();
+    setOpen(false);
+    if (!isMobileShell()) return;
+    event.preventDefault();
+    const target = withBase(href);
+    window.setTimeout(() => {
+      window.location.assign(target);
+    }, 0);
+  };
 
   const drawer = (
     <>
@@ -103,7 +149,7 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               data-active={isActive(item.href, normalized)}
-              onClick={close}
+              onClick={(event) => onDrawerNav(event, item.href)}
             >
               {item.label}
             </Link>
@@ -113,21 +159,21 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               data-active={isActive(item.href, normalized)}
-              onClick={close}
+              onClick={(event) => onDrawerNav(event, item.href)}
             >
               {item.label}
             </Link>
           ))}
-          <Link href="/timeline/" onClick={close}>
+          <Link href="/timeline/" onClick={(event) => onDrawerNav(event, "/timeline/")}>
             Timeline
           </Link>
-          <Link href="/fun-trips/" onClick={close}>
+          <Link href="/fun-trips/" onClick={(event) => onDrawerNav(event, "/fun-trips/")}>
             Fun Fest
           </Link>
-          <Link href="/search/" onClick={close}>
+          <Link href="/search/" onClick={(event) => onDrawerNav(event, "/search/")}>
             Search
           </Link>
-          <Link href="/settings/" onClick={close}>
+          <Link href="/settings/" onClick={(event) => onDrawerNav(event, "/settings/")}>
             Settings
           </Link>
           {ready && isAdmin ? (
@@ -143,7 +189,11 @@ export function SiteHeader() {
               {editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
             </button>
           ) : null}
-          <Link href="/admin/" onClick={close} className="nav-drawer-superadmin">
+          <Link
+            href="/admin/"
+            onClick={(event) => onDrawerNav(event, "/admin/")}
+            className="nav-drawer-superadmin"
+          >
             Super Admin Login
           </Link>
           <button

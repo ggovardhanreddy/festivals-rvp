@@ -18,10 +18,12 @@ export function Reveal({
     <m.div
       id={id}
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 28 }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      // Never start at opacity 0 — whileInView can miss on mobile when
+      // overflow is locked or IntersectionObserver is delayed after nav.
+      initial={reduce ? false : { opacity: 1, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
+      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </m.div>

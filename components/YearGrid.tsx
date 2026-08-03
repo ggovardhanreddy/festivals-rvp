@@ -18,9 +18,9 @@ export function YearGrid({
         return (
           <m.div
             key={year}
-            initial={reduce ? false : { opacity: 0, y: 18 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={reduce ? false : { opacity: 1, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
             transition={{ delay: index * 0.06, duration: 0.45 }}
           >
             <Link className="year-card" href={`/years/${year}/`}>

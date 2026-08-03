@@ -313,9 +313,9 @@ export function Gallery({
             className="tile"
             type="button"
             onClick={() => setSelected(index)}
-            initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-            whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            initial={reduce ? false : { opacity: 1, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
             transition={{ duration: 0.45, delay: Math.min(index * 0.03, 0.3) }}
           >
             <TilePreview media={media} />

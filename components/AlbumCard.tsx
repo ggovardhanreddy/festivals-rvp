@@ -36,9 +36,9 @@ export function AlbumCard({
   return (
     <m.div
       className="card-3d"
-      initial={reduce ? false : { opacity: 0, y: 22, rotateX: 6 }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0, rotateX: 0 }}
-      viewport={{ once: true }}
+      initial={reduce ? false : { opacity: 1, y: 16, rotateX: 4 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+      viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
       transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.55 }}
       style={
         reduce ? undefined : { rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }
