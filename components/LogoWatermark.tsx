@@ -1,20 +1,28 @@
-import { withBase } from "@/lib/base";
+"use client";
+
+import { Logo } from "@/components/Logo";
 
 /**
- * Decorative fixed brand mark — atmospheric only.
+ * Decorative brand watermark — atmospheric only.
  * Non-interactive so it never blocks nav, drawers, or CTAs.
  */
-export function LogoWatermark() {
+export function LogoWatermark({
+  className = "",
+  vertical = false,
+}: {
+  className?: string;
+  /** Vertical lockup for large hero watermarks; horizontal master for shell. */
+  vertical?: boolean;
+}) {
   return (
-    <div className="logo-watermark" aria-hidden="true">
-      <img
-        className="logo-watermark-img"
-        src={withBase("/logo/logo-master.png")}
-        alt=""
-        width={220}
-        height={63}
-        draggable={false}
-        decoding="async"
+    <div
+      className={`logo-watermark ${className}`.trim()}
+      aria-hidden="true"
+    >
+      <Logo
+        variant={vertical ? "watermark" : "auto"}
+        glossy
+        className="logo-watermark-mark"
       />
     </div>
   );

@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { m, useReducedMotion } from "framer-motion";
 import { Logo } from "@/components/Logo";
+import { LogoWatermark } from "@/components/LogoWatermark";
 import {
   OFFICIAL_MISSION,
   OFFICIAL_SUBTITLE,
@@ -39,6 +40,8 @@ export function HomeHero() {
         <VantaBirds />
         <div className="clean-hero-veil home-hero-veil" />
       </div>
+
+      <LogoWatermark className="home-hero-watermark" vertical />
 
       <div className="clean-hero-content home-hero-content">
         <m.div
