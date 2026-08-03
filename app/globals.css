@@ -338,7 +338,14 @@ html.dark body:has(.home-hero) .logo-watermark {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  flex-wrap: nowrap;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.nav-actions > * {
+  flex-shrink: 0;
+  position: relative;
 }
 
 .icon-btn {
@@ -7833,23 +7840,36 @@ body {
 .theme-toggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
-  min-width: auto;
-  padding-inline: 0.55rem;
+  width: auto;
+  min-width: 42px;
+  height: 42px;
+  padding-inline: 0.7rem;
+  white-space: nowrap;
 }
 
 .theme-toggle-label {
   font-size: 0.72rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  line-height: 1;
+}
+
+@media (max-width: 1100px) {
+  .theme-toggle-label {
+    display: none;
+  }
+
+  .theme-toggle {
+    width: 42px;
+    padding-inline: 0;
+  }
 }
 
 @media (max-width: 640px) {
   .birthday-hero-card {
     grid-template-columns: 1fr;
-  }
-  .theme-toggle-label {
-    display: none;
   }
 }
 
@@ -8186,8 +8206,14 @@ body {
 /* Super Admin entry + members admin */
 .nav-superadmin-btn {
   display: none;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 0.85rem;
   font-size: 0.78rem;
-  padding: 0.35rem 0.65rem;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 @media (min-width: 900px) {
@@ -8243,16 +8269,46 @@ body {
 
 /* —— Super Admin Edit Mode (Members) —— */
 .nav-edit-mode-btn {
-  display: inline-flex;
+  display: none;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
-  font-size: 0.82rem;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 0.85rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.nav-edit-mode-btn .nav-edit-mode-label {
+  line-height: 1;
 }
 
 .nav-edit-mode-btn.is-active {
   background: color-mix(in srgb, var(--color-accent, #8f6a32) 18%, var(--color-bg));
   border-color: color-mix(in srgb, var(--color-accent, #8f6a32) 45%, var(--line));
   color: var(--color-ink, var(--ink));
+}
+
+/* Desktop header only — mobile uses drawer controls */
+@media (min-width: 920px) {
+  .nav-edit-mode-btn {
+    display: inline-flex;
+  }
+}
+
+/* Tight desktop: icon-only Edit Mode so it never collides with Super Admin */
+@media (min-width: 920px) and (max-width: 1100px) {
+  .nav-edit-mode-btn {
+    width: 42px;
+    min-width: 42px;
+    padding: 0;
+  }
+
+  .nav-edit-mode-btn .nav-edit-mode-label {
+    display: none;
+  }
 }
 
 .members-section--edit {
@@ -8519,10 +8575,6 @@ body {
 }
 
 @media (max-width: 720px) {
-  .nav-edit-mode-btn {
-    padding-inline: 0.55rem;
-  }
-
   .member-edit-photo-block,
   .member-edit-grid-2 {
     grid-template-columns: 1fr;

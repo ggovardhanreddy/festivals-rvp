@@ -237,10 +237,13 @@ export function SiteHeader() {
               className={`btn ghost nav-edit-mode-btn${editMode ? " is-active" : ""}`}
               aria-pressed={editMode}
               aria-label={editMode ? "Turn off Edit Mode" : "Turn on Edit Mode"}
+              title={editMode ? "Editing — click to turn off Edit Mode" : "Turn on Edit Mode"}
               onClick={toggleEditMode}
             >
               <Pencil size={14} aria-hidden />
-              {editMode ? "Editing" : "Edit Mode"}
+              <span className="nav-edit-mode-label">
+                {editMode ? "Editing" : "Edit Mode"}
+              </span>
             </button>
           ) : null}
           <Link
