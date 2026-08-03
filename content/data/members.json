@@ -18,7 +18,7 @@
   {
     "id": "dr-g-uma-maheshwar-reddy",
     "name": "Dr. G Uma Maheshwar Reddy",
-    "photo": "/members/g-uma.webp"
+    "photo": "/members/g-uma.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Doctor (Orthopaedic MD)"
@@ -42,7 +42,7 @@
   {
     "id": "g-rana-pathap-reddy",
     "name": "G Rana Prathap Reddy",
-    "photo": "/members/rana.webp"
+    "photo": "/members/rana.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Software Engineer"
@@ -50,7 +50,7 @@
   {
     "id": "g-jayachandra-reddy",
     "name": "G Jayachandra Reddy",
-    "photo": "/members/jayachandra.webp"
+    "photo": "/members/jayachandra.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Farmer"
@@ -84,7 +84,7 @@
   {
     "id": "d-rammohan-reddy",
     "name": "D Rammohan Reddy",
-    "photo": "/members/d--rammohana.webp"
+    "photo": "/members/d-rammohana.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Farmer",
@@ -110,7 +110,7 @@
   {
     "id": "g-raja",
     "name": "G Raja",
-    "photo": "/members/g-raja.webp"
+    "photo": "/members/g-raja.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Real Estate"
@@ -150,7 +150,7 @@
   {
     "id": "j-shiva",
     "name": "J Shiva",
-    "photo": "/members/j-shiva.webp"
+    "photo": "/members/j-shiva.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Government Teacher (Mathematics)"
@@ -158,7 +158,7 @@
   {
     "id": "j-balaji",
     "name": "J Balaji",
-    "photo": "/members/j-balaji.webp"
+    "photo": "/members/j-balaji.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Farmer"
