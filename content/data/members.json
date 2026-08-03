@@ -21,7 +21,7 @@
     "photo": null,
     "dob": null,
     "group": "legacy",
-    "designation": "Orthopedic Doctor (MD)"
+    "designation": "Doctor (Orthopaedic MD)"
   },
   {
     "id": "g-dhanunjaya-reddy",
@@ -29,7 +29,7 @@
     "photo": null,
     "dob": null,
     "group": "legacy",
-    "designation": "Government Employee – Vigilance Department"
+    "designation": "Government Employee – Vigilance Director"
   },
   {
     "id": "g-vijay-kumar-reddy",
@@ -105,7 +105,7 @@
     "photo": null,
     "dob": null,
     "group": "legacy",
-    "designation": "Headmaster, Government School"
+    "designation": "Headmaster – Government School"
   },
   {
     "id": "g-raja",
@@ -129,7 +129,7 @@
     "photo": null,
     "dob": null,
     "group": "legacy",
-    "designation": "Village Revenue Officer (VRO)"
+    "designation": "Village Revenue Officer (VRO) – Government Employee"
   },
   {
     "id": "y-satheesh",
@@ -137,7 +137,7 @@
     "photo": null,
     "dob": null,
     "group": "legacy",
-    "designation": "Business (Retail Shop)"
+    "designation": "Business (Shop)"
   },
   {
     "id": "y-uma",
@@ -185,7 +185,7 @@
     "photo": null,
     "dob": null,
     "group": "legacy",
-    "designation": "Orthopedic Doctor"
+    "designation": "Doctor (Orthopaedic)"
   },
   {
     "id": "g-govardhan-reddy",
@@ -225,7 +225,7 @@
     "photo": "/members/keshava.webp",
     "dob": null,
     "group": "core",
-    "designation": "Poultry Business"
+    "designation": "Business (Poultry)"
   },
   {
     "id": "g-sreekanth",
@@ -233,7 +233,7 @@
     "photo": null,
     "dob": null,
     "group": "core",
-    "designation": "E-commerce Delivery Manager"
+    "designation": "E-commerce Manager (Delivery)"
   },
   {
     "id": "c-narendra-ck",
@@ -293,11 +293,11 @@
   },
   {
     "id": "d-shantha-kumar",
-    "name": "D Shantha Kumar",
+    "name": "Dr. D Shantha Kumar",
     "photo": null,
     "dob": null,
     "group": "core",
-    "designation": "General Surgeon (MD)"
+    "designation": "Doctor (General Surgeon, MD)"
   },
   {
     "id": "u-nagendra",
@@ -345,7 +345,7 @@
     "photo": null,
     "dob": null,
     "group": "nextgen",
-    "designation": "Government Employee (Post Office)"
+    "designation": "Government Employee – Post Office"
   },
   {
     "id": "d-santhosh-reddy",

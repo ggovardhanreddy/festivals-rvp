@@ -128,7 +128,6 @@ export const NAV = [
   { href: "/", label: "Home" },
   { href: "/gallery/", label: "Gallery" },
   { href: "/events/", label: "Events" },
-  { href: "/years/", label: "Annual Archive" },
   { href: "/directory/", label: "Directory" },
   { href: "/developments/", label: "Developments" },
   { href: "/members/", label: "Members" },
@@ -138,7 +137,6 @@ export const NAV = [
 /** Secondary community links (drawer / footer). */
 export const COMMUNITY_NAV = [
   { href: "/heritage/", label: "Heritage Archive" },
-  { href: "/lost-found/", label: "Lost & Found" },
   { href: "/blood-donors/", label: "Blood Donors" },
   { href: "/documents/", label: "Panchayat Documents" },
   { href: "/suggestions/", label: "Suggestions" },

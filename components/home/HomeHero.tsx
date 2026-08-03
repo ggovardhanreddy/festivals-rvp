@@ -8,7 +8,6 @@ import { Logo } from "@/components/Logo";
 import {
   OFFICIAL_MISSION,
   OFFICIAL_SUBTITLE,
-  OFFICIAL_TITLE,
   SITE_NAME,
   SITE_TAGLINE_LANDING,
   VILLAGE_ALSO_KNOWN_AS,
@@ -63,7 +62,7 @@ export function HomeHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.2 }}
         >
-          {OFFICIAL_TITLE}
+          {VILLAGE_ALSO_KNOWN_AS}
         </m.h1>
         <m.p
           className="clean-hero-lede"
@@ -87,14 +86,14 @@ export function HomeHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.46 }}
         >
-          <Link className="btn" href="/years/">
-            Annual Archive
-          </Link>
-          <Link className="btn ghost" href="/heritage/">
-            Heritage
-          </Link>
-          <Link className="btn ghost" href="/gallery/">
+          <Link className="btn" href="/gallery/">
             Gallery
+          </Link>
+          <Link className="btn ghost" href="/members/">
+            Members
+          </Link>
+          <Link className="btn ghost" href="/directory/">
+            Directory
           </Link>
         </m.div>
       </div>

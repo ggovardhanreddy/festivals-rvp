@@ -7809,6 +7809,18 @@ body {
   object-fit: cover;
 }
 
+.directory-badge {
+  display: inline-block;
+  margin: 0.2rem 0 0.15rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.3;
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--color-bg));
+  color: var(--ink);
+}
+
 .directory-meta {
   margin: 0.25rem 0 0;
   font-size: 0.85rem;

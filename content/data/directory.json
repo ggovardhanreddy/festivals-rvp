@@ -1,61 +1,98 @@
 [
   {
-    "id": "dir-dr-uma",
-    "name": "Dr. G Uma Maheshwar Reddy",
+    "id": "dir-c-avinash",
+    "name": "C Avinash",
     "category": "Doctors",
-    "profession": "Doctor",
-    "designation": "Physician",
-    "photo": null,
-    "availability": "By appointment"
+    "profession": "Veterinary",
+    "designation": "Veterinary Professional",
+    "photo": null
   },
   {
-    "id": "dir-dr-shantha",
+    "id": "dir-d-shantha-kumar",
     "name": "Dr. D Shantha Kumar",
     "category": "Doctors",
     "profession": "Doctor",
-    "designation": "Physician",
-    "photo": null,
-    "availability": "By appointment"
+    "designation": "Doctor (General Surgeon, MD)",
+    "photo": null
   },
   {
-    "id": "dir-dr-prasad",
+    "id": "dir-dr-g-uma-maheshwar-reddy",
+    "name": "Dr. G Uma Maheshwar Reddy",
+    "category": "Doctors",
+    "profession": "Doctor",
+    "designation": "Doctor (Orthopaedic MD)",
+    "photo": null
+  },
+  {
+    "id": "dir-dr-u-reddy-prasad",
     "name": "Dr. U Reddy Prasad",
     "category": "Doctors",
     "profession": "Doctor",
-    "designation": "Physician",
-    "photo": null,
-    "availability": "By appointment"
-  },
-  {
-    "id": "dir-j-shiva",
-    "name": "J Shiva",
-    "category": "Teachers",
-    "profession": "Teacher",
-    "designation": "Teacher",
+    "designation": "Doctor (Orthopaedic)",
     "photo": null
   },
   {
     "id": "dir-d-harinatha",
     "name": "D Harinatha",
     "category": "Teachers",
-    "profession": "Teacher",
-    "designation": "Headmaster",
+    "profession": "Government Employee",
+    "designation": "Headmaster – Government School",
     "photo": null
   },
   {
-    "id": "dir-g-ramesh",
+    "id": "dir-j-shiva",
+    "name": "J Shiva",
+    "category": "Teachers",
+    "profession": "Government Employee",
+    "designation": "Government Teacher (Mathematics)",
+    "photo": null
+  },
+  {
+    "id": "dir-c-hari",
+    "name": "C Hari",
+    "category": "Other Professionals",
+    "profession": "Banking",
+    "designation": "Bank Employee (Loan Department)",
+    "photo": null
+  },
+  {
+    "id": "dir-d-anil-reddy",
+    "name": "D Anil Reddy",
+    "category": "Government Employees",
+    "profession": "Government Employee",
+    "designation": "Government Employee – Post Office",
+    "photo": null
+  },
+  {
+    "id": "dir-d-raja-reddy",
+    "name": "D Raja Reddy",
+    "category": "Government Employees",
+    "profession": "Temple Service",
+    "designation": "Priest (Devapatlamma Temple)",
+    "photo": null
+  },
+  {
+    "id": "dir-g-dhanunjaya-reddy",
+    "name": "G Dhanunjaya Reddy",
+    "category": "Government Employees",
+    "profession": "Government Employee",
+    "designation": "Government Employee – Vigilance Director",
+    "photo": null
+  },
+  {
+    "id": "dir-g-ramesh-kumar-reddy",
     "name": "G Ramesh Kumar Reddy",
     "category": "Government Employees",
     "profession": "Government Employee",
     "designation": "Government Employee",
-    "photo": null
+    "photo": "/members/g-ramesh-kumar-reddy.webp"
   },
   {
-    "id": "dir-g-dhanunjaya",
-    "name": "G Dhanunjaya Reddy",
+    "id": "dir-j-niranjan",
+    "name": "J Niranjan",
     "category": "Government Employees",
-    "profession": "Government Employee",
-    "designation": "Government Employee",
+    "profession": "Defence",
+    "designation": "Indian Army",
     "photo": null
   },
   {
@@ -63,23 +100,271 @@
     "name": "Y Naveen",
     "category": "Government Employees",
     "profession": "Government Employee",
-    "designation": "VRO",
+    "designation": "Village Revenue Officer (VRO) – Government Employee",
     "photo": null
   },
   {
-    "id": "dir-j-shiva-gov",
-    "name": "J Shiva",
-    "category": "Government Employees",
-    "profession": "Teacher",
-    "designation": "Teacher",
+    "id": "dir-c-ganesh",
+    "name": "C Ganesh",
+    "category": "Other Professionals",
+    "profession": "Engineer",
+    "designation": "Electrical Engineer (UAE)",
     "photo": null
   },
   {
-    "id": "dir-d-harinatha-gov",
-    "name": "D Harinatha",
-    "category": "Government Employees",
-    "profession": "Teacher",
-    "designation": "Headmaster",
+    "id": "dir-c-ganu",
+    "name": "C Ganu",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": "/members/ganu.webp"
+  },
+  {
+    "id": "dir-c-narasimha",
+    "name": "C Narasimha",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": null
+  },
+  {
+    "id": "dir-c-narendra-cg",
+    "name": "C Narendra (CG)",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "GRT Manager",
+    "photo": "/members/c-narendra-cg.webp"
+  },
+  {
+    "id": "dir-c-narendra-ck",
+    "name": "C Narendra (CK)",
+    "category": "Other Professionals",
+    "profession": "Engineer",
+    "designation": "Mechanical Engineer",
+    "photo": null
+  },
+  {
+    "id": "dir-d-akhil-reddy",
+    "name": "D Akhil Reddy",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": "/members/akhil.webp"
+  },
+  {
+    "id": "dir-d-santhosh-reddy",
+    "name": "D Santhosh Reddy",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": "/members/santhosh.webp"
+  },
+  {
+    "id": "dir-d-shiva-shankar-reddy",
+    "name": "D Shiva Shankar Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Agriculture Manager",
+    "photo": "/members/d-shiva.webp"
+  },
+  {
+    "id": "dir-g-giridhar-gopal-reddy",
+    "name": "G Giridhar Gopal Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-g-govardhan-reddy",
+    "name": "G Govardhan Reddy",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": "/members/govardhan.webp"
+  },
+  {
+    "id": "dir-g-hemanth-kumar-reddy",
+    "name": "G Hemanth Kumar Reddy",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Cyber Security Head (Software Engineer)",
+    "photo": null
+  },
+  {
+    "id": "dir-g-jayachandra-reddy",
+    "name": "G Jayachandra Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-g-pushyanth-reddy",
+    "name": "G Pushyanth Reddy",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": null
+  },
+  {
+    "id": "dir-g-raja",
+    "name": "G Raja",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "Real Estate",
+    "photo": null
+  },
+  {
+    "id": "dir-g-rana-pathap-reddy",
+    "name": "G Rana Prathap Reddy",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": null
+  },
+  {
+    "id": "dir-g-ravi-kumar-reddy",
+    "name": "G Ravi Kumar Reddy",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "Medical Shop",
+    "photo": null
+  },
+  {
+    "id": "dir-g-sreekanth",
+    "name": "G Sreekanth",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "E-commerce Manager (Delivery)",
+    "photo": null
+  },
+  {
+    "id": "dir-g-vijay-kumar-reddy",
+    "name": "G Vijay Kumar Reddy",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "Business",
+    "photo": null
+  },
+  {
+    "id": "dir-j-balaji",
+    "name": "J Balaji",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-j-bhanu",
+    "name": "J Bhanu",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": null
+  },
+  {
+    "id": "dir-j-eswar-reddy",
+    "name": "J Eswar Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-j-krishna-reddy",
+    "name": "J Krishna Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-k-balaji",
+    "name": "K Balaji",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": "/members/k-balaji.webp"
+  },
+  {
+    "id": "dir-m-rajesh",
+    "name": "M Rajesh",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "Sales Manager",
+    "photo": "/members/rajesh.webp"
+  },
+  {
+    "id": "dir-u-guru",
+    "name": "U Guru",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": null
+  },
+  {
+    "id": "dir-u-guru-mahesh-puli",
+    "name": "U Guru Mahesh (Puli)",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "GRT Employee",
+    "photo": null
+  },
+  {
+    "id": "dir-u-nagendra",
+    "name": "U Nagendra",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "Business",
+    "photo": null
+  },
+  {
+    "id": "dir-u-nagesh",
+    "name": "U Nagesh",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": "/members/u-nagesh.webp"
+  },
+  {
+    "id": "dir-y-chenna-keshava",
+    "name": "Y Chenna Keshava",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Business (Poultry)",
+    "photo": "/members/keshava.webp"
+  },
+  {
+    "id": "dir-y-krishna-mohan",
+    "name": "Y Krishna Mohan",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Software Engineer",
+    "photo": null
+  },
+  {
+    "id": "dir-y-ramesh",
+    "name": "Y Ramesh",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-y-satheesh",
+    "name": "Y Satheesh",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "Business (Shop)",
+    "photo": null
+  },
+  {
+    "id": "dir-y-uma",
+    "name": "Y Uma",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
     "photo": null
   }
 ]

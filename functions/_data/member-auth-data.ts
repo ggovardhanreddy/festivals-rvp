@@ -265,7 +265,7 @@ export const MEMBER_AUTH: { version: number; members: MemberAuthRecord[] } = {
     {
       "memberId": "d-shantha-kumar",
       "username": "Shantha",
-      "name": "D Shantha Kumar",
+      "name": "Dr. D Shantha Kumar",
       "passwordHash": "pbkdf2:a80a2ee03dd08fa67d10b176d6d3cc48:nyf3eoTr09IIJGTyg7aeaOWdlJ3fxUpMmopss0g9pXg",
       "updatedAt": "2026-08-02T16:03:46.604Z"
     },

@@ -14,8 +14,44 @@ import { Reveal } from "@/components/Reveal";
 
 const SEED = loadDirectorySeed();
 
+function mergeDirectory(
+  seed: DirectoryEntry[],
+  remote: DirectoryEntry[],
+): DirectoryEntry[] {
+  if (!remote.length) return seed;
+  const map = new Map<string, DirectoryEntry>();
+  for (const item of seed) map.set(item.id, item);
+  for (const item of remote) {
+    const prev = map.get(item.id);
+    map.set(item.id, {
+      ...prev,
+      ...item,
+      name: item.name?.trim() || prev?.name || item.name,
+      designation: item.designation?.trim() || prev?.designation,
+      profession: item.profession?.trim() || prev?.profession || item.profession,
+      photo: item.photo || prev?.photo || null,
+      category: item.category || prev?.category || item.category,
+    });
+  }
+  // Keep seed order, then append remote-only entries
+  const seen = new Set<string>();
+  const out: DirectoryEntry[] = [];
+  for (const item of seed) {
+    const merged = map.get(item.id);
+    if (merged) {
+      out.push(merged);
+      seen.add(item.id);
+    }
+  }
+  for (const item of remote) {
+    if (!seen.has(item.id) && map.has(item.id)) out.push(map.get(item.id)!);
+  }
+  return out;
+}
+
 export function DirectoryPage() {
-  const { items, loading } = useCommunityList<DirectoryEntry>("directory", SEED);
+  const { raw, loading } = useCommunityList<DirectoryEntry>("directory", SEED);
+  const items = useMemo(() => mergeDirectory(SEED, raw), [raw]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<DirectoryCategory | "all">("all");
   const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
@@ -57,8 +93,8 @@ export function DirectoryPage() {
             <p className="eyebrow">Village services</p>
             <h1>Village Directory</h1>
             <p className="lede">
-              Find doctors, teachers, and government employees who serve
-              Reddivaripalli.
+              Doctors, teachers, government staff, and other professionals who
+              serve Reddivaripalli — updated from the community roster.
             </p>
           </div>
         </div>
@@ -68,7 +104,7 @@ export function DirectoryPage() {
             <span className="sr-only">Search directory</span>
             <input
               type="search"
-              placeholder="Search by name, profession…"
+              placeholder="Search by name, designation, profession…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -119,6 +155,7 @@ export function DirectoryPage() {
                       ) : (
                         <span aria-hidden>
                           {person.name
+                            .replace(/^Dr\.?\s+/i, "")
                             .split(/\s+/)
                             .filter(Boolean)
                             .slice(0, 2)
@@ -130,10 +167,16 @@ export function DirectoryPage() {
                     </div>
                     <div>
                       <h3>{person.name}</h3>
+                      {person.designation ? (
+                        <p className="directory-badge">{person.designation}</p>
+                      ) : null}
                       <p className="muted">
-                        {person.profession}
-                        {person.designation ? ` · ${person.designation}` : ""}
+                        {person.category}
+                        {person.profession ? ` · ${person.profession}` : ""}
                       </p>
+                      {!person.photo ? (
+                        <p className="directory-meta">Photo Coming Soon</p>
+                      ) : null}
                       {person.availability ? (
                         <p className="directory-meta">
                           Availability · {person.availability}
