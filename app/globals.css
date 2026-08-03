@@ -798,6 +798,10 @@ button:focus-visible {
   position: relative;
   margin-left: 1.2rem;
   padding: 1.1rem 1.2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 5.5rem) minmax(0, 1fr);
+  gap: 0.85rem 1rem;
+  align-items: center;
 }
 
 .timeline-item::before {
@@ -810,6 +814,37 @@ button:focus-visible {
   border-radius: 50%;
   background: var(--accent);
   box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.timeline-thumb {
+  width: 5.5rem;
+  height: 5.5rem;
+  object-fit: cover;
+  border-radius: 0.85rem;
+  display: block;
+}
+
+.timeline-thumb.media-image-empty,
+.timeline-thumb.media-image-skeleton {
+  min-height: 5.5rem;
+}
+
+.timeline-item-copy {
+  min-width: 0;
+}
+
+@media (max-width: 520px) {
+  .timeline-item {
+    grid-template-columns: minmax(0, 4.25rem) minmax(0, 1fr);
+  }
+
+  .timeline-thumb,
+  .timeline-thumb.media-image-empty,
+  .timeline-thumb.media-image-skeleton {
+    width: 4.25rem;
+    height: 4.25rem;
+    min-height: 4.25rem;
+  }
 }
 
 .notes {
@@ -4279,7 +4314,9 @@ html.intro-active .glass-music {
   inset: 0;
 }
 
-.hover-slide-tile-media img {
+.hover-slide-tile-media img,
+.hover-slide-tile-media .media-image-empty,
+.hover-slide-tile-media .media-image-skeleton {
   position: absolute;
   inset: 0;
   width: 100%;

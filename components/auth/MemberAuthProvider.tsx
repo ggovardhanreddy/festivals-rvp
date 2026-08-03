@@ -16,6 +16,7 @@ import {
   writeSession,
   type MemberSession,
 } from "@/lib/auth";
+import { clearMediaSignCache } from "@/lib/use-media-url";
 
 type AuthContextValue = {
   session: MemberSession | null;
@@ -56,6 +57,14 @@ export function MemberAuthProvider({ children }: { children: ReactNode }) {
             if (!cancelled) setReady(true);
             return;
           }
+          // Cookie missing/invalid — do not trust stale sessionStorage
+          clearSession();
+          clearMediaSignCache();
+          if (!cancelled) {
+            setSession(null);
+            setReady(true);
+          }
+          return;
         }
       } catch {
         /* offline / local next without Functions */
@@ -98,6 +107,7 @@ export function MemberAuthProvider({ children }: { children: ReactNode }) {
             "Invalid username or password. Both are case-sensitive.",
         };
       }
+      clearMediaSignCache();
       const next = writeSession({
         memberId: data.session.memberId,
         username: data.session.username,
@@ -125,6 +135,7 @@ export function MemberAuthProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
     clearSession();
+    clearMediaSignCache();
     setSession(null);
   }, []);
 

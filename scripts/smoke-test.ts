@@ -92,6 +92,21 @@ function main() {
     }
   });
 
+  test("opaque UUID media titles are hidden from UI labels", async () => {
+    const { mediaDisplayTitle, isOpaqueMediaTitle } = await import(
+      "../lib/media-label"
+    );
+    assert.equal(
+      isOpaqueMediaTitle("14edb320 5a9f 4065 8bd5 41b8b1bd9c47"),
+      true,
+    );
+    assert.equal(mediaDisplayTitle("Img 0179", "Photo"), "Img 0179");
+    assert.equal(
+      mediaDisplayTitle("14edb320 5a9f 4065 8bd5 41b8b1bd9c47", "Photo"),
+      "Photo",
+    );
+  });
+
   console.log("Smoke tests passed.");
 }
 

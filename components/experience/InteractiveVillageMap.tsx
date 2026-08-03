@@ -15,6 +15,7 @@ import { useIsClient, useLowPowerDevice } from "@/lib/client";
 import { VillageMap } from "@/components/VillageMap";
 import { VILLAGE_MAPS_URL } from "@/lib/site";
 import { ResolvedMediaImage } from "@/components/media/ResolvedMediaImage";
+import { mediaDisplayTitle } from "@/lib/media-label";
 import { prefetchMedia } from "@/lib/use-media-url";
 import type { Media } from "@/lib/types";
 
@@ -56,6 +57,7 @@ function MapViewportSlideshow({
 
   if (!slides.length) return null;
   const current = slides[index]!;
+  const label = mediaDisplayTitle(current.title, "From home");
 
   return (
     <div
@@ -77,7 +79,7 @@ function MapViewportSlideshow({
           <ResolvedMediaImage
             className="map-viewport-slideshow-img"
             src={current.thumb || current.file}
-            alt={current.title || "Village memory"}
+            alt={label}
             draggable={false}
             loading="eager"
           />
@@ -86,7 +88,7 @@ function MapViewportSlideshow({
       <div className="map-viewport-slideshow-veil" aria-hidden />
       <div className="map-viewport-slideshow-caption">
         <p className="eyebrow">{hovered ? "Hovering" : "Slideshow"}</p>
-        <h4>{current.title || "From home"}</h4>
+        <h4>{label}</h4>
       </div>
       {slides.length > 1 && slides.length <= 14 ? (
         <div className="map-viewport-slideshow-dots" aria-hidden>

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
 import { isDisplayableImageUrl } from "@/lib/media-formats";
+import { mediaDisplayTitle } from "@/lib/media-label";
 import { useMediaUrl } from "@/lib/use-media-url";
 
 const VideoPlayer = dynamic(
@@ -49,18 +50,24 @@ function DownloadLink({ file }: { file: string }) {
 function TilePreview({ media }: { media: Media }) {
   const src = previewUrl(media);
   const { url, loading, error } = useMediaUrl(src);
+  const [broken, setBroken] = useState(false);
+  const label = mediaDisplayTitle(
+    media.title,
+    media.type === "video" ? "Video" : "Photo",
+  );
   if (src && loading && !url) {
     return <div className="media-image-skeleton" aria-hidden />;
   }
-  if (src && url) {
+  if (src && url && !broken) {
     return (
       <>
         <img
           src={url}
-          alt={media.title || "Memory"}
+          alt={label}
           loading="lazy"
           decoding="async"
           draggable={false}
+          onError={() => setBroken(true)}
           style={
             media.blurDataURL
               ? {
@@ -79,7 +86,7 @@ function TilePreview({ media }: { media: Media }) {
   return (
     <div className="tile-kind">
       <p className="eyebrow">{media.type}</p>
-      <h3>{error ? "Unavailable" : media.title}</h3>
+      <h3>{error || broken ? "Unavailable" : label}</h3>
     </div>
   );
 }
@@ -353,7 +360,12 @@ export function Gallery({
             transition={{ duration: 0.45, delay: Math.min(index * 0.03, 0.3) }}
           >
             <TilePreview media={media} />
-            <span>{media.title}</span>
+            <span>
+              {mediaDisplayTitle(
+                media.title,
+                media.type === "video" ? "Video" : "Photo",
+              )}
+            </span>
           </m.button>
         ))}
       </div>

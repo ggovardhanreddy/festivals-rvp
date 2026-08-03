@@ -14,7 +14,7 @@ import { Logo } from "./Logo";
 import { Clouds } from "./atmosphere/Clouds";
 import { Birds } from "./atmosphere/Birds";
 import { SunRays } from "./atmosphere/SunRays";
-import { withBase } from "@/lib/base";
+import { useMediaUrl } from "@/lib/use-media-url";
 import type { VantaEffectName } from "@/components/vanta/VantaBackground";
 
 const VantaBackground = dynamic(
@@ -61,6 +61,10 @@ export function MemoryHero({
   const moveX = useTransform(sx, [-40, 40], [-14, 14]);
   const moveY = useTransform(sy, [-40, 40], [-12, 12]);
   const useVanta = Boolean(vantaEffect);
+  const bgImage = useMediaUrl(backgroundImage);
+  const bgVideo = useMediaUrl(backgroundVideo);
+  const posterUrl = bgImage.url || undefined;
+  const videoUrl = bgVideo.url || undefined;
 
   return (
     <section
@@ -90,24 +94,24 @@ export function MemoryHero({
             style={{
               x: moveX,
               y: moveY,
-              backgroundImage: backgroundImage
-                ? `linear-gradient(180deg, rgba(10,16,12,.2), rgba(10,16,12,.78)), url(${withBase(backgroundImage)})`
+              backgroundImage: posterUrl
+                ? `linear-gradient(180deg, rgba(10,16,12,.2), rgba(10,16,12,.78)), url(${posterUrl})`
                 : undefined,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           />
-          {backgroundVideo && (
+          {videoUrl && (
             <video
               className="hero-video"
               autoPlay
               muted
               loop
               playsInline
-              poster={backgroundImage ? withBase(backgroundImage) : undefined}
+              poster={posterUrl}
               aria-hidden
             >
-              <source src={withBase(backgroundVideo)} />
+              <source src={videoUrl} />
             </video>
           )}
           <div className="aurora" aria-hidden />

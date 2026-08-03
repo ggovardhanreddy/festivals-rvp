@@ -269,10 +269,16 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
   const albums = albumsByBucket(bucket);
   const media = albums.flatMap((a) => a.media);
   const images = media.filter((m) => m.type === "image");
+  // Fun Fest: prefer real album covers (signed after login) over the locked brand plate
   const heroImage =
-    FESTIVAL_HEROES[bucket] ||
-    albums.find((a) => a.cover)?.cover ||
-    images[0]?.file;
+    bucket === "fun-trips"
+      ? albums.find((a) => a.cover)?.cover ||
+        images[0]?.thumb ||
+        images[0]?.file ||
+        FESTIVAL_HEROES[bucket]
+      : FESTIVAL_HEROES[bucket] ||
+        albums.find((a) => a.cover)?.cover ||
+        images[0]?.file;
   if (!albums.length && !heroImage && !HERO_ONLY_BUCKETS.has(bucket)) {
     notFound();
   }

@@ -1,10 +1,12 @@
 import type { Album } from "@/lib/types";
 import { festivalByKey, bucketByKey } from "@/lib/site";
+import { mediaDisplayTitle } from "@/lib/media-label";
 import { Gallery } from "./Gallery";
 import { Slideshow } from "./Slideshow";
 import { PrivateNotice } from "./PrivateNotice";
 import { Reveal } from "./Reveal";
 import { MemoryHero } from "./MemoryHero";
+import { MediaImage } from "./media/MediaImage";
 
 export function AlbumView({ album }: { album: Album }) {
   const festival = festivalByKey(album.festival);
@@ -73,13 +75,30 @@ export function AlbumView({ album }: { album: Album }) {
           </div>
         </div>
         <div className="timeline">
-          {album.media.map((media) => (
-            <div className="timeline-item glass-card" key={media.id}>
-              <p className="eyebrow">{media.date}</p>
-              <h3>{media.title}</h3>
-              {media.note && <p className="muted">{media.note}</p>}
-            </div>
-          ))}
+          {album.media.map((media) => {
+            const thumb = media.thumb || media.poster || media.file;
+            const label = mediaDisplayTitle(
+              media.title,
+              media.type === "video" ? "Video" : "Photo",
+            );
+            return (
+              <div className="timeline-item glass-card" key={media.id}>
+                {thumb ? (
+                  <MediaImage
+                    className="timeline-thumb"
+                    src={thumb}
+                    alt={label}
+                    loading="lazy"
+                  />
+                ) : null}
+                <div className="timeline-item-copy">
+                  <p className="eyebrow">{media.date}</p>
+                  <h3>{label}</h3>
+                  {media.note && <p className="muted">{media.note}</p>}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Reveal>
 

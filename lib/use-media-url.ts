@@ -62,14 +62,14 @@ export async function resolveMediaPath(
   if (!isPrivateMediaPath(raw)) {
     return withBase(resolveMediaUrl(raw));
   }
-  try {
-    return await fetchSignedUrl(raw);
-  } catch (err) {
-    const status = (err as { status?: number }).status;
-    if (status === 401) throw err;
-    // Local next / missing Functions — fall back to site path
-    return withBase(raw);
-  }
+  // Private Fun Fest / documents must never fall back to strip-local paths
+  // (those 404 or redirect to /login after deploy). Surface the sign error.
+  return fetchSignedUrl(raw);
+}
+
+/** Drop cached signed URLs (e.g. after logout). */
+export function clearMediaSignCache() {
+  signCache.clear();
 }
 
 export function prefetchMedia(path: string | undefined | null) {

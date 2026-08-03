@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
 import { ResolvedMediaImage } from "@/components/media/ResolvedMediaImage";
+import { mediaDisplayTitle } from "@/lib/media-label";
 import { prefetchMedia } from "@/lib/use-media-url";
 import { useLowPowerDevice } from "@/lib/client";
 
@@ -50,6 +51,7 @@ export function AutoMemorySlideshow({
   const current = slides[index]!;
   const yearHint = current.date?.slice(0, 4);
   const lightMotion = Boolean(reduce || lowPower);
+  const label = mediaDisplayTitle(current.title, "From home");
 
   return (
     <div
@@ -68,7 +70,7 @@ export function AutoMemorySlideshow({
         >
           <ResolvedMediaImage
             src={current.thumb || current.file}
-            alt={current.title || "Memory"}
+            alt={label}
             className="apple-slideshow-img"
             draggable={false}
             fetchPriority={index === 0 ? "high" : "auto"}
@@ -80,7 +82,7 @@ export function AutoMemorySlideshow({
 
       <div className="apple-slideshow-caption">
         <p className="eyebrow">{eyebrow}</p>
-        <h2 className="apple-slideshow-title">{current.title || "From home"}</h2>
+        <h2 className="apple-slideshow-title">{label}</h2>
         {yearHint ? <p className="apple-slideshow-meta">{yearHint}</p> : null}
       </div>
 

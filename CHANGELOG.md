@@ -2,6 +2,20 @@
 
 All notable changes to **RVP Youth — Digital Village Experience** are documented here.
 
+## [1.4.2] — 2026-08-03
+
+### Fixed
+
+- Fun Fest album slideshow and hero backgrounds now resolve signed `/api/media` URLs (no more unsigned strip-local paths)
+- Private media signing no longer falls back to local `/images|/thumbs|/videos` paths that 404 after deploy
+- Stale Fun Fest `sessionStorage` is cleared when the member cookie is missing, so the UI cannot look logged-in without media access
+- Gallery / slideshow / timeline stop surfacing UUID filenames as primary labels; album timeline shows signed thumbs
+- Service worker skips caching `/fun-trips/` and `/funfest/` paths so stale 404/login redirects cannot stick
+
+### Changed
+
+- Fun Fest chapter hero prefers a real album cover after login (signed) instead of only the locked brand plate
+
 ## [1.3.2] — 2026-08-03
 
 ### Fixed

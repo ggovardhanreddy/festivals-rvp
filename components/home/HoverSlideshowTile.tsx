@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { Media } from "@/lib/types";
 import { ResolvedMediaImage } from "@/components/media/ResolvedMediaImage";
+import { mediaDisplayTitle } from "@/lib/media-label";
 import { prefetchMedia } from "@/lib/use-media-url";
 import { useFinePointer, useLowPowerDevice } from "@/lib/client";
 
@@ -81,6 +82,7 @@ export function HoverSlideshowTile({
   }, [playing, index, images]);
 
   const current = images[index] ?? cover;
+  const captionTitle = mediaDisplayTitle(title || cover.title, "Memory");
 
   const start = () => {
     setActive(true);
@@ -107,7 +109,7 @@ export function HoverSlideshowTile({
       onFocus={finePointer ? start : undefined}
       onBlur={finePointer ? stop : undefined}
       onClick={onClick}
-      aria-label={title || cover.title || "Open memory"}
+      aria-label={captionTitle}
     >
       <div className="hover-slide-tile-media">
         <AnimatePresence mode="popLayout" initial={false}>
@@ -121,17 +123,17 @@ export function HoverSlideshowTile({
           >
             <ResolvedMediaImage
               src={current.thumb || current.file}
-              alt={current.title || title || "Memory"}
+              alt={mediaDisplayTitle(current.title, captionTitle)}
               draggable={false}
               loading={index === 0 ? "eager" : "lazy"}
             />
           </m.div>
         </AnimatePresence>
       </div>
-      {(title || meta) && (
+      {(meta || captionTitle) && (
         <div className="hover-slide-tile-caption">
           {meta ? <p className="eyebrow">{meta}</p> : null}
-          {title ? <h3>{title}</h3> : null}
+          <h3>{captionTitle}</h3>
         </div>
       )}
     </button>
