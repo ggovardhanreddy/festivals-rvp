@@ -35,7 +35,9 @@ export function matchProfession(
   if (!d) return false;
   switch (key) {
     case "doctors":
-      return /doctor|surgeon|orthopedic|md\b|physician|veterinary/.test(d);
+      return /doctor|surgeon|orthop(?:a)?edic|md\b|physician|veterinary/.test(
+        d,
+      );
     case "government":
       return /government|vro|vigilance|post office|bank employee|headmaster|priest|indian army/.test(
         d,
@@ -86,37 +88,95 @@ export function computeMemberStats(members: Member[]): MemberDirectoryStats {
   return { total: active.length, byGroup, byProfession };
 }
 
-/** Merge seed roster with admin/R2 updates without dropping designations or photos. */
-export function mergeMemberRosters(seed: Member[], remote: Member[]): Member[] {
-  if (!remote.length) return seed.filter((m) => !m.archived);
+function pickStr(
+  next: string | null | undefined,
+  prev: string | null | undefined,
+): string | null | undefined {
+  if (next === null) return null;
+  if (typeof next === "string") {
+    const t = next.trim();
+    if (t) return t;
+  }
+  return prev;
+}
 
+function mergeOne(prev: Member | undefined, item: Member): Member {
+  if (!prev) return item;
+  return {
+    ...prev,
+    ...item,
+    name: item.name?.trim() || prev.name,
+    nickname: pickStr(item.nickname, prev.nickname) as string | undefined,
+    photo: item.photo === null ? null : item.photo || prev.photo,
+    dob: pickStr(item.dob, prev.dob) as string | null,
+    designation: pickStr(item.designation, prev.designation) as
+      | string
+      | undefined,
+    profession: pickStr(item.profession, prev.profession) as string | undefined,
+    company: pickStr(item.company, prev.company) as string | undefined,
+    bio: pickStr(item.bio, prev.bio) as string | undefined,
+    phone: pickStr(item.phone, prev.phone) as string | undefined,
+    email: pickStr(item.email, prev.email) as string | undefined,
+    bloodGroup: pickStr(item.bloodGroup, prev.bloodGroup) as string | undefined,
+    memorial: item.memorial ?? prev.memorial,
+    status: item.status || prev.status,
+    archived: item.archived ?? prev.archived,
+    achievements:
+      item.achievements && item.achievements.length
+        ? item.achievements
+        : prev.achievements,
+    social: item.social && item.social.length ? item.social : prev.social,
+    birthYear: item.birthYear ?? prev.birthYear,
+    joinYear: item.joinYear ?? prev.joinYear,
+    group: item.group || prev.group,
+    displayOrder: item.displayOrder ?? prev.displayOrder,
+  };
+}
+
+function sortByDisplayOrder(a: Member, b: Member) {
+  const ao = a.displayOrder ?? Number.MAX_SAFE_INTEGER;
+  const bo = b.displayOrder ?? Number.MAX_SAFE_INTEGER;
+  if (ao !== bo) return ao - bo;
+  return a.name.localeCompare(b.name);
+}
+
+/**
+ * Merge seed roster with admin/R2 updates.
+ * For known seed ids, seed name/designation/group/memorial/status win so a
+ * stale R2 `community/members.json` cannot show outdated titles. Remote may
+ * still enrich photos, DOBs, achievements, and add new members.
+ */
+export function mergeMemberRosters(
+  seed: Member[],
+  remote: Member[],
+  opts?: { includeArchived?: boolean },
+): Member[] {
+  const includeArchived = Boolean(opts?.includeArchived);
+  if (!remote.length) {
+    const base = includeArchived ? seed : seed.filter((m) => !m.archived);
+    return [...base].sort(sortByDisplayOrder);
+  }
+
+  const seedById = new Map(seed.map((m) => [m.id, m]));
   const map = new Map<string, Member>();
   for (const item of seed) map.set(item.id, item);
 
   for (const item of remote) {
-    const prev = map.get(item.id);
-    if (!prev) {
-      map.set(item.id, item);
+    const seedItem = seedById.get(item.id);
+    const merged = mergeOne(map.get(item.id), item);
+    if (!seedItem) {
+      map.set(item.id, merged);
       continue;
     }
     map.set(item.id, {
-      ...prev,
-      ...item,
-      name: item.name?.trim() || prev.name,
-      photo: item.photo || prev.photo,
-      dob: item.dob || prev.dob,
-      designation: item.designation?.trim() || prev.designation,
-      memorial: item.memorial ?? prev.memorial,
-      status: item.status || prev.status,
-      archived: item.archived ?? prev.archived,
-      achievements:
-        item.achievements && item.achievements.length
-          ? item.achievements
-          : prev.achievements,
-      social: item.social && item.social.length ? item.social : prev.social,
-      birthYear: item.birthYear ?? prev.birthYear,
-      joinYear: item.joinYear ?? prev.joinYear,
-      group: item.group || prev.group,
+      ...merged,
+      name: seedItem.name?.trim() || merged.name,
+      designation: seedItem.designation?.trim() || merged.designation,
+      group: seedItem.group || merged.group,
+      memorial: seedItem.memorial ?? merged.memorial,
+      status: seedItem.status || merged.status,
+      photo: merged.photo || seedItem.photo,
+      dob: merged.dob || seedItem.dob,
     });
   }
 
@@ -124,15 +184,60 @@ export function mergeMemberRosters(seed: Member[], remote: Member[]): Member[] {
   const out: Member[] = [];
   for (const item of seed) {
     const merged = map.get(item.id);
-    if (merged && !merged.archived) {
-      out.push(merged);
-      seen.add(item.id);
-    }
+    if (!merged) continue;
+    if (!includeArchived && merged.archived) continue;
+    out.push(merged);
+    seen.add(item.id);
   }
   for (const item of remote) {
     if (seen.has(item.id)) continue;
     const merged = map.get(item.id);
-    if (merged && !merged.archived) out.push(merged);
+    if (!merged) continue;
+    if (!includeArchived && merged.archived) continue;
+    out.push(merged);
   }
-  return out;
+  return out.sort(sortByDisplayOrder);
+}
+
+/** Diff two member snapshots for audit logging. */
+export function diffMemberFields(
+  before: Member | null | undefined,
+  after: Member,
+): { fields: string[]; beforeSnap: Partial<Member>; afterSnap: Partial<Member> } {
+  const keys: (keyof Member)[] = [
+    "name",
+    "nickname",
+    "photo",
+    "dob",
+    "group",
+    "designation",
+    "profession",
+    "company",
+    "bio",
+    "phone",
+    "email",
+    "bloodGroup",
+    "memorial",
+    "status",
+    "archived",
+    "achievements",
+    "social",
+    "birthYear",
+    "joinYear",
+    "displayOrder",
+  ];
+  const fields: string[] = [];
+  const beforeSnap: Partial<Member> = {};
+  const afterSnap: Partial<Member> = {};
+  for (const key of keys) {
+    const a = before?.[key];
+    const b = after[key];
+    const same = JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+    if (!same) {
+      fields.push(key);
+      (beforeSnap as Record<string, unknown>)[key] = a ?? null;
+      (afterSnap as Record<string, unknown>)[key] = b ?? null;
+    }
+  }
+  return { fields, beforeSnap, afterSnap };
 }

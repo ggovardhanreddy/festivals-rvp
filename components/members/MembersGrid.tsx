@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type DragEvent,
+} from "react";
 import { m, useReducedMotion } from "framer-motion";
 import {
   Award,
@@ -10,6 +17,9 @@ import {
   Search,
   X,
   ExternalLink,
+  Pencil,
+  Upload,
+  GripVertical,
 } from "lucide-react";
 import { withBase } from "@/lib/base";
 import type { Member, MemberGroup } from "@/lib/types";
@@ -30,6 +40,20 @@ import {
 } from "@/lib/member-stats";
 import { dobMonthDay, formatBirthdayLabel, monthDay } from "@/lib/dates";
 import { SITE_NAME } from "@/lib/site";
+import { useEditMode } from "@/lib/use-super-admin";
+import {
+  prepareMemberImage,
+  uploadMemberPhotoFile,
+} from "@/lib/member-image";
+import {
+  downloadMembersCsv,
+  parseMembersCsv,
+} from "@/lib/member-csv";
+import {
+  useMemberEditOptional,
+  createBlankMember,
+} from "./MemberEditProvider";
+import { MemberEditPanel } from "./MemberEditPanel";
 
 const GROUP_ICONS = {
   legacy: Award,
@@ -43,10 +67,30 @@ function MemberCard({
   member,
   index,
   onOpen,
+  editMode,
+  selected,
+  onToggleSelect,
+  onEdit,
+  onQuickPhoto,
+  draggable,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onDragEnd,
 }: {
   member: Member;
   index: number;
   onOpen: (member: Member) => void;
+  editMode?: boolean;
+  selected?: boolean;
+  onToggleSelect?: () => void;
+  onEdit?: () => void;
+  onQuickPhoto?: (file: File) => void;
+  draggable?: boolean;
+  onDragStart?: () => void;
+  onDragOver?: (e: DragEvent) => void;
+  onDrop?: () => void;
+  onDragEnd?: () => void;
 }) {
   const reduce = useReducedMotion();
   const hasPhoto = Boolean(member.photo);
@@ -54,15 +98,48 @@ function MemberCard({
   const isBirthdayToday = dobMonthDay(member.dob) === monthDay();
   const memorial = isMemorial(member);
   const group = resolveMemberGroup(member);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   return (
     <m.article
-      className={`member-card${isBirthdayToday ? " is-birthday-today" : ""}${memorial ? " is-memorial" : ""}`}
+      className={`member-card${isBirthdayToday ? " is-birthday-today" : ""}${memorial ? " is-memorial" : ""}${editMode ? " is-edit-mode" : ""}${selected ? " is-selected" : ""}`}
       initial={reduce ? false : { opacity: 1, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.02, 0.2) }}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      onDragEnd={onDragEnd}
+      data-member-id={member.id}
     >
+      {editMode ? (
+        <div className="member-edit-card-bar">
+          <label className="member-select">
+            <input
+              type="checkbox"
+              checked={Boolean(selected)}
+              onChange={onToggleSelect}
+              aria-label={`Select ${member.name}`}
+            />
+          </label>
+          {draggable ? (
+            <span className="member-drag-handle" aria-hidden title="Drag to reorder">
+              <GripVertical size={16} />
+            </span>
+          ) : null}
+          <button
+            type="button"
+            className="icon-btn member-edit-btn"
+            aria-label={`Edit ${member.name}`}
+            onClick={onEdit}
+          >
+            <Pencil size={14} />
+          </button>
+        </div>
+      ) : null}
+
       {memorial ? (
         <span className="member-memorial-ribbon" aria-label="In Loving Memory">
           <Heart size={12} aria-hidden /> In Loving Memory
@@ -95,12 +172,45 @@ function MemberCard({
         <span className={`member-group-badge member-group-badge--${group}`}>
           {MEMBER_GROUP_LABELS[group]}
         </span>
+        {editMode ? (
+          <>
+            <button
+              type="button"
+              className="member-photo-upload-btn"
+              aria-label={`Upload photo for ${member.name}`}
+              onClick={() => fileRef.current?.click()}
+            >
+              <Upload size={14} aria-hidden /> Photo
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*,.heic,.heif"
+              hidden
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onQuickPhoto?.(file);
+                e.target.value = "";
+              }}
+            />
+          </>
+        ) : null}
       </div>
 
       <div className="member-card-body">
-        <h3>{member.name}</h3>
+        <h3>
+          {member.name}
+          {member.nickname ? (
+            <span className="member-nickname"> “{member.nickname}”</span>
+          ) : null}
+        </h3>
         {member.designation ? (
           <p className="member-designation">{member.designation}</p>
+        ) : null}
+        {member.profession || member.company ? (
+          <p className="member-designation">
+            {[member.profession, member.company].filter(Boolean).join(" · ")}
+          </p>
         ) : null}
         {memorial ? (
           <p className="member-forever">Forever Remembered</p>
@@ -125,13 +235,24 @@ function MemberCard({
             ))}
           </div>
         ) : null}
-        <button
-          type="button"
-          className="btn ghost member-profile-btn"
-          onClick={() => onOpen(member)}
-        >
-          View Profile
-        </button>
+        <div className="btn-row member-card-actions">
+          <button
+            type="button"
+            className="btn ghost member-profile-btn"
+            onClick={() => onOpen(member)}
+          >
+            View Profile
+          </button>
+          {editMode ? (
+            <button
+              type="button"
+              className="btn member-profile-btn"
+              onClick={onEdit}
+            >
+              Edit
+            </button>
+          ) : null}
+        </div>
       </div>
     </m.article>
   );
@@ -140,9 +261,13 @@ function MemberCard({
 function MemberProfileModal({
   member,
   onClose,
+  editMode,
+  onEdit,
 }: {
   member: Member;
   onClose: () => void;
+  editMode?: boolean;
+  onEdit?: () => void;
 }) {
   const titleId = useId();
   const hasPhoto = Boolean(member.photo);
@@ -196,10 +321,16 @@ function MemberProfileModal({
           <p className={`member-group-badge member-group-badge--${group}`}>
             {MEMBER_GROUP_LABELS[group]}
           </p>
-          <h2 id={titleId}>{member.name}</h2>
+          <h2 id={titleId}>
+            {member.name}
+            {member.nickname ? (
+              <span className="member-nickname"> “{member.nickname}”</span>
+            ) : null}
+          </h2>
           {member.designation ? (
             <p className="member-designation">{member.designation}</p>
           ) : null}
+          {member.bio ? <p className="lede">{member.bio}</p> : null}
           {memorial ? (
             <p className="member-forever">
               <Heart size={14} aria-hidden /> Forever Remembered
@@ -236,14 +367,43 @@ function MemberProfileModal({
               ))}
             </div>
           ) : null}
+          {editMode ? (
+            <button type="button" className="btn" onClick={onEdit}>
+              Edit in panel
+            </button>
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
 
+function EditToast({
+  toast,
+  onClose,
+}: {
+  toast: { kind: "ok" | "err"; text: string };
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const t = window.setTimeout(onClose, 4200);
+    return () => window.clearTimeout(t);
+  }, [toast, onClose]);
+  return (
+    <div
+      className={`member-edit-toast member-edit-toast--${toast.kind}`}
+      role="status"
+    >
+      <span>{toast.text}</span>
+      <button type="button" className="icon-btn" aria-label="Dismiss" onClick={onClose}>
+        <X size={14} />
+      </button>
+    </div>
+  );
+}
+
 export function MembersGrid({
-  members,
+  members: seedMembers,
   eyebrow = "Community",
   title = "Our circles",
   lede = `Legacy Circle, Core Members, and Next Generation — the living structure of ${SITE_NAME}.`,
@@ -253,11 +413,28 @@ export function MembersGrid({
   title?: string;
   lede?: string;
 }) {
+  const { editMode } = useEditMode();
+  const edit = useMemberEditOptional();
+  const members = edit?.members ?? seedMembers;
+
   const [query, setQuery] = useState("");
   const [groupFilter, setGroupFilter] = useState<MemberGroup | "all">("all");
   const [profession, setProfession] = useState<ProfessionKey | "all">("all");
   const [sort, setSort] = useState<SortMode>("group");
   const [active, setActive] = useState<Member | null>(null);
+  const [localToast, setLocalToast] = useState<{
+    kind: "ok" | "err";
+    text: string;
+  } | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [bulkGroup, setBulkGroup] = useState<MemberGroup>("core");
+  const csvRef = useRef<HTMLInputElement>(null);
+
+  const toast = edit?.toast || localToast;
+  const clearToast = () => {
+    edit?.clearToast();
+    setLocalToast(null);
+  };
 
   const activeMembers = useMemo(
     () => members.filter((m) => !m.archived),
@@ -274,13 +451,20 @@ export function MembersGrid({
       if (groupFilter !== "all" && resolveMemberGroup(m) !== groupFilter) {
         return false;
       }
-      if (profession !== "all" && !matchProfession(m.designation, profession)) {
+      if (
+        profession !== "all" &&
+        !matchProfession(m.designation, profession) &&
+        !matchProfession(m.profession, profession)
+      ) {
         return false;
       }
       if (!q) return true;
       return (
         m.name.toLowerCase().includes(q) ||
-        (m.designation || "").toLowerCase().includes(q)
+        (m.nickname || "").toLowerCase().includes(q) ||
+        (m.designation || "").toLowerCase().includes(q) ||
+        (m.profession || "").toLowerCase().includes(q) ||
+        (m.company || "").toLowerCase().includes(q)
       );
     });
     if (sort === "alpha") {
@@ -296,8 +480,88 @@ export function MembersGrid({
     people: filtered.filter((m) => resolveMemberGroup(m) === group),
   })).filter((g) => g.people.length);
 
+  const canDrag = Boolean(editMode && edit && sort === "group");
+
+  async function quickPhoto(member: Member, file: File) {
+    if (!edit) return;
+    try {
+      const prepared = await prepareMemberImage(file);
+      const url = await uploadMemberPhotoFile(prepared.file);
+      if (!url) throw new Error("Upload returned no URL");
+      await edit.saveMember({ ...member, photo: url });
+      URL.revokeObjectURL(prepared.previewUrl);
+    } catch (err) {
+      setLocalToast({
+        kind: "err",
+        text: err instanceof Error ? err.message : "Photo upload failed",
+      });
+    }
+  }
+
+  async function onDropCard(targetId: string, group: MemberGroup) {
+    if (!edit || !dragId || dragId === targetId) return;
+    const people = (edit.members || []).filter(
+      (m) => resolveMemberGroup(m) === group && !m.archived,
+    );
+    const ids = people.map((m) => m.id);
+    const from = ids.indexOf(dragId);
+    const to = ids.indexOf(targetId);
+    if (from < 0) {
+      await edit.moveMemberToGroup(dragId, group, Math.max(0, to));
+      setDragId(null);
+      return;
+    }
+    if (to < 0) return;
+    const next = [...ids];
+    next.splice(from, 1);
+    next.splice(to, 0, dragId);
+    await edit.reorderInGroup(group, next);
+    setDragId(null);
+  }
+
+  async function onImportCsv(file: File | undefined) {
+    if (!file || !edit) return;
+    try {
+      const text = await file.text();
+      const rows = parseMembersCsv(text);
+      if (!rows.length) throw new Error("No rows found in CSV");
+      const byId = new Map(edit.allMembers.map((m) => [m.id, m]));
+      const byName = new Map(
+        edit.allMembers.map((m) => [m.name.toLowerCase(), m]),
+      );
+      let next = [...edit.allMembers];
+      for (const row of rows) {
+        const existing =
+          (row.id && byId.get(row.id)) ||
+          (row.name ? byName.get(row.name.toLowerCase()) : undefined);
+        if (existing) {
+          next = next.map((m) =>
+            m.id === existing.id ? { ...m, ...row, id: existing.id } : m,
+          );
+        } else {
+          const blank = createBlankMember(
+            (row.group as MemberGroup) || "core",
+          );
+          next.push({ ...blank, ...row, id: row.id || blank.id });
+        }
+      }
+      await edit.persistRoster(next, {
+        action: "import",
+        note: `Imported ${rows.length} CSV row(s).`,
+      });
+    } catch (err) {
+      setLocalToast({
+        kind: "err",
+        text: err instanceof Error ? err.message : "CSV import failed",
+      });
+    }
+  }
+
   return (
-    <section className="section members-section" id="members">
+    <section
+      className={`section members-section${editMode ? " members-section--edit" : ""}`}
+      id="members"
+    >
       {(eyebrow || title || lede) && (
         <div className="section-head">
           <div>
@@ -307,6 +571,93 @@ export function MembersGrid({
           </div>
         </div>
       )}
+
+      {editMode && edit ? (
+        <div className="member-edit-toolbar" aria-label="Super Admin edit tools">
+          <p className="eyebrow" style={{ margin: 0 }}>
+            Edit Mode
+          </p>
+          <button
+            type="button"
+            className="btn ghost"
+            onClick={() => {
+              const blank = createBlankMember(
+                groupFilter === "all" ? "core" : groupFilter,
+              );
+              void edit
+                .persistRoster([...edit.allMembers, blank], {
+                  note: "Added new member draft.",
+                })
+                .then(() => edit.openEditor(blank.id));
+            }}
+          >
+            Add member
+          </button>
+          <button
+            type="button"
+            className="btn ghost"
+            onClick={() =>
+              downloadMembersCsv(
+                edit.allMembers,
+                "reddivaripalli-members.csv",
+              )
+            }
+          >
+            Export CSV
+          </button>
+          <button
+            type="button"
+            className="btn ghost"
+            onClick={() => csvRef.current?.click()}
+          >
+            Import CSV
+          </button>
+          <input
+            ref={csvRef}
+            type="file"
+            accept=".csv,text/csv"
+            hidden
+            onChange={(e) => {
+              void onImportCsv(e.target.files?.[0]);
+              e.target.value = "";
+            }}
+          />
+          <button
+            type="button"
+            className="btn ghost"
+            disabled={!edit.selectedIds.size}
+            onClick={() => void edit.bulkArchive([...edit.selectedIds])}
+          >
+            Archive selected ({edit.selectedIds.size})
+          </button>
+          <label className="member-bulk-move">
+            Move to
+            <select
+              value={bulkGroup}
+              onChange={(e) => setBulkGroup(e.target.value as MemberGroup)}
+            >
+              {MEMBER_GROUP_ORDER.map((g) => (
+                <option key={g} value={g}>
+                  {MEMBER_GROUP_LABELS[g]}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              className="btn ghost"
+              disabled={!edit.selectedIds.size}
+              onClick={() =>
+                void edit.bulkMoveCategory([...edit.selectedIds], bulkGroup)
+              }
+            >
+              Apply
+            </button>
+          </label>
+          <p className="muted" style={{ fontSize: "0.8rem", margin: 0 }}>
+            Drag cards to reorder when ordered by category. Changes auto-save to R2.
+          </p>
+        </div>
+      ) : null}
 
       <div className="member-stats" aria-label="Community statistics">
         <div className="member-stat">
@@ -400,6 +751,11 @@ export function MembersGrid({
               member={member}
               index={index}
               onOpen={setActive}
+              editMode={editMode}
+              selected={edit?.selectedIds.has(member.id)}
+              onToggleSelect={() => edit?.toggleSelected(member.id)}
+              onEdit={() => edit?.openEditor(member.id)}
+              onQuickPhoto={(file) => void quickPhoto(member, file)}
             />
           ))}
         </div>
@@ -412,6 +768,17 @@ export function MembersGrid({
               className="members-group"
               data-group={group}
               id={`members-${group}`}
+              onDragOver={(e) => {
+                if (canDrag) e.preventDefault();
+              }}
+              onDrop={() => {
+                if (!canDrag || !dragId || !edit) return;
+                const inGroup = people.some((p) => p.id === dragId);
+                if (!inGroup) {
+                  void edit.moveMemberToGroup(dragId, group, people.length);
+                  setDragId(null);
+                }
+              }}
             >
               <div className="members-group-head">
                 <div className="members-group-icon" aria-hidden>
@@ -435,6 +802,18 @@ export function MembersGrid({
                     member={member}
                     index={index}
                     onOpen={setActive}
+                    editMode={editMode}
+                    selected={edit?.selectedIds.has(member.id)}
+                    onToggleSelect={() => edit?.toggleSelected(member.id)}
+                    onEdit={() => edit?.openEditor(member.id)}
+                    onQuickPhoto={(file) => void quickPhoto(member, file)}
+                    draggable={canDrag}
+                    onDragStart={() => setDragId(member.id)}
+                    onDragOver={(e) => {
+                      if (canDrag) e.preventDefault();
+                    }}
+                    onDrop={() => void onDropCard(member.id, group)}
+                    onDragEnd={() => setDragId(null)}
                   />
                 ))}
               </div>
@@ -450,8 +829,20 @@ export function MembersGrid({
       ) : null}
 
       {active ? (
-        <MemberProfileModal member={active} onClose={() => setActive(null)} />
+        <MemberProfileModal
+          member={active}
+          onClose={() => setActive(null)}
+          editMode={editMode}
+          onEdit={() => {
+            edit?.openEditor(active.id);
+            setActive(null);
+          }}
+        />
       ) : null}
+
+      {editMode && edit ? <MemberEditPanel /> : null}
+
+      {toast ? <EditToast toast={toast} onClose={clearToast} /> : null}
     </section>
   );
 }

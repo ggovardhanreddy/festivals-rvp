@@ -32,6 +32,7 @@ import { AdminLoginForm } from "@/components/auth/AdminLoginForm";
 import { AnalyticsPanel } from "@/components/admin/AnalyticsPanel";
 import { AdminClient } from "@/components/AdminClient";
 import { MembersManager } from "@/components/admin/MembersManager";
+import { AuditLogPanel } from "@/components/admin/AuditLogPanel";
 import { ROLE_CAPABILITIES } from "@/lib/roles";
 
 type Tab =
@@ -39,6 +40,7 @@ type Tab =
   | "analytics"
   | "media"
   | "members"
+  | "audit"
   | "directory"
   | "approvals"
   | "documents"
@@ -768,6 +770,7 @@ export function AdminHub() {
     { id: "analytics", label: "Analytics" },
     { id: "media", label: "Media / R2" },
     { id: "members", label: "Members" },
+    { id: "audit", label: "Audit" },
     { id: "directory", label: "Directory" },
     { id: "approvals", label: "Approvals" },
     { id: "documents", label: "Documents" },
@@ -862,6 +865,11 @@ export function AdminHub() {
       ) : null}
       {tab === "media" ? <AdminClient /> : null}
       {tab === "members" ? <MembersManager /> : null}
+      {tab === "audit" ? (
+        <RequireAdmin>
+          <AuditLogPanel />
+        </RequireAdmin>
+      ) : null}
       {tab === "directory" ? <DirectoryManager /> : null}
       {tab === "approvals" ? <ApprovalsManager /> : null}
       {tab === "documents" ? <DocumentsManager /> : null}

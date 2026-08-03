@@ -17,6 +17,7 @@ import { LocationProvider } from "./location/LocationProvider";
 import { LocationConsentDialog } from "./location/LocationConsentDialog";
 import { AnalyticsTracker } from "./analytics/AnalyticsTracker";
 import { AutoDayNightSync } from "./Theme";
+import { SuperAdminProvider } from "@/lib/use-super-admin";
 import type { Announcement, Development, Member, SiteEvent } from "@/lib/types";
 import membersData from "@/content/data/members.json";
 import eventsData from "@/content/data/events.json";
@@ -52,30 +53,32 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <LazyMotion features={domAnimation}>
         <AutoDayNightSync />
-        <MemberAuthProvider>
-          <LocationProvider>
-            <NotificationProvider
-              members={membersData as Member[]}
-              events={eventsData as SiteEvent[]}
-              announcements={announcementsData as Announcement[]}
-              developments={developmentsData as Development[]}
-            >
-              <MusicProvider>
-                <AudioDeckProvider>
-                  <MusicRouteSync />
-                  <DesktopExtras />
-                  <ServiceWorkerManager />
-                  <UpdateAvailablePrompt />
-                  <AnalyticsTracker />
-                  {children}
-                  <GlassMusicPlayer />
-                  <InstallAppPrompt />
-                  <LocationConsentDialog />
-                </AudioDeckProvider>
-              </MusicProvider>
-            </NotificationProvider>
-          </LocationProvider>
-        </MemberAuthProvider>
+        <SuperAdminProvider>
+          <MemberAuthProvider>
+            <LocationProvider>
+              <NotificationProvider
+                members={membersData as Member[]}
+                events={eventsData as SiteEvent[]}
+                announcements={announcementsData as Announcement[]}
+                developments={developmentsData as Development[]}
+              >
+                <MusicProvider>
+                  <AudioDeckProvider>
+                    <MusicRouteSync />
+                    <DesktopExtras />
+                    <ServiceWorkerManager />
+                    <UpdateAvailablePrompt />
+                    <AnalyticsTracker />
+                    {children}
+                    <GlassMusicPlayer />
+                    <InstallAppPrompt />
+                    <LocationConsentDialog />
+                  </AudioDeckProvider>
+                </MusicProvider>
+              </NotificationProvider>
+            </LocationProvider>
+          </MemberAuthProvider>
+        </SuperAdminProvider>
       </LazyMotion>
     </ThemeProvider>
   );

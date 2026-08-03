@@ -28,6 +28,7 @@ export const COMMUNITY_COLLECTIONS = [
   "heritage",
   "site-settings",
   "analytics",
+  "audit",
 ] as const;
 
 export type CommunityCollection = (typeof COMMUNITY_COLLECTIONS)[number];

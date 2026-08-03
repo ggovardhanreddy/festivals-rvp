@@ -24,6 +24,19 @@ export type MemberSocialLink = {
   href: string;
 };
 
+/** Public directory lifecycle for a community member */
+export type MemberStatus = "Active" | "In Loving Memory" | "Archived";
+
+export type BloodGroup =
+  | "A+"
+  | "A-"
+  | "B+"
+  | "B-"
+  | "AB+"
+  | "AB-"
+  | "O+"
+  | "O-";
+
 export type Member = {
   id: string;
   name: string;
@@ -39,10 +52,32 @@ export type Member = {
   joinYear?: number | null;
   /** Memorial recognition — In Loving Memory */
   memorial?: boolean;
-  status?: string;
+  status?: MemberStatus | string;
   archived?: boolean;
   achievements?: string[];
   social?: MemberSocialLink[];
+  /** Informal / preferred name shown in directory */
+  nickname?: string;
+  profession?: string;
+  company?: string;
+  bio?: string;
+  phone?: string;
+  email?: string;
+  bloodGroup?: BloodGroup | string;
+  /** Manual sort within category (lower first) */
+  displayOrder?: number;
+};
+
+export type MemberAuditEntry = {
+  id: string;
+  ts: number;
+  adminName: string;
+  memberId: string;
+  memberName?: string;
+  action: "update" | "create" | "archive" | "reorder" | "import" | "photo";
+  fields: string[];
+  before?: Partial<Member> | null;
+  after?: Partial<Member> | null;
 };
 
 export type SiteEventCategory = "festival" | "village" | "birthday" | "other";
@@ -234,16 +269,6 @@ export type LostFoundItem = {
   submittedAt: string;
   submittedBy?: string;
 };
-
-export type BloodGroup =
-  | "A+"
-  | "A-"
-  | "B+"
-  | "B-"
-  | "AB+"
-  | "AB-"
-  | "O+"
-  | "O-";
 
 export type BloodDonor = {
   id: string;

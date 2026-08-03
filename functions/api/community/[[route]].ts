@@ -27,6 +27,7 @@ const COLLECTIONS = new Set([
   "heritage",
   "site-settings",
   "analytics",
+  "audit",
 ]);
 
 const APPROVAL_COLLECTIONS = new Set([
@@ -61,7 +62,11 @@ async function hmacSign(value: string, secret: string) {
 function json(data: unknown, status = 200, headers: Record<string, string> = {}) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "content-type": "application/json", ...headers },
+    headers: {
+      "content-type": "application/json",
+      "cache-control": "no-store, no-cache, must-revalidate",
+      ...headers,
+    },
   });
 }
 
@@ -185,6 +190,41 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
         if (!admin) return json({ error: "Admin required" }, 401, headers);
         const hits = asItems(await readStore(env, collection));
         return json({ hits }, 200, headers);
+      }
+      return json({ error: "Method not allowed" }, 405, headers);
+    }
+
+    if (collection === "audit") {
+      if (request.method === "GET") {
+        if (!admin) return json({ error: "Admin required" }, 401, headers);
+        const items = asItems(await readStore(env, collection));
+        return json({ items, source: "r2" }, 200, headers);
+      }
+      if (request.method === "POST") {
+        if (!admin) return json({ error: "Admin required" }, 401, headers);
+        const body = (await request.json()) as { item?: Record<string, unknown> };
+        if (!body.item || typeof body.item !== "object") {
+          return json({ error: "item required" }, 400, headers);
+        }
+        const existing = asItems(await readStore(env, collection));
+        const item = {
+          ...body.item,
+          id: body.item.id || `audit-${Date.now().toString(36)}`,
+          ts: body.item.ts || Date.now(),
+        };
+        const next = [...existing, item].slice(-1000);
+        await writeStore(env, collection, { items: next });
+        return json({ ok: true, items: next, item }, 200, headers);
+      }
+      if (request.method === "PUT") {
+        if (!admin) return json({ error: "Admin required" }, 401, headers);
+        const body = (await request.json()) as { items?: Record<string, unknown>[] };
+        if (!Array.isArray(body.items)) {
+          return json({ error: "items array required" }, 400, headers);
+        }
+        const next = body.items.slice(-1000);
+        await writeStore(env, collection, { items: next });
+        return json({ ok: true, items: next }, 200, headers);
       }
       return json({ error: "Method not allowed" }, 405, headers);
     }

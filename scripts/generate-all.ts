@@ -197,8 +197,8 @@ self.addEventListener("fetch",e=>{
   const req=e.request;
   const url=new URL(req.url);
   if(url.origin!==self.location.origin)return;
-  // Always hit network for deploy version + SW + manifest + app shell JS/CSS
-  if(url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")||url.pathname.includes("/_next/static/")){
+  // Never cache APIs / version / SW / manifest — always network
+  if(url.pathname.includes("/api/")||url.pathname.endsWith("/version.json")||url.pathname.endsWith("/sw.js")||url.pathname.endsWith("/manifest.webmanifest")||url.pathname.includes("/_next/static/")){
     e.respondWith(fetch(new Request(req,{cache:"no-store"})).catch(()=>caches.match(req)));
     return;
   }

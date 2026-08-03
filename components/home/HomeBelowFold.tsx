@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { MediaWithAlbum, Member, SiteEvent } from "@/lib/types";
 import type { TimelineEntry } from "@/lib/timeline";
 import { dobMonthDay, monthDay } from "@/lib/dates";
+import { mergeMemberRosters } from "@/lib/member-stats";
+import { useCommunityList } from "@/lib/use-community";
 import { Reveal } from "@/components/Reveal";
 import { StatsOverview } from "./StatsOverview";
 import { AboutTeaser } from "./AboutTeaser";
@@ -19,7 +21,7 @@ import { LocationHomeNote } from "@/components/location/LocationHomeNote";
 export function HomeBelowFold({
   galleryItems,
   yearList,
-  members,
+  members: seedMembers,
   upcomingEvents,
   festivals,
   liveSlugs = [],
@@ -38,6 +40,11 @@ export function HomeBelowFold({
     icon: "legacy" | "core" | "nextgen" | "total";
   }[];
 }) {
+  const { raw } = useCommunityList<Member>("members", seedMembers);
+  const members = useMemo(
+    () => mergeMemberRosters(seedMembers, raw),
+    [seedMembers, raw],
+  );
   const [todayMembers, setTodayMembers] = useState<Member[]>([]);
 
   useEffect(() => {

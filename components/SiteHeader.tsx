@@ -4,11 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, Pencil, X } from "lucide-react";
 import { COMMUNITY_NAV, NAV } from "@/lib/site";
 import { ThemeToggle } from "./Theme";
 import { Logo } from "./Logo";
 import { NotificationBell } from "./notifications/NotificationBell";
+import { useEditMode } from "@/lib/use-super-admin";
 
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
@@ -30,6 +31,7 @@ export function SiteHeader() {
   const menuId = useId();
   const btnRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const { ready, isAdmin, editMode, toggleEditMode } = useEditMode();
 
   useEffect(() => {
     setMounted(true);
@@ -128,6 +130,19 @@ export function SiteHeader() {
           <Link href="/settings/" onClick={close}>
             Settings
           </Link>
+          {ready && isAdmin ? (
+            <button
+              type="button"
+              className={`btn ghost${editMode ? " is-selected" : ""}`}
+              aria-pressed={editMode}
+              onClick={() => {
+                toggleEditMode();
+                close();
+              }}
+            >
+              {editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
+            </button>
+          ) : null}
           <Link href="/admin/" onClick={close} className="nav-drawer-superadmin">
             Super Admin Login
           </Link>
@@ -169,6 +184,18 @@ export function SiteHeader() {
         <div className="nav-actions">
           <NotificationBell />
           <ThemeToggle />
+          {ready && isAdmin ? (
+            <button
+              type="button"
+              className={`btn ghost nav-edit-mode-btn${editMode ? " is-active" : ""}`}
+              aria-pressed={editMode}
+              aria-label={editMode ? "Turn off Edit Mode" : "Turn on Edit Mode"}
+              onClick={toggleEditMode}
+            >
+              <Pencil size={14} aria-hidden />
+              {editMode ? "Editing" : "Edit Mode"}
+            </button>
+          ) : null}
           <Link
             href="/admin/"
             className="btn ghost nav-superadmin-btn"

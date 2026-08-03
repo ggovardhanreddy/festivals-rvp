@@ -10,6 +10,12 @@
   Cache-Control: no-cache, no-store, must-revalidate
 /manifest.webmanifest
   Cache-Control: no-cache, must-revalidate
+/search-index.json
+  Cache-Control: no-cache, no-store, must-revalidate
+/members
+  Cache-Control: public, max-age=0, must-revalidate
+/members/
+  Cache-Control: public, max-age=0, must-revalidate
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 /vendor/*
