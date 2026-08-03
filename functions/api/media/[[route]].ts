@@ -15,6 +15,14 @@ import {
   type R2ObjectRef,
 } from "../../../lib/r2-catalog";
 import { isCmsAlbum, isYearDir } from "../../../lib/cms";
+import {
+  IMAGE_MAX_UPLOAD_BYTES,
+  VIDEO_MAX_BYTES,
+} from "../../../lib/media-pipeline/constants";
+import {
+  deriveThumbKey,
+  validateUpload,
+} from "../../../lib/media-pipeline/validate";
 
 interface Env {
   MEDIA?: R2Bucket;
@@ -383,6 +391,7 @@ async function handleMedia({
     }
     const form = await request.formData();
     const file = form.get("file");
+    const thumbFile = form.get("thumb");
     const category = String(form.get("category") || "gallery")
       .replace(/^\//, "")
       .replace(/\/$/, "");
@@ -401,6 +410,10 @@ async function handleMedia({
       .toLowerCase()
       .replace(/[^a-z0-9-]+/g, "-");
     const preserveOriginal = String(form.get("preserveOriginal") || "1") !== "0";
+    const clientOptimized =
+      String(form.get("clientOptimized") || form.get("optimized") || "") ===
+      "1";
+    const originalBytes = String(form.get("originalBytes") || "");
 
     if (!(file instanceof File)) {
       return json({ error: "file required" }, 400, headers);
@@ -423,6 +436,54 @@ async function handleMedia({
       mime !== "application/pdf"
     ) {
       return json({ error: "Unsupported file type" }, 400, headers);
+    }
+
+    // Light magic sniff + size/format policy (no Sharp/FFmpeg in Workers).
+    const head = new Uint8Array(await file.slice(0, 64).arrayBuffer());
+    const allowRaw =
+      category === "documents" ||
+      category === "logos" ||
+      category === "hero";
+    const check = validateUpload(
+      originalName,
+      file.size,
+      mime,
+      { category, clientOptimized, allowRaw },
+      head,
+    );
+    if (!check.ok) {
+      return json(
+        {
+          error: check.error,
+          code: check.code,
+          hint:
+            check.code === "needs_ffmpeg" || check.code === "needs_node_convert"
+              ? "Use Admin client image compress for JPEG/PNG/WebP, or `npm run media:optimize` / GitHub Action “Media Optimize” for HEIC/video."
+              : undefined,
+        },
+        400,
+        headers,
+      );
+    }
+    if (file.size > VIDEO_MAX_BYTES) {
+      return json(
+        {
+          error: `File exceeds ${VIDEO_MAX_BYTES / (1024 * 1024)} MB hard limit.`,
+          code: "too_large",
+        },
+        413,
+        headers,
+      );
+    }
+    if (check.kind === "image" && file.size > IMAGE_MAX_UPLOAD_BYTES) {
+      return json(
+        {
+          error: `Image exceeds ${IMAGE_MAX_UPLOAD_BYTES / 1024} KB. Compress in Admin first.`,
+          code: "image_too_large",
+        },
+        413,
+        headers,
+      );
     }
 
     // Structured gallery path when year + album provided → discoverable by reindex.
@@ -480,6 +541,8 @@ async function handleMedia({
         uploadedAt,
         mime,
         size: String(file.size),
+        clientOptimized: clientOptimized ? "1" : "0",
+        ...(originalBytes ? { originalBytes } : {}),
         ...(year ? { year } : {}),
         ...(album ? { album } : {}),
         ...(width ? { width } : {}),
@@ -488,7 +551,31 @@ async function handleMedia({
       },
     });
 
+    // Optional client-generated thumbnail (gallery/thumbs/… layout).
+    let thumbKey: string | null = null;
+    if (thumbFile instanceof File && thumbFile.size > 0) {
+      const derived = deriveThumbKey(key);
+      if (derived && !isProtectedHeroKey(derived)) {
+        thumbKey = derived;
+        const thumbBytes = new Uint8Array(await thumbFile.arrayBuffer());
+        const thumbMime = guessMime(
+          thumbFile.name || "thumb.webp",
+          thumbFile.type || "image/webp",
+        );
+        await env.MEDIA.put(thumbKey, thumbBytes, {
+          httpMetadata: { contentType: thumbMime },
+          customMetadata: {
+            pairedKey: key,
+            category: "thumbs",
+            uploadedAt,
+            clientOptimized: "1",
+          },
+        });
+      }
+    }
+
     // Preserve HEIC/originals alongside the primary key when requested.
+    // (Gallery path rejects raw HEIC; originals/ still allowed for logos/docs.)
     let originalKey: string | null = null;
     const ext = extOf(originalName);
     if (
@@ -514,15 +601,11 @@ async function handleMedia({
         ? `/api/media/object?key=${encodeURIComponent(key)}`
         : `${publicBase}/${key}`;
 
-    const heicNote =
-      ext === "heic" || ext === "heif"
-        ? "HEIC stored as-is (Workers cannot convert). Prefer local import (HEIC→WebP) or export JPEG/WebP before upload for gallery display."
-        : null;
-
     return json(
       {
         ok: true,
         key,
+        thumbKey,
         publicUrl,
         private: privateObject,
         size: file.size,
@@ -537,7 +620,14 @@ async function handleMedia({
         year: year || null,
         album: album || null,
         originalKey,
-        note: heicNote,
+        clientOptimized,
+        originalBytes: originalBytes ? Number(originalBytes) : null,
+        warnings: check.warnings,
+        note:
+          check.warnings[0] ||
+          (clientOptimized
+            ? "Accepted client-optimized upload (Workers do not re-encode)."
+            : null),
         next: year && album
           ? "Call POST /api/media/reindex (or click Reindex gallery) so albums.json picks up this path."
           : "Flat category upload — not auto-indexed into Festival→Year albums unless year+album were set.",

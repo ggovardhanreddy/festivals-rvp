@@ -80,22 +80,18 @@ Hero preservation: discovery never treats `festivals/*/hero.webp` as album frame
 
 ## 3. Media upload pipeline
 
+Full detail: **[MEDIA_PIPELINE.md](./MEDIA_PIPELINE.md)**.
+
 | Path | When to use | Conversion |
 |---|---|---|
-| Local import (`npm run admin:api` + Admin “Import folder”) | Bulk HEIC/MOV from disk | HEIC→WebP, video→MP4, originals kept under `originals/` |
-| Admin **Upload to R2** | Production browser upload | No Worker-side HEIC convert — prefer WebP/JPEG/MP4; HEIC/MOV stored + optional `originals/` copy |
-| `npm run media:migrate:r2` | Push local `public/` derivatives to R2 | Uses Wrangler |
+| Admin **Optimize & upload to R2** | Production browser stills | Client Canvas → WebP ≤500 KB + thumb; Worker validates (no FFmpeg) |
+| `npm run media:optimize` / GH **Media Optimize** | HEIC, MOV, large video/audio | Sharp + system FFmpeg (Node/CI only) |
+| Local import (`npm run admin:api` + Import folder) | Bulk disk drops into Git CMS | HEIC→WebP, video→MP4 → `content/` / `public/` |
+| `npm run media:migrate:r2` | Push local `public/` derivatives to R2 | Wrangler |
 
-**Structured uploads (discoverable):** set **Year** + **Festival/album** in Admin Media tab so keys look like:
+**Structured uploads (discoverable):** set **Year** + **Festival/album** so keys look like `gallery/2026/vinayaka-chavithi/…` (+ matching `gallery/thumbs/…`). Auto-reindex after upload is optional in Admin.
 
-- `gallery/2026/vinayaka-chavithi/<file>`
-- `videos/2026/sankranthi/<file>`
-
-Flat `gallery/<timestamp>-file` uploads are **not** auto-indexed into Festival→Year until re-uploaded with year/album or migrated into that layout.
-
-**After upload:** click **Reindex gallery** (`POST /api/media/reindex`) → writes `catalog/albums.json` on R2 → optionally `repository_dispatch` `content-sync` → Actions rebuild/deploy.
-
-Thumbnails: produced by local `sync-cms` (600px WebP). Browser R2 upload does not generate thumbs; reindex will use a thumb key if `gallery/thumbs/…` already exists.
+Workers **reject** raw HEIC/MOV for gallery-like categories — use client optimize (JPEG/PNG sources) or `media:optimize`. **`hero.webp` is never overwritten.** Fun Fest keys stay signed.
 
 ---
 
@@ -158,7 +154,8 @@ Version: `public/version.json` + footer “Build …” (`lib/build-id.ts`).
 
 ## Honest limitations
 
-- Workers **cannot** HEIC→WebP; use local import or export JPEG/WebP before Admin upload.
+- Workers **cannot** run Sharp/FFmpeg — no edge HEIC convert or 1 GB video transcode (see [MEDIA_PIPELINE.md](./MEDIA_PIPELINE.md)).
+- Admin browser compresses stills only; HEIC/large video need `npm run media:optimize` or the Media Optimize Action.
 - Flat Admin uploads without year/album are not Festival→Year indexed until reindexed from structured keys.
 - Fun Fest auth tracks the **Git seed**, not R2-only members.
 - Without `catalog/albums.json` and without R2 list secrets, CI **preserves** the last committed `generated/albums.json` (does not invent new albums from thin air).

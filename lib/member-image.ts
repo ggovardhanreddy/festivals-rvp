@@ -129,10 +129,24 @@ export async function prepareMemberImage(
 }
 
 export async function uploadMemberPhotoFile(file: File): Promise<string> {
+  const { prepareFileForUpload } = await import(
+    "@/lib/media-pipeline/client-optimize"
+  );
+  const prepared = await prepareFileForUpload(file, undefined, {
+    category: "members",
+  });
+  if (prepared.kind !== "image") {
+    throw new Error("Member photo must be an image (JPEG/PNG/WebP).");
+  }
   const form = new FormData();
-  form.append("file", file);
+  form.append("file", prepared.full);
+  form.append("thumb", prepared.thumb);
   form.append("category", "members");
-  form.append("originalName", file.name);
+  form.append("originalName", prepared.full.name);
+  form.append("clientOptimized", "1");
+  form.append("originalBytes", String(prepared.originalBytes));
+  form.append("width", String(prepared.width));
+  form.append("height", String(prepared.height));
   const { withBase } = await import("@/lib/base");
   const res = await fetch(withBase("/api/media/upload"), {
     method: "POST",
@@ -145,6 +159,7 @@ export async function uploadMemberPhotoFile(file: File): Promise<string> {
     publicUrl?: string;
     url?: string;
   };
+  URL.revokeObjectURL(prepared.previewUrl);
   if (!res.ok) throw new Error(data.error || "Photo upload failed");
   return (
     data.publicUrl ||

@@ -17,6 +17,7 @@
     "test": "tsx scripts/smoke-test.ts",
     "typecheck": "tsc --noEmit",
     "optimize": "tsx scripts/sync-cms.ts",
+    "media:optimize": "tsx scripts/media-optimize.ts",
     "ingest": "tsx scripts/ingest-zips.ts",
     "import": "tsx scripts/import-folder.ts",
     "import:folder": "tsx scripts/import-folder.ts",

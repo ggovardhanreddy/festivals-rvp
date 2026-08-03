@@ -70,7 +70,7 @@ public/search-index.json
 2. Commit + push to `main`
 3. Actions run sync → optimize → generate → validate → deploy
 
-No browser upload API exists by design.
+**Admin / R2 uploads** also exist (`POST /api/media/upload`) with browser pre-compress and Node/CI FFmpeg for HEIC/video — see **[MEDIA_PIPELINE.md](./MEDIA_PIPELINE.md)** (authoritative for upload + conversion limits).
 
 ## Operational tips
 
