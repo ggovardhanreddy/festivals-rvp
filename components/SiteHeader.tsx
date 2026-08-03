@@ -164,9 +164,6 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link href="/timeline/" onClick={(event) => onDrawerNav(event, "/timeline/")}>
-            Timeline
-          </Link>
           <Link href="/fun-trips/" onClick={(event) => onDrawerNav(event, "/fun-trips/")}>
             Fun Fest
           </Link>
