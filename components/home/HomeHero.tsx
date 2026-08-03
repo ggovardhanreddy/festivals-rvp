@@ -12,12 +12,10 @@ const VantaBirds = dynamic(
   { ssr: false },
 );
 
+/** Exact two-line hero address (home-only copy). */
 const HERO_LINES = [
-  "Gram Panchayat",
-  "Devapatla Post",
-  "Sambepalle Mandal",
-  "Annamayya District",
-  "Andhra Pradesh – 516215",
+  "Reddivaripalli Grama Panchayat, Devepatla (P),",
+  "Sambepalli (M), Annamayya (D), A.P 516215",
 ] as const;
 
 /**
@@ -84,17 +82,17 @@ export function HomeHero() {
             Directory
           </Link>
         </m.div>
-      </div>
 
-      <a
-        className="clean-hero-scroll"
-        href="#overview"
-        aria-label="Scroll to overview"
-      >
-        <span>Scroll</span>
-        <span className="clean-hero-scroll-line" aria-hidden />
-        <span className="clean-hero-scroll-chevron" aria-hidden />
-      </a>
+        <a
+          className="clean-hero-scroll home-hero-scroll"
+          href="#overview"
+          aria-label="Scroll to overview"
+        >
+          <span>Scroll</span>
+          <span className="clean-hero-scroll-line" aria-hidden />
+          <span className="clean-hero-scroll-chevron" aria-hidden />
+        </a>
+      </div>
     </section>
   );
 }

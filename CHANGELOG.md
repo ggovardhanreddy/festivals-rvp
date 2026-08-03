@@ -2,6 +2,18 @@
 
 All notable changes to **RVP Youth — Digital Village Experience** are documented here.
 
+## [1.3.1] — 2026-08-03
+
+### Fixed
+
+- Homepage hero title no longer truncates **Reddivaripalli** (background-clip / overflow / size)
+- Hero address is exactly two lines (Grama Panchayat + Devepatla / Sambepalli / Annamayya / A.P)
+- SCROLL cue sits in-flow under the CTA row so it never overlaps Members
+
+### Changed
+
+- PWA `version.json` / service-worker build id bumped — installed clients should see **Update Now**
+
 ## [1.3.0] — 2026-08-03
 
 ### Fixed

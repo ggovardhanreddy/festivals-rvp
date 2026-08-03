@@ -6948,6 +6948,13 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 .home-hero {
   min-height: 100vh;
   min-height: 100svh;
+  /* Parent .clean-hero uses overflow:hidden; allow title glyphs to paint fully */
+  overflow: visible;
+}
+
+.home-hero .clean-hero-media {
+  overflow: hidden;
+  border-radius: inherit;
 }
 
 .hero-vanta {
@@ -7006,11 +7013,28 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 
 .home-hero-content {
   z-index: 3;
-  max-width: 42rem;
+  max-width: min(42rem, 100%);
+  width: 100%;
+  /* Extra bottom room so CTA + in-flow scroll cue never collide */
+  padding-bottom: clamp(1.25rem, 4vh, 2.5rem);
+  overflow: visible;
 }
 
 .home-hero-title {
-  margin: 0.2rem 0 0.85rem;
+  margin: 0.2rem auto 0.85rem;
+  max-width: 100%;
+  /* Slightly under global --text-hero so "Reddivaripalli" never clips */
+  font-size: clamp(2.35rem, 7.2vw, 4.6rem);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  /* Side padding: background-clip + letter-spacing otherwise trims final glyphs */
+  padding-inline: 0.12em;
+  box-sizing: content-box;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
   /* Rainbow brand treatment — echoes the colorful RVP Youth logo */
   background: linear-gradient(
     100deg,
@@ -7026,21 +7050,19 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.45))
-    drop-shadow(0 8px 22px rgba(0, 0, 0, 0.55))
-    drop-shadow(0 0 28px rgba(255, 214, 77, 0.28));
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  /* Avoid filter+clip stacking which crops last letters under overflow:hidden */
+  filter: none;
+  text-shadow: none;
 }
 
 .home-hero-address {
   list-style: none;
-  margin: 0 auto 1.75rem;
+  margin: 0 auto 1.5rem;
   padding: 0;
   display: grid;
-  gap: 0.28rem;
-  max-width: 28rem;
-  font-size: clamp(1rem, 2.1vw, 1.2rem);
+  gap: 0.2rem;
+  max-width: 36rem;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
   line-height: 1.45;
   font-weight: 500;
   color: #fff;
@@ -7104,9 +7126,15 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   transform: translateY(-2px);
 }
 
-.home-hero .clean-hero-scroll {
+/* In-flow under CTAs — never absolute-overlap Members / Gallery */
+.home-hero .clean-hero-scroll,
+.home-hero .home-hero-scroll {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
   z-index: 4;
-  bottom: 1.35rem;
+  margin: 1.35rem auto 0;
   gap: 0.35rem;
   color: #fff;
   font-size: 0.82rem;

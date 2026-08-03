@@ -2,6 +2,18 @@
 
 All notable changes to the Reddivaripalli Village Portal are documented here.
 
+## [1.3.1] — 2026-08-03
+
+### Fixed
+
+- Homepage hero title shows full **Reddivaripalli** (no truncation)
+- Hero address is two lines; SCROLL cue no longer overlaps Members CTA
+- Documented durable `CLOUDFLARE_API_TOKEN` refresh for Actions auth 9109
+
+### Changed
+
+- PWA build id / `version.json` bump — clients prompted with **Update Now**
+
 Format inspired by [Keep a Changelog](https://keepachangelog.com/). Versioning follows the app `package.json` semver.
 
 The root [CHANGELOG.md](../CHANGELOG.md) is mirrored for operators; prefer updating **both** (or this file as canonical docs copy) on release.

@@ -7,6 +7,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { CMS_ALBUMS, isYearDir } from "../lib/cms";
 import { publicAlbums, years } from "../lib/content";
+import { isPrivateMediaPath } from "../lib/media-url";
+import { mediaPrivateApiPath } from "../lib/media-src";
 import { BUCKETS, VILLAGE_ADDRESS, VILLAGE_NAME } from "../lib/site";
 
 const root = process.cwd();
@@ -74,6 +76,19 @@ function main() {
       const key = `${album.year}/${album.bucket}/${album.slug}`;
       assert.ok(!seen.has(key), `duplicate route ${key}`);
       seen.add(key);
+    }
+  });
+
+  test("Fun Fest paths stay on signed media API", () => {
+    const funPath = "/images/2024/fun-trips/cover.webp";
+    assert.equal(isPrivateMediaPath(funPath), true);
+    assert.equal(isPrivateMediaPath("/images/2024/vinayaka-chavithi/a.jpg"), false);
+    // When R2 public URL is unset locally, private API helper returns null —
+    // signing still happens at runtime via useMediaUrl (credentials + /api/media/sign).
+    const signed = mediaPrivateApiPath(funPath);
+    if (signed) {
+      assert.ok(signed.startsWith("/api/media/sign?key="));
+      assert.ok(signed.includes("fun-trips") || signed.includes("funfest"));
     }
   });
 

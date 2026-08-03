@@ -46,9 +46,11 @@ With fresh media upload: `npm run deploy:cf:r2` (`media:migrate:r2` then `deploy
 
 | Kind | Name | Purpose |
 |---|---|---|
-| Secret | `CLOUDFLARE_API_TOKEN` | Pages deploy |
+| Secret | `CLOUDFLARE_API_TOKEN` | Durable Pages deploy token (not wrangler OAuth) |
 | Secret | `CLOUDFLARE_ACCOUNT_ID` | Account scope |
 | Variable | `NEXT_PUBLIC_R2_PUBLIC_URL` | Build rewrite + strip-local |
+
+If Actions fails with `Invalid access token [code: 9109]`, recreate the API token (Pages Edit + Account Settings Read) and `gh secret set CLOUDFLARE_API_TOKEN`. See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md#auth-error-10000--invalid-access-token-code-9109). Local deploys can use `npx wrangler login` + `npm run deploy:cf` in the meantime.
 
 ## Cloudflare Pages secrets (production Functions)
 

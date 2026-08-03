@@ -43,9 +43,32 @@
 
 ## Cloudflare deploy step fails
 
-- Check `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`
+### Auth error `10000` / `Invalid access token [code: 9109]`
+
+Wrangler OAuth (`npx wrangler login`) works for **local** `npm run deploy:cf`, but GitHub Actions needs a **durable API token** in `CLOUDFLARE_API_TOKEN`. OAuth tokens cannot create API tokens via API (403), so create one in the dashboard:
+
+1. Open [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens) → **Create Token**
+2. Use template **Edit Cloudflare Workers**, or custom permissions:
+   - **Account** → **Cloudflare Pages** → **Edit**
+   - **Account** → **Account Settings** → **Read**
+3. Account Resources → include this account (`CLOUDFLARE_ACCOUNT_ID`)
+4. Create → copy the token once
+5. From the repo root:
+
+```bash
+gh secret set CLOUDFLARE_API_TOKEN
+# paste token, Enter
+gh secret set CLOUDFLARE_ACCOUNT_ID -b "9e9bfe3d5a15e0ddee2e6270e74f6f40"
+gh workflow run "Deploy Cloudflare Pages"
+```
+
+6. Confirm the run is green: `gh run list --workflow=deploy-cloudflare.yml --limit 3`
+
+### Other deploy failures
+
 - Project name must be `festivals-rvp`
 - Confirm `out/` exists and is under size limits (media on R2)
+- Local fallback while the secret is broken: `npm run deploy:cf` (uses wrangler OAuth)
 
 ## GitHub Pages assets 404
 
