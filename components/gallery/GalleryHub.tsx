@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { Lock } from "lucide-react";
+import { FunFestLoginDialog } from "@/components/auth/FunFestLoginDialog";
+import { useMemberAuth } from "@/components/auth/MemberAuthProvider";
 import { Gallery } from "@/components/Gallery";
 import { MediaImage } from "@/components/media/MediaImage";
+import { withBase } from "@/lib/base";
 import { CULTURE_FESTIVALS, festivalThumbPath } from "@/lib/festivals";
-import { albumHref, BUCKETS } from "@/lib/site";
+import { albumHref, BUCKETS, FESTIVAL_HEROES } from "@/lib/site";
 import type { Album, MediaWithAlbum } from "@/lib/types";
 
 type FestivalDef = {
@@ -14,6 +19,8 @@ type FestivalDef = {
   buckets: string[];
   /** Official festival cover/thumb — never replaced by regenerated gallery frames. */
   coverHint?: string;
+  /** Members-only — opens Fun Fest login instead of public drill-down. */
+  locked?: boolean;
 };
 
 const CULTURE_BY_KEY = Object.fromEntries(
@@ -65,19 +72,11 @@ const GALLERY_FESTIVALS: FestivalDef[] = [
     coverHint: festivalThumbPath(CULTURE_BY_KEY["devapatlamma-jathara"]!.folder),
   },
   {
-    key: "village-events",
-    title: "Village Events",
-    buckets: ["village-events", "events"],
-  },
-  {
-    key: "sports",
-    title: "Sports",
-    buckets: ["sports"],
-  },
-  {
-    key: "cultural-programs",
-    title: "Cultural Programs",
-    buckets: ["cultural-programs", "cultural"],
+    key: "fun-trips",
+    title: "Fun Fest",
+    buckets: ["fun-trips"],
+    coverHint: FESTIVAL_HEROES["fun-trips"],
+    locked: true,
   },
   {
     key: "other-celebrations",
@@ -100,6 +99,14 @@ const KNOWN_BUCKETS = new Set(
 
 const FALLBACK = "/brand/village-aerial.webp";
 
+function isMobileShell() {
+  return (
+    typeof document !== "undefined" &&
+    (document.documentElement.classList.contains("rvp-mobile") ||
+      window.matchMedia("(max-width:820px)").matches)
+  );
+}
+
 function countTypes(media: MediaWithAlbum[]) {
   let photos = 0;
   let videos = 0;
@@ -111,6 +118,7 @@ function countTypes(media: MediaWithAlbum[]) {
 }
 
 function albumsForFestival(albums: Album[], fest: FestivalDef) {
+  if (fest.locked) return [];
   if (fest.key === "other-celebrations") {
     return albums.filter(
       (a) =>
@@ -137,11 +145,14 @@ export function GalleryHub({
   media: MediaWithAlbum[];
   years?: string[];
 }) {
+  const router = useRouter();
+  const { session, ready } = useMemberAuth();
   const [festivalKey, setFestivalKey] = useState<string | null>(null);
   const [year, setYear] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState<"all" | "image" | "video">(
     "all",
   );
+  const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
 
   const publicAlbums = useMemo(
     () =>
@@ -186,13 +197,28 @@ export function GalleryHub({
         videos,
         cover,
         blurb: bucketMeta?.blurb,
-        hasContent: festAlbums.length > 0,
+        hasContent: fest.locked || festAlbums.length > 0,
       };
     });
   }, [publicAlbums, publicMedia]);
 
+  const openFunFest = () => {
+    if (!ready) return;
+    if (!session) {
+      setFunFestLoginOpen(true);
+      return;
+    }
+    if (isMobileShell()) {
+      window.setTimeout(() => {
+        window.location.assign(withBase("/fun-trips/"));
+      }, 0);
+      return;
+    }
+    router.push("/fun-trips/");
+  };
+
   const activeFest = festivalKey
-    ? GALLERY_FESTIVALS.find((f) => f.key === festivalKey) || null
+    ? GALLERY_FESTIVALS.find((f) => f.key === festivalKey && !f.locked) || null
     : null;
 
   const yearCards = useMemo(() => {
@@ -435,37 +461,70 @@ export function GalleryHub({
         </div>
 
         <div className="gallery-album-grid gallery-festival-grid">
-          {festivalCards.map((card) => (
-            <button
-              key={card.fest.key}
-              type="button"
-              className="gallery-album-card gallery-album-card--button"
-              onClick={() => {
-                setFestivalKey(card.fest.key);
-                setYear(null);
-                setTypeFilter("all");
-              }}
-            >
-              <div className="gallery-album-cover">
-                <MediaImage
-                  src={card.cover}
-                  fallback={FALLBACK}
-                  alt=""
-                  loading="lazy"
-                />
-              </div>
-              <div className="gallery-album-meta">
-                <h4>{card.fest.title}</h4>
-                <p className="muted">
-                  {card.years.length}{" "}
-                  {card.years.length === 1 ? "year" : "years"} · {card.photos}{" "}
-                  photos · {card.videos} videos
-                </p>
-              </div>
-            </button>
-          ))}
+          {festivalCards.map((card) => {
+            const locked = Boolean(card.fest.locked);
+            return (
+              <button
+                key={card.fest.key}
+                type="button"
+                className={
+                  locked
+                    ? "gallery-album-card gallery-album-card--button gallery-album-card--locked"
+                    : "gallery-album-card gallery-album-card--button"
+                }
+                aria-label={
+                  locked
+                    ? `${card.fest.title}, members only — sign in to open`
+                    : undefined
+                }
+                onClick={() => {
+                  if (locked) {
+                    openFunFest();
+                    return;
+                  }
+                  setFestivalKey(card.fest.key);
+                  setYear(null);
+                  setTypeFilter("all");
+                }}
+              >
+                <div className="gallery-album-cover">
+                  <MediaImage
+                    src={card.cover}
+                    fallback={FALLBACK}
+                    alt=""
+                    loading="lazy"
+                  />
+                  {locked ? (
+                    <span className="gallery-lock-badge" aria-hidden="true">
+                      <Lock size={14} strokeWidth={2.25} />
+                    </span>
+                  ) : null}
+                </div>
+                <div className="gallery-album-meta">
+                  <h4>
+                    {card.fest.title}
+                    {locked ? (
+                      <span className="gallery-lock-label"> Locked</span>
+                    ) : null}
+                  </h4>
+                  <p className="muted">
+                    {locked
+                      ? "Members only · Sign in to open"
+                      : `${card.years.length} ${
+                          card.years.length === 1 ? "year" : "years"
+                        } · ${card.photos} photos · ${card.videos} videos`}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </section>
+      <FunFestLoginDialog
+        open={funFestLoginOpen}
+        onClose={() => setFunFestLoginOpen(false)}
+        next="/fun-trips/"
+      />
     </div>
   );
 }

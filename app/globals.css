@@ -5195,6 +5195,7 @@ html.intro-active .glass-music {
 }
 
 .gallery-album-cover {
+  position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: color-mix(in srgb, var(--color-forest) 12%, var(--color-bg));
@@ -5253,6 +5254,41 @@ html.intro-active .glass-music {
 
 .gallery-festival-grid {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+
+.gallery-album-card--locked .gallery-album-cover img {
+  filter: saturate(0.85) brightness(0.82);
+}
+
+.gallery-album-card--locked .gallery-album-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink) 28%, transparent);
+  pointer-events: none;
+}
+
+.gallery-lock-badge {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  color: #fff;
+  background: color-mix(in srgb, var(--ink) 72%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+.gallery-lock-label {
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
 }
 
 .gallery-album-links {
