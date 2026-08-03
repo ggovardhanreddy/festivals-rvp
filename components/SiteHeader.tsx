@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Menu, X } from "lucide-react";
 import { COMMUNITY_NAV, NAV } from "@/lib/site";
 import { ThemeToggle } from "./Theme";
@@ -15,14 +16,24 @@ function isActive(href: string, normalized: string) {
   return normalized.startsWith(href);
 }
 
+function unlockBodyScroll() {
+  document.body.style.overflow = "";
+  document.documentElement.classList.remove("nav-drawer-open");
+}
+
 export function SiteHeader() {
   const pathname = usePathname() || "/";
   const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const menuId = useId();
   const btnRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -31,21 +42,24 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close drawer on route change
+  // Close drawer on route change and always restore scroll
   useEffect(() => {
     setOpen(false);
+    unlockBodyScroll();
   }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     document.documentElement.classList.toggle("nav-drawer-open", open);
-    return () => {
-      document.body.style.overflow = "";
-      document.documentElement.classList.remove("nav-drawer-open");
-    };
+    return () => unlockBodyScroll();
   }, [open]);
 
   useEffect(() => {
+    const drawer = drawerRef.current;
+    if (drawer) {
+      if (open) drawer.removeAttribute("inert");
+      else drawer.setAttribute("inert", "");
+    }
     if (!open) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -54,58 +68,16 @@ export function SiteHeader() {
       }
     };
     window.addEventListener("keydown", onKey);
-    // Focus first link for keyboard / screen-reader users
-    const first = drawerRef.current?.querySelector<HTMLAnchorElement>("a");
+    const first = drawer?.querySelector<HTMLAnchorElement>("a");
     first?.focus();
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   const close = () => setOpen(false);
+  const toggle = () => setOpen((v) => !v);
 
-  return (
+  const drawer = (
     <>
-      <header
-        className="nav nav-sticky"
-        data-scrolled={scrolled || undefined}
-      >
-        <Link href="/" className="brand-link" aria-label="RVP Youth home">
-          <Logo />
-        </Link>
-        <nav className="nav-links" aria-label="Primary">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              data-active={isActive(item.href, normalized)}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="nav-actions">
-          <NotificationBell />
-          <ThemeToggle />
-          <Link
-            href="/admin/"
-            className="btn ghost nav-superadmin-btn"
-            aria-label="Super Admin login"
-          >
-            Super Admin
-          </Link>
-          <button
-            ref={btnRef}
-            type="button"
-            className="icon-btn nav-menu-btn"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls={menuId}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </header>
-
       <div
         className="nav-drawer-backdrop"
         data-open={open || undefined}
@@ -171,6 +143,55 @@ export function SiteHeader() {
           </button>
         </nav>
       </div>
+    </>
+  );
+
+  return (
+    <>
+      <header
+        className="nav nav-sticky"
+        data-scrolled={scrolled || undefined}
+      >
+        <Link href="/" className="brand-link" aria-label="RVP Youth home">
+          <Logo />
+        </Link>
+        <nav className="nav-links" aria-label="Primary">
+          {NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              data-active={isActive(item.href, normalized)}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="nav-actions">
+          <NotificationBell />
+          <ThemeToggle />
+          <Link
+            href="/admin/"
+            className="btn ghost nav-superadmin-btn"
+            aria-label="Super Admin login"
+          >
+            Super Admin
+          </Link>
+          <button
+            ref={btnRef}
+            type="button"
+            className="icon-btn nav-menu-btn"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls={menuId}
+            onClick={toggle}
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </header>
+
+      {/* Portal escapes page stacking contexts so the drawer stays tappable */}
+      {mounted ? createPortal(drawer, document.body) : drawer}
     </>
   );
 }

@@ -246,11 +246,12 @@ export function VantaBackground({
         }
 
         effectRef.current?.destroy();
+        // Decorative only — never steal taps from nav / page chrome
         effectRef.current = factory({
           el: ref.current,
           THREE: window.THREE,
-          mouseControls: !lowPower,
-          touchControls: true,
+          mouseControls: false,
+          touchControls: false,
           gyroControls: false,
           minHeight: 200,
           minWidth: 200,
@@ -258,6 +259,13 @@ export function VantaBackground({
           scaleMobile: 1,
           ...effectOptions(effect, dark, lowPower),
         });
+        const host = ref.current;
+        if (host) {
+          host.style.pointerEvents = "none";
+          host.querySelectorAll("canvas").forEach((node) => {
+            (node as HTMLElement).style.pointerEvents = "none";
+          });
+        }
         if (!cancelled) setReady(true);
       } catch {
         if (!cancelled) {
