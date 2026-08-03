@@ -36,9 +36,39 @@ jobs:
       # Skip slow EXIF walks; media already lives on R2 for production.
       CMS_READ_EXIF: "0"
     steps:
+      # Skip ~2GiB of media blobs already served from R2. Non-cone patterns keep
+      # content/*/metadata.json while omitting heavy originals under content/.
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/public/images/**
+            !/public/videos/**
+            !/public/thumbs/**
+            !/public/audio/**
+            !/public/festivals/**
+            !/public/docs/**
+            !/content/**/*.jpg
+            !/content/**/*.JPG
+            !/content/**/*.jpeg
+            !/content/**/*.JPEG
+            !/content/**/*.png
+            !/content/**/*.PNG
+            !/content/**/*.webp
+            !/content/**/*.WEBP
+            !/content/**/*.gif
+            !/content/**/*.GIF
+            !/content/**/*.heic
+            !/content/**/*.HEIC
+            !/content/**/*.mp4
+            !/content/**/*.MP4
+            !/content/**/*.mov
+            !/content/**/*.MOV
+            !/content/**/*.avi
+            !/content/**/*.AVI
+            !/originals/**
 
       - uses: actions/setup-node@v4
         with:
@@ -57,4 +87,6 @@ jobs:
         run: |
           npm run build
           npm run media:strip-local
+          # Confirm artifact stayed small (media should already be on R2).
+          du -sh out
           npx wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true
