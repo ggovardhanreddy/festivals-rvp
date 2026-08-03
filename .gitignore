@@ -33,8 +33,11 @@ review/**
 !review/near-duplicates/.gitkeep
 content/_oversized/
 
-# Build-time generated catalogs (rebuilt by prepare:site)
-generated/
+# Build-time generated catalogs (rebuilt by prepare:site).
+# Keep the R2-backed album index in git so CI sparse checkouts still ship a gallery.
+generated/*
+!generated/albums.json
+!generated/albums.r2.json
 
 # Editor
 .vscode/

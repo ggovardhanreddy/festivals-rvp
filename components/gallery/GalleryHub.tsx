@@ -12,20 +12,57 @@ type FestivalDef = {
   key: string;
   title: string;
   buckets: string[];
+  /** Official festival cover/thumb — never replaced by regenerated gallery frames. */
   coverHint?: string;
 };
 
+const CULTURE_BY_KEY = Object.fromEntries(
+  CULTURE_FESTIVALS.map((f) => [f.key, f]),
+);
+
+/** Gallery → Festival → Year → Media (festival-first, not year-first). */
 const GALLERY_FESTIVALS: FestivalDef[] = [
-  ...CULTURE_FESTIVALS.map((f) => ({
-    key: f.key,
-    title: f.title,
-    buckets: [f.key],
-    coverHint: festivalThumbPath(f.folder),
-  })),
   {
-    key: "rvp-birthdays",
-    title: "RVP Birthdays",
-    buckets: ["rvp-birthdays"],
+    key: "vinayaka-chavithi",
+    title: "Vinayaka Chavithi",
+    buckets: ["vinayaka-chavithi"],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY["vinayaka-chavithi"]!.folder),
+  },
+  {
+    key: "sankranthi",
+    title: "Sankranti",
+    buckets: ["sankranthi"],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY.sankranthi!.folder),
+  },
+  {
+    key: "ugadi",
+    title: "Ugadi",
+    buckets: ["ugadi"],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY.ugadi!.folder),
+  },
+  {
+    key: "sri-rama-navami",
+    title: "Sri Rama Navami",
+    buckets: ["sri-rama-navami"],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY["sri-rama-navami"]!.folder),
+  },
+  {
+    key: "varalakshmi-vratam",
+    title: "Varalakshmi Vratam",
+    buckets: ["varalakshmi-vratam"],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY["varalakshmi-vratam"]!.folder),
+  },
+  {
+    key: "mathamma-jathara",
+    title: "Mathamma Jathara",
+    buckets: ["mathamma-jathara"],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY["mathamma-jathara"]!.folder),
+  },
+  {
+    key: "devapatlamma-jathara",
+    title: "Devapatlamma Jathara",
+    buckets: ["devapatlamma-jathara"],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY["devapatlamma-jathara"]!.folder),
   },
   {
     key: "village-events",
@@ -43,9 +80,17 @@ const GALLERY_FESTIVALS: FestivalDef[] = [
     buckets: ["cultural-programs", "cultural"],
   },
   {
-    key: "miscellaneous",
-    title: "Miscellaneous",
-    buckets: ["miscellaneous", "other"],
+    key: "other-celebrations",
+    title: "Other Celebrations",
+    buckets: [
+      "other-celebrations",
+      "miscellaneous",
+      "other",
+      "deepavali",
+      "dasara",
+      "rvp-birthdays",
+    ],
+    coverHint: festivalThumbPath(CULTURE_BY_KEY.deepavali!.folder),
   },
 ];
 
@@ -66,12 +111,14 @@ function countTypes(media: MediaWithAlbum[]) {
 }
 
 function albumsForFestival(albums: Album[], fest: FestivalDef) {
-  if (fest.key === "miscellaneous") {
+  if (fest.key === "other-celebrations") {
     return albums.filter(
       (a) =>
         a.bucket !== "fun-trips" &&
         (a.media?.length ?? 0) > 0 &&
-        (!a.bucket || !KNOWN_BUCKETS.has(a.bucket)),
+        (fest.buckets.includes(a.bucket || "") ||
+          !a.bucket ||
+          !KNOWN_BUCKETS.has(a.bucket)),
     );
   }
   return albums.filter(
@@ -124,11 +171,12 @@ export function GalleryHub({
         ),
       );
       const { photos, videos } = countTypes(festMedia);
+      // Prefer official festival cover; only fall back to gallery frames when none assigned.
       const cover =
+        fest.coverHint ||
         festAlbums.find((a) => a.cover)?.cover ||
         festMedia.find((m) => m.type === "image")?.thumb ||
         festMedia.find((m) => m.type === "image")?.file ||
-        fest.coverHint ||
         FALLBACK;
       const bucketMeta = BUCKETS.find((b) => b.key === fest.key);
       return {
@@ -172,6 +220,7 @@ export function GalleryHub({
           yearAlbums.find((a) => a.cover)?.cover ||
           yearMedia.find((m) => m.type === "image")?.thumb ||
           yearMedia.find((m) => m.type === "image")?.file ||
+          activeFest.coverHint ||
           FALLBACK;
         return { year: yr, albums: yearAlbums, photos, videos, cover };
       });
@@ -346,7 +395,7 @@ export function GalleryHub({
                   <div className="gallery-album-cover">
                     <MediaImage
                       src={card.cover}
-                      fallback={FALLBACK}
+                      fallback={activeFest.coverHint || FALLBACK}
                       alt=""
                       loading="lazy"
                     />

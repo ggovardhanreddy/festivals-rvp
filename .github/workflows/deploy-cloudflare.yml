@@ -37,7 +37,9 @@ jobs:
       CMS_READ_EXIF: "0"
     steps:
       # Skip ~2GiB of media blobs already served from R2. Non-cone patterns keep
-      # content/*/metadata.json while omitting heavy originals under content/.
+      # content/*/metadata.json + generated/albums.json while omitting heavy
+      # originals. sync-cms preserves the committed albums catalog when no local
+      # media is present (otherwise the live gallery ships empty).
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
@@ -69,6 +71,8 @@ jobs:
             !/content/**/*.avi
             !/content/**/*.AVI
             !/originals/**
+            /generated/albums.json
+            /generated/albums.r2.json
 
       - uses: actions/setup-node@v4
         with:

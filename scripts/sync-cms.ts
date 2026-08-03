@@ -27,6 +27,8 @@ import {
   PUBLIC_IMAGES_DIR,
   PUBLIC_THUMBS_DIR,
   PUBLIC_VIDEOS_DIR,
+  VIDEO_EXTS,
+  AUDIO_EXTS,
   detectMediaKind,
   mimeForExt,
 } from "../lib/paths";
@@ -584,49 +586,15 @@ async function buildAlbumFromDir(
       : files;
 
   if (!mediaFiles.length) {
-    // Fallback: use already-optimized public images if present
-    const publicDir = personName
-      ? path.join(PUBLIC_IMAGES_DIR, year, bucket, personName)
-      : path.join(PUBLIC_IMAGES_DIR, year, bucket);
-    if (fs.existsSync(publicDir)) {
-      const publicFiles = walkFiles(publicDir).filter((f) =>
-        IMAGE_EXTS.has(path.extname(f).toLowerCase()),
-      );
-      if (!publicFiles.length) return null;
-      const override = readOverride(albumDir);
-      const media: Media[] = [];
-      for (const file of publicFiles) {
-        const ext = path.extname(file);
-        const base = path.basename(file, ext);
-        const rel = path.relative(PUBLIC_IMAGES_DIR, file).replace(/\\/g, "/");
-        const thumbRel = rel.replace(/\.[^.]+$/, ".webp");
-        const thumbPath = path.join(PUBLIC_THUMBS_DIR, thumbRel);
-        media.push({
-          id: crypto.createHash("sha256").update(rel).digest("hex").slice(0, 16),
-          file: `/images/${rel}`,
-          thumb: fs.existsSync(thumbPath)
-            ? `/thumbs/${thumbRel}`
-            : `/images/${rel}`,
-          type: "image",
-          title: titleCase(base),
-          date: await fileDate(file, year),
-          tags: [bucket, year, slug],
-        });
-      }
-      media.sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
-      const defaults = albumMetaDefaults(year, bucket, slug);
-      return {
-        ...defaults,
-        ...override,
-        year,
-        bucket,
-        slug,
-        media,
-        cover: override.cover || pickBestCover(media),
-        published: override.published ?? true,
-      };
-    }
-    return null;
+    // Fallback: index already-optimized public derivatives (CI sparse checkout
+    // omits content originals; local/public or committed catalog may still exist).
+    return buildAlbumFromPublicDerivatives(
+      year,
+      bucket,
+      albumDir,
+      slug,
+      personName,
+    );
   }
 
   const override = readOverride(albumDir);
@@ -671,6 +639,121 @@ async function buildAlbumFromDir(
     cover: override.cover || pickBestCover(media),
     published: override.published ?? true,
   };
+}
+
+async function buildAlbumFromPublicDerivatives(
+  year: string,
+  bucket: BucketKey,
+  albumDir: string,
+  slug: string,
+  personName?: string,
+): Promise<Album | null> {
+  const override = readOverride(albumDir);
+  const media: Media[] = [];
+  const seen = new Set<string>();
+
+  const imageRoot = personName
+    ? path.join(PUBLIC_IMAGES_DIR, year, bucket, personName)
+    : path.join(PUBLIC_IMAGES_DIR, year, bucket);
+  const videoRoot = personName
+    ? path.join(PUBLIC_VIDEOS_DIR, year, bucket, personName)
+    : path.join(PUBLIC_VIDEOS_DIR, year, bucket);
+  const audioRoot = personName
+    ? path.join(PUBLIC_AUDIO_DIR, year, bucket, personName)
+    : path.join(PUBLIC_AUDIO_DIR, year, bucket);
+
+  for (const file of walkFiles(imageRoot)) {
+    const ext = path.extname(file).toLowerCase();
+    if (!IMAGE_EXTS.has(ext) || ext === ".avif") continue;
+    const rel = path.relative(PUBLIC_IMAGES_DIR, file).replace(/\\/g, "/");
+    if (seen.has(rel)) continue;
+    seen.add(rel);
+    const base = path.basename(file, ext);
+    const thumbRel = rel.replace(/\.[^.]+$/, ".webp");
+    const thumbPath = path.join(PUBLIC_THUMBS_DIR, thumbRel);
+    media.push({
+      id: crypto.createHash("sha256").update(`img:${rel}`).digest("hex").slice(0, 16),
+      file: `/images/${rel}`,
+      thumb: fs.existsSync(thumbPath) ? `/thumbs/${thumbRel}` : `/images/${rel}`,
+      type: "image",
+      title: titleCase(base),
+      date: await fileDate(file, year),
+      tags: [bucket, year, slug, "image"],
+      mime: mimeForExt(ext),
+    });
+  }
+
+  for (const file of walkFiles(videoRoot)) {
+    const ext = path.extname(file).toLowerCase();
+    if (!VIDEO_EXTS.has(ext)) continue;
+    const rel = path.relative(PUBLIC_VIDEOS_DIR, file).replace(/\\/g, "/");
+    if (seen.has(rel)) continue;
+    seen.add(rel);
+    const base = path.basename(file, ext);
+    const thumbRel = `${rel.replace(/\.[^.]+$/, "")}.webp`;
+    const thumbPath = path.join(PUBLIC_THUMBS_DIR, thumbRel);
+    const thumb = fs.existsSync(thumbPath) ? `/thumbs/${thumbRel}` : "";
+    media.push({
+      id: crypto.createHash("sha256").update(`vid:${rel}`).digest("hex").slice(0, 16),
+      file: `/videos/${rel}`,
+      thumb,
+      poster: thumb || undefined,
+      type: "video",
+      title: titleCase(base),
+      date: await fileDate(file, year),
+      tags: [bucket, year, slug, "video"],
+      mime: mimeForExt(ext),
+    });
+  }
+
+  for (const file of walkFiles(audioRoot)) {
+    const ext = path.extname(file).toLowerCase();
+    if (!AUDIO_EXTS.has(ext)) continue;
+    const rel = path.relative(PUBLIC_AUDIO_DIR, file).replace(/\\/g, "/");
+    if (seen.has(rel)) continue;
+    seen.add(rel);
+    const base = path.basename(file, ext);
+    media.push({
+      id: crypto.createHash("sha256").update(`aud:${rel}`).digest("hex").slice(0, 16),
+      file: `/audio/${rel}`,
+      thumb: "",
+      type: "audio",
+      title: titleCase(base),
+      date: await fileDate(file, year),
+      tags: [bucket, year, slug, "audio"],
+      mime: mimeForExt(ext),
+    });
+  }
+
+  if (!media.length) return null;
+  media.sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
+  const defaults = albumMetaDefaults(year, bucket, slug);
+  return {
+    ...defaults,
+    ...override,
+    year,
+    bucket,
+    slug,
+    media,
+    cover: override.cover || pickBestCover(media),
+    published: override.published ?? true,
+  };
+}
+
+function mediaCountOf(albums: Album[]) {
+  return albums.reduce((n, album) => n + (album.media?.length ?? 0), 0);
+}
+
+/** When CI omits binaries, keep the last good R2-backed catalog instead of wiping the gallery. */
+function loadPreviousAlbumsCatalog(): Album[] | null {
+  if (!fs.existsSync(ALBUMS_OUT)) return null;
+  try {
+    const prev = JSON.parse(fs.readFileSync(ALBUMS_OUT, "utf8")) as Album[];
+    if (!Array.isArray(prev) || mediaCountOf(prev) === 0) return null;
+    return prev;
+  } catch {
+    return null;
+  }
 }
 
 async function syncYear(year: string): Promise<Album[]> {
@@ -722,8 +805,9 @@ async function syncYear(year: string): Promise<Album[]> {
 
 async function main() {
   console.log("Syncing GitHub CMS content…");
+  const previous = loadPreviousAlbumsCatalog();
   const years = listYears();
-  const albums: Album[] = [];
+  let albums: Album[] = [];
 
   for (const year of years) {
     console.log(`  ${year}…`);
@@ -733,6 +817,19 @@ async function main() {
   }
 
   albums.sort((a, b) => b.year.localeCompare(a.year) || a.order - b.order);
+
+  // Production CI uses sparse checkout (no content/public binaries). Never replace a
+  // healthy R2-backed catalog with an empty scan — that ships "No gallery photos yet".
+  if (mediaCountOf(albums) === 0 && previous) {
+    console.warn(
+      `Sync found 0 media files — preserving previous generated/albums.json (${previous.length} albums, ${mediaCountOf(previous)} media).`,
+    );
+    albums = previous;
+    warnings.push(
+      "Preserved previous albums.json because this sync found no local media (sparse checkout / R2-only).",
+    );
+  }
+
   fs.mkdirSync(GENERATED_DIR, { recursive: true });
   fs.writeFileSync(ALBUMS_OUT, JSON.stringify(albums, null, 2));
   fs.writeFileSync(WARNINGS_OUT, JSON.stringify(warnings, null, 2));
