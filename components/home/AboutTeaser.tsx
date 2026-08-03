@@ -5,7 +5,6 @@ import {
   VILLAGE_NAME,
   VILLAGE_ALSO_KNOWN_AS,
   SITE_NAME,
-  OFFICIAL_TITLE,
   OFFICIAL_MISSION,
   VILLAGE_ADDRESS,
   VILLAGE_ADDRESS_LINE,
@@ -18,7 +17,7 @@ export function AboutTeaser() {
     <Reveal className="section home-about" id="about">
       <div className="about-teaser">
         <div className="about-teaser-copy">
-          <p className="eyebrow">{OFFICIAL_TITLE}</p>
+          <p className="eyebrow">{VILLAGE_ALSO_KNOWN_AS}</p>
           <h2>About {VILLAGE_ALSO_KNOWN_AS}</h2>
           <p className="lede">{OFFICIAL_MISSION}</p>
           <div className="about-teaser-body">
@@ -49,10 +48,7 @@ export function AboutTeaser() {
             </p>
           </div>
           <div className="btn-row">
-            <Link className="btn" href="/years/">
-              Annual Archive
-            </Link>
-            <Link className="btn ghost" href="/heritage/">
+            <Link className="btn" href="/heritage/">
               Heritage
             </Link>
             <Link className="btn ghost" href="/contact/">

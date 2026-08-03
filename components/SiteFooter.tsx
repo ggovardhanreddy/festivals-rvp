@@ -32,12 +32,10 @@ export function SiteFooter() {
           <p className="footer-heading">Quick links</p>
           <div className="footer-links">
             <Link href="/">Home</Link>
-            <Link href="/years/">Annual Archive</Link>
             <Link href="/gallery/">Gallery</Link>
             <Link href="/events/">Events</Link>
             <Link href="/heritage/">Heritage Archive</Link>
             <Link href="/directory/">Village Directory</Link>
-            <Link href="/lost-found/">Lost &amp; Found</Link>
             <Link href="/blood-donors/">Blood Donors</Link>
             <Link href="/documents/">Panchayat Documents</Link>
             <Link href="/developments/">Developments</Link>

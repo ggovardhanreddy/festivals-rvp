@@ -22,8 +22,8 @@ export function HistoryTimeline({ entries }: { entries: TimelineEntry[] }) {
             a time.
           </p>
         </div>
-        <Link className="btn ghost" href="/years/">
-          All years
+        <Link className="btn ghost" href="/timeline/">
+          Full timeline
         </Link>
       </div>
 
