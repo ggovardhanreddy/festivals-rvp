@@ -6,7 +6,6 @@ import { LazyMotion, domAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import { AudioDeckProvider } from "./media/AudioDeck";
 import { MusicProvider } from "./music/MusicProvider";
-import { GlassMusicPlayer } from "./music/GlassMusicPlayer";
 import { MusicRouteSync } from "./music/MusicRouteSync";
 import { InstallAppPrompt } from "./pwa/InstallAppPrompt";
 import { ServiceWorkerManager } from "./pwa/ServiceWorkerManager";
@@ -78,7 +77,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
                       <PlausibleScript />
                       <CloudflareWebAnalytics />
                       {children}
-                      <GlassMusicPlayer />
                       <InstallAppPrompt />
                       <LocationConsentDialog />
                     </AudioDeckProvider>

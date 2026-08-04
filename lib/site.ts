@@ -157,8 +157,6 @@ export const COMMUNITY_NAV = [
   { href: "/contact/", label: "Contact" },
   { href: "/heritage/", label: "Heritage Archive" },
   { href: "/fun-trips/", label: "Fun Fest" },
-  { href: "/documents/", label: "Panchayat Documents" },
-  { href: "/lost-found/", label: "Lost & Found" },
   { href: "/suggestions/", label: "Suggestions" },
   { href: "/timeline/", label: "Timeline" },
 ] as const;

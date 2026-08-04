@@ -22,7 +22,7 @@ const R2_PREFIXES = [
   "/brand/",
   "/festivals/",
   "/members/",
-  "/logo/",
+  // /logo/ stays on Pages so brand updates ship with each deploy
 ] as const;
 
 export function r2Enabled(): boolean {
