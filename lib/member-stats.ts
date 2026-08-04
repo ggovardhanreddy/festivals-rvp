@@ -107,11 +107,11 @@ function pickStr(
 function preferPhoto(
   remote: string | null | undefined,
   seed: string | null | undefined,
-): string | null | undefined {
+): string | null {
   if (remote === null) return null;
   const r = (remote || "").trim();
   const s = (seed || "").trim();
-  if (!r) return s || undefined;
+  if (!r) return s || null;
   if (!s) return r;
   // Prefer absolute CDN URLs over site-relative stubs (strip-local leaves 32-byte files).
   const rAbs = /^https?:\/\//i.test(r);
