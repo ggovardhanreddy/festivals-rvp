@@ -1,12 +1,25 @@
 /**
  * Cloudflare Pages 404s some hashed Next/Turbopack assets whose basename
- * ends with "_" (e.g. 2qyhsvaq-ymc_.css). Rename those files and rewrite
- * references inside the static export before deploy.
+ * ends with "_" (e.g. 2qyhsvaq-ymc_.css). Rename only `_next/static` media
+ * assets and rewrite references before deploy.
+ *
+ * Do NOT rename `__next.*.txt` flight/RSC payloads — those break routing.
  */
 import fs from "node:fs";
 import path from "node:path";
 
 const OUT = path.join(process.cwd(), "out");
+const STATIC_ROOT = path.join(OUT, "_next", "static");
+const ASSET_EXT = new Set([
+  ".css",
+  ".js",
+  ".mjs",
+  ".woff",
+  ".woff2",
+  ".ttf",
+  ".otf",
+  ".map",
+]);
 const TEXT_EXT = new Set([
   ".html",
   ".js",
@@ -34,32 +47,34 @@ function main() {
     console.error("out/ missing — run build first");
     process.exit(1);
   }
+  if (!fs.existsSync(STATIC_ROOT)) {
+    console.log("No out/_next/static — nothing to fix.");
+    return;
+  }
 
-  const all = walk(OUT);
-  const renames: Array<{ from: string; to: string; oldBase: string; newBase: string }> =
-    [];
+  const renames: Array<{ oldBase: string; newBase: string }> = [];
 
-  for (const file of all) {
+  for (const file of walk(STATIC_ROOT)) {
     const base = path.basename(file);
-    const ext = path.extname(base);
-    const stem = base.slice(0, -ext.length || undefined);
+    const ext = path.extname(base).toLowerCase();
+    if (!ASSET_EXT.has(ext)) continue;
+    const stem = base.slice(0, -ext.length);
     if (!stem.endsWith("_")) continue;
-    const newBase = `${stem.slice(0, -1)}0${ext}`;
+    const newBase = `${stem.slice(0, -1)}0${path.extname(base)}`;
     const to = path.join(path.dirname(file), newBase);
     if (fs.existsSync(to)) {
       console.warn("skip collide", base, "→", newBase);
       continue;
     }
     fs.renameSync(file, to);
-    renames.push({ from: file, to, oldBase: base, newBase });
+    renames.push({ oldBase: base, newBase });
   }
 
   if (!renames.length) {
-    console.log("No trailing-underscore assets to fix.");
+    console.log("No trailing-underscore static assets to fix.");
     return;
   }
 
-  // Longest first so nested replacements stay stable.
   renames.sort((a, b) => b.oldBase.length - a.oldBase.length);
 
   let rewritten = 0;
@@ -78,7 +93,7 @@ function main() {
   }
 
   console.log(
-    `Fixed ${renames.length} asset name(s), rewrote ${rewritten} file(s).`,
+    `Fixed ${renames.length} static asset name(s), rewrote ${rewritten} file(s).`,
   );
   for (const { oldBase, newBase } of renames) {
     console.log(`  ${oldBase} → ${newBase}`);
