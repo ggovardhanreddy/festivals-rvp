@@ -20,6 +20,7 @@ import {
   VILLAGE_COORDS,
   VILLAGE_NAME,
   VILLAGE_NAME_VARIANTS,
+  SITE_CONTACT_EMAIL,
 } from "@/lib/site";
 import { SITE_FAQS } from "@/lib/faq";
 import { upcomingEvents } from "@/lib/events";
@@ -280,6 +281,15 @@ const jsonLd = [
     name: `${VILLAGE_ALSO_KNOWN_AS} — ${SITE_NAME}`,
     description: `Official logo and social preview for ${VILLAGE_ALSO_KNOWN_AS} village digital archive.`,
     creditText: SITE_NAME,
+    creator: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: siteUrl,
+      email: SITE_CONTACT_EMAIL,
+    },
+    copyrightNotice: `© ${OFFICIAL_TITLE}. All rights reserved. Stewarded by ${SITE_NAME}.`,
+    license: `${siteUrl}/terms/`,
+    acquireLicensePage: `${siteUrl}/contact/`,
   },
   {
     "@context": "https://schema.org",
