@@ -73,8 +73,32 @@ function isFunFestMediaPath(pathname: string) {
   );
 }
 
+/** Google Search Console HTML file — serve 200 before Pages strips `.html` (308). */
+const GOOGLE_HTML_VERIFY = "/googled76649c26b0af13c";
+const GOOGLE_HTML_VERIFY_BODY =
+  "google-site-verification: googled76649c26b0af13c.html\n";
+
+function isGoogleHtmlVerification(pathname: string) {
+  return (
+    pathname === `${GOOGLE_HTML_VERIFY}.html` ||
+    pathname === GOOGLE_HTML_VERIFY ||
+    pathname === `${GOOGLE_HTML_VERIFY}/`
+  );
+}
+
 export async function onRequest(context: MiddlewareContext) {
   const url = new URL(context.request.url);
+
+  if (isGoogleHtmlVerification(url.pathname)) {
+    return new Response(GOOGLE_HTML_VERIFY_BODY, {
+      status: 200,
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "x-robots-tag": "noindex",
+      },
+    });
+  }
 
   if (url.hostname === PAGES_HOST) {
     url.hostname = CANONICAL_HOST;
