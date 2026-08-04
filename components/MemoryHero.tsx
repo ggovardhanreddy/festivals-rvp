@@ -136,7 +136,7 @@ export function MemoryHero({
             transition={{ duration: 0.55 }}
             style={{ marginBottom: "1.25rem" }}
           >
-            <Logo className="hero-logo" />
+            <Logo variant="mark" className="hero-logo" glossy={false} />
           </m.div>
         )}
         {!showLogo && (
