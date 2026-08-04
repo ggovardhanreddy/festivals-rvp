@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { withBase } from "@/lib/base";
 import { daysUntil, formatCountdown } from "@/lib/dates";
+import { festivalCardImage } from "@/lib/festivals";
 import type { SiteEvent } from "@/lib/types";
 
 const FALLBACK_IMAGE = "/brand/village-aerial.webp";
@@ -41,8 +42,10 @@ export function UpcomingEventsStrip({
             <Link key={event.id} href={href} className="event-card event-card--link">
               <div className="event-card-media">
                 <img
-                  src={withBase(event.image || FALLBACK_IMAGE)}
-                  alt=""
+                  src={withBase(
+                    festivalCardImage(event.image) || FALLBACK_IMAGE,
+                  )}
+                  alt={`${event.title} — Reddivaripalli`}
                   width={640}
                   height={360}
                   loading="lazy"

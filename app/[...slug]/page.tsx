@@ -198,18 +198,21 @@ export async function generateMetadata({
     };
   }
 
-  const pageTitles: Record<string, { title: string; description: string }> = {
+  const pageTitles: Record<
+    string,
+    { title: string; description: string; noindex?: boolean }
+  > = {
     gallery: {
       title: "Gallery",
-      description: `Festival and village photo gallery from ${VILLAGE_ALSO_KNOWN_AS}.`,
+      description: `Festival and village photo gallery from ${VILLAGE_ALSO_KNOWN_AS} — Vinayaka Chavithi, Sankranthi, temples, and community memories.`,
     },
     events: {
-      title: "Events",
-      description: `Upcoming festivals, birthdays, and gatherings in ${VILLAGE_ALSO_KNOWN_AS}.`,
+      title: "Events & Birthdays",
+      description: `Upcoming festivals, birthdays, and gatherings in ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat, Sambepalle.`,
     },
     members: {
       title: "Members",
-      description: `RVP Youth members of ${VILLAGE_ALSO_KNOWN_AS}.`,
+      description: `Meet RVP Youth Legacy, Core, and NextGen members of ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat.`,
     },
     about: {
       title: "Our Heritage",
@@ -222,10 +225,11 @@ export async function generateMetadata({
     search: {
       title: "Search",
       description: `Search members, festivals, media, documents, and village services in ${VILLAGE_ALSO_KNOWN_AS}.`,
+      noindex: true,
     },
     contact: {
       title: "Contact",
-      description: `Contact ${OFFICIAL_TITLE} · ${VILLAGE_ALSO_KNOWN_AS}.`,
+      description: `Contact ${OFFICIAL_TITLE} · ${VILLAGE_ALSO_KNOWN_AS}, Sambepalle, YSR Kadapa.`,
     },
     directory: {
       title: "Village Directory",
@@ -243,17 +247,66 @@ export async function generateMetadata({
       title: "Heritage Archive",
       description: `Historical photographs, temple history, and cultural memory of ${VILLAGE_ALSO_KNOWN_AS}.`,
     },
+    developments: {
+      title: "Developments",
+      description: `Village development projects, infrastructure updates, and community works in ${VILLAGE_ALSO_KNOWN_AS}.`,
+    },
+    suggestions: {
+      title: "Suggestions",
+      description: `Share ideas and feedback for ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat and RVP Youth.`,
+    },
+    timeline: {
+      title: "Village Timeline",
+      description: `History timeline of ${VILLAGE_ALSO_KNOWN_AS} — origins, milestones, and community memory.`,
+    },
+    "rvp-birthdays": {
+      title: "RVP Birthdays",
+      description: `Birthday celebrations and photo memories from RVP Youth in ${VILLAGE_ALSO_KNOWN_AS}.`,
+    },
     admin: {
       title: "Admin Dashboard",
       description: `Administrator tools for ${SITE_NAME}.`,
+      noindex: true,
+    },
+    login: {
+      title: "Login",
+      description: `Secure sign-in for ${SITE_NAME} administrators.`,
+      noindex: true,
+    },
+    settings: {
+      title: "Settings",
+      description: `Site preferences for ${SITE_NAME}.`,
+      noindex: true,
     },
   };
   const page = slug[0] ? pageTitles[slug[0]] : undefined;
   if (page) {
+    const path = `/${slug[0]}/`;
+    const socialTitle = `${page.title} | ${VILLAGE_ALSO_KNOWN_AS}`;
     return {
       title: page.title,
       description: page.description,
-      alternates: { canonical: `/${slug[0]}/` },
+      alternates: { canonical: path },
+      robots: page.noindex
+        ? { index: false, follow: false, googleBot: { index: false, follow: false } }
+        : { index: true, follow: true },
+      openGraph: {
+        title: socialTitle,
+        description: page.description,
+        url: path,
+        images: [
+          {
+            url: withBase("/logo/social-banner.png"),
+            alt: `${page.title} — ${VILLAGE_ALSO_KNOWN_AS}`,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: socialTitle,
+        description: page.description,
+        images: [withBase("/logo/social-banner.png")],
+      },
     };
   }
   return {};

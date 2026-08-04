@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { withBase } from "@/lib/base";
 import { daysUntil, formatCountdown } from "@/lib/dates";
+import { festivalCardImage } from "@/lib/festivals";
 import { Reveal } from "@/components/Reveal";
 import type { SiteEvent } from "@/lib/types";
 
@@ -74,8 +75,10 @@ export function FestivalCalendar({
             >
               <div className="festival-card-media">
                 <img
-                  src={withBase(event.image || FALLBACK_IMAGE)}
-                  alt=""
+                  src={withBase(
+                    festivalCardImage(event.image) || FALLBACK_IMAGE,
+                  )}
+                  alt={`${event.title} — Reddivaripalli`}
                   width={640}
                   height={360}
                   loading="lazy"

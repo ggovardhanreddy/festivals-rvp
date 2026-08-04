@@ -226,13 +226,15 @@ export function SiteHeader() {
               {editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
             </button>
           ) : null}
-          <Link
-            href="/admin/"
-            onClick={(event) => onDrawerNav(event, "/admin/")}
-            className="nav-drawer-superadmin"
-          >
-            Super Admin Login
-          </Link>
+          {ready && isAdmin ? (
+            <Link
+              href="/admin/"
+              onClick={(event) => onDrawerNav(event, "/admin/")}
+              className="nav-drawer-superadmin"
+            >
+              Admin dashboard
+            </Link>
+          ) : null}
           <button
             type="button"
             className="btn"
@@ -286,13 +288,15 @@ export function SiteHeader() {
               </span>
             </button>
           ) : null}
-          <Link
-            href="/admin/"
-            className="btn ghost nav-superadmin-btn"
-            aria-label="Super Admin login"
-          >
-            Super Admin
-          </Link>
+          {ready && isAdmin ? (
+            <Link
+              href="/admin/"
+              className="btn ghost nav-superadmin-btn"
+              aria-label="Admin dashboard"
+            >
+              Admin
+            </Link>
+          ) : null}
           <button
             ref={btnRef}
             type="button"

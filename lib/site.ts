@@ -75,10 +75,14 @@ export const VILLAGE_ADDRESS_LINE = [
 ].join(", ");
 
 export const SEO_TITLE =
-  "Reddivaripalli Gram Panchayat | Official Digital Identity | Sambepalle | YSR Kadapa | Andhra Pradesh";
+  "Reddivaripalli Gram Panchayat | Sambepalle, YSR Kadapa, AP";
 
 export const SEO_DESCRIPTION =
-  "Official digital home of Reddivaripalli Gram Panchayat in the Devapatla region of Sambepalle Mandal, YSR Kadapa District, Andhra Pradesh. Explore village history, festivals, gallery, members, developments, directory, and community services — preserved for the next decade and beyond.";
+  "Official digital home of Reddivaripalli Gram Panchayat (Sambepalle, YSR Kadapa). Explore heritage, festivals, members, gallery, and village services.";
+
+/** Public contact inbox — set NEXT_PUBLIC_CONTACT_EMAIL in deploy env. */
+export const SITE_CONTACT_EMAIL =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "";
 
 export const SEO_KEYWORDS = [
   "Reddivaripalli",

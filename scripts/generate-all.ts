@@ -25,7 +25,6 @@ const bucketsWithContent = BUCKETS.filter((b) =>
 );
 const routes = [
   "",
-  "search",
   "about",
   "years",
   "events",
@@ -39,6 +38,7 @@ const routes = [
   "lost-found",
   "documents",
   "heritage",
+  "rvp-birthdays",
   // Public festival chapters with media (exclude private fun-trips from SEO)
   ...bucketsWithContent
     .filter((b) => b.key !== "fun-trips")

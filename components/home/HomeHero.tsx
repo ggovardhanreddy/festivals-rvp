@@ -46,7 +46,7 @@ export function HomeHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <Logo variant="vertical" className="home-hero-logo" />
+          <Logo variant="vertical" className="home-hero-logo" priority />
         </m.div>
         <m.h1
           className="home-hero-title"

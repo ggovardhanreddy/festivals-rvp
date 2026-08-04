@@ -30,7 +30,7 @@ export function VillageHeritageStory() {
         <div className="section-head">
           <div>
             <p className="eyebrow">{heritage.eyebrow}</p>
-            <h1>{heritage.title}</h1>
+            <h2 className="village-heritage-story-title">{heritage.title}</h2>
             <p className="lede">{heritage.lede}</p>
             <p className="village-heritage-tagline">{heritage.tagline}</p>
             <p className="muted">{addressLine}</p>

@@ -120,6 +120,20 @@ export function festivalThumbPath(folder: string): string {
   return `/festivals/${folder}/thumbs/hero.webp?v=${FESTIVAL_ASSET_VERSION}`;
 }
 
+/** Prefer card/list thumbs when a festival hero path is provided. */
+export function festivalCardImage(image?: string | null): string | null {
+  if (!image) return null;
+  const cleaned = image.replace(/\?.*$/, "");
+  const match = cleaned.match(/^\/festivals\/([^/]+)\/hero\.webp$/i);
+  if (match) return festivalThumbPath(match[1]!);
+  if (cleaned.includes("/festivals/") && cleaned.includes("/thumbs/")) {
+    return image.includes("?")
+      ? image
+      : `${cleaned}?v=${FESTIVAL_ASSET_VERSION}`;
+  }
+  return image;
+}
+
 export function cultureFestivalBySlug(slug: string) {
   return CULTURE_FESTIVALS.find((f) => f.slug === slug || f.folder === slug);
 }

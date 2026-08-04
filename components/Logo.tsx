@@ -24,6 +24,7 @@ export function Logo({
   markOnly = false,
   variant = "auto",
   glossy = true,
+  priority = false,
 }: {
   className?: string;
   markOnly?: boolean;
@@ -31,6 +32,8 @@ export function Logo({
   variant?: LogoVariant;
   /** Soft glass/gloss sheen. Default on for brand consistency. */
   glossy?: boolean;
+  /** Mark the LCP logo candidate (home hero). */
+  priority?: boolean;
 }) {
   const vertical = variant === "vertical";
 
@@ -59,7 +62,9 @@ export function Logo({
         width={markOnly ? 40 : vertical ? 120 : 168}
         height={markOnly ? 40 : vertical ? 98 : 48}
         draggable={false}
-        decoding="async"
+        decoding={priority ? "sync" : "async"}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "low"}
       />
       {glossy ? (
         <span className="brand-logo-gloss-clip" aria-hidden>
