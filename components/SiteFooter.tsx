@@ -58,13 +58,13 @@ export function SiteFooter() {
             <Link href="/">Home</Link>
             <Link href="/gallery/">Gallery</Link>
             <Link href="/events/">Events</Link>
+            <Link href="/about/">Our Heritage</Link>
             <Link href="/heritage/">Heritage Archive</Link>
             <Link href="/directory/">Village Directory</Link>
             <Link href="/documents/">Panchayat Documents</Link>
             <Link href="/developments/">Developments</Link>
             <Link href="/suggestions/">Suggestions</Link>
             <Link href="/members/">Members</Link>
-            <Link href="/about/">About Village</Link>
             <Link href="/timeline/">Timeline</Link>
             <Link href="/search/">Search</Link>
             <Link href="/contact/">Contact</Link>

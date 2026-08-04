@@ -5,7 +5,6 @@ import {
   VILLAGE_NAME,
   VILLAGE_ALSO_KNOWN_AS,
   SITE_NAME,
-  OFFICIAL_MISSION,
   VILLAGE_ADDRESS,
   VILLAGE_ADDRESS_LINE,
 } from "@/lib/site";
@@ -18,8 +17,11 @@ export function AboutTeaser() {
       <div className="about-teaser">
         <div className="about-teaser-copy">
           <p className="eyebrow">{VILLAGE_ALSO_KNOWN_AS}</p>
-          <h2>About {VILLAGE_ALSO_KNOWN_AS}</h2>
-          <p className="lede">{OFFICIAL_MISSION}</p>
+          <h2>Our Heritage</h2>
+          <p className="lede">
+            One Village • One Family • One Heritage — founded around 1850 as{" "}
+            {VILLAGE_NAME} by Sri G. Konda Reddy.
+          </p>
           <div className="about-teaser-body">
             <p>
               Also known as {VILLAGE_NAME}, the village is known for its rich
@@ -32,27 +34,21 @@ export function AboutTeaser() {
             <p>
               Families celebrate Vinayaka Chavithi, Varalakshmi Vratam,
               Sankranti, Sri Rama Navami, Mathamma Jathara, Devapatlamma
-              Jathara, Ugadi, Deepavali, and Dasara with sincerity — traditions
-              that bind the {VILLAGE_ADDRESS.region} and Sambepalle together
-              across generations.
-            </p>
-            <p>
-              This portal is built to still be useful in ten years: annual
-              archives, heritage records, developments, and community services.
-              {SITE_NAME} stewards the site so the next generation can feel the
-              same pride in {VILLAGE_ALSO_KNOWN_AS} that we carry today.
+              Jathara, Ugadi, Deepavali, Dasara, and Vana Pandaga with sincerity
+              — traditions that bind the {VILLAGE_ADDRESS.region} and Sambepalle
+              together across generations.
             </p>
             <p className="muted">
               {VILLAGE_ADDRESS_LINE}. Part of {VILLAGE_ADDRESS.district},{" "}
-              {VILLAGE_ADDRESS.state}, India.
+              {VILLAGE_ADDRESS.state}, India. Stewards: {SITE_NAME}.
             </p>
           </div>
           <div className="btn-row">
-            <Link className="btn" href="/heritage/">
-              Heritage
+            <Link className="btn" href="/about/">
+              Read our story
             </Link>
-            <Link className="btn ghost" href="/contact/">
-              Contact us
+            <Link className="btn ghost" href="/heritage/">
+              Heritage Archive
             </Link>
             <Link className="btn ghost" href="/gallery/">
               Gallery

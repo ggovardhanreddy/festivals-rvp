@@ -10,6 +10,7 @@ import {
   loadHeritageSeed,
   loadPanchayatDocsSeed,
 } from "../lib/community";
+import { loadVillageHeritage } from "../lib/village-heritage";
 
 const root = process.cwd();
 const url =
@@ -117,6 +118,51 @@ const searchIndex = [
       body: h.description,
       url: `${base}/heritage/`,
     })),
+  ...(() => {
+    const vh = loadVillageHeritage();
+    return [
+      {
+        title: vh.title,
+        date: "1850-01-01",
+        kind: "heritage",
+        tags: ["Our Heritage", "History"],
+        body: vh.lede,
+        url: `${base}/about/`,
+      },
+      {
+        title: "Festivals of Reddivaripalli",
+        date: undefined,
+        kind: "heritage",
+        tags: ["Festivals"],
+        body: vh.festivals.items.map((f) => f.name).join(", "),
+        url: `${base}/about/#festivals`,
+      },
+      {
+        title: "Sacred Temples of Reddivaripalli",
+        date: undefined,
+        kind: "heritage",
+        tags: ["Temples"],
+        body: vh.temples.items.map((t) => t.name).join(", "),
+        url: `${base}/about/#temples`,
+      },
+      {
+        title: "In Loving Memory",
+        date: undefined,
+        kind: "heritage",
+        tags: ["Memorial"],
+        body: vh.memorial.foreverRemembered.join("; "),
+        url: `${base}/about/#memorial`,
+      },
+      {
+        title: "Farmers — The Backbone of Reddivaripalli",
+        date: undefined,
+        kind: "heritage",
+        tags: ["Farmers"],
+        body: vh.farmers.names.join(", "),
+        url: `${base}/about/#farmers`,
+      },
+    ];
+  })(),
 ];
 
 fs.writeFileSync(

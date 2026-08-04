@@ -10,14 +10,9 @@ import type { Metadata } from "next";
 import {
   BUCKETS,
   FESTIVAL_HEROES,
-  LANDING_BRAND_TAGLINES,
-  OFFICIAL_MISSION,
   OFFICIAL_TITLE,
   SITE_NAME,
-  SITE_TAGLINE,
-  VILLAGE_ADDRESS_LINE,
   VILLAGE_ALSO_KNOWN_AS,
-  VILLAGE_MAPS_URL,
   VILLAGE_NAME,
   type BucketKey,
 } from "@/lib/site";
@@ -26,7 +21,6 @@ import { loadMembers } from "@/lib/members";
 import { pastEvents, upcomingEvents } from "@/lib/events";
 import { loadDevelopments } from "@/lib/developments";
 import { loadSuggestionsSeed } from "@/lib/suggestions";
-import { YouthPortrait } from "@/components/YouthPortrait";
 import { MembersPage } from "@/components/members/MembersPage";
 import { EventsCalendar } from "@/components/events/EventsCalendar";
 import { GalleryHub } from "@/components/gallery/GalleryHub";
@@ -40,11 +34,9 @@ import { Gallery } from "@/components/Gallery";
 import { InteractiveVillageMap } from "@/components/experience/InteractiveVillageMap";
 import { MemoryHero } from "@/components/MemoryHero";
 import { PageVanta } from "@/components/vanta/PageVanta";
-import { MemoryWall } from "@/components/MemoryWall";
 import { PrivateNotice } from "@/components/PrivateNotice";
 import { Reveal } from "@/components/Reveal";
 import { SearchClient } from "@/components/SearchClient";
-import { VillageStory } from "@/components/VillageStory";
 import { YearGrid } from "@/components/YearGrid";
 import { AnnualArchivePage } from "@/components/archive/AnnualArchivePage";
 import { AppleBucketStage } from "@/components/home/AppleBucketStage";
@@ -58,6 +50,7 @@ import { DirectoryPage } from "@/components/directory/DirectoryPage";
 import { LostFoundPage } from "@/components/lost-found/LostFoundPage";
 import { PanchayatDocsPage } from "@/components/documents/PanchayatDocsPage";
 import { HeritagePage } from "@/components/heritage/HeritagePage";
+import { VillageHeritageStory } from "@/components/heritage/VillageHeritageStory";
 import { MembersChat } from "@/components/chat/MembersChat";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { LoginForm } from "@/components/auth/LoginForm";
@@ -217,8 +210,8 @@ export async function generateMetadata({
       description: `RVP Youth members of ${VILLAGE_ALSO_KNOWN_AS}.`,
     },
     about: {
-      title: "About Village",
-      description: `${OFFICIAL_TITLE} — ${OFFICIAL_MISSION}`,
+      title: "Our Heritage",
+      description: `${VILLAGE_ALSO_KNOWN_AS} — One Village • One Family • One Heritage. Village history, agriculture, festivals, temples, and memorials.`,
     },
     years: {
       title: "Annual Archive",
@@ -637,48 +630,21 @@ export default async function ArchiveRoute({
         <MemoryHero
           showLogo
           atmosphere
-          eyebrow="About Village"
-          title={OFFICIAL_TITLE}
-          lede={OFFICIAL_MISSION}
-          primaryHref="/years/"
-          primaryLabel="Annual Archive"
-          secondaryHref="/heritage/"
-          secondaryLabel="Heritage"
+          eyebrow="Our Heritage"
+          title="One Village • One Family • One Heritage"
+          lede={`${VILLAGE_ALSO_KNOWN_AS} — founded around 1850 as Kondareddigaripalli by Sri G. Konda Reddy. A living record of history, agriculture, festivals, temples, and the people who shaped our home.`}
+          primaryHref="/heritage/"
+          primaryLabel="Heritage Archive"
+          secondaryHref="/gallery/"
+          secondaryLabel="Gallery"
         />
-        <VillageStory />
-        <Reveal className="section">
-          <div className="glass-card" style={{ padding: "1.5rem" }}>
-            <h2>What this digital home holds</h2>
-            <p className="muted" style={{ marginTop: "0.5rem" }}>
-              {SITE_TAGLINE}
-            </p>
-            {LANDING_BRAND_TAGLINES.map((line) => (
-              <p key={line} className="muted" style={{ marginTop: "0.5rem" }}>
-                {line}
-              </p>
-            ))}
-            <p className="muted" style={{ marginTop: "0.75rem" }}>
-              Annual archives, heritage photographs, temple history, festivals,
-              members, developments, directory, and community services — curated
-              so {VILLAGE_ALSO_KNOWN_AS} remains findable for the next decade.
-              Stewards: {SITE_NAME}.
-            </p>
-            <p className="muted" style={{ marginTop: "0.75rem" }}>
-              {VILLAGE_ADDRESS_LINE}
-            </p>
-            <p style={{ marginTop: "1rem" }}>
-              <a className="btn" href={VILLAGE_MAPS_URL} target="_blank" rel="noreferrer">
-                Open Ramalayam on Google Maps
-              </a>
-            </p>
-            <PrivateNotice />
-          </div>
-        </Reveal>
+        <VillageHeritageStory />
         <Reveal className="section">
           <VillageDepthMap />
         </Reveal>
-        <YouthPortrait />
-        <MemoryWall items={media} />
+        <Reveal className="section">
+          <PrivateNotice />
+        </Reveal>
       </main>
     );
   }

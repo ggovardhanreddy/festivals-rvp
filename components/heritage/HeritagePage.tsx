@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import Link from "next/link";
 import { withBase } from "@/lib/base";
 import {
   HERITAGE_CATEGORIES,
@@ -86,6 +87,11 @@ export function HeritagePage() {
               Historical photographs, temple and village history, cultural
               traditions, oral histories, festival memories, documents, audio,
               and video — preserved for Reddivaripalli.
+            </p>
+            <p className="muted" style={{ marginTop: "0.75rem" }}>
+              For the full written village story — history, agriculture,
+              festivals, temples, farmers, and memorials — visit{" "}
+              <Link href="/about/">Our Heritage</Link>.
             </p>
           </div>
         </div>

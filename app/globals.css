@@ -8999,3 +8999,152 @@ body {
     animation: none;
   }
 }
+
+/* Village heritage story (/about/) */
+.village-heritage-tagline {
+  margin: 0.85rem 0 0.5rem;
+  font-family: var(--font-display, var(--font-body));
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--ink) 88%, var(--accent, #9a6b2f));
+}
+
+.village-heritage-tagline--end {
+  margin: 1.25rem 0 1rem;
+  text-align: center;
+}
+
+.village-heritage-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.65rem;
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.village-heritage-toc a {
+  font-size: 0.86rem;
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
+  border-bottom: 1px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.village-heritage-toc a:hover {
+  color: var(--ink);
+  border-bottom-color: color-mix(in srgb, var(--accent, #9a6b2f) 55%, transparent);
+}
+
+.village-heritage-prose {
+  display: grid;
+  gap: 0.95rem;
+  max-width: 68ch;
+}
+
+.village-heritage-prose p {
+  margin: 0;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--ink) 90%, transparent);
+}
+
+.village-heritage-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.village-heritage-chips span {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  background: color-mix(in srgb, var(--color-bg-elevated, var(--bg-2)) 80%, transparent);
+}
+
+.village-heritage-crop-grid,
+.village-heritage-list-grid,
+.village-heritage-professionals,
+.village-heritage-memorial-bios {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.village-heritage-panel {
+  padding: 1.1rem 0 0.35rem;
+  border-top: 1px solid var(--line);
+}
+
+.village-heritage-panel h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1.05rem;
+}
+
+.village-heritage-panel ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.village-heritage-panel li {
+  line-height: 1.45;
+}
+
+.village-heritage-closing {
+  margin-top: 1.15rem;
+  max-width: 68ch;
+  line-height: 1.65;
+}
+
+.village-heritage-name-cloud {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.55rem;
+}
+
+.village-heritage-name-cloud li {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.88rem;
+  background: color-mix(in srgb, var(--color-bg-elevated, var(--bg-2)) 70%, transparent);
+}
+
+.village-heritage-memorial {
+  border-radius: var(--radius-lg, 1rem);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #6b5535 8%, transparent),
+      transparent 42%
+    );
+}
+
+.village-heritage-forever-title {
+  margin: 1.5rem 0 0.75rem;
+}
+
+.village-heritage-memorial-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.4rem;
+  max-width: 42rem;
+}
+
+.village-heritage-memorial-closing {
+  margin-top: 1.25rem;
+  max-width: 48ch;
+  font-style: italic;
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+  line-height: 1.65;
+}
+
+.village-heritage-maps {
+  margin-top: 1rem;
+}

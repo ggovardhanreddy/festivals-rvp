@@ -1,0 +1,504 @@
+{
+  "tagline": "One Village • One Family • One Heritage",
+  "title": "Reddivaripalli — Our Heritage",
+  "eyebrow": "Kondareddigaripalli · Reddivaripalli",
+  "lede": "A living record of unity, leadership, agriculture, faith, and the people who shaped our village — preserved for every generation.",
+  "address": {
+    "village": "Reddivaripalli",
+    "formerName": "Kondareddigaripalli",
+    "post": "Devapatla (P)",
+    "pincode": "516215",
+    "mandal": "Sambepalli Mandal",
+    "district": "Annamayya District",
+    "state": "Andhra Pradesh"
+  },
+  "maps": {
+    "heritage": "https://maps.app.goo.gl/xUJPzTMHyv6NSE899",
+    "ramalayam": "https://maps.app.goo.gl/w7Nn7pbXju6uQ6vx6"
+  },
+  "history": {
+    "title": "Our History",
+    "paragraphs": [
+      "Reddivaripalli, originally known as Kondareddigaripalli, traces its origins to the mid-19th century (around 1850). The village was founded by the visionary Sri G. Konda Reddy of the Gundluru family, whose leadership, wisdom, and dedication laid the foundation for a united and prosperous community.",
+      "As time passed, Kondareddigaripalli gradually came to be known as Reddivaripalli, the name by which it is proudly recognized today.",
+      "For generations, Reddivaripalli served as one of the most respected villages in the region. More than 32 surrounding villages looked to Reddivaripalli for leadership, guidance, and the resolution of community matters. It became a central place where people gathered to seek advice, settle disputes, and strengthen relationships between neighboring villages.",
+      "Sri G. Konda Reddy was admired not only as the founder of the village but also as a wise and compassionate leader. He believed that every individual should be treated with dignity and respect, regardless of caste, religion, or social background. His home was always open to visitors, and it became a tradition that no guest would ever leave the village without being offered food, hospitality, and assistance.",
+      "Under his leadership, Reddivaripalli became known for its unity, generosity, and strong sense of community. He encouraged agriculture, promoted education, preserved cultural traditions, and introduced village-wide celebrations that brought everyone together as one family.",
+      "One of his most remarkable contributions was Vana Pandaga, during which the entire village gathered together for two days to pray for timely rains, prepare traditional food, celebrate as one community, and seek blessings for a prosperous agricultural season.",
+      "After Sri G. Konda Reddy, Sri G. Venkata Subba Reddy continued this remarkable legacy. As the respected village head and Panchayat leader, he earned the trust and admiration of people not only from Reddivaripalli but also from the surrounding villages. Political leaders, government officials, and respected elders regularly visited Reddivaripalli to seek his guidance and participate in Panchayat discussions. His wisdom, fairness, and impartial judgments helped resolve disputes peacefully.",
+      "Today, more than 170 years later, Reddivaripalli continues to preserve the values established by its founders — unity, justice, hospitality, agriculture, culture, devotion, education, and service to society."
+    ],
+    "traditionsIntroduced": [
+      "Mahabharata Natakalu",
+      "Vana Pandaga",
+      "Kolla Pandem",
+      "Jallikattu",
+      "Cow Competitions",
+      "Vana Bhojanalu",
+      "Village Cultural Programs",
+      "Grand celebrations of religious and seasonal festivals"
+    ]
+  },
+  "agriculture": {
+    "title": "Agriculture — The Heart of Reddivaripalli",
+    "lede": "Agriculture has always been the backbone of Reddivaripalli and the primary source of livelihood for many families. Blessed with fertile soil, favorable climate, and the dedication of hardworking farmers, the village has prospered through agriculture for generations.",
+    "closing": "Agriculture is more than an occupation in Reddivaripalli — it is a way of life. Every harvest reflects the dedication, resilience, and hard work of our farmers. Their efforts not only provide food and livelihood but also preserve the agricultural traditions and values that have been passed down from generation to generation.",
+    "categories": [
+      {
+        "name": "Food Grains",
+        "crops": [
+          "Paddy (Vari)",
+          "Maize (Mokka Jonna)",
+          "Jowar (Jonnalu)",
+          "Bajra (Sajjalu)",
+          "Ragi (Finger Millet)",
+          "Korra (Foxtail Millet)",
+          "Sama (Little Millet)",
+          "Arika (Kodo Millet)"
+        ]
+      },
+      {
+        "name": "Pulses",
+        "crops": [
+          "Red Gram (Kandulu)",
+          "Green Gram (Pesalu)",
+          "Black Gram (Minumulu)",
+          "Bengal Gram (Senagalu)",
+          "Horse Gram (Ulavalu)",
+          "Cowpea (Alasandalu)"
+        ]
+      },
+      {
+        "name": "Oilseed Crops",
+        "crops": [
+          "Groundnut (Verusenaga)",
+          "Sunflower",
+          "Sesame (Nuvvulu)",
+          "Castor (Amudam)",
+          "Mustard (Avalu)"
+        ]
+      },
+      {
+        "name": "Commercial & Cash Crops",
+        "crops": [
+          "Cotton",
+          "Sugarcane",
+          "Tobacco (where cultivated)",
+          "Chillies",
+          "Turmeric",
+          "Coriander"
+        ]
+      },
+      {
+        "name": "Vegetables",
+        "crops": [
+          "Tomato",
+          "Brinjal (Eggplant)",
+          "Okra (Bendakaya)",
+          "Bottle Gourd",
+          "Bitter Gourd",
+          "Ridge Gourd",
+          "Snake Gourd",
+          "Pumpkin",
+          "Cucumber",
+          "Drumstick (Moringa)",
+          "Onion",
+          "Garlic"
+        ]
+      },
+      {
+        "name": "Leafy Vegetables",
+        "crops": [
+          "Spinach (Palakura)",
+          "Amaranthus (Thotakura)",
+          "Fenugreek Leaves (Menthi Kura)",
+          "Sorrel Leaves (Gongura)",
+          "Coriander Leaves"
+        ]
+      },
+      {
+        "name": "Fruit Crops",
+        "crops": [
+          "Mango",
+          "Banana",
+          "Papaya",
+          "Guava",
+          "Sweet Lime (Mosambi)",
+          "Lemon",
+          "Coconut",
+          "Custard Apple",
+          "Sapota (Chikoo)",
+          "Pomegranate"
+        ]
+      },
+      {
+        "name": "Spice & Plantation Crops",
+        "crops": ["Fenugreek (Menthulu)", "Curry Leaves", "Tamarind"]
+      }
+    ]
+  },
+  "festivals": {
+    "title": "Festivals",
+    "lede": "The people of Reddivaripalli celebrate every festival together with devotion and happiness.",
+    "items": [
+      {
+        "name": "Sankranthi",
+        "note": "Harvest festival celebrated with traditional games, rangoli, family gatherings, and cultural activities."
+      },
+      {
+        "name": "Ugadi",
+        "note": "Telugu New Year celebrated with prayers, Ugadi Pachadi, and new beginnings."
+      },
+      {
+        "name": "Sri Rama Navami",
+        "note": "Special prayers and celebrations dedicated to Lord Sri Rama."
+      },
+      {
+        "name": "Krishna Janmashtami",
+        "note": "Celebrating the birth of Lord Krishna with devotional programs and cultural performances."
+      },
+      {
+        "name": "Varalakshmi Vratham",
+        "note": "A sacred festival observed by women for the prosperity and well-being of their families."
+      },
+      {
+        "name": "Vinayaka Chavithi",
+        "note": "Grand celebrations in honor of Lord Ganesha with community participation."
+      },
+      {
+        "name": "Dasara",
+        "note": "Celebrating the victory of good over evil through cultural and religious events."
+      },
+      {
+        "name": "Deepavali",
+        "note": "The Festival of Lights celebrated with prayers, lamps, and family gatherings."
+      },
+      {
+        "name": "Vana Pandaga",
+        "note": "A unique tradition introduced by Sri G. Konda Reddy — villagers gather for two days to pray for timely rains, cook and eat together, and celebrate as one community."
+      },
+      {
+        "name": "Mathamma Jathara",
+        "note": "The village gathers for Mathamma — drums, offerings, and shared faith."
+      },
+      {
+        "name": "Devapatlamma Jathara",
+        "note": "Devotional celebrations for Sri Devapatlamma that bring families together in faith and community."
+      }
+    ]
+  },
+  "culturalEvents": {
+    "title": "Cultural Events",
+    "lede": "Reddivaripalli has always been known for its vibrant cultural programs and traditional village events. Many of these were introduced and encouraged by Sri G. Konda Reddy and continue to be celebrated today.",
+    "items": [
+      {
+        "name": "Mahabharata Natakam",
+        "note": "Traditional stage performances depicting stories from the Mahabharata."
+      },
+      {
+        "name": "Kolla Pandem",
+        "note": "Traditional rooster competitions enjoyed by the community."
+      },
+      {
+        "name": "Jallikattu",
+        "note": "Traditional cattle-related sporting event celebrated with enthusiasm."
+      },
+      {
+        "name": "Cow Competitions",
+        "note": "Celebrations that honor cattle and the farming life of the village."
+      },
+      {
+        "name": "Vana Bhojanalu",
+        "note": "Community picnics where families gather to enjoy food, games, and togetherness in nature."
+      }
+    ]
+  },
+  "temples": {
+    "title": "Sacred Temples",
+    "lede": "The spiritual life of Reddivaripalli revolves around its ancient and respected temples, where villagers gather for worship and major religious celebrations.",
+    "preservationIntro": "Over the years, some of these historic temples have suffered damage due to age, natural deterioration, and unfortunate incidents. Today, the villagers remain committed to preserving this precious heritage for future generations.",
+    "items": [
+      {
+        "name": "Sri Ramalayam",
+        "note": "One of the oldest temples in the village. According to village tradition, it was established during the time of Sri G. Konda Reddy. Due to its age, the structure has weakened considerably. Large tree roots have grown into the foundation and walls, causing significant damage. The villagers aspire to restore and preserve this temple so that future generations can continue to worship there."
+      },
+      {
+        "name": "Sri Shiva Temple",
+        "note": "The ancient Sri Shiva Temple was once one of the village's most revered places of worship. The temple was destroyed, and the sacred Shiva Lingam and Nandi were found broken. Although the original structure no longer exists, the memory and spiritual significance continue to live in the hearts of the people. The villagers hope that one day this sacred temple will be restored."
+      },
+      {
+        "name": "Sri Mulasthanamma Temple",
+        "note": "An important place of worship for the village. According to village tradition, it was established during the time of Sri G. Konda Reddy. Although it is currently in a stable condition, the community hopes to renovate and develop the temple in the future to preserve its heritage and provide improved facilities for devotees."
+      },
+      {
+        "name": "Sri Devapatlamma Temple",
+        "note": "Recently reconstructed with the support and dedication of the villagers. Today, the temple stands in excellent condition and continues to serve as an important spiritual center where devotees gather for festivals and daily prayers."
+      },
+      {
+        "name": "Sri Mathamma Temple",
+        "note": "A sacred place of devotion for Mathamma, where the village gathers in faith for prayers and Mathamma Jathara."
+      }
+    ]
+  },
+  "landmarks": {
+    "title": "Village Landmarks",
+    "lede": "Reddivaripalli is blessed with several important landmarks that represent its history, development, and community spirit.",
+    "items": [
+      {
+        "name": "Ragi Manu",
+        "note": "At the entrance of Reddivaripalli stands the historic Ragi Manu, one of the village's most recognizable landmarks. For generations, it has welcomed visitors and served as a gathering place where villagers meet, discuss community matters, and celebrate together."
+      },
+      {
+        "name": "Village Kunta (Pond)",
+        "note": "Located at the entrance of the village, the Kunta is an important natural resource. It has supported agriculture, livestock, and the daily lives of villagers for many years while adding to the beauty of the village."
+      },
+      {
+        "name": "Overhead Water Tank",
+        "note": "Situated at the upper side of the village, ensuring a reliable supply of drinking water for the community."
+      },
+      {
+        "name": "Government Primary School",
+        "note": "Located near the village entrance, the school has been educating generations of children and plays a vital role in building the future of Reddivaripalli."
+      },
+      {
+        "name": "Anganwadi Centre",
+        "note": "Adjacent to the Primary School, supporting the health, nutrition, and early childhood education of young children while also providing care and guidance for mothers."
+      },
+      {
+        "name": "Gram Panchayat Office",
+        "note": "Located near the Ragi Manu at the entrance of the village, serving as the administrative center where important village decisions are made and community welfare activities are coordinated."
+      },
+      {
+        "name": "Community Hall",
+        "note": "Situated within the Panchayat Office premises, used for village meetings, social gatherings, awareness programs, celebrations, and community events."
+      },
+      {
+        "name": "Village Playground",
+        "note": "A place where children and youth participate in sports, games, and recreational activities — especially during village festivals and annual events."
+      }
+    ]
+  },
+  "professionals": {
+    "title": "Education & Professionals",
+    "lede": "Reddivaripalli takes great pride in its people — teachers, doctors, engineers, graduates, government servants, armed forces personnel, entrepreneurs, and artisans who carry the village's values into the wider world.",
+    "groups": [
+      {
+        "name": "Teachers & Education",
+        "people": [
+          { "name": "J. Shiva", "role": "Lecturer" },
+          { "name": "G. Ramesh Kumar Reddy", "role": "Lecturer" },
+          { "name": "D. Harinadha", "role": "Headmaster" },
+          { "name": "D. Rammohana", "role": "Teacher" },
+          { "name": "C. Ramanjulu", "role": "Teacher" },
+          { "name": "D. Venkataswami Reddy", "role": "Retired Teacher" },
+          { "name": "D. Reddemma", "role": "Anganwadi Teacher" }
+        ]
+      },
+      {
+        "name": "Medical Professionals",
+        "people": [
+          {
+            "name": "Dr. G. Uma Maheshwar Reddy",
+            "role": "MD (Orthopaedics)"
+          },
+          {
+            "name": "Dr. D. Shantha Kumar",
+            "role": "MBBS, General Surgeon"
+          },
+          {
+            "name": "Dr. U. Reddi Prasad",
+            "role": "MBBS, Orthopaedic Specialist"
+          },
+          { "name": "J. Ramesh", "role": "Rural Medical Practitioner (RMP)" }
+        ]
+      },
+      {
+        "name": "Engineers",
+        "people": [
+          { "name": "G. Govardhan Reddy", "role": "Mechanical Engineer" },
+          {
+            "name": "G. Pushyanth Kumar Reddy",
+            "role": "Automobile Engineer"
+          },
+          {
+            "name": "G. Dheeraj Reddy",
+            "role": "Electrical & Electronics Engineer"
+          },
+          {
+            "name": "G. Santhabushan Reddy",
+            "role": "Computer Science Engineer"
+          },
+          {
+            "name": "G. Hemanth Kumar Reddy",
+            "role": "Electronics & Communication Engineer"
+          },
+          {
+            "name": "G. Rana Prathap Reddy",
+            "role": "Computer Science Engineer"
+          },
+          { "name": "D. Akhil Reddy", "role": "Computer Science Engineer" },
+          {
+            "name": "D. Santhosh Kumar Reddy",
+            "role": "Electronics & Communication Engineer"
+          },
+          {
+            "name": "K. Balaji",
+            "role": "Electronics & Communication Engineer"
+          },
+          {
+            "name": "Y. Krishna Mohan",
+            "role": "Electronics & Communication Engineer"
+          },
+          { "name": "J. Bhanu", "role": "Mechanical Engineer" }
+        ]
+      },
+      {
+        "name": "Other Graduates",
+        "people": [
+          { "name": "M. Rajesh", "role": "M.Sc." },
+          { "name": "U. Gurumahesh", "role": "CEC" },
+          { "name": "U. Nagesh", "role": "Biotechnology" },
+          { "name": "U. Nagendra", "role": "CEC" },
+          { "name": "Y. Keshava", "role": "Mechanical" },
+          { "name": "D. Anil Kumar Reddy", "role": "Hotel Management" },
+          { "name": "D. Shiva Shankar Reddy", "role": "B.Sc. Agriculture" },
+          { "name": "G. Dhanunjaya Reddy", "role": "B.Sc. Agriculture" },
+          { "name": "G. Vijay Kumar Reddy", "role": "CEC" },
+          { "name": "G. Ramesh Kumar Reddy", "role": "Postgraduate (PG)" },
+          { "name": "J. Niranjan Reddy", "role": "Degree" },
+          { "name": "G. Sreekanth", "role": "Degree" },
+          { "name": "M. Nagaraja", "role": "10th Standard" },
+          { "name": "P. Tharun", "role": "10th Standard" }
+        ]
+      },
+      {
+        "name": "Government Service",
+        "people": [
+          { "name": "D. Harinadha", "role": "Headmaster" },
+          { "name": "D. Venkataswami Reddy", "role": "Retired Teacher" },
+          { "name": "D. Reddemma", "role": "Anganwadi Teacher" },
+          { "name": "G. Dhanunjaya Reddy", "role": "Vigilance Director" }
+        ]
+      },
+      {
+        "name": "Armed Forces",
+        "people": [
+          { "name": "M. Surendra", "role": "" },
+          { "name": "Niranjan Reddy", "role": "" }
+        ]
+      },
+      {
+        "name": "Entrepreneurs & Business Owners",
+        "people": [
+          {
+            "name": "G. Vijay Kumar Reddy",
+            "role": "Granite, Marble & Agricultural Traders"
+          },
+          { "name": "G. Ravi Kumar Reddy", "role": "Medical Shop" },
+          { "name": "Y. Satheesh", "role": "Grocery Store" },
+          { "name": "K. Venkatramana", "role": "Grocery Store" }
+        ]
+      },
+      {
+        "name": "Tailors",
+        "people": [
+          { "name": "D. Radha", "role": "" },
+          { "name": "M. Vijaya", "role": "" },
+          { "name": "D. Uma Devi", "role": "" }
+        ]
+      },
+      {
+        "name": "Non-Resident Indian (NRI)",
+        "people": [{ "name": "Y. Krishna Mohan", "role": "" }]
+      }
+    ]
+  },
+  "farmers": {
+    "title": "Farmers — The Backbone of Reddivaripalli",
+    "lede": "Agriculture has always been the heart of our village. We proudly recognize the hardworking farmers whose dedication has sustained Reddivaripalli for generations.",
+    "names": [
+      "G. Sivarami Reddy",
+      "G. Venkataramana Reddy",
+      "G. Venkataswami Reddy",
+      "G. Raghunatha Reddy",
+      "G. Devendra Reddy",
+      "G. Giridhar Gopal Reddy",
+      "K. Bali Reddy",
+      "K. Chinna Bali Reddy",
+      "K. Krishna Reddy",
+      "U. Adinarayana",
+      "D. Rammohan Reddy",
+      "J. Raghava Reddy",
+      "D. Raja Reddy",
+      "D. Lakshminarayana Reddy",
+      "D. Venkatramana Reddy",
+      "D. Chenna Reddy",
+      "K. Ramanjulu",
+      "G. Vasudeva Reddy",
+      "G. Jayachandra Reddy",
+      "D. Viswanatha",
+      "J. Krishna Reddy",
+      "J. Eswar Reddy",
+      "K. Reddenna",
+      "D. Venkataswami",
+      "M. Ramesh",
+      "M. Krishnaiah",
+      "M. Chinnappa",
+      "Y. Ramesh",
+      "D. Ratnam",
+      "Y. Uma",
+      "Y. Satheesh",
+      "G. Sreeramulu",
+      "C. Ramakrishna",
+      "C. Suresh",
+      "U. Chinna Gurrappa",
+      "U. Pedda Gurrappa",
+      "U. Gurunadha",
+      "J. Chinna Reddenna",
+      "J. Balaji",
+      "C. Rajagopal",
+      "C. Jayanna",
+      "C. Rammohana",
+      "C. Rammurthy",
+      "M. Nadipanna",
+      "M. Venkatesh",
+      "P. Ramana"
+    ]
+  },
+  "memorial": {
+    "title": "In Loving Memory",
+    "lede": "With deep respect and gratitude, the people of Reddivaripalli remember the great souls whose vision, leadership, hard work, and selfless service shaped our village. Though they are no longer with us, their legacy continues to live in every field, every festival, every temple, and in the hearts of every villager.",
+    "founder": {
+      "name": "Sri G. Konda Reddy",
+      "role": "Founder of Reddivaripalli (Kondareddigaripalli)",
+      "bio": "Founded the village around 1850 with the ideals of unity, equality, hospitality, and service. He welcomed every visitor with kindness, encouraged agriculture, introduced cultural programs, celebrated festivals with the entire community, organized Mahabharata Natakalu, Vana Pandaga, Kolla Pandem, and many traditional events, and laid the foundation for a peaceful and prosperous village. His vision continues to guide Reddivaripalli more than a century and a half later."
+    },
+    "successor": {
+      "name": "Sri G. Venkata Subba Reddy",
+      "role": "Village head / Panchayat leader",
+      "bio": "After Sri G. Konda Reddy, Sri G. Venkata Subba Reddy carried forward the founder's vision. As the respected village head and Panchayat leader, he upheld justice, resolved disputes with fairness, preserved village traditions, and ensured that the customs and celebrations established by his predecessor continued for future generations."
+    },
+    "foreverRememberedTitle": "Forever Remembered",
+    "foreverRemembered": [
+      "G Sivarami Reddy (s/o G Konda Reddy)",
+      "G Venkataswami Reddy (s/o G Konda Reddy)",
+      "G Venkatramana Reddy (s/o G Konda Reddy)",
+      "G Narayana Reddy (s/o G Konda Reddy)",
+      "G Devendra Reddy (s/o G Venkata Subba Reddy)",
+      "G Raghunadha Reddy (s/o G Venkata Subba Reddy)",
+      "G Raja Reddy (s/o G Venkata Subba Reddy)",
+      "D Rammohan Reddy (s/o Gangi Reddy)",
+      "Y Suryanarayana",
+      "Y Jayachandra",
+      "K Venkatramana"
+    ],
+    "closing": "Gone from our sight, but never from our hearts. Their legacy will continue to inspire every generation of Reddivaripalli."
+  },
+  "vision": {
+    "title": "Our Vision",
+    "paragraphs": [
+      "This website is dedicated to preserving the rich history, traditions, culture, agriculture, temples, and achievements of Reddivaripalli. It is a digital home for every villager — past, present, and future — connecting families across the world while honoring our ancestors and inspiring generations to come.",
+      "Dedicated with love and respect to every resident of Reddivaripalli who has contributed to the growth, unity, and prosperity of our beloved village."
+    ]
+  }
+}
