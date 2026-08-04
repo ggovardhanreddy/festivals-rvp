@@ -166,7 +166,10 @@ function MemberCard({
           />
         ) : (
           <div className="member-avatar" aria-hidden>
-            {memberInitials(member.name)}
+            <span className="member-avatar-initials">
+              {memberInitials(member.name)}
+            </span>
+            <span className="member-photo-soon">Photo Coming Soon</span>
           </div>
         )}
         <span className={`member-group-badge member-group-badge--${group}`}>
@@ -216,9 +219,6 @@ function MemberCard({
           <p className="member-forever">Forever Remembered</p>
         ) : birthdayLabel ? (
           <p className="member-birthday">Birthday · {birthdayLabel}</p>
-        ) : null}
-        {!hasPhoto ? (
-          <p className="member-photo-soon">Photo Coming Soon</p>
         ) : null}
         {member.social?.length ? (
           <div className="member-social-row">
@@ -313,7 +313,10 @@ function MemberProfileModal({
             <img src={withBase(member.photo!)} alt="" width={320} height={320} />
           ) : (
             <div className="member-avatar" aria-hidden>
-              {memberInitials(member.name)}
+              <span className="member-avatar-initials">
+                {memberInitials(member.name)}
+              </span>
+              <span className="member-photo-soon">Photo Coming Soon</span>
             </div>
           )}
         </div>
@@ -338,9 +341,6 @@ function MemberProfileModal({
           ) : null}
           {birthdayLabel ? (
             <p className="member-birthday">Birthday · {birthdayLabel}</p>
-          ) : null}
-          {!hasPhoto ? (
-            <p className="member-photo-soon">Photo Coming Soon</p>
           ) : null}
           {member.achievements?.length ? (
             <div className="member-achievements">

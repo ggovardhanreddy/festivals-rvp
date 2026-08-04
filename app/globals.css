@@ -4709,8 +4709,9 @@ html.intro-active .glass-music {
 
 .members-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(11.5rem, 100%), 1fr));
   gap: 1.25rem;
+  align-items: stretch;
 }
 
 .member-card {
@@ -4718,11 +4719,15 @@ html.intro-active .glass-music {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
+  height: 100%;
+  min-width: 0;
 }
 
 .member-card-photo {
   position: relative;
   aspect-ratio: 1;
+  width: 100%;
+  flex: 0 0 auto;
   border-radius: var(--radius-lg, 1rem);
   overflow: hidden;
   background:
@@ -4737,6 +4742,7 @@ html.intro-active .glass-music {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -4748,12 +4754,38 @@ html.intro-active .glass-music {
 .member-avatar {
   width: 100%;
   height: 100%;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  text-align: center;
   font-weight: 700;
-  font-size: 1.55rem;
+  font-size: clamp(1.15rem, 4.5vw, 1.65rem);
   letter-spacing: 0.04em;
   color: color-mix(in srgb, var(--ink, #1a1a1a) 70%, #8b6914);
+}
+
+.member-avatar-initials {
+  line-height: 1;
+}
+
+.birthday-card-photo .member-avatar,
+.birthday-hero-photo .member-avatar,
+.member-edit-photo .member-avatar,
+.day-panchang-people .member-avatar {
+  padding: 0;
+  gap: 0;
+}
+
+.birthday-card-photo .member-avatar {
+  font-size: 1.05rem;
+}
+
+.day-panchang-people .member-avatar {
+  font-size: 0.7rem;
 }
 
 .member-card-body h3 {
@@ -4784,10 +4816,19 @@ html.intro-active .glass-music {
 }
 
 .member-photo-soon {
-  margin: 0.2rem 0 0;
-  font-size: 0.78rem;
+  margin: 0;
+  font-size: clamp(0.65rem, 2.4vw, 0.75rem);
   letter-spacing: 0.02em;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+  max-width: 9rem;
+  line-height: 1.25;
+}
+
+.member-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .member-group-badge {
@@ -9168,7 +9209,18 @@ body {
 }
 
 .village-heritage-forever-title {
-  margin: 1.5rem 0 0.55rem;
+  margin: 0 0 0.55rem;
+}
+
+.village-heritage-forever-block {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--line) 90%, transparent);
+  max-width: 40rem;
+}
+
+.village-heritage-forever-block .village-heritage-forever-title {
+  margin-top: 0;
 }
 
 .village-heritage-memorial-list-lede {
@@ -9186,6 +9238,7 @@ body {
   display: grid;
   gap: 0.5rem 2rem;
   max-width: 40rem;
+  grid-template-columns: 1fr;
 }
 
 @media (min-width: 560px) {
@@ -9197,15 +9250,32 @@ body {
 .village-heritage-memorial-list--legends li {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: clamp(0.98rem, 2.8vw, 1.08rem);
   letter-spacing: 0.01em;
   line-height: 1.4;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .village-heritage-memorial-list--forever li {
   font-weight: 400;
+  font-size: 0.88rem;
   line-height: 1.45;
-  color: color-mix(in srgb, var(--ink) 82%, transparent);
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 560px) {
+  .village-heritage-memorial-list--forever li {
+    font-size: 0.96rem;
+    color: color-mix(in srgb, var(--ink) 82%, transparent);
+  }
+}
+
+/* Legends title spacing when it is the first list heading */
+.village-heritage-memorial > .village-heritage-forever-title {
+  margin-top: 1.5rem;
 }
 
 .village-heritage-memorial-closing {
