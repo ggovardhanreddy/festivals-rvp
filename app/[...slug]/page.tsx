@@ -731,11 +731,10 @@ export default async function ArchiveRoute({
 
   if (path === "about") {
     return (
-      <main className="page page--about">
+      <main className="page">
         <MemoryHero
           showLogo
           atmosphere
-          fullBleed={false}
           eyebrow="Reddivaripalli"
           title="Our Heritage"
           lede={`${VILLAGE_ALSO_KNOWN_AS} — founded around 1850 as Kondareddigaripalli by Sri G. Konda Reddy. A living record of history, agriculture, festivals, temples, and the people who shaped our home.`}

@@ -59,7 +59,7 @@ export function Logo({
         className={`brand-logo ${vertical ? "brand-logo-vertical" : ""} ${className}`.trim()}
         src={src}
         alt="Reddivaripalli Village — Heritage, Community, Progress"
-        width={mark ? 40 : vertical ? 120 : 48}
+        width={mark ? 40 : vertical ? 120 : 168}
         height={mark ? 40 : vertical ? 160 : 48}
         draggable={false}
         decoding={priority ? "sync" : "async"}
