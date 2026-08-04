@@ -110,10 +110,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [volume, setVolumeState] = useState(0.6);
   const [ready, setReady] = useState(false);
   const [needsGesture, setNeedsGesture] = useState(false);
-  const wantsPlay = useRef(true); // autoplay by default until user stops
+  const wantsPlay = useRef(false); // opt-in only — never autoplay
   const fadeLock = useRef(false);
   const loadedTheme = useRef<string | null>(null);
-  const autoTried = useRef(false);
   const duckMul = useRef(1);
   const baseVolume = useRef(0.6);
   const volumeRef = useRef(0.6);
@@ -140,8 +139,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const savedTheme = readSession(SESSION.theme, DEFAULT_MUSIC_THEME);
     const savedVol = Number(readSession(SESSION.volume, "0.6"));
     const savedMuted = readSession(SESSION.muted, "0") === "1";
-    // Default autoplay: only skip if user explicitly stopped this session
-    const savedPlay = readSession(SESSION.wantsPlay, "1") !== "0";
+    // Music is opt-in only (Play/Mute dock removed; no autoplay).
+    const savedPlay = readSession(SESSION.wantsPlay, "0") === "1";
     setThemeIdState(
       MUSIC_THEMES.some((t) => t.id === savedTheme)
         ? (savedTheme as MusicThemeId)
@@ -364,73 +363,6 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       window.removeEventListener("rvp:audio-swell", onSwell);
     };
   }, [duck, unduck, swell]);
-
-  // Soft autoplay after first paint — load audio only when attempting play
-  useEffect(() => {
-    if (!ready || autoTried.current) return;
-    if (!wantsPlay.current) return;
-
-    const start = () => {
-      if (autoTried.current) return;
-      autoTried.current = true;
-      ensureLoaded(themeId);
-      const el = audioRef.current;
-      if (!el) return;
-
-      el.muted = muted;
-      el.volume = 0;
-      fadeLock.current = true;
-      void el
-        .play()
-        .then(() => {
-          setNeedsGesture(false);
-          fadeVolume(el, 0, muted ? 0 : volume, 1200, () => {
-            fadeLock.current = false;
-          });
-        })
-        .catch(() => {
-          fadeLock.current = false;
-          setNeedsGesture(true);
-          const unlock = () => {
-            if (!wantsPlay.current) return;
-            ensureLoaded(themeId);
-            const audio = audioRef.current;
-            if (!audio) return;
-            audio.muted = muted;
-            audio.volume = 0;
-            void audio.play().then(() => {
-              setNeedsGesture(false);
-              fadeVolume(audio, 0, muted ? 0 : volume, 900);
-              window.removeEventListener("pointerdown", unlock);
-              window.removeEventListener("keydown", unlock);
-              window.removeEventListener("touchstart", unlock);
-            });
-          };
-          window.addEventListener("pointerdown", unlock, { once: true });
-          window.addEventListener("keydown", unlock, { once: true });
-          window.addEventListener("touchstart", unlock, { once: true });
-        });
-    };
-
-    // Phones: never auto-fetch multi‑MB audio — wait for an explicit tap
-    const mobile =
-      window.matchMedia("(max-width: 820px)").matches ||
-      /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-    if (mobile) {
-      setNeedsGesture(true);
-      return;
-    }
-
-    // Desktop: defer network until after first paint / intro sky
-    let cancelled = false;
-    const timer = window.setTimeout(() => {
-      if (!cancelled) start();
-    }, 1800);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
-  }, [ready, ensureLoaded, themeId, muted, volume]);
 
   const value = useMemo(
     () => ({
