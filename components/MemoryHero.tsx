@@ -183,10 +183,18 @@ export function MemoryHero({
         </m.div>
         <m.div
           className="scroll-hint"
-          initial={{ opacity: 0 }}
-          animate={reduce ? { opacity: 0.8 } : { opacity: 0.8, y: [0, 6, 0] }}
+          initial={motionOff ? false : { opacity: 0 }}
+          animate={
+            motionOff
+              ? { opacity: 0.8 }
+              : reduce
+                ? { opacity: 0.8 }
+                : { opacity: 0.8, y: [0, 6, 0] }
+          }
           transition={
-            reduce ? { delay: 0.8 } : { delay: 0.8, duration: 2.2, repeat: Infinity }
+            motionOff || reduce
+              ? { delay: 0.2 }
+              : { delay: 0.8, duration: 2.2, repeat: Infinity }
           }
         >
           Scroll
