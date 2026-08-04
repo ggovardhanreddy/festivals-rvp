@@ -36,7 +36,8 @@
     "media:migrate:r2": "tsx scripts/migrate-media-to-r2.ts",
     "media:migrate:r2:dry": "R2_MIGRATE_DRY=1 tsx scripts/migrate-media-to-r2.ts",
     "media:strip-local": "tsx scripts/strip-local-media.ts",
-    "deploy:cf": "npm run build && npm run media:strip-local && wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true",
+    "pages:fix-assets": "tsx scripts/fix-pages-asset-names.ts",
+    "deploy:cf": "npm run build && npm run media:strip-local && npm run pages:fix-assets && wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true",
     "deploy:cf:r2": "npm run media:migrate:r2 && npm run deploy:cf"
   },
   "dependencies": {
