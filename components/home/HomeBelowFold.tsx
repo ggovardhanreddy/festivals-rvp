@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
 import type { MediaWithAlbum, Member, SiteEvent } from "@/lib/types";
 import type { TimelineEntry } from "@/lib/timeline";
 import { dobMonthDay, monthDay } from "@/lib/dates";
 import { mergeMemberRosters } from "@/lib/member-stats";
 import { useCommunityList } from "@/lib/use-community";
 import { HOME_QUICK_LINKS } from "@/lib/site";
+import { withBase } from "@/lib/base";
+import { isMobileShell } from "@/lib/mobile-shell";
 import { Reveal } from "@/components/Reveal";
 import { StatsOverview } from "./StatsOverview";
 import { AboutTeaser } from "./AboutTeaser";
@@ -18,6 +20,13 @@ import { CultureTraditions } from "./CultureTraditions";
 import { TodayBirthdays } from "./TodayBirthdays";
 import { UpcomingBirthdays } from "./UpcomingBirthdays";
 import { LocationHomeNote } from "@/components/location/LocationHomeNote";
+
+/** PWA/mobile soft-nav can leave Members blank — hard navigate instead. */
+function onMobileHardNav(event: MouseEvent<HTMLAnchorElement>, href: string) {
+  if (!isMobileShell()) return;
+  event.preventDefault();
+  window.location.assign(withBase(href));
+}
 
 export function HomeBelowFold({
   galleryItems,
@@ -119,10 +128,18 @@ export function HomeBelowFold({
             </p>
           </div>
           <div className="btn-row">
-            <Link className="btn" href="/members/">
+            <Link
+              className="btn"
+              href="/members/"
+              onClick={(event) => onMobileHardNav(event, "/members/")}
+            >
               View members
             </Link>
-            <Link className="btn ghost" href="/directory/">
+            <Link
+              className="btn ghost"
+              href="/directory/"
+              onClick={(event) => onMobileHardNav(event, "/directory/")}
+            >
               Directory
             </Link>
           </div>

@@ -104,6 +104,22 @@ function pickStr(
   return prev;
 }
 
+function preferPhoto(
+  remote: string | null | undefined,
+  seed: string | null | undefined,
+): string | null | undefined {
+  if (remote === null) return null;
+  const r = (remote || "").trim();
+  const s = (seed || "").trim();
+  if (!r) return s || undefined;
+  if (!s) return r;
+  // Prefer absolute CDN URLs over site-relative stubs (strip-local leaves 32-byte files).
+  const rAbs = /^https?:\/\//i.test(r);
+  const sAbs = /^https?:\/\//i.test(s);
+  if (sAbs && !rAbs) return s;
+  return r;
+}
+
 function mergeOne(prev: Member | undefined, item: Member): Member {
   if (!prev) return item;
   return {
@@ -111,7 +127,7 @@ function mergeOne(prev: Member | undefined, item: Member): Member {
     ...item,
     name: item.name?.trim() || prev.name,
     nickname: pickStr(item.nickname, prev.nickname) as string | undefined,
-    photo: item.photo === null ? null : item.photo || prev.photo,
+    photo: preferPhoto(item.photo, prev.photo),
     dob: pickStr(item.dob, prev.dob) as string | null,
     designation: pickStr(item.designation, prev.designation) as
       | string
@@ -181,7 +197,7 @@ export function mergeMemberRosters(
       group: seedItem.group || merged.group,
       memorial: seedItem.memorial ?? merged.memorial,
       status: seedItem.status || merged.status,
-      photo: merged.photo || seedItem.photo,
+      photo: preferPhoto(merged.photo, seedItem.photo),
       dob: merged.dob || seedItem.dob,
     });
   }

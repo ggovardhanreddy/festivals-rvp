@@ -8720,9 +8720,18 @@ body {
   background: var(--color-bg);
 }
 
-/* Failsafe: never leave roster invisible if motion styles stick */
-.page--members .member-card {
+/* Failsafe: never leave roster / hero invisible if motion styles stick */
+.page--members .member-card,
+.page--members .hero-copy,
+.page--members .hero-copy > * {
   opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+.page--members .members-section,
+.page--members .member-card {
+  pointer-events: auto;
 }
 
 .page--members .hero {

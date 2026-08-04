@@ -44,12 +44,6 @@ export function LoadingScreen() {
           style={{ pointerEvents: "none" }}
         >
           <img
-            src={withBase("/brand/rvp-youth-festival.webp")}
-            alt=""
-            className="landing-loader-photo"
-            aria-hidden
-          />
-          <img
             src={withBase("/logo/loading-logo.svg")}
             alt="RVP Youth"
             width={200}

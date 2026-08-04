@@ -67,6 +67,8 @@ export function MemoryHero({
   const bgVideo = useMediaUrl(backgroundVideo);
   const posterUrl = bgImage.url || undefined;
   const videoUrl = bgVideo.url || undefined;
+  // Mobile/PWA: never SSR as opacity:0 — stuck hydration left Members looking blank.
+  const motionOff = Boolean(reduce) || !allowHeavy;
 
   return (
     <section
@@ -131,7 +133,7 @@ export function MemoryHero({
       <div className="hero-copy">
         {showLogo && (
           <m.div
-            initial={reduce ? false : { opacity: 0, y: 10 }}
+            initial={motionOff ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
             style={{ marginBottom: "1.25rem" }}
@@ -142,7 +144,7 @@ export function MemoryHero({
         {!showLogo && (
           <m.p
             className="eyebrow"
-            initial={reduce ? false : { opacity: 0, y: 12 }}
+            initial={motionOff ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
@@ -150,7 +152,7 @@ export function MemoryHero({
           </m.p>
         )}
         <m.h1
-          initial={reduce ? false : { opacity: 0, y: 28 }}
+          initial={motionOff ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05 }}
         >
@@ -158,7 +160,7 @@ export function MemoryHero({
         </m.h1>
         <m.p
           className="lede"
-          initial={reduce ? false : { opacity: 0, y: 18 }}
+          initial={motionOff ? false : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.12 }}
         >
@@ -166,7 +168,7 @@ export function MemoryHero({
         </m.p>
         <m.div
           className="btn-row"
-          initial={reduce ? false : { opacity: 0, y: 16 }}
+          initial={motionOff ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.18 }}
         >

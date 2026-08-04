@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { withBase } from "@/lib/base";
 import type { CommunityCollection } from "@/lib/community";
 
@@ -11,14 +11,18 @@ type StorePayload<T> = {
   source?: string;
 };
 
+const FETCH_MS = 8000;
+
 async function fetchCollection<T>(
   collection: CommunityCollection,
   admin = false,
+  signal?: AbortSignal,
 ): Promise<T[]> {
   const qs = admin ? "?admin=1" : "";
   const res = await fetch(withBase(`/api/community/${collection}${qs}`), {
     credentials: "include",
     cache: "no-store",
+    signal,
   });
   if (!res.ok) return [];
   const data = (await res.json()) as StorePayload<T>;
@@ -47,23 +51,36 @@ export function useCommunityList<T>(
   seed: T[],
   opts?: { admin?: boolean; approvedOnly?: boolean },
 ) {
+  const seedRef = useRef(seed);
+  seedRef.current = seed;
   const [raw, setRaw] = useState<T[]>(seed);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const admin = Boolean(opts?.admin);
 
   const refresh = useCallback(async () => {
     setLoading(true);
     setError(null);
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), FETCH_MS);
     try {
-      const remote = await fetchCollection<T>(collection, opts?.admin);
-      setRaw(mergeById(seed, remote));
+      const remote = await fetchCollection<T>(
+        collection,
+        admin,
+        controller.signal,
+      );
+      // Never wipe a seed roster if the API returns empty / times out.
+      setRaw(mergeById(seedRef.current, remote));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load");
-      setRaw(seed);
+      if ((err as Error)?.name !== "AbortError") {
+        setError(err instanceof Error ? err.message : "Failed to load");
+      }
+      setRaw(seedRef.current);
     } finally {
+      window.clearTimeout(timer);
       setLoading(false);
     }
-  }, [collection, opts?.admin, seed]);
+  }, [collection, admin]);
 
   useEffect(() => {
     void refresh();
