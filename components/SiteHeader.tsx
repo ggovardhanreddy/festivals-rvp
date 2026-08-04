@@ -182,19 +182,27 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          {COMMUNITY_NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              data-active={isActive(item.href, normalized)}
-              onClick={(event) => onDrawerNav(event, item.href)}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <Link href="/fun-trips/" onClick={onFunFestNav}>
-            Fun Fest
-          </Link>
+          {COMMUNITY_NAV.map((item) =>
+            item.href === "/fun-trips/" ? (
+              <Link
+                key={item.href}
+                href={item.href}
+                data-active={isActive(item.href, normalized)}
+                onClick={onFunFestNav}
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                data-active={isActive(item.href, normalized)}
+                onClick={(event) => onDrawerNav(event, item.href)}
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
           <Link href="/search/" onClick={(event) => onDrawerNav(event, "/search/")}>
             Search
           </Link>

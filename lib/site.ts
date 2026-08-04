@@ -128,25 +128,36 @@ export const VILLAGE_COORDS = {
   labelTe: "రామాలయం",
 } as const;
 
-/** Primary nav — keep compact and scannable. */
+/**
+ * Primary nav — priority order (desktop + drawer).
+ * Members + Directory are adjacent; Events covers calendar; Birthdays → /rvp-birthdays/.
+ */
 export const NAV = [
   { href: "/", label: "Home" },
-  { href: "/gallery/", label: "Gallery" },
-  { href: "/events/", label: "Events" },
-  { href: "/directory/", label: "Directory" },
-  { href: "/developments/", label: "Developments" },
   { href: "/members/", label: "Members" },
-  { href: "/contact/", label: "Contact" },
+  { href: "/directory/", label: "Directory" },
+  { href: "/events/", label: "Events" },
+  { href: "/rvp-birthdays/", label: "Birthdays" },
+  { href: "/developments/", label: "Developments" },
+  { href: "/about/", label: "Our Heritage" },
+  { href: "/gallery/", label: "Gallery" },
 ] as const;
 
-/** Secondary community links (drawer / footer). */
+/**
+ * Secondary community links (drawer / footer) — after primary, relative order preserved.
+ * Fun Fest stays here; SiteHeader applies member-auth gating for /fun-trips/.
+ */
 export const COMMUNITY_NAV = [
-  { href: "/about/", label: "Our Heritage" },
+  { href: "/contact/", label: "Contact" },
   { href: "/heritage/", label: "Heritage Archive" },
+  { href: "/fun-trips/", label: "Fun Fest" },
   { href: "/documents/", label: "Panchayat Documents" },
   { href: "/suggestions/", label: "Suggestions" },
   { href: "/timeline/", label: "Timeline" },
 ] as const;
+
+/** Homepage shortcuts — mirrors primary priority (excludes Home). */
+export const HOME_QUICK_LINKS = NAV.slice(1);
 
 export const BUCKETS = [
   ...CULTURE_FESTIVALS.map((f) => ({

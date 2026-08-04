@@ -5,6 +5,8 @@ import { useState, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import {
+  COMMUNITY_NAV,
+  NAV,
   OFFICIAL_SUBTITLE,
   OFFICIAL_TITLE,
   SITE_NAME,
@@ -17,6 +19,11 @@ import {
 import { BUILD_ID } from "@/lib/build-id";
 import { useMemberAuth } from "./auth/MemberAuthProvider";
 import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
+
+const FOOTER_EXTRA = [
+  { href: "/search/", label: "Search" },
+  { href: "/settings/", label: "Settings" },
+] as const;
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -55,23 +62,27 @@ export function SiteFooter() {
         <div className="footer-col">
           <p className="footer-heading">Quick links</p>
           <div className="footer-links">
-            <Link href="/">Home</Link>
-            <Link href="/gallery/">Gallery</Link>
-            <Link href="/events/">Events</Link>
-            <Link href="/about/">Our Heritage</Link>
-            <Link href="/heritage/">Heritage Archive</Link>
-            <Link href="/directory/">Village Directory</Link>
-            <Link href="/documents/">Panchayat Documents</Link>
-            <Link href="/developments/">Developments</Link>
-            <Link href="/suggestions/">Suggestions</Link>
-            <Link href="/members/">Members</Link>
-            <Link href="/timeline/">Timeline</Link>
-            <Link href="/search/">Search</Link>
-            <Link href="/contact/">Contact</Link>
-            <Link href="/fun-trips/" onClick={onFunFest}>
-              Fun Fest
-            </Link>
-            <Link href="/settings/">Settings</Link>
+            {NAV.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+            {COMMUNITY_NAV.map((item) =>
+              item.href === "/fun-trips/" ? (
+                <Link key={item.href} href={item.href} onClick={onFunFest}>
+                  {item.label}
+                </Link>
+              ) : (
+                <Link key={item.href} href={item.href}>
+                  {item.label}
+                </Link>
+              ),
+            )}
+            {FOOTER_EXTRA.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
 

@@ -305,11 +305,13 @@ html.dark body:has(.home-hero) .logo-watermark {
 
 .nav-links {
   display: none;
-  gap: 1.15rem;
+  gap: 0.72rem;
   align-items: center;
   font-family: var(--font-accent);
-  font-size: 0.92rem;
+  font-size: 0.84rem;
   color: var(--muted);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .nav-links a {
@@ -6741,6 +6743,10 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .filter-chip {
     min-height: 44px;
   }
+}
+
+.home-quick-actions {
+  flex-wrap: wrap;
 }
 
 .members-teaser-card {

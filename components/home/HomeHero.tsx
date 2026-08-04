@@ -72,14 +72,14 @@ export function HomeHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.42 }}
         >
-          <Link className="btn" href="/gallery/">
-            Gallery
-          </Link>
-          <Link className="btn ghost" href="/members/">
+          <Link className="btn" href="/members/">
             Members
           </Link>
           <Link className="btn ghost" href="/directory/">
             Directory
+          </Link>
+          <Link className="btn ghost" href="/events/">
+            Events
           </Link>
         </m.div>
 

@@ -7,6 +7,7 @@ import type { TimelineEntry } from "@/lib/timeline";
 import { dobMonthDay, monthDay } from "@/lib/dates";
 import { mergeMemberRosters } from "@/lib/member-stats";
 import { useCommunityList } from "@/lib/use-community";
+import { HOME_QUICK_LINKS } from "@/lib/site";
 import { Reveal } from "@/components/Reveal";
 import { StatsOverview } from "./StatsOverview";
 import { AboutTeaser } from "./AboutTeaser";
@@ -61,14 +62,11 @@ export function HomeBelowFold({
     <div className="page home-redesign" id="home-start">
       <LocationHomeNote />
 
+      <StatsOverview stats={stats} />
+
       <Reveal>
         <TodayBirthdays members={todayMembers} />
       </Reveal>
-
-      <StatsOverview stats={stats} />
-      <AboutTeaser />
-
-      <CultureTraditions />
 
       <Reveal>
         <UpcomingBirthdays members={members} />
@@ -78,25 +76,57 @@ export function HomeBelowFold({
         <UpcomingEventsStrip events={upcomingEvents} liveSlugs={liveSlugs} />
       </Reveal>
 
-      <FestivalCalendar festivals={festivals} liveSlugs={liveSlugs} />
-
-      <HomeGallery items={galleryItems} years={yearList} />
+      <Reveal className="section" id="quick-actions">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Explore</p>
+            <h2>Quick actions</h2>
+            <p className="lede">
+              People, events, birthdays, and village updates — one tap away.
+            </p>
+          </div>
+        </div>
+        <div className="btn-row home-quick-actions">
+          {HOME_QUICK_LINKS.map((item, index) => (
+            <Link
+              key={item.href}
+              className={index === 0 ? "btn" : "btn ghost"}
+              href={item.href}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </Reveal>
 
       <Reveal className="section" id="members-teaser">
         <div className="members-teaser-card">
           <div>
             <p className="eyebrow">Community</p>
-            <h2>Members</h2>
+            <h2>Members & Directory</h2>
             <p className="lede">
-              Meet RVP Youth as Legacy Circle, Core Members, and NextGen — open for everyone to
-              explore.
+              Meet RVP Youth as Legacy Circle, Core Members, and NextGen — then
+              find households in the village directory.
             </p>
           </div>
-          <Link className="btn" href="/members/">
-            View members
-          </Link>
+          <div className="btn-row">
+            <Link className="btn" href="/members/">
+              View members
+            </Link>
+            <Link className="btn ghost" href="/directory/">
+              Directory
+            </Link>
+          </div>
         </div>
       </Reveal>
+
+      <FestivalCalendar festivals={festivals} liveSlugs={liveSlugs} />
+
+      <AboutTeaser />
+
+      <CultureTraditions />
+
+      <HomeGallery items={galleryItems} years={yearList} />
     </div>
   );
 }
