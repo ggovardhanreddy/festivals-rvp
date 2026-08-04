@@ -9167,14 +9167,22 @@ body {
 
 .village-heritage-prose {
   display: grid;
-  gap: 0.7rem;
-  max-width: 68ch;
+  gap: 0.85rem;
+  max-width: none;
+  width: 100%;
 }
 
 .village-heritage-prose p {
   margin: 0;
-  line-height: 1.65;
+  line-height: 1.7;
+  max-width: none;
   color: color-mix(in srgb, var(--ink) 92%, transparent);
+}
+
+/* Keep intro/lede readable but let story body use the full page column */
+.village-heritage .section-head,
+.village-heritage .lede {
+  max-width: none;
 }
 
 .village-heritage-chips {
