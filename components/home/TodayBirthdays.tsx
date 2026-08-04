@@ -7,10 +7,12 @@ import { withBase } from "@/lib/base";
 import type { Member } from "@/lib/types";
 import { memberAge } from "@/lib/member-groups";
 import { formatBirthdayLabel } from "@/lib/dates";
+import { panchangHintForDob } from "@/lib/telugu-panchangam";
 
 export function TodayBirthdays({ members }: { members: Member[] }) {
   const reduce = useReducedMotion();
   const [celebrate, setCelebrate] = useState(!reduce);
+  const [panchangHint, setPanchangHint] = useState<string | null>(null);
 
   useEffect(() => {
     if (reduce) return;
@@ -18,6 +20,18 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
     const stop = window.setTimeout(() => setCelebrate(false), 4200);
     return () => window.clearTimeout(stop);
   }, [reduce, members]);
+
+  useEffect(() => {
+    const featuredDob = members[0]?.dob;
+    if (!featuredDob) {
+      setPanchangHint(null);
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      setPanchangHint(panchangHintForDob(featuredDob));
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [members]);
 
   if (!members.length) return null;
 
@@ -76,6 +90,7 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
           <p className="muted">
             {formatBirthdayLabel(featured.dob) || "Birthday celebration"}
             {memberAge(featured) != null ? ` · age ${memberAge(featured)}` : ""}
+            {panchangHint ? ` · ${panchangHint}` : ""}
           </p>
           <p className="lede">
             May this year bring health, joy, and every blessing — from all of us

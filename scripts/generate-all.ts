@@ -164,22 +164,6 @@ const searchIndex = [
         body: vh.farmers.names.join(", "),
         url: `${base}/about/#farmers`,
       },
-      ...(vh.formerMembers?.people?.length
-        ? [
-            {
-              title: vh.formerMembers.title || "Former Members",
-              date: undefined,
-              kind: "heritage" as const,
-              tags: ["Former Members", "Heritage"],
-              body: vh.formerMembers.people
-                .map((p) =>
-                  p.role ? `${p.name} — ${p.role}` : p.name,
-                )
-                .join("; "),
-              url: `${base}/about/#former-members`,
-            },
-          ]
-        : []),
     ];
   })(),
 ];

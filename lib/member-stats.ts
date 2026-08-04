@@ -1,5 +1,8 @@
 import type { Member, MemberGroup } from "./types";
 import { resolveMemberGroup } from "./member-groups";
+import removedMemberIds from "@/content/data/members-removed.json";
+
+const REMOVED_MEMBER_IDS = new Set<string>(removedMemberIds as string[]);
 
 export type ProfessionKey =
   | "doctors"
@@ -146,6 +149,7 @@ function sortByDisplayOrder(a: Member, b: Member) {
  * For known seed ids, seed name/designation/group/memorial/status win so a
  * stale R2 `community/members.json` cannot show outdated titles. Remote may
  * still enrich photos, DOBs, achievements, and add new members.
+ * IDs in `members-removed.json` are never reintroduced from R2.
  */
 export function mergeMemberRosters(
   seed: Member[],
@@ -153,7 +157,8 @@ export function mergeMemberRosters(
   opts?: { includeArchived?: boolean },
 ): Member[] {
   const includeArchived = Boolean(opts?.includeArchived);
-  if (!remote.length) {
+  const remoteSafe = remote.filter((m) => !REMOVED_MEMBER_IDS.has(m.id));
+  if (!remoteSafe.length) {
     const base = includeArchived ? seed : seed.filter((m) => !m.archived);
     return [...base].sort(sortByDisplayOrder);
   }
@@ -162,7 +167,7 @@ export function mergeMemberRosters(
   const map = new Map<string, Member>();
   for (const item of seed) map.set(item.id, item);
 
-  for (const item of remote) {
+  for (const item of remoteSafe) {
     const seedItem = seedById.get(item.id);
     const merged = mergeOne(map.get(item.id), item);
     if (!seedItem) {
@@ -184,14 +189,16 @@ export function mergeMemberRosters(
   const seen = new Set<string>();
   const out: Member[] = [];
   for (const item of seed) {
+    if (REMOVED_MEMBER_IDS.has(item.id)) continue;
     const merged = map.get(item.id);
     if (!merged) continue;
     if (!includeArchived && merged.archived) continue;
     out.push(merged);
     seen.add(item.id);
   }
-  for (const item of remote) {
+  for (const item of remoteSafe) {
     if (seen.has(item.id)) continue;
+    if (REMOVED_MEMBER_IDS.has(item.id)) continue;
     const merged = map.get(item.id);
     if (!merged) continue;
     if (!includeArchived && merged.archived) continue;

@@ -581,7 +581,7 @@ export default async function ArchiveRoute({
         <MemoryHero
           eyebrow="Village calendar"
           title="Events & Birthdays"
-          lede="Festivals, jatharas, and birthday celebrations — with countdowns, calendar, and archive."
+          lede="Festivals, jatharas, and birthday celebrations — with a Telugu panchangam calendar (Tithi, Nakshatra, Rahu Kalam, Yama Gandam)."
           primaryHref="/gallery/"
           primaryLabel="Gallery"
           secondaryHref="/rvp-birthdays/"

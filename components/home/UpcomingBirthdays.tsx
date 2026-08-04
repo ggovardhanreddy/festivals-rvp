@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { withBase } from "@/lib/base";
 import type { Member } from "@/lib/types";
 import { formatBirthdayLabel, formatCountdown } from "@/lib/dates";
 import { memberAge } from "@/lib/member-groups";
 import { daysUntilNextBirthday } from "@/lib/member-birthdays";
+import { panchangHintForDob } from "@/lib/telugu-panchangam";
 
 export function UpcomingBirthdays({
   members,
@@ -23,6 +25,21 @@ export function UpcomingBirthdays({
     .filter((x) => x.days > 0)
     .sort((a, b) => a.days - b.days)
     .slice(0, limit);
+
+  const [hints, setHints] = useState<Record<string, string>>({});
+  const upcomingKey = upcoming.map((x) => x.member.id).join("|");
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const next: Record<string, string> = {};
+      for (const { member } of upcoming) {
+        const hint = panchangHintForDob(member.dob);
+        if (hint) next[member.id] = hint;
+      }
+      setHints(next);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [upcomingKey, upcoming]);
 
   if (!upcoming.length) {
     return (
@@ -89,6 +106,7 @@ export function UpcomingBirthdays({
                 <p className="muted">
                   {label || "Birthday not available"}
                   {age != null ? ` · turns ${age + 1}` : ""}
+                  {hints[member.id] ? ` · ${hints[member.id]}` : ""}
                 </p>
                 {!hasPhoto ? (
                   <p className="member-photo-soon">Photo Coming Soon</p>

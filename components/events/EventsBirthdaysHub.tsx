@@ -87,8 +87,11 @@ export function EventsBirthdaysHub({
             upcoming={upcoming}
             archive={archive}
             liveSlugs={liveSlugs}
-            members={[]}
-            showBirthdays={false}
+            members={members}
+            showBirthdays
+            showEvents
+            calendarEyebrow="Telugu calendar"
+            calendarLede="Tap a date for Tithi, Nakshatra, Rahu Kalam, Yama Gandam, festivals, and birthdays."
           />
         </div>
       ) : (
@@ -96,15 +99,17 @@ export function EventsBirthdaysHub({
           <TodayBirthdays members={todayMembers} />
           <UpcomingBirthdays members={members} />
           <EventsCalendar
-            upcoming={[]}
-            archive={[]}
-            liveSlugs={[]}
+            upcoming={upcoming}
+            archive={archive}
+            liveSlugs={liveSlugs}
             members={members}
             showBirthdays
+            showEvents
             calendarOnly
-            calendarEyebrow="Birthday calendar"
+            emphasizeBirthdays
+            calendarEyebrow="Birthday · Telugu calendar"
             calendarTitle="When we celebrate"
-            calendarLede="Member birthdays on file for this month."
+            calendarLede="Member birthdays with Tithi, Nakshatra, Rahu Kalam, and Yama Gandam — tap a date for details."
           />
           <section className="section" id="birthday-wishes">
             <div className="section-head">
