@@ -9167,16 +9167,6 @@ body {
   background: color-mix(in srgb, var(--color-bg-elevated, var(--bg-2)) 70%, transparent);
 }
 
-.village-heritage-memorial {
-  border-radius: var(--radius-lg, 1rem);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, #6b5535 8%, transparent),
-      transparent 42%
-    );
-}
-
 .village-heritage-forever-title {
   margin: 1.5rem 0 0.75rem;
 }
@@ -9184,8 +9174,6 @@ body {
 .village-heritage-memorial-list--legends li {
   font-family: var(--font-display);
   font-weight: 600;
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
-  background: color-mix(in srgb, var(--accent) 8%, var(--color-bg-elevated));
 }
 
 .village-heritage-memorial-list {
