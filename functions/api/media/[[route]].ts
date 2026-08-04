@@ -1,10 +1,11 @@
 /**
  * Media API (Cloudflare Pages Function)
  *
- * POST /api/media/upload — admin upload to R2
+ * POST /api/media/upload — admin upload to R2 (or free Google Drive at ≥90% R2)
  * POST /api/media/reindex — rebuild catalog/albums.json from R2 listing
  * GET  /api/media/sign?key= — short-lived signed URL for private objects
- * GET  /api/media/object?key= — stream object via R2 binding
+ * GET  /api/media/object?key= — stream object via R2 binding (or redirect Drive)
+ * GET  /api/media/usage — R2 usage + overflow status (admin)
  */
 
 import {
@@ -23,18 +24,35 @@ import {
   deriveThumbKey,
   validateUpload,
 } from "../../../lib/media-pipeline/validate";
+import {
+  isGoogleDriveConfigured,
+  uploadToGoogleDrive,
+} from "../../_lib/gdrive";
+import {
+  addTrackedR2Usage,
+  recountR2Usage,
+  shouldUseGoogleDriveOverflow,
+} from "../../_lib/r2-usage";
 
 interface Env {
   MEDIA?: R2Bucket;
+  RATE_LIMIT?: KVNamespace;
   ADMIN_PASSWORD_HASH?: string;
   ADMIN_SESSION_SECRET?: string;
   MEMBER_SESSION_SECRET?: string;
   MEDIA_SIGNING_SECRET?: string;
   R2_PUBLIC_BASE?: string;
+  R2_SOFT_LIMIT_BYTES?: string;
+  GOOGLE_DRIVE_CLIENT_ID?: string;
+  GOOGLE_DRIVE_CLIENT_SECRET?: string;
+  GOOGLE_DRIVE_REFRESH_TOKEN?: string;
+  GOOGLE_DRIVE_FOLDER_ID?: string;
   /** Optional: GitHub PAT with `repo` scope to trigger repository_dispatch */
   GITHUB_DISPATCH_TOKEN?: string;
   GITHUB_REPO?: string;
 }
+
+const GDRIVE_POINTER_MIME = "application/vnd.rvp.gdrive+json";
 
 type MediaR2Range =
   | { offset: number; length?: number }
@@ -362,6 +380,23 @@ async function handleMedia({
     }
 
     const obj = await env.MEDIA.get(key, range ? { range } : undefined);
+    if (obj) {
+      const backend = obj.customMetadata?.backend;
+      const driveUrl = obj.customMetadata?.publicUrl;
+      if (backend === "gdrive" && driveUrl) {
+        return Response.redirect(driveUrl, 302);
+      }
+      if (obj.httpMetadata?.contentType === GDRIVE_POINTER_MIME) {
+        try {
+          const pointer = (await obj.json()) as { publicUrl?: string };
+          if (pointer.publicUrl) {
+            return Response.redirect(pointer.publicUrl, 302);
+          }
+        } catch {
+          /* fall through */
+        }
+      }
+    }
     if (!obj) return new Response("Not found", { status: 404, headers });
     const responseHeaders = new Headers(headers);
     obj.writeHttpMetadata(responseHeaders);
@@ -532,74 +567,142 @@ async function handleMedia({
     const privateObject = isPrivateKey(key);
     const bytes = new Uint8Array(await file.arrayBuffer());
 
-    await env.MEDIA.put(key, bytes, {
-      httpMetadata: { contentType: mime },
-      customMetadata: {
-        fileName: originalName,
-        originalName,
-        category,
-        uploadedAt,
-        mime,
-        size: String(file.size),
-        clientOptimized: clientOptimized ? "1" : "0",
-        ...(originalBytes ? { originalBytes } : {}),
-        ...(year ? { year } : {}),
-        ...(album ? { album } : {}),
-        ...(width ? { width } : {}),
-        ...(height ? { height } : {}),
-        ...(duration ? { duration } : {}),
-      },
-    });
+    // Public uploads only: when R2 ≥ ~90% of free soft-limit, spill to free Google Drive.
+    // Private Fun Fest / documents stay on R2 (no public Drive links).
+    const usage = await shouldUseGoogleDriveOverflow(env, 0.9);
+    const useDrive =
+      !privateObject &&
+      usage.overflow &&
+      isGoogleDriveConfigured(env);
 
-    // Optional client-generated thumbnail (gallery/thumbs/… layout).
     let thumbKey: string | null = null;
-    if (thumbFile instanceof File && thumbFile.size > 0) {
-      const derived = deriveThumbKey(key);
-      if (derived && !isProtectedHeroKey(derived)) {
-        thumbKey = derived;
-        const thumbBytes = new Uint8Array(await thumbFile.arrayBuffer());
-        const thumbMime = guessMime(
-          thumbFile.name || "thumb.webp",
-          thumbFile.type || "image/webp",
-        );
-        await env.MEDIA.put(thumbKey, thumbBytes, {
-          httpMetadata: { contentType: thumbMime },
-          customMetadata: {
-            pairedKey: key,
-            category: "thumbs",
-            uploadedAt,
-            clientOptimized: "1",
-          },
-        });
-      }
-    }
-
-    // Preserve HEIC/originals alongside the primary key when requested.
-    // (Gallery path rejects raw HEIC; originals/ still allowed for logos/docs.)
     let originalKey: string | null = null;
-    const ext = extOf(originalName);
-    if (
-      preserveOriginal &&
-      (ext === "heic" || ext === "heif" || ext === "mov" || ext === "dng")
-    ) {
-      originalKey = `originals/${key}`;
-      await env.MEDIA.put(originalKey, bytes, {
-        httpMetadata: { contentType: mime },
+    let storage: "r2" | "gdrive" = "r2";
+    let gdriveId: string | null = null;
+    let publicUrl = "";
+
+    if (useDrive) {
+      storage = "gdrive";
+      const driveFile = await uploadToGoogleDrive(env, {
+        bytes,
+        name: originalName,
+        mime,
+      });
+      gdriveId = driveFile.fileId;
+      publicUrl = driveFile.publicUrl;
+
+      // Tiny R2 pointer so catalog keys still resolve (redirects to Drive).
+      const pointer = {
+        backend: "gdrive",
+        fileId: driveFile.fileId,
+        publicUrl: driveFile.publicUrl,
+        webViewLink: driveFile.webViewLink,
+        mime,
+        originalName,
+        size: file.size,
+        uploadedAt,
+      };
+      await env.MEDIA.put(key, JSON.stringify(pointer), {
+        httpMetadata: { contentType: GDRIVE_POINTER_MIME },
         customMetadata: {
+          backend: "gdrive",
+          gdriveId: driveFile.fileId,
+          publicUrl: driveFile.publicUrl,
           fileName: originalName,
           originalName,
-          category: "originals",
-          pairedKey: key,
+          category,
           uploadedAt,
+          mime,
+          size: String(file.size),
+          clientOptimized: clientOptimized ? "1" : "0",
+          ...(year ? { year } : {}),
+          ...(album ? { album } : {}),
         },
       });
+      // Pointer bytes only (~0.5KB) — still track lightly
+      await addTrackedR2Usage(env, 512);
+    } else {
+      await env.MEDIA.put(key, bytes, {
+        httpMetadata: { contentType: mime },
+        customMetadata: {
+          backend: "r2",
+          fileName: originalName,
+          originalName,
+          category,
+          uploadedAt,
+          mime,
+          size: String(file.size),
+          clientOptimized: clientOptimized ? "1" : "0",
+          ...(originalBytes ? { originalBytes } : {}),
+          ...(year ? { year } : {}),
+          ...(album ? { album } : {}),
+          ...(width ? { width } : {}),
+          ...(height ? { height } : {}),
+          ...(duration ? { duration } : {}),
+        },
+      });
+      await addTrackedR2Usage(env, file.size);
+
+      if (thumbFile instanceof File && thumbFile.size > 0) {
+        const derived = deriveThumbKey(key);
+        if (derived && !isProtectedHeroKey(derived)) {
+          thumbKey = derived;
+          const thumbBytes = new Uint8Array(await thumbFile.arrayBuffer());
+          const thumbMime = guessMime(
+            thumbFile.name || "thumb.webp",
+            thumbFile.type || "image/webp",
+          );
+          await env.MEDIA.put(thumbKey, thumbBytes, {
+            httpMetadata: { contentType: thumbMime },
+            customMetadata: {
+              pairedKey: key,
+              category: "thumbs",
+              uploadedAt,
+              clientOptimized: "1",
+              backend: "r2",
+            },
+          });
+          await addTrackedR2Usage(env, thumbFile.size);
+        }
+      }
+
+      const ext = extOf(originalName);
+      if (
+        preserveOriginal &&
+        (ext === "heic" || ext === "heif" || ext === "mov" || ext === "dng")
+      ) {
+        originalKey = `originals/${key}`;
+        await env.MEDIA.put(originalKey, bytes, {
+          httpMetadata: { contentType: mime },
+          customMetadata: {
+            fileName: originalName,
+            originalName,
+            category: "originals",
+            pairedKey: key,
+            uploadedAt,
+            backend: "r2",
+          },
+        });
+        await addTrackedR2Usage(env, file.size);
+      }
+
+      const publicBase = (env.R2_PUBLIC_BASE || "").replace(/\/$/, "");
+      publicUrl =
+        privateObject || !publicBase
+          ? `/api/media/object?key=${encodeURIComponent(key)}`
+          : `${publicBase}/${key}`;
     }
 
-    const publicBase = (env.R2_PUBLIC_BASE || "").replace(/\/$/, "");
-    const publicUrl =
-      privateObject || !publicBase
-        ? `/api/media/object?key=${encodeURIComponent(key)}`
-        : `${publicBase}/${key}`;
+    if (
+      usage.overflow &&
+      !useDrive &&
+      !privateObject &&
+      !isGoogleDriveConfigured(env)
+    ) {
+      check.warnings.push(
+        "R2 is at/above ~90% of the free soft limit, but Google Drive secrets are not configured — uploaded to R2 anyway. Set GOOGLE_DRIVE_* secrets to enable free Drive overflow.",
+      );
+    }
 
     return json(
       {
@@ -608,6 +711,8 @@ async function handleMedia({
         thumbKey,
         publicUrl,
         private: privateObject,
+        storage,
+        gdriveId,
         size: file.size,
         mime,
         originalName,
@@ -622,15 +727,48 @@ async function handleMedia({
         originalKey,
         clientOptimized,
         originalBytes: originalBytes ? Number(originalBytes) : null,
+        r2Usage: {
+          bytes: usage.bytes + (storage === "r2" ? file.size : 0),
+          limit: usage.limit,
+          ratio: usage.ratio,
+          overflow: usage.overflow,
+        },
         warnings: check.warnings,
         note:
-          check.warnings[0] ||
-          (clientOptimized
-            ? "Accepted client-optimized upload (Workers do not re-encode)."
-            : null),
+          storage === "gdrive"
+            ? "Stored on free Google Drive (R2 ≥ 90% soft limit). R2 keeps a tiny redirect pointer."
+            : check.warnings[0] ||
+              (clientOptimized
+                ? "Accepted client-optimized upload (Workers do not re-encode)."
+                : null),
         next: year && album
           ? "Call POST /api/media/reindex (or click Reindex gallery) so albums.json picks up this path."
           : "Flat category upload — not auto-indexed into Festival→Year albums unless year+album were set.",
+      },
+      200,
+      headers,
+    );
+  }
+
+  if (route === "usage" && request.method === "GET") {
+    if (!(await requireAdmin(request, env))) {
+      return json({ error: "Unauthorized" }, 401, headers);
+    }
+    const recount = url.searchParams.get("recount") === "1";
+    const bytes = recount
+      ? await recountR2Usage(env)
+      : (await shouldUseGoogleDriveOverflow(env)).bytes;
+    const status = await shouldUseGoogleDriveOverflow(env);
+    return json(
+      {
+        ok: true,
+        bytes: recount ? bytes : status.bytes,
+        limit: status.limit,
+        ratio: status.ratio,
+        overflowAt: 0.9,
+        overflowActive: status.overflow,
+        googleDriveConfigured: isGoogleDriveConfigured(env),
+        recounted: recount,
       },
       200,
       headers,

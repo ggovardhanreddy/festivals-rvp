@@ -14,6 +14,7 @@ import { Logo } from "./Logo";
 import { Clouds } from "./atmosphere/Clouds";
 import { Birds } from "./atmosphere/Birds";
 import { SunRays } from "./atmosphere/SunRays";
+import { useAllowHeavyEffects } from "@/lib/mobile-shell";
 import { useMediaUrl } from "@/lib/use-media-url";
 import type { VantaEffectName } from "@/components/vanta/VantaBackground";
 
@@ -54,13 +55,14 @@ export function MemoryHero({
   vantaEffect?: VantaEffectName;
 }) {
   const reduce = useReducedMotion();
+  const allowHeavy = useAllowHeavyEffects();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 40, damping: 20 });
   const sy = useSpring(y, { stiffness: 40, damping: 20 });
   const moveX = useTransform(sx, [-40, 40], [-14, 14]);
   const moveY = useTransform(sy, [-40, 40], [-12, 12]);
-  const useVanta = Boolean(vantaEffect);
+  const useVanta = Boolean(vantaEffect) && allowHeavy;
   const bgImage = useMediaUrl(backgroundImage);
   const bgVideo = useMediaUrl(backgroundVideo);
   const posterUrl = bgImage.url || undefined;

@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "how-to-request-records",
+    "title": "How to request Panchayat records",
+    "description": "Official notices, minutes, and forms will appear here as PDFs are uploaded by administrators. Until then, email reddivaripalli.rvp@gmail.com or use Contact to request a copy.",
+    "category": "Announcements",
+    "date": "2026-08-01",
+    "fileKey": "/contact/",
+    "mime": "text/html",
+    "updatedAt": "2026-08-04"
+  },
+  {
+    "id": "privacy-member-data",
+    "title": "Member photos & directory privacy",
+    "description": "See the Privacy Policy for how member photos, birthdays, and directory listings are handled, and how to request changes.",
+    "category": "Circulars",
+    "date": "2026-08-04",
+    "fileKey": "/privacy/",
+    "mime": "text/html",
+    "updatedAt": "2026-08-04"
+  },
+  {
+    "id": "village-services-index",
+    "title": "Village services index",
+    "description": "Directory (doctors, teachers, government staff), Lost & Found notices, Suggestions, and Developments are available from the site menu.",
+    "category": "Public Forms",
+    "date": "2026-08-04",
+    "fileKey": "/directory/",
+    "mime": "text/html",
+    "updatedAt": "2026-08-04"
+  }
+]

@@ -80,9 +80,10 @@ export const SEO_TITLE =
 export const SEO_DESCRIPTION =
   "Official digital home of Reddivaripalli Gram Panchayat (Sambepalle, YSR Kadapa). Explore heritage, festivals, members, gallery, and village services.";
 
-/** Public contact inbox — set NEXT_PUBLIC_CONTACT_EMAIL in deploy env. */
+/** Public contact inbox — override with NEXT_PUBLIC_CONTACT_EMAIL at build time. */
 export const SITE_CONTACT_EMAIL =
-  process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "";
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() ||
+  "reddivaripalli.rvp@gmail.com";
 
 export const SEO_KEYWORDS = [
   "Reddivaripalli",
@@ -155,6 +156,7 @@ export const COMMUNITY_NAV = [
   { href: "/heritage/", label: "Heritage Archive" },
   { href: "/fun-trips/", label: "Fun Fest" },
   { href: "/documents/", label: "Panchayat Documents" },
+  { href: "/lost-found/", label: "Lost & Found" },
   { href: "/suggestions/", label: "Suggestions" },
   { href: "/timeline/", label: "Timeline" },
 ] as const;

@@ -137,12 +137,19 @@ function albumsForFestival(albums: Album[], fest: FestivalDef) {
   );
 }
 
+function mediaFromAlbums(albums: Album[]): MediaWithAlbum[] {
+  return albums.flatMap((album) => {
+    const slimAlbum: Album = { ...album, media: [] };
+    return (album.media || []).map((item) => ({ ...item, album: slimAlbum }));
+  });
+}
+
 export function GalleryHub({
   albums,
-  media,
 }: {
   albums: Album[];
-  media: MediaWithAlbum[];
+  /** @deprecated unused — media is derived from albums */
+  media?: MediaWithAlbum[];
   years?: string[];
 }) {
   const router = useRouter();
@@ -163,8 +170,8 @@ export function GalleryHub({
   );
 
   const publicMedia = useMemo(
-    () => media.filter((m) => m.album.bucket !== "fun-trips"),
-    [media],
+    () => mediaFromAlbums(publicAlbums),
+    [publicAlbums],
   );
 
   const festivalCards = useMemo(() => {

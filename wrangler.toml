@@ -8,6 +8,12 @@ binding = "MEDIA"
 bucket_name = "reddivaripalli"
 preview_bucket_name = "reddivaripalli"
 
+# Login rate-limit counters (admin + Fun Fest)
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "624eb2d060674aa586550f67487e5adb"
+preview_id = "624eb2d060674aa586550f67487e5adb"
+
 # Secrets (set via dashboard / wrangler pages secret — never commit values):
 # ADMIN_PASSWORD_HASH
 # ADMIN_SESSION_SECRET

@@ -38,6 +38,8 @@ const routes = [
   "lost-found",
   "documents",
   "heritage",
+  "privacy",
+  "terms",
   "rvp-birthdays",
   // Public festival chapters with media (exclude private fun-trips from SEO)
   ...bucketsWithContent
@@ -61,14 +63,20 @@ const searchIndex = [
   ...media
     .filter((item) => item.album.bucket !== "fun-trips")
     .map((item) => ({
+      id: item.id,
       title: item.title,
       date: item.date,
       tags: item.tags,
       type: item.type,
       kind: "media",
+      file: item.file,
+      thumb: item.thumb,
+      poster: item.poster,
       album: item.album.title,
+      albumSlug: item.album.slug,
       bucket: item.album.bucket,
       year: item.album.year,
+      category: item.album.category,
       url: `${base}${albumHref(item.album)}`,
     })),
   ...loadMembers().map((m) => ({

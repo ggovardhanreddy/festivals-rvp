@@ -9,6 +9,7 @@ import {
   NAV,
   OFFICIAL_SUBTITLE,
   OFFICIAL_TITLE,
+  SITE_CONTACT_EMAIL,
   SITE_NAME,
   SITE_TAGLINE,
   VILLAGE_ADDRESS_LINE,
@@ -19,17 +20,22 @@ import {
 import { BUILD_ID } from "@/lib/build-id";
 import { useMemberAuth } from "./auth/MemberAuthProvider";
 import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
+import { useUiLang } from "./i18n/LanguageProvider";
 
 const FOOTER_EXTRA = [
   { href: "/search/", label: "Search" },
   { href: "/settings/", label: "Settings" },
+  { href: "/privacy/", label: "Privacy" },
+  { href: "/terms/", label: "Terms" },
 ] as const;
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const router = useRouter();
   const { session, ready } = useMemberAuth();
+  const { t } = useUiLang();
   const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
+  const inbox = SITE_CONTACT_EMAIL || "reddivaripalli.rvp@gmail.com";
 
   const onFunFest = (event: MouseEvent<HTMLAnchorElement>) => {
     if (!ready) {
@@ -50,52 +56,56 @@ export function SiteFooter() {
       <div className="footer-inner footer-inner--minimal">
         <div className="footer-brand">
           <Logo variant="auto" />
-          <p className="footer-village">
-            {OFFICIAL_TITLE}
-          </p>
+          <p className="footer-village">{OFFICIAL_TITLE}</p>
           <p className="muted footer-tagline">
             {OFFICIAL_SUBTITLE} · {VILLAGE_NAME} ({VILLAGE_ALSO_KNOWN_AS})
           </p>
           <p className="muted footer-tagline">{SITE_TAGLINE}</p>
+          <p className="muted footer-tagline footer-tagline-te" lang="te">
+            {"\u0c2a\u0c4d\u0c30\u0c24\u0c3f \u0c09\u0c24\u0c4d\u0c38\u0c35\u0c02 \u0c35\u0c3e\u0c30\u0c38\u0c24\u0c4d\u0c35\u0c02\u0c17\u0c3e \u2014 \u0c30\u0c46\u0c21\u0c4d\u0c21\u0c3f\u0c35\u0c3e\u0c30\u0c3f\u0c2a\u0c32\u0c4d\u0c32\u0c3f"}
+          </p>
         </div>
 
         <div className="footer-col">
-          <p className="footer-heading">Quick links</p>
+          <p className="footer-heading">{t("quick-links")}</p>
           <div className="footer-links">
             {NAV.map((item) => (
               <Link key={item.href} href={item.href}>
-                {item.label}
+                {t(item.href, item.label)}
               </Link>
             ))}
             {COMMUNITY_NAV.map((item) =>
               item.href === "/fun-trips/" ? (
                 <Link key={item.href} href={item.href} onClick={onFunFest}>
-                  {item.label}
+                  {t(item.href, item.label)}
                 </Link>
               ) : (
                 <Link key={item.href} href={item.href}>
-                  {item.label}
+                  {t(item.href, item.label)}
                 </Link>
               ),
             )}
             {FOOTER_EXTRA.map((item) => (
               <Link key={item.href} href={item.href}>
-                {item.label}
+                {t(item.href, item.label)}
               </Link>
             ))}
           </div>
         </div>
 
         <div className="footer-col" id="contact-details">
-          <p className="footer-heading">Contact</p>
+          <p className="footer-heading">{t("footer-contact")}</p>
           <p className="muted footer-address">{VILLAGE_ADDRESS_LINE}</p>
+          <a className="footer-map-link" href={`mailto:${inbox}`}>
+            {t("email-us")}: {inbox}
+          </a>
           <a
             className="footer-map-link"
             href={VILLAGE_MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Open in Google Maps
+            {t("open-maps")}
           </a>
         </div>
       </div>

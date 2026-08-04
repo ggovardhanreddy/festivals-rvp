@@ -3,6 +3,7 @@ import { MEMBER_AUTH, type MemberAuthRecord } from "../../_data/member-auth-data
 export interface AuthEnv {
   MEMBER_SESSION_SECRET?: string;
   ADMIN_SESSION_SECRET?: string;
+  RATE_LIMIT?: KVNamespace;
 }
 
 export const COOKIE = "rvp_member";

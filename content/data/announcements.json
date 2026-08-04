@@ -1,9 +1,23 @@
 [
   {
     "id": "welcome-2026",
-    "title": "Welcome to the RVP Youth archive",
-    "body": "Browse festivals, members, birthdays, and village memories. New photos are added through the GitHub CMS.",
+    "title": "Welcome to the Reddivaripalli digital home",
+    "body": "Browse festivals, members, birthdays, developments, and village memories. Stewards: RVP Youth.",
     "date": "2026-01-01",
+    "important": false
+  },
+  {
+    "id": "contact-inbox-2026",
+    "title": "Community inbox is open",
+    "body": "Reach RVP Youth at reddivaripalli.rvp@gmail.com via the Contact page, or visit Ramalayam using the map link.",
+    "date": "2026-08-04",
+    "important": true
+  },
+  {
+    "id": "ramalayam-dev-2026",
+    "title": "Sri Ramalayam development updates",
+    "body": "Follow planning and progress on the Developments page. Suggestions from villagers are welcome under Suggestions.",
+    "date": "2026-08-01",
     "important": false
   }
 ]

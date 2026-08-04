@@ -130,7 +130,7 @@ export function useCommunityList<T>(
 
 export async function trackAnalyticsHit(input: {
   path: string;
-  kind?: "pageview" | "notif-click" | "search" | "upload";
+  kind?: "pageview" | "notif-click" | "search" | "upload" | "error";
   meta?: string;
 }) {
   try {

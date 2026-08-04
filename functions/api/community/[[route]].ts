@@ -24,6 +24,7 @@ const COLLECTIONS = new Set([
   "lost-found",
   "panchayat-docs",
   "heritage",
+  "suggestions",
   "site-settings",
   "analytics",
   "audit",

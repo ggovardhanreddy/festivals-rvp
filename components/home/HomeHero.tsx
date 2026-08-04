@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { m, useReducedMotion } from "framer-motion";
 import { Logo } from "@/components/Logo";
+import { useAllowHeavyEffects } from "@/lib/mobile-shell";
 import { VILLAGE_ALSO_KNOWN_AS } from "@/lib/site";
 
 const VantaBirds = dynamic(
@@ -24,6 +25,7 @@ const HERO_LINES = [
  */
 export function HomeHero() {
   const reduce = useReducedMotion();
+  const allowVanta = useAllowHeavyEffects();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -35,7 +37,7 @@ export function HomeHero() {
   return (
     <section className="clean-hero home-hero" aria-label="Welcome">
       <div className="clean-hero-media" aria-hidden>
-        <VantaBirds />
+        {allowVanta ? <VantaBirds /> : null}
         <div className="clean-hero-veil home-hero-veil" />
       </div>
 

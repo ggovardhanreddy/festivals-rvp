@@ -1,7 +1,15 @@
+import {
+  checkLoginRateLimit,
+  clearLoginRateLimit,
+  clientIp,
+  recordLoginFailure,
+} from "../../_lib/rate-limit";
+
 interface Env {
   ADMIN_PASSWORD_HASH: string;
   ADMIN_SESSION_SECRET: string;
   SUPER_ADMIN_USERNAME?: string;
+  RATE_LIMIT?: KVNamespace;
 }
 interface FunctionContext {
   request: Request;
@@ -126,6 +134,23 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
           },
         );
       }
+      const rateKey = `admin-login:${clientIp(request)}`;
+      const limited = await checkLoginRateLimit(rateKey, env);
+      if (!limited.ok) {
+        return new Response(
+          JSON.stringify({
+            error: `Too many login attempts. Try again in ${limited.retryAfterSec}s.`,
+          }),
+          {
+            status: 429,
+            headers: {
+              ...headers,
+              "content-type": "application/json",
+              "retry-after": String(limited.retryAfterSec),
+            },
+          },
+        );
+      }
       let payload: { password?: string; username?: string } = {};
       try {
         payload = (await request.json()) as {
@@ -146,14 +171,26 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
         env.ADMIN_PASSWORD_HASH,
       );
       if (!userOk || !passOk) {
+        const fail = await recordLoginFailure(rateKey, env);
         return new Response(
-          JSON.stringify({ error: "Invalid Super Admin credentials" }),
+          JSON.stringify({
+            error: fail.locked
+              ? `Too many login attempts. Try again in ${fail.retryAfterSec}s.`
+              : "Invalid Super Admin credentials",
+          }),
           {
-            status: 401,
-            headers: { ...headers, "content-type": "application/json" },
+            status: fail.locked ? 429 : 401,
+            headers: {
+              ...headers,
+              "content-type": "application/json",
+              ...(fail.retryAfterSec
+                ? { "retry-after": String(fail.retryAfterSec) }
+                : {}),
+            },
           },
         );
       }
+      await clearLoginRateLimit(rateKey, env);
       const value = base64url(
         encoder.encode(
           JSON.stringify({

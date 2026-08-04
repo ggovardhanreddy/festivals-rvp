@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import {
-  allMedia,
   albumsByBucket,
   findYearBucketAlbum,
   publicAlbums,
   years,
 } from "@/lib/content";
+import type { Album, Media } from "@/lib/types";
 import type { Metadata } from "next";
 import {
   BUCKETS,
@@ -43,6 +43,7 @@ import { AppleBucketStage } from "@/components/home/AppleBucketStage";
 import { HistoryTimeline } from "@/components/home/HistoryTimeline";
 import { buildHistoryTimeline } from "@/lib/timeline";
 import { ContactPage } from "@/components/contact/ContactPage";
+import { PrivacyPage, TermsPage } from "@/components/legal/LegalPages";
 import { SettingsPage } from "@/components/settings/SettingsPage";
 import { DevelopmentsPage } from "@/components/developments/DevelopmentsPage";
 import { SuggestionsPage } from "@/components/suggestions/SuggestionsPage";
@@ -88,6 +89,29 @@ const HERO_ONLY_BUCKETS = new Set<string>([
   "fun-trips",
 ]);
 
+/** Drop heavy hashes / originals from gallery SSR payload. */
+function slimAlbumForClient(album: Album): Album {
+  return {
+    ...album,
+    media: (album.media || []).map(
+      (m): Media => ({
+        id: m.id,
+        file: m.file,
+        thumb: m.thumb,
+        poster: m.poster,
+        type: m.type,
+        title: m.title,
+        date: m.date,
+        tags: m.tags,
+        width: m.width,
+        height: m.height,
+        blurDataURL: m.blurDataURL,
+        fileAvif: m.fileAvif,
+      }),
+    ),
+  };
+}
+
 export function generateStaticParams() {
   const paths: { slug: string[] }[] = [
     { slug: ["search"] },
@@ -111,6 +135,8 @@ export function generateStaticParams() {
     { slug: ["chat"] },
     { slug: ["rvp-birthdays"] },
     { slug: ["fun-trips"] },
+    { slug: ["privacy"] },
+    { slug: ["terms"] },
   ];
 
   const published = publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
@@ -278,6 +304,14 @@ export async function generateMetadata({
       description: `Site preferences for ${SITE_NAME}.`,
       noindex: true,
     },
+    privacy: {
+      title: "Privacy Policy",
+      description: `How ${SITE_NAME} handles member photos, birthdays, analytics, and contact data for ${VILLAGE_ALSO_KNOWN_AS}.`,
+    },
+    terms: {
+      title: "Terms of Use",
+      description: `Terms for using the ${VILLAGE_ALSO_KNOWN_AS} community website stewarded by ${SITE_NAME}.`,
+    },
   };
   const page = slug[0] ? pageTitles[slug[0]] : undefined;
   if (page) {
@@ -434,7 +468,6 @@ export default async function ArchiveRoute({
 }) {
   const { slug } = await params;
   const path = slug.join("/");
-  const media = allMedia();
 
   if (BUCKET_ROUTES.includes(slug[0] as BucketKey) && slug.length === 1) {
     return <BucketPage bucket={slug[0] as BucketKey} />;
@@ -652,10 +685,9 @@ export default async function ArchiveRoute({
   }
 
   if (path === "gallery") {
-    const albums = publicAlbums().filter(
-      (a) => a.bucket !== "fun-trips" && (a.media?.length ?? 0) > 0,
-    );
-    const galleryMedia = media.filter((m) => m.album.bucket !== "fun-trips");
+    const albums = publicAlbums()
+      .filter((a) => a.bucket !== "fun-trips" && (a.media?.length ?? 0) > 0)
+      .map(slimAlbumForClient);
     return (
       <main className="page">
         <MemoryHero
@@ -668,7 +700,7 @@ export default async function ArchiveRoute({
           secondaryLabel="Years"
           vantaEffect="fog"
         />
-        <GalleryHub albums={albums} media={galleryMedia} />
+        <GalleryHub albums={albums} />
       </main>
     );
   }
@@ -684,9 +716,17 @@ export default async function ArchiveRoute({
             records, documents, doctors, and teachers.
           </p>
         </div>
-        <SearchClient items={media} />
+        <SearchClient />
       </main>
     );
+  }
+
+  if (path === "privacy") {
+    return <PrivacyPage />;
+  }
+
+  if (path === "terms") {
+    return <TermsPage />;
   }
 
   if (path === "about") {

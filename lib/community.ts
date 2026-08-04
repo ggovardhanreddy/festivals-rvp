@@ -23,6 +23,7 @@ export const COMMUNITY_COLLECTIONS = [
   "lost-found",
   "panchayat-docs",
   "heritage",
+  "suggestions",
   "site-settings",
   "analytics",
   "audit",

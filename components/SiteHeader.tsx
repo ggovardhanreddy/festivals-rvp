@@ -13,6 +13,7 @@ import { NotificationBell } from "./notifications/NotificationBell";
 import { useEditMode } from "@/lib/use-super-admin";
 import { useMemberAuth } from "./auth/MemberAuthProvider";
 import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
+import { useUiLang } from "./i18n/LanguageProvider";
 
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
@@ -49,6 +50,7 @@ export function SiteHeader() {
   const drawerRef = useRef<HTMLDivElement>(null);
   const { ready, isAdmin, editMode, toggleEditMode } = useEditMode();
   const { session: memberSession, ready: memberReady } = useMemberAuth();
+  const { t } = useUiLang();
   const router = useRouter();
   const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
 
@@ -183,7 +185,7 @@ export function SiteHeader() {
               data-active={isActive(item.href, normalized)}
               onClick={(event) => onDrawerNav(event, item.href)}
             >
-              {item.label}
+              {t(item.href, item.label)}
             </Link>
           ))}
           {COMMUNITY_NAV.map((item) =>
@@ -194,7 +196,7 @@ export function SiteHeader() {
                 data-active={isActive(item.href, normalized)}
                 onClick={onFunFestNav}
               >
-                {item.label}
+                {t(item.href, item.label)}
               </Link>
             ) : (
               <Link
@@ -203,15 +205,15 @@ export function SiteHeader() {
                 data-active={isActive(item.href, normalized)}
                 onClick={(event) => onDrawerNav(event, item.href)}
               >
-                {item.label}
+                {t(item.href, item.label)}
               </Link>
             ),
           )}
           <Link href="/search/" onClick={(event) => onDrawerNav(event, "/search/")}>
-            Search
+            {t("/search/")}
           </Link>
           <Link href="/settings/" onClick={(event) => onDrawerNav(event, "/settings/")}>
-            Settings
+            {t("/settings/")}
           </Link>
           {ready && isAdmin ? (
             <button
@@ -223,7 +225,7 @@ export function SiteHeader() {
                 close();
               }}
             >
-              {editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
+              {editMode ? t("exit-edit") : t("enter-edit")}
             </button>
           ) : null}
           {ready && isAdmin ? (
@@ -232,7 +234,7 @@ export function SiteHeader() {
               onClick={(event) => onDrawerNav(event, "/admin/")}
               className="nav-drawer-superadmin"
             >
-              Admin dashboard
+              {t("admin-dashboard")}
             </Link>
           ) : null}
           <button
@@ -243,7 +245,7 @@ export function SiteHeader() {
               window.dispatchEvent(new CustomEvent("rvp:show-install"));
             }}
           >
-            Install App
+            {t("install-app")}
           </button>
         </nav>
       </div>
@@ -259,14 +261,14 @@ export function SiteHeader() {
         <Link href="/" className="brand-link" aria-label="RVP Youth home">
           <Logo />
         </Link>
-        <nav className="nav-links" aria-label="Primary">
+        <nav className="nav-links" aria-label={t("primary-nav")}>
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               data-active={isActive(item.href, normalized)}
             >
-              {item.label}
+              {t(item.href, item.label)}
             </Link>
           ))}
         </nav>
@@ -278,13 +280,13 @@ export function SiteHeader() {
               type="button"
               className={`btn ghost nav-edit-mode-btn${editMode ? " is-active" : ""}`}
               aria-pressed={editMode}
-              aria-label={editMode ? "Turn off Edit Mode" : "Turn on Edit Mode"}
-              title={editMode ? "Editing — click to turn off Edit Mode" : "Turn on Edit Mode"}
+              aria-label={editMode ? t("exit-edit") : t("enter-edit")}
+              title={editMode ? t("exit-edit") : t("enter-edit")}
               onClick={toggleEditMode}
             >
               <Pencil size={14} aria-hidden />
               <span className="nav-edit-mode-label">
-                {editMode ? "Editing" : "Edit Mode"}
+                {editMode ? t("editing") : t("edit-mode")}
               </span>
             </button>
           ) : null}
@@ -292,16 +294,16 @@ export function SiteHeader() {
             <Link
               href="/admin/"
               className="btn ghost nav-superadmin-btn"
-              aria-label="Admin dashboard"
+              aria-label={t("admin-dashboard")}
             >
-              Admin
+              {t("admin")}
             </Link>
           ) : null}
           <button
             ref={btnRef}
             type="button"
             className="icon-btn nav-menu-btn"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? t("close-menu") : t("open-menu")}
             aria-expanded={open}
             aria-controls={menuId}
             onClick={toggle}

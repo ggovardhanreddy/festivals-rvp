@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "sug-welcome",
+    "subject": "Share ideas for the village",
+    "suggestion": "Use this page to suggest temple improvements, water works, festival help, or other village needs. Submissions are saved for RVP Youth stewards to review.",
+    "category": "General",
+    "status": "approved",
+    "submittedAt": "2026-08-01T00:00:00.000Z",
+    "name": "RVP Youth"
+  }
+]

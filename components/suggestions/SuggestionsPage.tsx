@@ -1,13 +1,12 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Reveal } from "@/components/Reveal";
 import { useMemberAuth } from "@/components/auth/MemberAuthProvider";
+import { useCommunityList } from "@/lib/use-community";
+import { useSuperAdmin } from "@/lib/use-super-admin";
 import type { Suggestion, SuggestionCategory, SuggestionStatus } from "@/lib/types";
-
-const STORAGE_KEY = "rvp-suggestions";
-const ADMIN_KEY = "rvp-admin";
+import suggestionsSeed from "@/content/data/suggestions.json";
 
 const CATEGORIES: SuggestionCategory[] = [
   "General",
@@ -22,39 +21,20 @@ const CATEGORIES: SuggestionCategory[] = [
 
 const STATUS_OPTIONS: SuggestionStatus[] = ["draft", "approved", "archived"];
 
-function loadStored(seed: Suggestion[]): Suggestion[] {
-  if (typeof window === "undefined") return seed;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return seed;
-    const stored = JSON.parse(raw) as Suggestion[];
-    const byId = new Map<string, Suggestion>();
-    for (const item of seed) byId.set(item.id, item);
-    for (const item of stored) byId.set(item.id, item);
-    return [...byId.values()].sort((a, b) =>
-      b.submittedAt.localeCompare(a.submittedAt),
-    );
-  } catch {
-    return seed;
-  }
-}
-
-function saveStored(items: Suggestion[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
+const SEED = suggestionsSeed as Suggestion[];
 
 function newId() {
   return `sug-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
+export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
   const { session } = useMemberAuth();
-  const searchParams = useSearchParams();
-  const [items, setItems] = useState<Suggestion[]>(seed);
-  const [ready, setReady] = useState(false);
+  const { isAdmin } = useSuperAdmin();
+  const { items, loading, submitItem, saveAll } = useCommunityList<Suggestion>(
+    "suggestions",
+    seed,
+  );
   const [submitted, setSubmitted] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [subject, setSubject] = useState("");
@@ -62,26 +42,22 @@ export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
   const [category, setCategory] = useState<SuggestionCategory>("General");
 
   useEffect(() => {
-    const adminParam = searchParams.get("admin");
-    if (adminParam === "1") {
-      localStorage.setItem(ADMIN_KEY, "true");
-    }
-    setIsAdmin(localStorage.getItem(ADMIN_KEY) === "true");
-    setItems(loadStored(seed));
-    setReady(true);
-  }, [seed, searchParams]);
+    if (session?.name) setName((prev) => prev || session.name);
+  }, [session]);
 
   const mine = useMemo(() => {
-    if (!session) return items.filter((s) => !s.submittedBy);
-    return items.filter((s) => s.submittedBy === session.memberId || !s.submittedBy);
+    if (!session) return items.filter((s) => !s.submittedBy || s.status !== "archived");
+    return items.filter(
+      (s) => s.submittedBy === session.memberId || (!s.submittedBy && s.name === session.name),
+    );
   }, [items, session]);
 
-  const persist = useCallback((next: Suggestion[]) => {
-    setItems(next);
-    saveStored(next);
-  }, []);
+  const publicApproved = useMemo(
+    () => items.filter((s) => s.status === "approved"),
+    [items],
+  );
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!subject.trim() || !suggestion.trim()) return;
 
@@ -97,7 +73,7 @@ export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
       submittedBy: session?.memberId,
     };
 
-    persist([entry, ...items]);
+    await submitItem(entry);
     setName("");
     setMobile("");
     setSubject("");
@@ -107,16 +83,9 @@ export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
     setTimeout(() => setSubmitted(false), 4000);
   }
 
-  function updateStatus(id: string, status: SuggestionStatus) {
-    persist(items.map((s) => (s.id === id ? { ...s, status } : s)));
-  }
-
-  if (!ready) {
-    return (
-      <div className="suggestions-page">
-        <p className="muted">Loading suggestions…</p>
-      </div>
-    );
+  async function updateStatus(id: string, status: SuggestionStatus) {
+    const next = items.map((s) => (s.id === id ? { ...s, status } : s));
+    await saveAll(next);
   }
 
   return (
@@ -128,7 +97,8 @@ export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
             <h1>Suggestions</h1>
             <p className="lede">
               Share ideas for the village — development, events, temple, and more.
-              Submissions stay on this device until reviewed locally.
+              Submissions sync to the community store when online (with a local
+              fallback on this device).
             </p>
           </div>
         </div>
@@ -198,6 +168,25 @@ export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
         </form>
       </Reveal>
 
+      {loading ? <p className="muted section">Loading suggestions…</p> : null}
+
+      {publicApproved.length ? (
+        <Reveal className="section">
+          <h2>Shared suggestions</h2>
+          <ul className="suggestions-list">
+            {publicApproved.map((s) => (
+              <li key={s.id} className="suggestions-item" data-status={s.status}>
+                <div className="suggestions-item-head">
+                  <strong>{s.subject}</strong>
+                  <span className="suggestions-meta">{s.category}</span>
+                </div>
+                <p className="muted">{s.suggestion}</p>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ) : null}
+
       {mine.length ? (
         <Reveal className="section">
           <h2>Your submitted suggestions</h2>
@@ -224,7 +213,7 @@ export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
         <Reveal className="section suggestions-admin">
           <h2>Admin review</h2>
           <p className="muted lede">
-            Local review panel — toggle status for suggestions stored on this device.
+            Review and update status for community suggestions.
           </p>
           {!items.length ? (
             <p className="muted">No suggestions yet.</p>
@@ -247,7 +236,7 @@ export function SuggestionsPage({ seed = [] }: { seed?: Suggestion[] }) {
                         type="button"
                         className="btn ghost"
                         data-active={s.status === st || undefined}
-                        onClick={() => updateStatus(s.id, st)}
+                        onClick={() => void updateStatus(s.id, st)}
                       >
                         {st}
                       </button>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   loadPanchayatDocsSeed,
@@ -9,6 +10,14 @@ import { useCommunityList } from "@/lib/use-community";
 import type { PanchayatDocCategory, PanchayatDocument } from "@/lib/types";
 import { Reveal } from "@/components/Reveal";
 import { DocumentCard } from "@/components/media/DocumentCard";
+
+function isSiteNotice(doc: PanchayatDocument) {
+  return (
+    doc.mime === "text/html" ||
+    doc.fileKey.startsWith("/") ||
+    doc.fileKey.startsWith("mailto:")
+  );
+}
 
 const SEED = loadPanchayatDocsSeed();
 
@@ -93,13 +102,19 @@ export function PanchayatDocsPage() {
                   <p className="muted">{doc.description}</p>
                 ) : null}
                 <p className="directory-meta">{doc.date}</p>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => setPreview(doc)}
-                >
-                  Preview PDF
-                </button>
+                {isSiteNotice(doc) ? (
+                  <Link className="btn" href={doc.fileKey}>
+                    Open
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => setPreview(doc)}
+                  >
+                    Preview PDF
+                  </button>
+                )}
               </div>
             </article>
           ))}

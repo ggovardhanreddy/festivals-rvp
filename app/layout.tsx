@@ -21,6 +21,8 @@ import {
   VILLAGE_NAME,
   VILLAGE_NAME_VARIANTS,
 } from "@/lib/site";
+import { SITE_FAQS } from "@/lib/faq";
+import { upcomingEvents } from "@/lib/events";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -279,6 +281,48 @@ const jsonLd = [
     description: `Official logo and social preview for ${VILLAGE_ALSO_KNOWN_AS} village digital archive.`,
     creditText: SITE_NAME,
   },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: SITE_FAQS.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  },
+  ...upcomingEvents(8).map((event) => ({
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    description: event.description,
+    startDate: event.date,
+    endDate: event.endDate || event.date,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    image: event.image
+      ? absoluteUrl(event.image, siteUrl)
+      : absoluteUrl("/logo/social-banner.png", siteUrl),
+    location: {
+      "@type": "Place",
+      name: `${VILLAGE_ALSO_KNOWN_AS} Village`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: VILLAGE_ALSO_KNOWN_AS,
+        addressRegion: VILLAGE_ADDRESS.state,
+        postalCode: VILLAGE_ADDRESS.pincode,
+        addressCountry: "IN",
+      },
+    },
+    organizer: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: siteUrl,
+    },
+    url: event.slug ? `${siteUrl}/${event.slug}/` : `${siteUrl}/events/`,
+  })),
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
