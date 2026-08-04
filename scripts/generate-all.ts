@@ -189,7 +189,25 @@ fs.writeFileSync(
   ]
     .map((route) => {
       const loc = route ? `${url}/${route}/` : `${url}/`;
-      const priority = route === "" || route === "about" ? "1.0" : "0.8";
+      // Prefer Home + Our Heritage over festival/year album deep pages.
+      let priority = "0.6";
+      if (route === "" || route === "about") priority = "1.0";
+      else if (
+        !route.includes("/") &&
+        ![
+          "vinayaka-chavithi",
+          "sankranthi",
+          "mathamma-jathara",
+          "devapatlamma-jathara",
+          "varalakshmi-vratam",
+          "dasara",
+          "deepavali",
+          "ugadi",
+          "sri-rama-navami",
+        ].includes(route)
+      ) {
+        priority = "0.8";
+      }
       return `<url><loc>${loc}</loc><lastmod>${sitemapLastmod}</lastmod><changefreq>weekly</changefreq><priority>${priority}</priority></url>`;
     })
     .join("")}</urlset>`,

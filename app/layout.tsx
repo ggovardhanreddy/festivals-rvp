@@ -235,48 +235,13 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    // Homepage trail only — do not list the whole nav (Google was showing Gallery › Contact).
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
-        name: "Home",
+        name: VILLAGE_ALSO_KNOWN_AS,
         item: `${siteUrl}/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Members",
-        item: `${siteUrl}/members/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "Our Heritage",
-        item: `${siteUrl}/about/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
-        name: "Events & Birthdays",
-        item: `${siteUrl}/events/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 5,
-        name: "Developments",
-        item: `${siteUrl}/developments/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 6,
-        name: "Gallery",
-        item: `${siteUrl}/gallery/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 7,
-        name: "Contact",
-        item: `${siteUrl}/contact/`,
       },
     ],
   },

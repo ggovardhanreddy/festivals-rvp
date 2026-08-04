@@ -241,7 +241,7 @@ export async function generateMetadata({
       description: `Meet RVP Youth Legacy, Core, and NextGen members of ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat.`,
     },
     about: {
-      title: "Our Heritage",
+      title: `About ${VILLAGE_ALSO_KNOWN_AS}`,
       description: `${VILLAGE_ALSO_KNOWN_AS} — One Village • One Family • One Heritage. Village history, agriculture, festivals, temples, and memorials.`,
     },
     years: {
