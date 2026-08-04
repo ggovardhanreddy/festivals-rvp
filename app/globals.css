@@ -9168,20 +9168,44 @@ body {
 }
 
 .village-heritage-forever-title {
-  margin: 1.5rem 0 0.75rem;
+  margin: 1.5rem 0 0.55rem;
+}
+
+.village-heritage-memorial-list-lede {
+  margin: 0 0 0.85rem;
+  max-width: 42rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ink) 68%, transparent);
+}
+
+.village-heritage-memorial-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem 2rem;
+  max-width: 40rem;
+}
+
+@media (min-width: 560px) {
+  .village-heritage-memorial-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .village-heritage-memorial-list--legends li {
   font-family: var(--font-display);
   font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
 }
 
-.village-heritage-memorial-list {
-  margin: 0;
-  padding-left: 1.15rem;
-  display: grid;
-  gap: 0.4rem;
-  max-width: 42rem;
+.village-heritage-memorial-list--forever li {
+  font-weight: 400;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--ink) 82%, transparent);
 }
 
 .village-heritage-memorial-closing {

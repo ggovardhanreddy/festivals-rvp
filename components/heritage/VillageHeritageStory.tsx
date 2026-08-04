@@ -320,6 +320,11 @@ export function VillageHeritageStory() {
             <h3 className="village-heritage-forever-title">
               {heritage.memorial.legendsTitle || "Legends"}
             </h3>
+            {heritage.memorial.legendsLede ? (
+              <p className="village-heritage-memorial-list-lede">
+                {heritage.memorial.legendsLede}
+              </p>
+            ) : null}
             <ul className="village-heritage-memorial-list village-heritage-memorial-list--legends">
               {heritage.memorial.legends.map((name) => (
                 <li key={name}>{name}</li>
@@ -330,7 +335,7 @@ export function VillageHeritageStory() {
         <h3 className="village-heritage-forever-title">
           {heritage.memorial.foreverRememberedTitle}
         </h3>
-        <ul className="village-heritage-memorial-list">
+        <ul className="village-heritage-memorial-list village-heritage-memorial-list--forever">
           {heritage.memorial.foreverRemembered.map((name) => (
             <li key={name}>{name}</li>
           ))}
