@@ -77,10 +77,10 @@ export const VILLAGE_ADDRESS_LINE = [
 ].join(", ");
 
 export const SEO_TITLE =
-  "Reddivaripalli Gram Panchayat | Sambepalle, YSR Kadapa, AP";
+  "Reddivaripalli Village | Official Website of Reddivaripalli Gram Panchayat, Sambepalle AP";
 
 export const SEO_DESCRIPTION =
-  "Official digital home of Reddivaripalli Gram Panchayat (Sambepalle, YSR Kadapa). Explore heritage, festivals, members, gallery, and village services.";
+  "Official website of Reddivaripalli (Kondreddigaripalli) Gram Panchayat, Sambepalle Mandal, Annamayya / YSR Kadapa, Andhra Pradesh 516215. Heritage, festivals, members, gallery, and village updates from RVP Youth.";
 
 /** Public contact inbox — override with NEXT_PUBLIC_CONTACT_EMAIL at build time. */
 export const SITE_CONTACT_EMAIL =

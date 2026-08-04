@@ -153,9 +153,9 @@ const jsonLd = [
   },
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: SITE_NAME,
-    alternateName: [...VILLAGE_NAME_VARIANTS],
+    "@type": "GovernmentOrganization",
+    name: OFFICIAL_TITLE,
+    alternateName: [SITE_NAME, ...VILLAGE_NAME_VARIANTS],
     url: siteUrl,
     logo: {
       "@type": "ImageObject",

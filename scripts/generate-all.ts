@@ -181,6 +181,7 @@ fs.writeFileSync(
   JSON.stringify(searchIndex, null, 2),
 );
 
+const sitemapLastmod = new Date().toISOString().slice(0, 10);
 fs.writeFileSync(
   path.join(root, "public", "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[
@@ -188,7 +189,8 @@ fs.writeFileSync(
   ]
     .map((route) => {
       const loc = route ? `${url}/${route}/` : `${url}/`;
-      return `<url><loc>${loc}</loc><changefreq>weekly</changefreq></url>`;
+      const priority = route === "" || route === "about" ? "1.0" : "0.8";
+      return `<url><loc>${loc}</loc><lastmod>${sitemapLastmod}</lastmod><changefreq>weekly</changefreq><priority>${priority}</priority></url>`;
     })
     .join("")}</urlset>`,
 );

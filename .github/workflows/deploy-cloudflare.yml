@@ -161,3 +161,6 @@ jobs:
           du -sh out
           test -f out/version.json && cat out/version.json
           npx wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true
+          # Notify Bing/IndexNow + sitemap pings after the new build is live.
+          sleep 15
+          npm run seo:indexnow
