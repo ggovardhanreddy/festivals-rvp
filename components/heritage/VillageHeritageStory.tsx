@@ -15,6 +15,7 @@ const TOC = [
   { id: "culture", label: "Culture & Traditions" },
   { id: "agriculture", label: "Agriculture" },
   { id: "notable", label: "Notable People" },
+  { id: "former-members", label: "Former Members" },
   { id: "development", label: "Development Journey" },
   { id: "heritage-gallery", label: "Image Gallery" },
   { id: "memorial", label: "In Loving Memory" },
@@ -248,6 +249,28 @@ export function VillageHeritageStory() {
           ))}
         </ul>
       </Reveal>
+
+      {heritage.formerMembers?.people?.length ? (
+        <Reveal className="section" id="former-members">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Village family</p>
+              <h2>{heritage.formerMembers.title}</h2>
+              <p className="lede">{heritage.formerMembers.lede}</p>
+            </div>
+          </div>
+          <ul className="village-heritage-name-cloud">
+            {heritage.formerMembers.people.map((person) => (
+              <li key={person.name}>
+                {person.name}
+                {person.role ? (
+                  <span className="muted"> — {person.role}</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ) : null}
 
       <Reveal className="section" id="development">
         <div className="section-head">

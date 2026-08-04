@@ -4811,12 +4811,6 @@ html.intro-active .glass-music {
   backdrop-filter: blur(8px);
 }
 
-.member-group-badge--former {
-  color: var(--muted);
-  border-color: color-mix(in srgb, var(--muted) 40%, var(--line));
-  background: color-mix(in srgb, var(--muted) 10%, transparent);
-}
-
 .member-group-badge--legacy {
   background: color-mix(in srgb, #c4a574 35%, #fff);
 }
@@ -6947,12 +6941,6 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
     linear-gradient(180deg, color-mix(in srgb, #3d7ea6 7%, var(--color-bg-elevated)), var(--color-bg-elevated));
 }
 
-.members-group[data-group="former"] {
-  border-color: color-mix(in srgb, var(--muted) 35%, var(--line));
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--muted) 8%, var(--color-bg-elevated)), var(--color-bg-elevated));
-}
-
 .members-group-head {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -6982,11 +6970,6 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 .members-group[data-group="nextgen"] .members-group-icon {
   color: #2f6f96;
   background: color-mix(in srgb, #3d7ea6 14%, transparent);
-}
-
-.members-group[data-group="former"] .members-group-icon {
-  color: var(--muted);
-  background: color-mix(in srgb, var(--muted) 14%, transparent);
 }
 
 .members-group-title {
@@ -7035,11 +7018,6 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 .stat-card[data-stat="nextgen"] .stat-card-icon {
   color: #2f6f96;
   background: color-mix(in srgb, #3d7ea6 14%, transparent);
-}
-
-.stat-card[data-stat="former"] .stat-card-icon {
-  color: var(--muted);
-  background: color-mix(in srgb, var(--muted) 14%, transparent);
 }
 
 @media (max-width: 640px) {

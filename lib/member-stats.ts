@@ -74,7 +74,6 @@ export function computeMemberStats(members: Member[]): MemberDirectoryStats {
     legacy: 0,
     core: 0,
     nextgen: 0,
-    former: 0,
   };
   const byProfession = Object.fromEntries(
     PROFESSION_ORDER.map((k) => [k, 0]),

@@ -60,13 +60,6 @@ export const MEMBER_AUTH: { version: number; members: MemberAuthRecord[] } = {
       "updatedAt": "2026-08-04T06:50:21.702Z"
     },
     {
-      "memberId": "g-giridhar-gopal-reddy",
-      "username": "Giridhar",
-      "name": "G Giridhar Gopal Reddy",
-      "passwordHash": "pbkdf2:393e28538bccf78bc780e0b69d7d9926:8AcSdxMnCZ95VIGFO0b_sfODSk-LNxMa8VXZREvkQ8M",
-      "updatedAt": "2026-08-02T16:03:46.185Z"
-    },
-    {
       "memberId": "d-harinatha",
       "username": "Harinatha",
       "name": "D Harinatha",
@@ -79,13 +72,6 @@ export const MEMBER_AUTH: { version: number; members: MemberAuthRecord[] } = {
       "name": "G Raja",
       "passwordHash": "pbkdf2:01474336c80a4a1926a83d61eee9b9e9:J5KMCstSDpwxlK_vj3NsSS6mlS2yDDAfWkpqq0RPj88",
       "updatedAt": "2026-08-04T06:29:07.050Z"
-    },
-    {
-      "memberId": "y-ramesh",
-      "username": "YRamesh",
-      "name": "Y Ramesh",
-      "passwordHash": "pbkdf2:b3faf1dfa1e08b7fad19c7675cb7fbd4:0ZlStDhc_k2XpEOkty41fH_OIyUCkShzJ1zbnQwjM64",
-      "updatedAt": "2026-08-02T16:03:46.265Z"
     },
     {
       "memberId": "y-naveen",
@@ -282,76 +268,6 @@ export const MEMBER_AUTH: { version: number; members: MemberAuthRecord[] } = {
       "name": "C Narasimha",
       "passwordHash": "pbkdf2:825e938f3ec71ac1bdb28a7ab1ae6ab8:8_nq8O86130rXwEkQTU4IdCl5hc0nyoAXneBs2HzCrw",
       "updatedAt": "2026-08-02T16:03:46.778Z"
-    },
-    {
-      "memberId": "d-rammohan-reddy",
-      "username": "Rammohan",
-      "name": "D Rammohan Reddy",
-      "passwordHash": "pbkdf2:8e7d8d1cacadc821fa1e6037211ac4a4:ys5rJRAQN9RWhdQoRQOiUYKSpYHgd3ZXfaP6TciGZpc",
-      "updatedAt": "2026-08-04T06:50:21.720Z"
-    },
-    {
-      "memberId": "g-jayachandra-reddy",
-      "username": "Jayachandra",
-      "name": "G Jayachandra Reddy",
-      "passwordHash": "pbkdf2:c6eda34cf7d05b266a178978d32d2cfc:oZO7hAi0B5Q6qnoZdDeJHvJ1ApYg7CROGPtbJZwMqvA",
-      "updatedAt": "2026-08-04T06:50:21.737Z"
-    },
-    {
-      "memberId": "g-vasudeva-reddy",
-      "username": "Vasudeva",
-      "name": "G Vasudeva Reddy",
-      "passwordHash": "pbkdf2:4dc22b9ba3ace20fc140422b30012f28:ralRqFjXF1pfdjguB2D9Jn2PJ63cg3ImMs0yN6ymxDo",
-      "updatedAt": "2026-08-04T06:50:21.754Z"
-    },
-    {
-      "memberId": "d-raja-reddy",
-      "username": "DRaja",
-      "name": "D Raja Reddy",
-      "passwordHash": "pbkdf2:51c20e25105217c9432b6c40e6c4d1df:onpf0rWcVwuFW9fC3oDxwpgdOmGrZCYiPHhSCNSV7AQ",
-      "updatedAt": "2026-08-04T06:50:21.771Z"
-    },
-    {
-      "memberId": "j-balaji",
-      "username": "JBalaji",
-      "name": "J Balaji",
-      "passwordHash": "pbkdf2:67e3ba4e7b7362a6c5ddd35ac68fdcf6:nLBdnsfpPmyr52bkcoxT-yAFloe2KbDlXT14CLSKC3s",
-      "updatedAt": "2026-08-04T06:50:21.787Z"
-    },
-    {
-      "memberId": "j-eswar-reddy",
-      "username": "Eswar",
-      "name": "J Eswar Reddy",
-      "passwordHash": "pbkdf2:3016630d71ec63cbf988e2132d807a1f:Bo9bVg7SFvrKgbd4fndY_-PWrpJQM7I25fasKC2zRII",
-      "updatedAt": "2026-08-04T06:50:21.805Z"
-    },
-    {
-      "memberId": "j-krishna-reddy",
-      "username": "JKrishna",
-      "name": "J Krishna Reddy",
-      "passwordHash": "pbkdf2:8c65bdf7fc899a4be1c63e135661cf06:PBq_B1Evif5HfXJt_JbjErX0CVfTsEIx1SDSPlNS-NU",
-      "updatedAt": "2026-08-04T06:50:21.821Z"
-    },
-    {
-      "memberId": "y-satheesh",
-      "username": "Satheesh",
-      "name": "Y Satheesh",
-      "passwordHash": "pbkdf2:af31798417b0c2c6411133e3fbc19f89:mvMaB-_0XSWeqJFu3sYwmFkzaUgoxhRuVLfuX-vO6uM",
-      "updatedAt": "2026-08-04T06:50:21.838Z"
-    },
-    {
-      "memberId": "y-uma",
-      "username": "YUma",
-      "name": "Y Uma",
-      "passwordHash": "pbkdf2:8e54cfaf94287268b31541c13f41bca4:FR4Ig0vQPvirddEnefhXA1UfvPEsCEqzPIV1BEO1UnM",
-      "updatedAt": "2026-08-04T06:50:21.854Z"
-    },
-    {
-      "memberId": "g-ravi-kumar-reddy",
-      "username": "Ravi",
-      "name": "G Ravi Kumar Reddy",
-      "passwordHash": "pbkdf2:e4347a3098f29b3bafe34b99993ad3bf:YYPFEZnkYcaGL3u1sJ1Bj2zxHAUjbeY3M3YcmP4ySCY",
-      "updatedAt": "2026-08-04T06:50:21.870Z"
     }
   ]
 } as const;

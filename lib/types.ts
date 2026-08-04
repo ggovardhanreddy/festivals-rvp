@@ -16,8 +16,8 @@ export type BucketKey =
   | "rvp-birthdays"
   | "fun-trips";
 
-/** Member circles: Legacy Circle · Core · Next Generation · Former */
-export type MemberGroup = "legacy" | "core" | "nextgen" | "former";
+/** Member circles: Legacy Circle · Core Members · Next Generation */
+export type MemberGroup = "legacy" | "core" | "nextgen";
 
 export type MemberSocialLink = {
   label: string;

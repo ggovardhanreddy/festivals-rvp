@@ -160,14 +160,6 @@
     "photo": "/members/d-shiva.webp"
   },
   {
-    "id": "dir-g-giridhar-gopal-reddy",
-    "name": "G Giridhar Gopal Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
     "id": "dir-g-govardhan-reddy",
     "name": "G Govardhan Reddy",
     "category": "Other Professionals",
@@ -294,94 +286,6 @@
     "profession": "Software / IT",
     "designation": "Software Engineer",
     "photo": "/members/kittu.webp"
-  },
-  {
-    "id": "dir-y-ramesh",
-    "name": "Y Ramesh",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-d-rammohan-reddy",
-    "name": "D Rammohan Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-g-jayachandra-reddy",
-    "name": "G Jayachandra Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-g-vasudeva-reddy",
-    "name": "G Vasudeva Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-d-raja-reddy",
-    "name": "D Raja Reddy",
-    "category": "Other Professionals",
-    "profession": "Temple Service",
-    "designation": "Priest (Devapatlamma Temple)",
-    "photo": null
-  },
-  {
-    "id": "dir-j-balaji",
-    "name": "J Balaji",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-j-eswar-reddy",
-    "name": "J Eswar Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-j-krishna-reddy",
-    "name": "J Krishna Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-y-satheesh",
-    "name": "Y Satheesh",
-    "category": "Other Professionals",
-    "profession": "Business",
-    "designation": "Business",
-    "photo": null
-  },
-  {
-    "id": "dir-y-uma",
-    "name": "Y Uma",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-g-ravi-kumar-reddy",
-    "name": "G Ravi Kumar Reddy",
-    "category": "Other Professionals",
-    "profession": "Business",
-    "designation": "Medical",
-    "photo": null
   },
   {
     "id": "dir-g-santhabushan-reddy",

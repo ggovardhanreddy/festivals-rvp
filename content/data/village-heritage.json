@@ -706,5 +706,71 @@
         "note": "Progress and village works"
       }
     ]
+  },
+  "formerMembers": {
+    "title": "Former Members",
+    "lede": "With respect, we remember these members of the Reddivaripalli family who remain part of our shared story.",
+    "people": [
+      {
+        "name": "G Giridhar Gopal Reddy",
+        "role": "Farmer",
+        "memorial": false
+      },
+      {
+        "name": "Y Ramesh",
+        "role": "Farmer",
+        "memorial": false
+      },
+      {
+        "name": "D Rammohan Reddy",
+        "role": "Farmer",
+        "memorial": true
+      },
+      {
+        "name": "G Jayachandra Reddy",
+        "role": "Farmer",
+        "memorial": false
+      },
+      {
+        "name": "G Vasudeva Reddy",
+        "role": "Farmer",
+        "memorial": true
+      },
+      {
+        "name": "D Raja Reddy",
+        "role": "Priest (Devapatlamma Temple)",
+        "memorial": false
+      },
+      {
+        "name": "J Balaji",
+        "role": "Farmer",
+        "memorial": false
+      },
+      {
+        "name": "J Eswar Reddy",
+        "role": "Farmer",
+        "memorial": false
+      },
+      {
+        "name": "J Krishna Reddy",
+        "role": "Farmer",
+        "memorial": false
+      },
+      {
+        "name": "Y Satheesh",
+        "role": "Business",
+        "memorial": false
+      },
+      {
+        "name": "Y Uma",
+        "role": "Farmer",
+        "memorial": false
+      },
+      {
+        "name": "G Ravi Kumar Reddy",
+        "role": "Medical",
+        "memorial": false
+      }
+    ]
   }
 }

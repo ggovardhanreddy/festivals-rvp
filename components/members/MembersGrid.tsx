@@ -20,7 +20,6 @@ import {
   Pencil,
   Upload,
   GripVertical,
-  Users,
 } from "lucide-react";
 import { withBase } from "@/lib/base";
 import type { Member, MemberGroup } from "@/lib/types";
@@ -60,7 +59,6 @@ const GROUP_ICONS = {
   legacy: Award,
   core: Star,
   nextgen: Rocket,
-  former: Users,
 } as const;
 
 type SortMode = "group" | "alpha";
@@ -677,10 +675,6 @@ export function MembersGrid({
         <div className="member-stat">
           <strong>{stats.byGroup.nextgen}</strong>
           <span>Next Generation</span>
-        </div>
-        <div className="member-stat">
-          <strong>{stats.byGroup.former}</strong>
-          <span>Former Members</span>
         </div>
         {PROFESSION_ORDER.map((key) => (
           <div key={key} className="member-stat member-stat--soft">
