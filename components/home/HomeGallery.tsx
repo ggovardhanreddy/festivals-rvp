@@ -94,11 +94,11 @@ export function HomeGallery({
   const rest = filtered.slice(5, 24);
 
   return (
-    <Reveal className="section home-gallery" id="gallery">
+    <Reveal className="section home-gallery" id="gallery" aria-labelledby="home-gallery-heading">
       <div className="section-head">
         <div>
           <p className="eyebrow">Memories</p>
-          <h2>Gallery</h2>
+          <h2 id="home-gallery-heading">Gallery</h2>
           <p className="lede">
             A living archive of festivals, faces, and ordinary days that became
             extraordinary.

@@ -126,23 +126,26 @@ function effectOptions(
   effect: VantaEffectName,
   dark: boolean,
   lowPower: boolean,
+  soft: boolean,
 ): Record<string, unknown> {
   switch (effect) {
-    case "birds":
+    case "birds": {
+      // Soft home hero: fewer, smaller, slower birds so copy stays readable.
       return {
         backgroundColor: dark ? 0x0a100e : 0x14241c,
         color1: dark ? 0xe8c07a : 0xd9ae62,
         color2: dark ? 0x4a8f6a : 0x3a7a55,
         colorMode: "lerpGradient",
-        birdSize: lowPower ? 1.55 : 2.05,
-        wingSpan: lowPower ? 28 : 36,
-        separation: lowPower ? 34 : 46,
-        alignment: lowPower ? 42 : 50,
-        cohesion: lowPower ? 32 : 40,
-        quantity: lowPower ? 4 : 6,
-        speedLimit: lowPower ? 3 : 3.8,
-        backgroundAlpha: 1,
+        birdSize: soft ? (lowPower ? 1.05 : 1.25) : lowPower ? 1.55 : 2.05,
+        wingSpan: soft ? (lowPower ? 22 : 26) : lowPower ? 28 : 36,
+        separation: soft ? 40 : lowPower ? 34 : 46,
+        alignment: soft ? 48 : lowPower ? 42 : 50,
+        cohesion: soft ? 36 : lowPower ? 32 : 40,
+        quantity: soft ? (lowPower ? 2 : 3) : lowPower ? 4 : 6,
+        speedLimit: soft ? (lowPower ? 1.8 : 2.2) : lowPower ? 3 : 3.8,
+        backgroundAlpha: soft ? 0.85 : 1,
       };
+    }
     case "fog":
       return {
         highlightColor: dark ? 0xc9a66b : 0xe8c07a,
@@ -194,9 +197,12 @@ function effectOptions(
 export function VantaBackground({
   effect,
   className = "",
+  soft = false,
 }: {
   effect: VantaEffectName;
   className?: string;
+  /** Lower intensity / cost — used on the homepage hero. */
+  soft?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const effectRef = useRef<VantaEffect | null>(null);
@@ -255,9 +261,9 @@ export function VantaBackground({
           gyroControls: false,
           minHeight: 200,
           minWidth: 200,
-          scale: 1,
-          scaleMobile: 1,
-          ...effectOptions(effect, dark, lowPower),
+          scale: soft ? 0.85 : 1,
+          scaleMobile: soft ? 0.75 : 1,
+          ...effectOptions(effect, dark, lowPower, soft),
         });
         const host = ref.current;
         if (host) {
@@ -275,9 +281,10 @@ export function VantaBackground({
       }
     };
 
+    // Soft hero: defer boot so LCP text/logo paint first.
     const kick = window.setTimeout(() => {
       if (!cancelled) void boot();
-    }, 40);
+    }, soft ? 280 : 40);
 
     // Fail-safe: never leave the hero blank if Vanta hangs
     const failsafe = window.setTimeout(() => {
@@ -285,7 +292,7 @@ export function VantaBackground({
         setUseFallback(true);
         setReady(true);
       }
-    }, 3500);
+    }, soft ? 2800 : 3500);
 
     return () => {
       cancelled = true;
@@ -294,7 +301,7 @@ export function VantaBackground({
       effectRef.current?.destroy();
       effectRef.current = null;
     };
-  }, [effect, reduce, lowPower, dark]);
+  }, [effect, reduce, lowPower, dark, soft]);
 
   return (
     <div

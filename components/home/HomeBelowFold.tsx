@@ -62,7 +62,16 @@ export function HomeBelowFold({
     <div className="page home-redesign" id="home-start">
       <LocationHomeNote />
 
+      {/* Primary story: About → Statistics → Events → Gallery */}
+      <AboutTeaser />
+
       <StatsOverview stats={stats} />
+
+      <Reveal>
+        <UpcomingEventsStrip events={upcomingEvents} liveSlugs={liveSlugs} />
+      </Reveal>
+
+      <HomeGallery items={galleryItems} years={yearList} />
 
       <Reveal>
         <TodayBirthdays members={todayMembers} />
@@ -72,9 +81,9 @@ export function HomeBelowFold({
         <UpcomingBirthdays members={members} />
       </Reveal>
 
-      <Reveal>
-        <UpcomingEventsStrip events={upcomingEvents} liveSlugs={liveSlugs} />
-      </Reveal>
+      <FestivalCalendar festivals={festivals} liveSlugs={liveSlugs} />
+
+      <CultureTraditions />
 
       <Reveal className="section" id="quick-actions">
         <div className="section-head">
@@ -119,14 +128,6 @@ export function HomeBelowFold({
           </div>
         </div>
       </Reveal>
-
-      <FestivalCalendar festivals={festivals} liveSlugs={liveSlugs} />
-
-      <AboutTeaser />
-
-      <CultureTraditions />
-
-      <HomeGallery items={galleryItems} years={yearList} />
     </div>
   );
 }

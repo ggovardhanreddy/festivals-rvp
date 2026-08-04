@@ -13,11 +13,11 @@ const ABOUT_IMAGE = "/brand/village-aerial.webp";
 
 export function AboutTeaser() {
   return (
-    <Reveal className="section home-about" id="about">
+    <Reveal className="section home-about" id="overview">
       <div className="about-teaser">
         <div className="about-teaser-copy">
           <p className="eyebrow">{VILLAGE_ALSO_KNOWN_AS}</p>
-          <h2>Our Heritage</h2>
+          <h2 id="about">Our Heritage</h2>
           <p className="lede">
             One Village • One Family • One Heritage — founded around 1850 as{" "}
             {VILLAGE_NAME} by Sri G. Konda Reddy.

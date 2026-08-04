@@ -19,11 +19,15 @@ const ICONS = {
 
 export function StatsOverview({ stats }: { stats: Stat[] }) {
   return (
-    <Reveal className="section home-stats" id="overview">
+    <Reveal className="section home-stats" id="statistics">
       <div className="section-head">
         <div>
           <p className="eyebrow">At a glance</p>
           <h2>Our community in numbers</h2>
+          <p className="lede">
+            Legacy Circle, Core Members, and NextGen — the people who steward
+            Reddivaripalli.
+          </p>
         </div>
       </div>
       <div className="stats-grid">

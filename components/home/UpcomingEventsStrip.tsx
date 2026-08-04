@@ -19,11 +19,11 @@ export function UpcomingEventsStrip({
   const live = new Set(liveSlugs);
 
   return (
-    <section className="section home-events" id="upcoming-events">
+    <section className="section home-events" id="events" aria-labelledby="home-events-heading">
       <div className="section-head">
         <div>
           <p className="eyebrow">Coming soon</p>
-          <h2>Upcoming events</h2>
+          <h2 id="home-events-heading">Upcoming events</h2>
           <p className="lede">The next five celebrations on the village calendar.</p>
         </div>
         <Link className="btn ghost" href="/events/">

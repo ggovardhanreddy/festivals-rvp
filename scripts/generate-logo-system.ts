@@ -1,6 +1,7 @@
 /**
- * RVP Youth — Community Unity logo system
- * Six figures in a circle (orange / green / blue) + RVP YOUTH wordmark.
+ * Reddivaripalli Village logo system
+ * Master PNG (banyan / temple / sun lockup) → transparent PNGs + icons.
+ * SVG fallbacks kept for legacy references.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -71,7 +72,7 @@ async function makeTransparentMaster() {
     console.warn("Master PNG missing — SVG-only generation");
     return null;
   }
-  // Knock out near-cream background for clean app icons
+  // Knock out solid black studio backdrop (keep dark green foliage / path).
   const { data, info } = await sharp(MASTER)
     .ensureAlpha()
     .raw()
@@ -81,19 +82,47 @@ async function makeTransparentMaster() {
     const r = data[i]!;
     const g = data[i + 1]!;
     const b = data[i + 2]!;
-    // Cream / near-white → transparent
-    if (r > 235 && g > 230 && b > 210) {
+    // Near-black only — foliage keeps a green channel; path keeps red/brown.
+    if (r <= 14 && g <= 14 && b <= 14) {
       data[i + 3] = 0;
     }
   }
 
-  const out = path.join(OUT, "logo-master.png");
+  const full = path.join(OUT, "logo-full.png");
   await sharp(data, {
     raw: { width: info.width, height: info.height, channels: 4 },
   })
     .png()
-    .toFile(out);
-  return out;
+    .toFile(full);
+
+  // Trim empty padding, then write full vertical lockup + header mark.
+  const trimmed = await sharp(full).trim({ threshold: 4 }).png().toBuffer();
+  const tMeta = await sharp(trimmed).metadata();
+  const tw = tMeta.width || 800;
+  const th = tMeta.height || 800;
+
+  // Vertical lockup (emblem + wordmark + pillars) for hero — tight crop, no letterbox.
+  await sharp(trimmed)
+    .resize({ width: 900, withoutEnlargement: true })
+    .png()
+    .toFile(path.join(OUT, "logo-vertical.png"));
+
+  // Header / compact master: circular emblem only (upper ~62% of artwork).
+  const emblemH = Math.max(1, Math.floor(th * 0.62));
+  const emblem = await sharp(trimmed)
+    .extract({ left: 0, top: 0, width: tw, height: emblemH })
+    .trim({ threshold: 4 })
+    .resize(640, 640, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png()
+    .toBuffer();
+
+  await sharp(emblem).png().toFile(path.join(OUT, "logo-master.png"));
+  await sharp(emblem).png().toFile(path.join(OUT, "logo-mark.png"));
+  fs.copyFileSync(MASTER, path.join(OUT, "logo-source.png"));
+  return path.join(OUT, "logo-master.png");
 }
 
 async function main() {
@@ -206,10 +235,9 @@ ${communityMark(110, 100, 0.78)}
     ),
   );
 
-  const transparentMaster = await makeTransparentMaster();
-  const markSource = transparentMaster
-    ? await sharp(transparentMaster)
-        .trim({ threshold: 8 })
+  const emblemMaster = await makeTransparentMaster();
+  const iconBuf = emblemMaster
+    ? await sharp(emblemMaster)
         .resize(512, 512, {
           fit: "contain",
           background: { r: 0, g: 0, b: 0, alpha: 0 },
@@ -221,28 +249,6 @@ ${communityMark(110, 100, 0.78)}
         .png()
         .toBuffer();
 
-  // Prefer cropping the mark circle from master for app icons
-  let iconBuf = markSource;
-  if (transparentMaster) {
-    const meta = await sharp(transparentMaster).metadata();
-    const w = meta.width || 512;
-    const h = meta.height || 512;
-    // Master is vertical logo — take upper mark region
-    iconBuf = await sharp(transparentMaster)
-      .extract({
-        left: Math.floor(w * 0.12),
-        top: Math.floor(h * 0.04),
-        width: Math.floor(w * 0.76),
-        height: Math.floor(w * 0.76),
-      })
-      .resize(512, 512, {
-        fit: "contain",
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-      })
-      .png()
-      .toBuffer();
-  }
-
   await sharp(iconBuf).png().toFile(path.join(OUT, "logo.png"));
   await sharp(iconBuf).resize(32, 32).png().toFile(path.join(OUT, "favicon-32x32.png"));
   await sharp(iconBuf).resize(16, 16).png().toFile(path.join(OUT, "favicon-16x16.png"));
@@ -251,32 +257,33 @@ ${communityMark(110, 100, 0.78)}
   await sharp(iconBuf).resize(192, 192).png().toFile(path.join(OUT, "android-icon.png"));
   await sharp(iconBuf).resize(512, 512).png().toFile(path.join(OUT, "app-icon.png"));
 
-  // Full vertical lockup PNG from master when available
-  if (transparentMaster) {
-    await sharp(transparentMaster)
-      .resize(800, 1080, {
+  // Social OG banner — dark village atmosphere + new emblem lockup
+  const bannerBase = await sharp({
+    create: {
+      width: 1200,
+      height: 630,
+      channels: 3,
+      background: { r: 10, g: 16, b: 14 },
+    },
+  })
+    .png()
+    .toBuffer();
+
+  if (fs.existsSync(path.join(OUT, "logo-vertical.png"))) {
+    const lockup = await sharp(path.join(OUT, "logo-vertical.png"))
+      .resize(520, 560, {
         fit: "contain",
         background: { r: 0, g: 0, b: 0, alpha: 0 },
       })
       .png()
-      .toFile(path.join(OUT, "logo-vertical.png"));
-    fs.copyFileSync(MASTER, path.join(OUT, "logo-source.png"));
+      .toBuffer();
+    await sharp(bannerBase)
+      .composite([{ input: lockup, gravity: "centre" }])
+      .png()
+      .toFile(path.join(OUT, "social-banner.png"));
+  } else {
+    await sharp(bannerBase).png().toFile(path.join(OUT, "social-banner.png"));
   }
-
-  const bannerSvg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="${CREAM}"/>
-  <circle cx="980" cy="80" r="220" fill="${ORANGE}" opacity="0.12"/>
-  <circle cx="120" cy="520" r="180" fill="${GREEN}" opacity="0.14"/>
-  <circle cx="600" cy="560" r="200" fill="${BLUE}" opacity="0.1"/>
-  <g transform="translate(120 95) scale(1.85)">
-${communityMark(100, 100, 1).replace(/^/gm, "    ")}
-  </g>
-  <text x="480" y="280" fill="${BLUE}" font-family="Montserrat, ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="84" font-weight="800" letter-spacing="4">RVP YOUTH</text>
-  <text x="480" y="340" fill="#3a5f8a" font-family="Georgia, 'Times New Roman', serif" font-size="28">Where Every Celebration Becomes a Legacy.</text>
-  <text x="480" y="390" fill="#5a6b7a" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="22">Our Village. Our Heritage. Our Memories.</text>
-</svg>`;
-  await sharp(Buffer.from(bannerSvg)).png().toFile(path.join(OUT, "social-banner.png"));
 
   const mirrors: [string, string, "copy" | "jpg"][] = [
     ["logo-light.svg", "rvp-youth-logo-light.svg", "copy"],
@@ -309,7 +316,7 @@ ${communityMark(100, 100, 1).replace(/^/gm, "    ")}
     path.join(process.cwd(), "public", "apple-touch-icon.png"),
   );
 
-  console.log("RVP Youth community logo system ready → public/logo/");
+  console.log("Reddivaripalli Village logo system ready → public/logo/");
 }
 
 main().catch((error) => {

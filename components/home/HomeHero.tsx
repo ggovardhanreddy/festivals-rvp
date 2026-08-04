@@ -35,34 +35,30 @@ export function HomeHero() {
   }, []);
 
   return (
-    <section className="clean-hero home-hero" aria-label="Welcome">
+    <section className="clean-hero home-hero" aria-labelledby="home-hero-title">
       <div className="clean-hero-media" aria-hidden>
-        {allowVanta ? <VantaBirds /> : null}
+        {allowVanta ? <VantaBirds soft /> : null}
         <div className="clean-hero-veil home-hero-veil" />
       </div>
 
       <div className="clean-hero-content home-hero-content">
+        {/* Wordmark lives in the logo artwork — keep one SEO H1, visually hidden. */}
+        <h1 id="home-hero-title" className="sr-only">
+          {VILLAGE_ALSO_KNOWN_AS} Village — Heritage, Community, Progress
+        </h1>
         <m.div
           className="home-hero-logo-wrap"
           initial={reduce ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <Logo variant="vertical" className="home-hero-logo" priority />
+          <Logo variant="vertical" className="home-hero-logo" priority glossy={false} />
         </m.div>
-        <m.h1
-          className="home-hero-title"
-          initial={reduce ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.15 }}
-        >
-          {VILLAGE_ALSO_KNOWN_AS}
-        </m.h1>
         <m.ul
           className="home-hero-address"
           initial={reduce ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.28 }}
+          transition={{ duration: 0.55, delay: 0.22 }}
         >
           {HERO_LINES.map((line) => (
             <li key={line}>{line}</li>
@@ -72,23 +68,23 @@ export function HomeHero() {
           className="clean-hero-cta home-hero-cta"
           initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.42 }}
+          transition={{ duration: 0.5, delay: 0.36 }}
         >
-          <Link className="btn" href="/members/">
-            Members
+          <Link className="btn" href="#overview">
+            Explore the village
           </Link>
           <Link className="btn ghost" href="/about/">
-            Our Heritage
+            Our heritage
           </Link>
-          <Link className="btn ghost" href="/events/">
-            Events & Birthdays
+          <Link className="btn ghost" href="/gallery/">
+            Gallery
           </Link>
         </m.div>
 
         <a
           className="clean-hero-scroll home-hero-scroll"
           href="#overview"
-          aria-label="Scroll to overview"
+          aria-label="Scroll to About Reddivaripalli"
         >
           <span>Scroll</span>
           <span className="clean-hero-scroll-line" aria-hidden />

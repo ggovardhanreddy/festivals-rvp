@@ -7,17 +7,20 @@ export function Reveal({
   delay = 0,
   className,
   id,
+  "aria-labelledby": ariaLabelledBy,
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
   id?: string;
+  "aria-labelledby"?: string;
 }) {
   const reduce = useReducedMotion();
   return (
     <m.div
       id={id}
       className={className}
+      aria-labelledby={ariaLabelledBy}
       // Never start at opacity 0 — whileInView can miss on mobile when
       // overflow is locked or IntersectionObserver is delayed after nav.
       initial={reduce ? false : { opacity: 1, y: 18 }}

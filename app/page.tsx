@@ -1,8 +1,23 @@
+import type { Metadata } from "next";
 import { allMedia, bucketsWithContent, years } from "@/lib/content";
 import { countByGroup, loadMembers } from "@/lib/members";
 import { loadEvents, upcomingEvents } from "@/lib/events";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeBelowFold } from "@/components/home/HomeBelowFold";
+import {
+  OFFICIAL_TITLE,
+  SITE_TAGLINE,
+  VILLAGE_ADDRESS_LINE,
+  VILLAGE_ALSO_KNOWN_AS,
+} from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: `${VILLAGE_ALSO_KNOWN_AS} · ${OFFICIAL_TITLE} | ${SITE_TAGLINE}`,
+  },
+  description: `${SITE_TAGLINE} Official digital home of ${VILLAGE_ALSO_KNOWN_AS} Grama Panchayat — festivals, members, heritage, and community updates. ${VILLAGE_ADDRESS_LINE}.`,
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   const media = allMedia();

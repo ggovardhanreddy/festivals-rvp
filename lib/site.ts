@@ -18,6 +18,8 @@ export const OFFICIAL_TITLE = "Reddivaripalli Gram Panchayat";
 export const OFFICIAL_SUBTITLE = "Official Digital Identity";
 export const OFFICIAL_MISSION =
   "The living digital home of Reddivaripalli — preserving festivals, people, projects, and history for generations.";
+/** Brand pillars from the village lockup */
+export const SITE_TAGLINE_PILLARS = "Heritage · Community · Progress";
 /** Primary brand line */
 export const SITE_TAGLINE = "Where Every Celebration Becomes a Legacy.";
 export const SITE_TAGLINE_HERITAGE = "Our Village. Our Heritage. Our Memories.";

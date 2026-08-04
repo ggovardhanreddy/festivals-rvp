@@ -15,9 +15,8 @@ type LogoVariant =
   | "vertical";
 
 /**
- * Always renders the provided brand artwork (Downloads logo.png → logo-master).
- * SVG variants are kept only for tiny mark / favicon use cases.
- * Gloss: CSS specular sheen on a glass-finish shell.
+ * Brand artwork — circular emblem (header) or full vertical lockup (hero).
+ * Source: public/brand/rvp-youth-logo-master.png → scripts/generate-logo-system.ts
  */
 export function Logo({
   className = "",
@@ -36,10 +35,11 @@ export function Logo({
   priority?: boolean;
 }) {
   const vertical = variant === "vertical";
+  const mark = markOnly || variant === "mark";
 
   const src = withBase(
-    markOnly || variant === "mark"
-      ? "/logo/mark.svg"
+    mark
+      ? "/logo/logo-mark.png"
       : vertical
         ? "/logo/logo-vertical.png"
         : "/logo/logo-master.png",
@@ -58,9 +58,9 @@ export function Logo({
       <img
         className={`brand-logo ${vertical ? "brand-logo-vertical" : ""} ${className}`.trim()}
         src={src}
-        alt="RVP Youth — Reddivaripalli"
-        width={markOnly ? 40 : vertical ? 120 : 168}
-        height={markOnly ? 40 : vertical ? 98 : 48}
+        alt="Reddivaripalli Village — Heritage, Community, Progress"
+        width={mark ? 40 : vertical ? 120 : 168}
+        height={mark ? 40 : vertical ? 160 : 48}
         draggable={false}
         decoding={priority ? "sync" : "async"}
         loading={priority ? "eager" : "lazy"}
