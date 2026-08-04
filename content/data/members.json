@@ -26,7 +26,7 @@
   {
     "id": "g-dhanunjaya-reddy",
     "name": "G Dhanunjaya Reddy",
-    "photo": null,
+    "photo": "/members/dhanunjaya.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Government Employee – Vigilance Director"
@@ -34,7 +34,7 @@
   {
     "id": "g-vijay-kumar-reddy",
     "name": "G Vijay Kumar Reddy",
-    "photo": null,
+    "photo": "/members/vijaykumar.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Business"
@@ -50,7 +50,7 @@
   {
     "id": "g-santhabushan-reddy",
     "name": "G Santhabushan Reddy",
-    "photo": null,
+    "photo": "/members/santhabushan.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Computer Science Engineer"
@@ -74,7 +74,7 @@
   {
     "id": "y-naveen",
     "name": "Y Naveen",
-    "photo": null,
+    "photo": "/members/naveen.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Village Revenue Officer (VRO) – Government Employee"

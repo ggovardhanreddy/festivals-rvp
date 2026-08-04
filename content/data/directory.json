@@ -69,7 +69,7 @@
     "category": "Government Employees",
     "profession": "Government Employee",
     "designation": "Government Employee – Vigilance Director",
-    "photo": null
+    "photo": "/members/dhanunjaya.webp"
   },
   {
     "id": "dir-g-ramesh-kumar-reddy",
@@ -93,7 +93,7 @@
     "category": "Government Employees",
     "profession": "Government Employee",
     "designation": "Village Revenue Officer (VRO) – Government Employee",
-    "photo": null
+    "photo": "/members/naveen.webp"
   },
   {
     "id": "dir-c-ganesh",
@@ -213,7 +213,7 @@
     "category": "Other Professionals",
     "profession": "Business",
     "designation": "Business",
-    "photo": null
+    "photo": "/members/vijaykumar.webp"
   },
   {
     "id": "dir-j-bhanu",
@@ -293,6 +293,6 @@
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Computer Science Engineer",
-    "photo": null
+    "photo": "/members/santhabushan.webp"
   }
 ]
