@@ -22,7 +22,7 @@ import { pastEvents, upcomingEvents } from "@/lib/events";
 import { loadDevelopments } from "@/lib/developments";
 import { loadSuggestionsSeed } from "@/lib/suggestions";
 import { MembersPage } from "@/components/members/MembersPage";
-import { EventsCalendar } from "@/components/events/EventsCalendar";
+import { EventsBirthdaysHub } from "@/components/events/EventsBirthdaysHub";
 import { GalleryHub } from "@/components/gallery/GalleryHub";
 import { VillageDepthMap } from "@/components/VillageDepthMap";
 import { FestivalIdolBanner } from "@/components/FestivalIdolBanner";
@@ -84,6 +84,7 @@ const BUCKET_ROUTES: BucketKey[] = [
 
 const HERO_ONLY_BUCKETS = new Set<string>([
   ...CULTURE_FESTIVALS.map((f) => f.key),
+  "rvp-birthdays",
   "fun-trips",
 ]);
 
@@ -108,6 +109,7 @@ export function generateStaticParams() {
     { slug: ["documents"] },
     { slug: ["heritage"] },
     { slug: ["chat"] },
+    { slug: ["rvp-birthdays"] },
     { slug: ["fun-trips"] },
   ];
 
@@ -332,10 +334,20 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
         {!albums.length && (
           <Reveal className="section">
             <EmptyState
-              title="Photos coming soon"
-              description={`Add photos under content/<YEAR>/${bucket}/ and rebuild.`}
-              actionHref="/admin/"
-              actionLabel="CMS guide"
+              title={
+                bucket === "rvp-birthdays"
+                  ? "Birthday gallery coming soon"
+                  : "Photos coming soon"
+              }
+              description={
+                bucket === "rvp-birthdays"
+                  ? "Birthday albums will appear here as photos are added under content/<YEAR>/rvp-birthdays/."
+                  : `Add photos under content/<YEAR>/${bucket}/ and rebuild.`
+              }
+              actionHref={bucket === "rvp-birthdays" ? "/events/?tab=birthdays" : "/admin/"}
+              actionLabel={
+                bucket === "rvp-birthdays" ? "View birthdays" : "CMS guide"
+              }
             />
           </Reveal>
         )}
@@ -568,15 +580,15 @@ export default async function ArchiveRoute({
       <main className="page">
         <MemoryHero
           eyebrow="Village calendar"
-          title="Events"
-          lede="Festivals, jatharas, and the next gatherings — with countdowns and archive."
+          title="Events & Birthdays"
+          lede="Festivals, jatharas, and birthday celebrations — with countdowns, calendar, and archive."
           primaryHref="/gallery/"
           primaryLabel="Gallery"
-          secondaryHref="/members/"
-          secondaryLabel="Members"
+          secondaryHref="/rvp-birthdays/"
+          secondaryLabel="Birthday gallery"
           vantaEffect="halo"
         />
-        <EventsCalendar
+        <EventsBirthdaysHub
           upcoming={upcomingEvents(5)}
           archive={pastEvents()}
           liveSlugs={liveSlugs}
@@ -630,8 +642,8 @@ export default async function ArchiveRoute({
         <MemoryHero
           showLogo
           atmosphere
-          eyebrow="Our Heritage"
-          title="One Village • One Family • One Heritage"
+          eyebrow="Reddivaripalli"
+          title="Our Heritage"
           lede={`${VILLAGE_ALSO_KNOWN_AS} — founded around 1850 as Kondareddigaripalli by Sri G. Konda Reddy. A living record of history, agriculture, festivals, temples, and the people who shaped our home.`}
           primaryHref="/heritage/"
           primaryLabel="Heritage Archive"

@@ -75,11 +75,11 @@ export function HomeHero() {
           <Link className="btn" href="/members/">
             Members
           </Link>
-          <Link className="btn ghost" href="/directory/">
-            Directory
+          <Link className="btn ghost" href="/about/">
+            Our Heritage
           </Link>
           <Link className="btn ghost" href="/events/">
-            Events
+            Events & Birthdays
           </Link>
         </m.div>
 

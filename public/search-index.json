@@ -8332,33 +8332,13 @@
     "url": "/members/"
   },
   {
-    "title": "G Jayachandra Reddy",
+    "title": "G Santhabushan Reddy",
     "kind": "member",
     "tags": [
-      "Farmer",
+      "Computer Science Engineer",
       "legacy"
     ],
-    "body": "Farmer",
-    "url": "/members/"
-  },
-  {
-    "title": "G Vasudeva Reddy",
-    "kind": "member",
-    "tags": [
-      "Farmer",
-      "legacy"
-    ],
-    "body": "Farmer",
-    "url": "/members/"
-  },
-  {
-    "title": "G Ravi Kumar Reddy",
-    "kind": "member",
-    "tags": [
-      "Medical Shop",
-      "legacy"
-    ],
-    "body": "Medical Shop",
+    "body": "Computer Science Engineer",
     "url": "/members/"
   },
   {
@@ -8366,29 +8346,9 @@
     "kind": "member",
     "tags": [
       "Farmer",
-      "legacy"
+      "former"
     ],
     "body": "Farmer",
-    "url": "/members/"
-  },
-  {
-    "title": "D Rammohan Reddy",
-    "kind": "member",
-    "tags": [
-      "Farmer",
-      "legacy"
-    ],
-    "body": "Farmer",
-    "url": "/members/"
-  },
-  {
-    "title": "D Raja Reddy",
-    "kind": "member",
-    "tags": [
-      "Priest (Devapatlamma Temple)",
-      "legacy"
-    ],
-    "body": "Priest (Devapatlamma Temple)",
     "url": "/members/"
   },
   {
@@ -8416,7 +8376,7 @@
     "kind": "member",
     "tags": [
       "Farmer",
-      "legacy"
+      "former"
     ],
     "body": "Farmer",
     "url": "/members/"
@@ -8432,26 +8392,6 @@
     "url": "/members/"
   },
   {
-    "title": "Y Satheesh",
-    "kind": "member",
-    "tags": [
-      "Business (Shop)",
-      "legacy"
-    ],
-    "body": "Business (Shop)",
-    "url": "/members/"
-  },
-  {
-    "title": "Y Uma",
-    "kind": "member",
-    "tags": [
-      "Farmer",
-      "legacy"
-    ],
-    "body": "Farmer",
-    "url": "/members/"
-  },
-  {
     "title": "J Shiva",
     "kind": "member",
     "tags": [
@@ -8459,36 +8399,6 @@
       "legacy"
     ],
     "body": "Government Teacher (Mathematics)",
-    "url": "/members/"
-  },
-  {
-    "title": "J Balaji",
-    "kind": "member",
-    "tags": [
-      "Farmer",
-      "legacy"
-    ],
-    "body": "Farmer",
-    "url": "/members/"
-  },
-  {
-    "title": "J Krishna Reddy",
-    "kind": "member",
-    "tags": [
-      "Farmer",
-      "legacy"
-    ],
-    "body": "Farmer",
-    "url": "/members/"
-  },
-  {
-    "title": "J Eswar Reddy",
-    "kind": "member",
-    "tags": [
-      "Farmer",
-      "legacy"
-    ],
-    "body": "Farmer",
     "url": "/members/"
   },
   {
@@ -8672,7 +8582,7 @@
     "url": "/members/"
   },
   {
-    "title": "J Niranjan",
+    "title": "J Niranjan Reddy",
     "kind": "member",
     "tags": [
       "Indian Army",
@@ -8749,6 +8659,106 @@
       "nextgen"
     ],
     "body": "Software Engineer",
+    "url": "/members/"
+  },
+  {
+    "title": "D Rammohan Reddy",
+    "kind": "member",
+    "tags": [
+      "Farmer",
+      "former"
+    ],
+    "body": "Farmer",
+    "url": "/members/"
+  },
+  {
+    "title": "G Jayachandra Reddy",
+    "kind": "member",
+    "tags": [
+      "Farmer",
+      "former"
+    ],
+    "body": "Farmer",
+    "url": "/members/"
+  },
+  {
+    "title": "G Vasudeva Reddy",
+    "kind": "member",
+    "tags": [
+      "Farmer",
+      "former"
+    ],
+    "body": "Farmer",
+    "url": "/members/"
+  },
+  {
+    "title": "D Raja Reddy",
+    "kind": "member",
+    "tags": [
+      "Priest (Devapatlamma Temple)",
+      "former"
+    ],
+    "body": "Priest (Devapatlamma Temple)",
+    "url": "/members/"
+  },
+  {
+    "title": "J Balaji",
+    "kind": "member",
+    "tags": [
+      "Farmer",
+      "former"
+    ],
+    "body": "Farmer",
+    "url": "/members/"
+  },
+  {
+    "title": "J Eswar Reddy",
+    "kind": "member",
+    "tags": [
+      "Farmer",
+      "former"
+    ],
+    "body": "Farmer",
+    "url": "/members/"
+  },
+  {
+    "title": "J Krishna Reddy",
+    "kind": "member",
+    "tags": [
+      "Farmer",
+      "former"
+    ],
+    "body": "Farmer",
+    "url": "/members/"
+  },
+  {
+    "title": "Y Satheesh",
+    "kind": "member",
+    "tags": [
+      "Business",
+      "former"
+    ],
+    "body": "Business",
+    "url": "/members/"
+  },
+  {
+    "title": "Y Uma",
+    "kind": "member",
+    "tags": [
+      "Farmer",
+      "former"
+    ],
+    "body": "Farmer",
+    "url": "/members/"
+  },
+  {
+    "title": "G Ravi Kumar Reddy",
+    "kind": "member",
+    "tags": [
+      "Medical",
+      "former"
+    ],
+    "body": "Medical",
     "url": "/members/"
   },
   {
@@ -8840,17 +8850,6 @@
     "url": "/directory/"
   },
   {
-    "title": "D Raja Reddy",
-    "kind": "directory",
-    "tags": [
-      "Other Professionals",
-      "Temple Service",
-      "Priest (Devapatlamma Temple)"
-    ],
-    "body": "Temple Service · Priest (Devapatlamma Temple)",
-    "url": "/directory/"
-  },
-  {
     "title": "G Dhanunjaya Reddy",
     "kind": "directory",
     "tags": [
@@ -8873,7 +8872,7 @@
     "url": "/directory/"
   },
   {
-    "title": "J Niranjan",
+    "title": "J Niranjan Reddy",
     "kind": "directory",
     "tags": [
       "Government Employees",
@@ -9016,17 +9015,6 @@
     "url": "/directory/"
   },
   {
-    "title": "G Jayachandra Reddy",
-    "kind": "directory",
-    "tags": [
-      "Other Professionals",
-      "Agriculture",
-      "Farmer"
-    ],
-    "body": "Agriculture · Farmer",
-    "url": "/directory/"
-  },
-  {
     "title": "G Pushyanth Reddy",
     "kind": "directory",
     "tags": [
@@ -9060,17 +9048,6 @@
     "url": "/directory/"
   },
   {
-    "title": "G Ravi Kumar Reddy",
-    "kind": "directory",
-    "tags": [
-      "Other Professionals",
-      "Business",
-      "Medical Shop"
-    ],
-    "body": "Business · Medical Shop",
-    "url": "/directory/"
-  },
-  {
     "title": "G Sreekanth",
     "kind": "directory",
     "tags": [
@@ -9093,17 +9070,6 @@
     "url": "/directory/"
   },
   {
-    "title": "J Balaji",
-    "kind": "directory",
-    "tags": [
-      "Other Professionals",
-      "Agriculture",
-      "Farmer"
-    ],
-    "body": "Agriculture · Farmer",
-    "url": "/directory/"
-  },
-  {
     "title": "J Bhanu",
     "kind": "directory",
     "tags": [
@@ -9112,28 +9078,6 @@
       "Software Engineer"
     ],
     "body": "Software / IT · Software Engineer",
-    "url": "/directory/"
-  },
-  {
-    "title": "J Eswar Reddy",
-    "kind": "directory",
-    "tags": [
-      "Other Professionals",
-      "Agriculture",
-      "Farmer"
-    ],
-    "body": "Agriculture · Farmer",
-    "url": "/directory/"
-  },
-  {
-    "title": "J Krishna Reddy",
-    "kind": "directory",
-    "tags": [
-      "Other Professionals",
-      "Agriculture",
-      "Farmer"
-    ],
-    "body": "Agriculture · Farmer",
     "url": "/directory/"
   },
   {
@@ -9236,14 +9180,91 @@
     "url": "/directory/"
   },
   {
+    "title": "D Rammohan Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Agriculture",
+      "Farmer"
+    ],
+    "body": "Agriculture · Farmer",
+    "url": "/directory/"
+  },
+  {
+    "title": "G Jayachandra Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Agriculture",
+      "Farmer"
+    ],
+    "body": "Agriculture · Farmer",
+    "url": "/directory/"
+  },
+  {
+    "title": "G Vasudeva Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Agriculture",
+      "Farmer"
+    ],
+    "body": "Agriculture · Farmer",
+    "url": "/directory/"
+  },
+  {
+    "title": "D Raja Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Temple Service",
+      "Priest (Devapatlamma Temple)"
+    ],
+    "body": "Temple Service · Priest (Devapatlamma Temple)",
+    "url": "/directory/"
+  },
+  {
+    "title": "J Balaji",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Agriculture",
+      "Farmer"
+    ],
+    "body": "Agriculture · Farmer",
+    "url": "/directory/"
+  },
+  {
+    "title": "J Eswar Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Agriculture",
+      "Farmer"
+    ],
+    "body": "Agriculture · Farmer",
+    "url": "/directory/"
+  },
+  {
+    "title": "J Krishna Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Agriculture",
+      "Farmer"
+    ],
+    "body": "Agriculture · Farmer",
+    "url": "/directory/"
+  },
+  {
     "title": "Y Satheesh",
     "kind": "directory",
     "tags": [
       "Other Professionals",
       "Business",
-      "Business (Shop)"
+      "Business"
     ],
-    "body": "Business · Business (Shop)",
+    "body": "Business · Business",
     "url": "/directory/"
   },
   {
@@ -9255,6 +9276,28 @@
       "Farmer"
     ],
     "body": "Agriculture · Farmer",
+    "url": "/directory/"
+  },
+  {
+    "title": "G Ravi Kumar Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Business",
+      "Medical"
+    ],
+    "body": "Business · Medical",
+    "url": "/directory/"
+  },
+  {
+    "title": "G Santhabushan Reddy",
+    "kind": "directory",
+    "tags": [
+      "Other Professionals",
+      "Software / IT",
+      "Computer Science Engineer"
+    ],
+    "body": "Software / IT · Computer Science Engineer",
     "url": "/directory/"
   },
   {
@@ -9384,5 +9427,53 @@
     ],
     "body": "The spiritual heart of the village — hymns, festivals, and community gatherings at Ramalayam.",
     "url": "/heritage/"
+  },
+  {
+    "title": "Reddivaripalli — Our Heritage",
+    "date": "1850-01-01",
+    "kind": "heritage",
+    "tags": [
+      "Our Heritage",
+      "History"
+    ],
+    "body": "A living record of unity, leadership, agriculture, faith, and the people who shaped our village — preserved for every generation.",
+    "url": "/about/"
+  },
+  {
+    "title": "Festivals of Reddivaripalli",
+    "kind": "heritage",
+    "tags": [
+      "Festivals"
+    ],
+    "body": "Sankranthi, Ugadi, Sri Rama Navami, Krishna Janmashtami, Varalakshmi Vratham, Vinayaka Chavithi, Dasara, Deepavali, Vana Pandaga, Mathamma Jathara, Devapatlamma Jathara",
+    "url": "/about/#festivals"
+  },
+  {
+    "title": "Sacred Temples of Reddivaripalli",
+    "kind": "heritage",
+    "tags": [
+      "Temples"
+    ],
+    "body": "Sri Ramalayam, Sri Shiva Temple, Sri Mulasthanamma Temple, Sri Devapatlamma Temple, Sri Mathamma Temple",
+    "url": "/about/#temples"
+  },
+  {
+    "title": "In Loving Memory",
+    "kind": "heritage",
+    "tags": [
+      "Memorial",
+      "Legends"
+    ],
+    "body": "G Sivarami Reddy (s/o G Konda Reddy); G Venkataswami Reddy (s/o G Konda Reddy); G Venkatramana Reddy (s/o G Konda Reddy); G Narayana Reddy (s/o G Konda Reddy); G Devendra Reddy (s/o G Venkata Subba Reddy); G Raghunadha Reddy (s/o G Venkata Subba Reddy); G Raja Reddy (s/o G Venkata Subba Reddy); D Rammohan Reddy (s/o Gangi Reddy); Y Suryanarayana; Y Jayachandra; K Venkatramana",
+    "url": "/about/#memorial"
+  },
+  {
+    "title": "Farmers — The Backbone of Reddivaripalli",
+    "kind": "heritage",
+    "tags": [
+      "Farmers"
+    ],
+    "body": "G. Sivarami Reddy, G. Venkataramana Reddy, G. Venkataswami Reddy, G. Raghunatha Reddy, G. Devendra Reddy, G. Giridhar Gopal Reddy, K. Bali Reddy, K. Chinna Bali Reddy, K. Krishna Reddy, U. Adinarayana, J. Raghava Reddy, D. Lakshminarayana Reddy, D. Venkatramana Reddy, D. Chenna Reddy, K. Ramanjulu, D. Viswanatha, K. Reddenna, D. Venkataswami, M. Ramesh, M. Krishnaiah, M. Chinnappa, Y. Ramesh, D. Ratnam, G. Sreeramulu, C. Ramakrishna, C. Suresh, U. Chinna Gurrappa, U. Pedda Gurrappa, U. Gurunadha, J. Chinna Reddenna, C. Rajagopal, C. Jayanna, C. Rammohana, C. Rammurthy, M. Nadipanna, M. Venkatesh, P. Ramana",
+    "url": "/about/#farmers"
   }
 ]

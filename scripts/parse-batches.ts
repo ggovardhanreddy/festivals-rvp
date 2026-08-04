@@ -29,6 +29,8 @@ const GROUP_MAP: Record<string, MemberGroup> = {
   "next gen": "nextgen",
   stems: "nextgen",
   stem: "nextgen",
+  former: "former",
+  "former members": "former",
 };
 
 /** Known DOBs (MM-DD) from Birthdays.rtf / prior data */
@@ -69,6 +71,7 @@ function parseBatches(text: string): Record<MemberGroup, string[]> {
     legacy: [],
     core: [],
     nextgen: [],
+    former: [],
   };
   let current: MemberGroup | null = null;
   for (const raw of text.split(/\r?\n/)) {
@@ -165,7 +168,7 @@ function main() {
   const usedIds = new Set<string>();
   const members: Member[] = [];
 
-  const order: MemberGroup[] = ["legacy", "core", "nextgen"];
+  const order: MemberGroup[] = ["legacy", "core", "nextgen", "former"];
   for (const group of order) {
     for (const name of groups[group]) {
       let id = normalizeKey(name) || "member";

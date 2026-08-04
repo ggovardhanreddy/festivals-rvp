@@ -48,56 +48,20 @@
     "designation": "Software Engineer"
   },
   {
-    "id": "g-jayachandra-reddy",
-    "name": "G Jayachandra Reddy",
-    "photo": "/members/jayachandra.webp",
-    "dob": null,
-    "group": "legacy",
-    "designation": "Farmer"
-  },
-  {
-    "id": "g-vasudeva-reddy",
-    "name": "G Vasudeva Reddy",
+    "id": "g-santhabushan-reddy",
+    "name": "G Santhabushan Reddy",
     "photo": null,
     "dob": null,
     "group": "legacy",
-    "designation": "Farmer",
-    "memorial": true,
-    "status": "In Loving Memory"
-  },
-  {
-    "id": "g-ravi-kumar-reddy",
-    "name": "G Ravi Kumar Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy",
-    "designation": "Medical Shop"
+    "designation": "Computer Science Engineer"
   },
   {
     "id": "g-giridhar-gopal-reddy",
     "name": "G Giridhar Gopal Reddy",
     "photo": null,
     "dob": null,
-    "group": "legacy",
+    "group": "former",
     "designation": "Farmer"
-  },
-  {
-    "id": "d-rammohan-reddy",
-    "name": "D Rammohan Reddy",
-    "photo": "/members/d-rammohana.webp",
-    "dob": null,
-    "group": "legacy",
-    "designation": "Farmer",
-    "memorial": true,
-    "status": "In Loving Memory"
-  },
-  {
-    "id": "d-raja-reddy",
-    "name": "D Raja Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy",
-    "designation": "Priest (Devapatlamma Temple)"
   },
   {
     "id": "d-harinatha",
@@ -120,7 +84,7 @@
     "name": "Y Ramesh",
     "photo": null,
     "dob": null,
-    "group": "legacy",
+    "group": "former",
     "designation": "Farmer"
   },
   {
@@ -132,52 +96,12 @@
     "designation": "Village Revenue Officer (VRO) – Government Employee"
   },
   {
-    "id": "y-satheesh",
-    "name": "Y Satheesh",
-    "photo": null,
-    "dob": null,
-    "group": "legacy",
-    "designation": "Business (Shop)"
-  },
-  {
-    "id": "y-uma",
-    "name": "Y Uma",
-    "photo": null,
-    "dob": null,
-    "group": "legacy",
-    "designation": "Farmer"
-  },
-  {
     "id": "j-shiva",
     "name": "J Shiva",
     "photo": "/members/j-shiva.webp",
     "dob": null,
     "group": "legacy",
     "designation": "Government Teacher (Mathematics)"
-  },
-  {
-    "id": "j-balaji",
-    "name": "J Balaji",
-    "photo": "/members/j-balaji.webp",
-    "dob": null,
-    "group": "legacy",
-    "designation": "Farmer"
-  },
-  {
-    "id": "j-krishna-reddy",
-    "name": "J Krishna Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy",
-    "designation": "Farmer"
-  },
-  {
-    "id": "j-eswar-reddy",
-    "name": "J Eswar Reddy",
-    "photo": null,
-    "dob": null,
-    "group": "legacy",
-    "designation": "Farmer"
   },
   {
     "id": "dr-u-reddy-prasad",
@@ -325,7 +249,7 @@
   },
   {
     "id": "j-niranjan",
-    "name": "J Niranjan",
+    "name": "J Niranjan Reddy",
     "photo": "/members/niranjan.webp",
     "dob": "09-11",
     "group": "core",
@@ -386,5 +310,89 @@
     "dob": "11-12",
     "group": "nextgen",
     "designation": "Software Engineer"
+  },
+  {
+    "id": "d-rammohan-reddy",
+    "name": "D Rammohan Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Farmer",
+    "memorial": true,
+    "status": "In Loving Memory"
+  },
+  {
+    "id": "g-jayachandra-reddy",
+    "name": "G Jayachandra Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Farmer"
+  },
+  {
+    "id": "g-vasudeva-reddy",
+    "name": "G Vasudeva Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Farmer",
+    "memorial": true,
+    "status": "In Loving Memory"
+  },
+  {
+    "id": "d-raja-reddy",
+    "name": "D Raja Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Priest (Devapatlamma Temple)"
+  },
+  {
+    "id": "j-balaji",
+    "name": "J Balaji",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Farmer"
+  },
+  {
+    "id": "j-eswar-reddy",
+    "name": "J Eswar Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Farmer"
+  },
+  {
+    "id": "j-krishna-reddy",
+    "name": "J Krishna Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Farmer"
+  },
+  {
+    "id": "y-satheesh",
+    "name": "Y Satheesh",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Business"
+  },
+  {
+    "id": "y-uma",
+    "name": "Y Uma",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Farmer"
+  },
+  {
+    "id": "g-ravi-kumar-reddy",
+    "name": "G Ravi Kumar Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "former",
+    "designation": "Medical"
   }
 ]

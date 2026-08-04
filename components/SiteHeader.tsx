@@ -17,6 +17,10 @@ import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
   if (href.startsWith("/#")) return normalized === "/";
+  // Birthday albums live under /rvp-birthdays/ but belong to Events & Birthdays.
+  if (href === "/events/" && normalized.startsWith("/rvp-birthdays/")) {
+    return true;
+  }
   return normalized.startsWith(href);
 }
 

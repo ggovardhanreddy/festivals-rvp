@@ -41,8 +41,8 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
           <h2>Today&apos;s Birthday</h2>
           <p className="lede">Celebrating our own — with love from the village.</p>
         </div>
-        <Link className="btn ghost" href="/rvp-birthdays/">
-          Birthday gallery
+        <Link className="btn ghost" href="/events/?tab=birthdays">
+          All birthdays
         </Link>
       </div>
 

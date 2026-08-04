@@ -7,6 +7,7 @@ export function normalizeStoredGroup(raw: string | undefined): MemberGroup {
     case "legacy":
     case "core":
     case "nextgen":
+    case "former":
       return raw;
     case "roots":
     case "root":
@@ -69,6 +70,7 @@ export const MEMBER_GROUP_LABELS: Record<MemberGroup, string> = {
   legacy: "Legacy Circle",
   core: "Core Members",
   nextgen: "Next Generation",
+  former: "Former Members",
 };
 
 export const MEMBER_GROUP_DESCRIPTIONS: Record<MemberGroup, string> = {
@@ -77,12 +79,15 @@ export const MEMBER_GROUP_DESCRIPTIONS: Record<MemberGroup, string> = {
   core: "The Core Members are the active contributors leading community initiatives, organizing festivals, supporting village development, and preserving the traditions of Reddivaripalli.",
   nextgen:
     "The Next Generation represents the future of Reddivaripalli—young professionals, entrepreneurs, public servants, and innovators who will carry forward the village's legacy with dedication and fresh ideas.",
+  former:
+    "Former Members are remembered as part of the village family — listed with respect, without active directory photos.",
 };
 
 export const MEMBER_GROUP_ORDER: MemberGroup[] = [
   "legacy",
   "core",
   "nextgen",
+  "former",
 ];
 
 /** Short label for badges (no age bands). */
@@ -90,6 +95,7 @@ export const MEMBER_GROUP_AGE_HINT: Record<MemberGroup, string> = {
   legacy: "Senior stewards",
   core: "Active leaders",
   nextgen: "Rising generation",
+  former: "Remembered with respect",
 };
 
 export function memberInitials(name: string): string {

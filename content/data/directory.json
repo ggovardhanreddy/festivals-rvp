@@ -64,14 +64,6 @@
     "photo": "/members/laddu.webp"
   },
   {
-    "id": "dir-d-raja-reddy",
-    "name": "D Raja Reddy",
-    "category": "Other Professionals",
-    "profession": "Temple Service",
-    "designation": "Priest (Devapatlamma Temple)",
-    "photo": null
-  },
-  {
     "id": "dir-g-dhanunjaya-reddy",
     "name": "G Dhanunjaya Reddy",
     "category": "Government Employees",
@@ -89,7 +81,7 @@
   },
   {
     "id": "dir-j-niranjan",
-    "name": "J Niranjan",
+    "name": "J Niranjan Reddy",
     "category": "Government Employees",
     "profession": "Defence",
     "designation": "Indian Army",
@@ -192,14 +184,6 @@
     "photo": "/members/hemanth.webp"
   },
   {
-    "id": "dir-g-jayachandra-reddy",
-    "name": "G Jayachandra Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": "/members/jayachandra.webp"
-  },
-  {
     "id": "dir-g-pushyanth-reddy",
     "name": "G Pushyanth Reddy",
     "category": "Other Professionals",
@@ -224,14 +208,6 @@
     "photo": "/members/rana.webp"
   },
   {
-    "id": "dir-g-ravi-kumar-reddy",
-    "name": "G Ravi Kumar Reddy",
-    "category": "Other Professionals",
-    "profession": "Business",
-    "designation": "Medical Shop",
-    "photo": null
-  },
-  {
     "id": "dir-g-sreekanth",
     "name": "G Sreekanth",
     "category": "Other Professionals",
@@ -248,36 +224,12 @@
     "photo": null
   },
   {
-    "id": "dir-j-balaji",
-    "name": "J Balaji",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": "/members/j-balaji.webp"
-  },
-  {
     "id": "dir-j-bhanu",
     "name": "J Bhanu",
     "category": "Other Professionals",
     "profession": "Software / IT",
     "designation": "Software Engineer",
     "photo": "/members/j-bhanu.webp"
-  },
-  {
-    "id": "dir-j-eswar-reddy",
-    "name": "J Eswar Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
-  },
-  {
-    "id": "dir-j-krishna-reddy",
-    "name": "J Krishna Reddy",
-    "category": "Other Professionals",
-    "profession": "Agriculture",
-    "designation": "Farmer",
-    "photo": null
   },
   {
     "id": "dir-k-balaji",
@@ -352,11 +304,67 @@
     "photo": null
   },
   {
+    "id": "dir-d-rammohan-reddy",
+    "name": "D Rammohan Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-g-jayachandra-reddy",
+    "name": "G Jayachandra Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-g-vasudeva-reddy",
+    "name": "G Vasudeva Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-d-raja-reddy",
+    "name": "D Raja Reddy",
+    "category": "Other Professionals",
+    "profession": "Temple Service",
+    "designation": "Priest (Devapatlamma Temple)",
+    "photo": null
+  },
+  {
+    "id": "dir-j-balaji",
+    "name": "J Balaji",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-j-eswar-reddy",
+    "name": "J Eswar Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-j-krishna-reddy",
+    "name": "J Krishna Reddy",
+    "category": "Other Professionals",
+    "profession": "Agriculture",
+    "designation": "Farmer",
+    "photo": null
+  },
+  {
     "id": "dir-y-satheesh",
     "name": "Y Satheesh",
     "category": "Other Professionals",
     "profession": "Business",
-    "designation": "Business (Shop)",
+    "designation": "Business",
     "photo": null
   },
   {
@@ -365,6 +373,22 @@
     "category": "Other Professionals",
     "profession": "Agriculture",
     "designation": "Farmer",
+    "photo": null
+  },
+  {
+    "id": "dir-g-ravi-kumar-reddy",
+    "name": "G Ravi Kumar Reddy",
+    "category": "Other Professionals",
+    "profession": "Business",
+    "designation": "Medical",
+    "photo": null
+  },
+  {
+    "id": "dir-g-santhabushan-reddy",
+    "name": "G Santhabushan Reddy",
+    "category": "Other Professionals",
+    "profession": "Software / IT",
+    "designation": "Computer Science Engineer",
     "photo": null
   }
 ]

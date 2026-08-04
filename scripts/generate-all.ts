@@ -149,8 +149,11 @@ const searchIndex = [
         title: "In Loving Memory",
         date: undefined,
         kind: "heritage",
-        tags: ["Memorial"],
-        body: vh.memorial.foreverRemembered.join("; "),
+        tags: ["Memorial", "Legends"],
+        body: [
+          ...(vh.memorial.legends || []),
+          ...vh.memorial.foreverRemembered,
+        ].join("; "),
         url: `${base}/about/#memorial`,
       },
       {

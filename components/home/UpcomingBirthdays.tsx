@@ -48,8 +48,8 @@ export function UpcomingBirthdays({
           <h2>Upcoming birthdays</h2>
           <p className="lede">Next celebrations in our community.</p>
         </div>
-        <Link className="btn ghost" href="/rvp-birthdays/">
-          Birthday gallery
+        <Link className="btn ghost" href="/events/?tab=birthdays">
+          All birthdays
         </Link>
       </div>
       <div className="birthday-strip">

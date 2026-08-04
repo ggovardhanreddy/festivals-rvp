@@ -133,7 +133,11 @@
       },
       {
         "name": "Spice & Plantation Crops",
-        "crops": ["Fenugreek (Menthulu)", "Curry Leaves", "Tamarind"]
+        "crops": [
+          "Fenugreek (Menthulu)",
+          "Curry Leaves",
+          "Tamarind"
+        ]
       }
     ]
   },
@@ -285,13 +289,34 @@
       {
         "name": "Teachers & Education",
         "people": [
-          { "name": "J. Shiva", "role": "Lecturer" },
-          { "name": "G. Ramesh Kumar Reddy", "role": "Lecturer" },
-          { "name": "D. Harinadha", "role": "Headmaster" },
-          { "name": "D. Rammohana", "role": "Teacher" },
-          { "name": "C. Ramanjulu", "role": "Teacher" },
-          { "name": "D. Venkataswami Reddy", "role": "Retired Teacher" },
-          { "name": "D. Reddemma", "role": "Anganwadi Teacher" }
+          {
+            "name": "J. Shiva",
+            "role": "Lecturer"
+          },
+          {
+            "name": "G. Ramesh Kumar Reddy",
+            "role": "Lecturer"
+          },
+          {
+            "name": "D. Harinadha",
+            "role": "Headmaster"
+          },
+          {
+            "name": "D. Rammohana",
+            "role": "Teacher"
+          },
+          {
+            "name": "C. Ramanjulu",
+            "role": "Teacher"
+          },
+          {
+            "name": "D. Venkataswami Reddy",
+            "role": "Retired Teacher"
+          },
+          {
+            "name": "D. Reddemma",
+            "role": "Anganwadi Teacher"
+          }
         ]
       },
       {
@@ -309,13 +334,19 @@
             "name": "Dr. U. Reddi Prasad",
             "role": "MBBS, Orthopaedic Specialist"
           },
-          { "name": "J. Ramesh", "role": "Rural Medical Practitioner (RMP)" }
+          {
+            "name": "J. Ramesh",
+            "role": "Rural Medical Practitioner (RMP)"
+          }
         ]
       },
       {
         "name": "Engineers",
         "people": [
-          { "name": "G. Govardhan Reddy", "role": "Mechanical Engineer" },
+          {
+            "name": "G. Govardhan Reddy",
+            "role": "Mechanical Engineer"
+          },
           {
             "name": "G. Pushyanth Kumar Reddy",
             "role": "Automobile Engineer"
@@ -336,7 +367,10 @@
             "name": "G. Rana Prathap Reddy",
             "role": "Computer Science Engineer"
           },
-          { "name": "D. Akhil Reddy", "role": "Computer Science Engineer" },
+          {
+            "name": "D. Akhil Reddy",
+            "role": "Computer Science Engineer"
+          },
           {
             "name": "D. Santhosh Kumar Reddy",
             "role": "Electronics & Communication Engineer"
@@ -349,42 +383,105 @@
             "name": "Y. Krishna Mohan",
             "role": "Electronics & Communication Engineer"
           },
-          { "name": "J. Bhanu", "role": "Mechanical Engineer" }
+          {
+            "name": "J. Bhanu",
+            "role": "Mechanical Engineer"
+          }
         ]
       },
       {
         "name": "Other Graduates",
         "people": [
-          { "name": "M. Rajesh", "role": "M.Sc." },
-          { "name": "U. Gurumahesh", "role": "CEC" },
-          { "name": "U. Nagesh", "role": "Biotechnology" },
-          { "name": "U. Nagendra", "role": "CEC" },
-          { "name": "Y. Keshava", "role": "Mechanical" },
-          { "name": "D. Anil Kumar Reddy", "role": "Hotel Management" },
-          { "name": "D. Shiva Shankar Reddy", "role": "B.Sc. Agriculture" },
-          { "name": "G. Dhanunjaya Reddy", "role": "B.Sc. Agriculture" },
-          { "name": "G. Vijay Kumar Reddy", "role": "CEC" },
-          { "name": "G. Ramesh Kumar Reddy", "role": "Postgraduate (PG)" },
-          { "name": "J. Niranjan Reddy", "role": "Degree" },
-          { "name": "G. Sreekanth", "role": "Degree" },
-          { "name": "M. Nagaraja", "role": "10th Standard" },
-          { "name": "P. Tharun", "role": "10th Standard" }
+          {
+            "name": "M. Rajesh",
+            "role": "M.Sc."
+          },
+          {
+            "name": "U. Gurumahesh",
+            "role": "CEC"
+          },
+          {
+            "name": "U. Nagesh",
+            "role": "Biotechnology"
+          },
+          {
+            "name": "U. Nagendra",
+            "role": "CEC"
+          },
+          {
+            "name": "Y. Keshava",
+            "role": "Mechanical"
+          },
+          {
+            "name": "D. Anil Kumar Reddy",
+            "role": "Hotel Management"
+          },
+          {
+            "name": "D. Shiva Shankar Reddy",
+            "role": "B.Sc. Agriculture"
+          },
+          {
+            "name": "G. Dhanunjaya Reddy",
+            "role": "B.Sc. Agriculture"
+          },
+          {
+            "name": "G. Vijay Kumar Reddy",
+            "role": "CEC"
+          },
+          {
+            "name": "G. Ramesh Kumar Reddy",
+            "role": "Postgraduate (PG)"
+          },
+          {
+            "name": "J. Niranjan Reddy",
+            "role": "Degree"
+          },
+          {
+            "name": "G. Sreekanth",
+            "role": "Degree"
+          },
+          {
+            "name": "M. Nagaraja",
+            "role": "10th Standard"
+          },
+          {
+            "name": "P. Tharun",
+            "role": "10th Standard"
+          }
         ]
       },
       {
         "name": "Government Service",
         "people": [
-          { "name": "D. Harinadha", "role": "Headmaster" },
-          { "name": "D. Venkataswami Reddy", "role": "Retired Teacher" },
-          { "name": "D. Reddemma", "role": "Anganwadi Teacher" },
-          { "name": "G. Dhanunjaya Reddy", "role": "Vigilance Director" }
+          {
+            "name": "D. Harinadha",
+            "role": "Headmaster"
+          },
+          {
+            "name": "D. Venkataswami Reddy",
+            "role": "Retired Teacher"
+          },
+          {
+            "name": "D. Reddemma",
+            "role": "Anganwadi Teacher"
+          },
+          {
+            "name": "G. Dhanunjaya Reddy",
+            "role": "Vigilance Director"
+          }
         ]
       },
       {
         "name": "Armed Forces",
         "people": [
-          { "name": "M. Surendra", "role": "" },
-          { "name": "Niranjan Reddy", "role": "" }
+          {
+            "name": "M. Surendra",
+            "role": ""
+          },
+          {
+            "name": "J. Niranjan Reddy",
+            "role": ""
+          }
         ]
       },
       {
@@ -394,22 +491,49 @@
             "name": "G. Vijay Kumar Reddy",
             "role": "Granite, Marble & Agricultural Traders"
           },
-          { "name": "G. Ravi Kumar Reddy", "role": "Medical Shop" },
-          { "name": "Y. Satheesh", "role": "Grocery Store" },
-          { "name": "K. Venkatramana", "role": "Grocery Store" }
+          {
+            "name": "K. Venkatramana",
+            "role": "Grocery Store"
+          },
+          {
+            "name": "Y. Satheesh",
+            "role": "Business"
+          },
+          {
+            "name": "G. Ravi Kumar Reddy",
+            "role": "Medical"
+          }
         ]
       },
       {
         "name": "Tailors",
         "people": [
-          { "name": "D. Radha", "role": "" },
-          { "name": "M. Vijaya", "role": "" },
-          { "name": "D. Uma Devi", "role": "" }
+          {
+            "name": "D. Radha",
+            "role": ""
+          },
+          {
+            "name": "M. Vijaya",
+            "role": ""
+          },
+          {
+            "name": "D. Uma Devi",
+            "role": ""
+          }
         ]
       },
       {
         "name": "Non-Resident Indian (NRI)",
-        "people": [{ "name": "Y. Krishna Mohan", "role": "" }]
+        "people": [
+          {
+            "name": "Y. Krishna Mohan",
+            "role": ""
+          },
+          {
+            "name": "G. Santhabushan Reddy",
+            "role": ""
+          }
+        ]
       }
     ]
   },
@@ -427,18 +551,12 @@
       "K. Chinna Bali Reddy",
       "K. Krishna Reddy",
       "U. Adinarayana",
-      "D. Rammohan Reddy",
       "J. Raghava Reddy",
-      "D. Raja Reddy",
       "D. Lakshminarayana Reddy",
       "D. Venkatramana Reddy",
       "D. Chenna Reddy",
       "K. Ramanjulu",
-      "G. Vasudeva Reddy",
-      "G. Jayachandra Reddy",
       "D. Viswanatha",
-      "J. Krishna Reddy",
-      "J. Eswar Reddy",
       "K. Reddenna",
       "D. Venkataswami",
       "M. Ramesh",
@@ -446,8 +564,6 @@
       "M. Chinnappa",
       "Y. Ramesh",
       "D. Ratnam",
-      "Y. Uma",
-      "Y. Satheesh",
       "G. Sreeramulu",
       "C. Ramakrishna",
       "C. Suresh",
@@ -455,7 +571,6 @@
       "U. Pedda Gurrappa",
       "U. Gurunadha",
       "J. Chinna Reddenna",
-      "J. Balaji",
       "C. Rajagopal",
       "C. Jayanna",
       "C. Rammohana",
@@ -480,25 +595,116 @@
     },
     "foreverRememberedTitle": "Forever Remembered",
     "foreverRemembered": [
+      "D Rammohan Reddy (s/o Gangi Reddy)",
+      "Y Suryanarayana",
+      "Y Jayachandra",
+      "K Venkatramana"
+    ],
+    "closing": "Gone from our sight, but never from our hearts. Their legacy will continue to inspire every generation of Reddivaripalli.",
+    "legendsTitle": "Legends",
+    "legends": [
       "G Sivarami Reddy (s/o G Konda Reddy)",
       "G Venkataswami Reddy (s/o G Konda Reddy)",
       "G Venkatramana Reddy (s/o G Konda Reddy)",
       "G Narayana Reddy (s/o G Konda Reddy)",
       "G Devendra Reddy (s/o G Venkata Subba Reddy)",
       "G Raghunadha Reddy (s/o G Venkata Subba Reddy)",
-      "G Raja Reddy (s/o G Venkata Subba Reddy)",
-      "D Rammohan Reddy (s/o Gangi Reddy)",
-      "Y Suryanarayana",
-      "Y Jayachandra",
-      "K Venkatramana"
-    ],
-    "closing": "Gone from our sight, but never from our hearts. Their legacy will continue to inspire every generation of Reddivaripalli."
+      "G Raja Reddy (s/o G Venkata Subba Reddy)"
+    ]
   },
   "vision": {
     "title": "Our Vision",
     "paragraphs": [
       "This website is dedicated to preserving the rich history, traditions, culture, agriculture, temples, and achievements of Reddivaripalli. It is a digital home for every villager — past, present, and future — connecting families across the world while honoring our ancestors and inspiring generations to come.",
       "Dedicated with love and respect to every resident of Reddivaripalli who has contributed to the growth, unity, and prosperity of our beloved village."
+    ]
+  },
+  "about": {
+    "title": "About Reddivaripalli",
+    "paragraphs": [
+      "Reddivaripalli — also known as Kondareddigaripalli — is a village rooted in unity, hospitality, agriculture, and faith. For more than 170 years it has stood as a place where families gather, traditions endure, and every guest is welcomed as one of our own.",
+      "Its historical significance reaches far beyond its fields: more than 32 surrounding villages once looked here for leadership, guidance, and peaceful resolution of community matters. That reputation for fairness and generosity remains central to our identity.",
+      "Culturally, Reddivaripalli is defined by shared festivals, temple traditions, agricultural seasons, and a deep respect for elders. Community values of equality, service, and togetherness continue to shape daily life and celebrations."
+    ],
+    "values": [
+      "Unity across families and neighbouring villages",
+      "Hospitality — no guest leaves without care",
+      "Agriculture as livelihood and way of life",
+      "Faith, festivals, and cultural continuity",
+      "Respect for elders and service to society"
+    ]
+  },
+  "origins": {
+    "title": "Origins of the Village",
+    "lede": "Founded around 1850 by Sri G. Konda Reddy of the Gundluru family — the beginning of Kondareddigaripalli, later known as Reddivaripalli.",
+    "timeline": [
+      {
+        "year": "c. 1850",
+        "title": "Village founded",
+        "note": "Sri G. Konda Reddy establishes Kondareddigaripalli with ideals of unity, dignity, and hospitality."
+      },
+      {
+        "year": "19th–20th c.",
+        "title": "Regional leadership",
+        "note": "The village becomes a centre for guidance and dispute resolution for more than 30 neighbouring villages."
+      },
+      {
+        "year": "Generations later",
+        "title": "Name evolves",
+        "note": "Kondareddigaripalli comes to be proudly known as Reddivaripalli."
+      },
+      {
+        "year": "Today",
+        "title": "Living heritage",
+        "note": "More than 170 years on, the founder’s values continue through festivals, agriculture, temples, and community service."
+      }
+    ]
+  },
+  "developmentJourney": {
+    "title": "Development Journey",
+    "lede": "From fertile fields and temple courtyards to roads, education, and a digital village home — Reddivaripalli continues to grow while honouring its roots.",
+    "milestones": [
+      {
+        "title": "Agriculture & livelihood",
+        "note": "Generations of farmers built prosperity through grains, pulses, oilseeds, and hard work on fertile land."
+      },
+      {
+        "title": "Faith & public life",
+        "note": "Temples, festivals, and Panchayat leadership strengthened social bonds and peaceful community order."
+      },
+      {
+        "title": "Education & professions",
+        "note": "Sons and daughters of the village entered teaching, medicine, government service, engineering, and enterprise."
+      },
+      {
+        "title": "Infrastructure & schemes",
+        "note": "Roads, water, and community works continue through Gram Panchayat initiatives and collective effort."
+      },
+      {
+        "title": "Digital identity",
+        "note": "This portal preserves festivals, people, developments, and history for the next decade and beyond."
+      }
+    ]
+  },
+  "gallery": {
+    "title": "Heritage Gallery",
+    "lede": "Historical photographs, community submissions, and festival archives — open windows into the life of our village.",
+    "links": [
+      {
+        "href": "/heritage/",
+        "label": "Heritage Archive",
+        "note": "Community heritage photos and stories"
+      },
+      {
+        "href": "/gallery/",
+        "label": "Festival Gallery",
+        "note": "Photos and videos from every celebration"
+      },
+      {
+        "href": "/developments/",
+        "label": "Development Gallery",
+        "note": "Progress and village works"
+      }
     ]
   }
 }

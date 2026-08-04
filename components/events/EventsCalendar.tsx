@@ -13,11 +13,21 @@ export function EventsCalendar({
   archive,
   liveSlugs = [],
   members = [],
+  showBirthdays = true,
+  calendarOnly = false,
+  calendarEyebrow = "Calendar",
+  calendarTitle,
+  calendarLede = "Festivals and member birthdays (when dates are on file).",
 }: {
   upcoming: SiteEvent[];
   archive: SiteEvent[];
   liveSlugs?: string[];
   members?: Member[];
+  showBirthdays?: boolean;
+  calendarOnly?: boolean;
+  calendarEyebrow?: string;
+  calendarTitle?: string;
+  calendarLede?: string;
 }) {
   const live = new Set(liveSlugs);
   const now = new Date();
@@ -69,63 +79,66 @@ export function EventsCalendar({
 
   return (
     <div className="events-module">
-      <section className="section">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Next up</p>
-            <h2>Upcoming events</h2>
+      {!calendarOnly ? (
+        <section className="section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Next up</p>
+              <h2>Upcoming events</h2>
+            </div>
           </div>
-        </div>
-        <div className="event-cards">
-          {upcoming.length ? (
-            upcoming.map((event) => {
-              const days = daysUntil(event.date);
-              return (
-                <article key={event.id} className="event-card event-card--featured">
-                  {event.image ? (
-                    <div className="event-card-media">
-                      <img
-                        src={withBase(event.image)}
-                        alt=""
-                        width={800}
-                        height={450}
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : null}
-                  <div className="event-card-body">
-                    <p className="eyebrow">{formatCountdown(days)}</p>
-                    <h3>{event.title}</h3>
-                    <p className="muted">
-                      {event.date}
-                      {event.endDate && event.endDate !== event.date
-                        ? ` – ${event.endDate}`
-                        : ""}
-                    </p>
-                    <p className="lede">{event.description}</p>
-                    {event.slug && live.has(event.slug) ? (
-                      <Link className="btn" href={`/${event.slug}/`}>
-                        View gallery
-                      </Link>
+          <div className="event-cards">
+            {upcoming.length ? (
+              upcoming.map((event) => {
+                const days = daysUntil(event.date);
+                return (
+                  <article
+                    key={event.id}
+                    className="event-card event-card--featured"
+                  >
+                    {event.image ? (
+                      <div className="event-card-media">
+                        <img
+                          src={withBase(event.image)}
+                          alt=""
+                          width={800}
+                          height={450}
+                          loading="lazy"
+                        />
+                      </div>
                     ) : null}
-                  </div>
-                </article>
-              );
-            })
-          ) : (
-            <p className="muted">No upcoming events on the calendar yet.</p>
-          )}
-        </div>
-      </section>
+                    <div className="event-card-body">
+                      <p className="eyebrow">{formatCountdown(days)}</p>
+                      <h3>{event.title}</h3>
+                      <p className="muted">
+                        {event.date}
+                        {event.endDate && event.endDate !== event.date
+                          ? ` – ${event.endDate}`
+                          : ""}
+                      </p>
+                      <p className="lede">{event.description}</p>
+                      {event.slug && live.has(event.slug) ? (
+                        <Link className="btn" href={`/${event.slug}/`}>
+                          View gallery
+                        </Link>
+                      ) : null}
+                    </div>
+                  </article>
+                );
+              })
+            ) : (
+              <p className="muted">No upcoming events on the calendar yet.</p>
+            )}
+          </div>
+        </section>
+      ) : null}
 
       <section className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Calendar</p>
-            <h2>{label}</h2>
-            <p className="lede muted">
-              Festivals and member birthdays (when dates are on file).
-            </p>
+            <p className="eyebrow">{calendarEyebrow}</p>
+            <h2>{calendarTitle || label}</h2>
+            <p className="lede muted">{calendarLede}</p>
           </div>
           <div className="calendar-nav">
             <button
@@ -152,7 +165,8 @@ export function EventsCalendar({
           ))}
           {cells.map((day, i) => {
             const events = day ? byDay.get(day) || [] : [];
-            const bdays = day ? birthdaysByDay.get(day) || [] : [];
+            const bdays =
+              showBirthdays && day ? birthdaysByDay.get(day) || [] : [];
             const hasMark = events.length > 0 || bdays.length > 0;
             return (
               <div
@@ -183,7 +197,7 @@ export function EventsCalendar({
         </div>
       </section>
 
-      {archive.length ? (
+      {!calendarOnly && archive.length ? (
         <section className="section">
           <div className="section-head">
             <div>

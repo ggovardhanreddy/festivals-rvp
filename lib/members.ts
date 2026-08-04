@@ -77,6 +77,7 @@ export function countByGroup(): Record<MemberGroup, number> {
     legacy: 0,
     core: 0,
     nextgen: 0,
+    former: 0,
   };
   for (const member of loadMembers()) {
     counts[resolveMemberGroup(member)] += 1;

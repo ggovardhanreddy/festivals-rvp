@@ -129,25 +129,24 @@ export const VILLAGE_COORDS = {
 } as const;
 
 /**
- * Primary nav — priority order (desktop + drawer).
- * Members + Directory are adjacent; Events covers calendar; Birthdays → /rvp-birthdays/.
+ * Primary nav — priority order (desktop + drawer + footer quick links).
+ * Events & Birthdays share /events/ (tabbed hub); birthday albums remain at /rvp-birthdays/.
  */
 export const NAV = [
   { href: "/", label: "Home" },
   { href: "/members/", label: "Members" },
-  { href: "/directory/", label: "Directory" },
-  { href: "/events/", label: "Events" },
-  { href: "/rvp-birthdays/", label: "Birthdays" },
-  { href: "/developments/", label: "Developments" },
   { href: "/about/", label: "Our Heritage" },
+  { href: "/events/", label: "Events & Birthdays" },
+  { href: "/developments/", label: "Developments" },
   { href: "/gallery/", label: "Gallery" },
 ] as const;
 
 /**
- * Secondary community links (drawer / footer) — after primary, relative order preserved.
+ * Secondary community links (drawer / footer) — remaining modules after primary.
  * Fun Fest stays here; SiteHeader applies member-auth gating for /fun-trips/.
  */
 export const COMMUNITY_NAV = [
+  { href: "/directory/", label: "Directory" },
   { href: "/contact/", label: "Contact" },
   { href: "/heritage/", label: "Heritage Archive" },
   { href: "/fun-trips/", label: "Fun Fest" },
@@ -197,6 +196,7 @@ export const FESTIVAL_HEROES: Partial<Record<BucketKey, string>> = {
   ...Object.fromEntries(
     CULTURE_FESTIVALS.map((f) => [f.key, festivalHeroPath(f.folder)]),
   ),
+  "rvp-birthdays": `/brand/village-aerial.webp?v=${FESTIVAL_HERO_VERSION}`,
   "fun-trips": `/brand/funfest-hero-locked.webp?v=${FESTIVAL_HERO_VERSION}`,
 };
 
