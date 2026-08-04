@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: seoTitle,
-    template: `%s | ${VILLAGE_ALSO_KNOWN_AS} · ${OFFICIAL_TITLE}`,
+    template: `%s | ${VILLAGE_ALSO_KNOWN_AS}`,
   },
   description: seoDescription,
   keywords: [...SEO_KEYWORDS],
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
-    siteName: `${OFFICIAL_TITLE} · ${VILLAGE_ALSO_KNOWN_AS}`,
+    siteName: VILLAGE_ALSO_KNOWN_AS,
     title: seoTitle,
     description: seoDescription,
     images: [
@@ -133,14 +133,21 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: `${SITE_NAME} — ${VILLAGE_ALSO_KNOWN_AS}`,
-    alternateName: [...VILLAGE_NAME_VARIANTS, SITE_NAME],
+    // Preferred Google site name (not the bare domain).
+    name: VILLAGE_ALSO_KNOWN_AS,
+    alternateName: [
+      ...VILLAGE_NAME_VARIANTS,
+      SITE_NAME,
+      OFFICIAL_TITLE,
+      "reddivaripalli.com",
+      "www.reddivaripalli.com",
+    ],
     url: siteUrl,
     description: seoDescription,
     inLanguage: "en",
     publisher: {
       "@type": "Organization",
-      name: SITE_NAME,
+      name: OFFICIAL_TITLE,
       logo: {
         "@type": "ImageObject",
         url: absoluteUrl("/logo/logo-master.png", siteUrl),
