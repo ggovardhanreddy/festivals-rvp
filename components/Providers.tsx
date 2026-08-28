@@ -18,6 +18,7 @@ import { ErrorReporter } from "./analytics/ErrorReporter";
 import { PlausibleScript } from "./analytics/PlausibleScript";
 import { CloudflareWebAnalytics } from "./analytics/CloudflareWebAnalytics";
 import { LanguageProvider } from "./i18n/LanguageProvider";
+import { MobileBottomNav } from "./platform/MobileBottomNav";
 import { AutoDayNightSync } from "./Theme";
 import { SuperAdminProvider } from "@/lib/use-super-admin";
 import type { Announcement, Development, Member, SiteEvent } from "@/lib/types";
@@ -75,6 +76,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                       <PlausibleScript />
                       <CloudflareWebAnalytics />
                       {children}
+                      <MobileBottomNav />
                       <InstallAppPrompt />
                       <LocationConsentDialog />
                     </AudioDeckProvider>

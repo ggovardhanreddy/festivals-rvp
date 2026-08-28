@@ -59,6 +59,11 @@ import { FunFestAuthBar } from "@/components/auth/FunFestAuthBar";
 import { InstagramFollow } from "@/components/festivals/InstagramFollow";
 import { CULTURE_FESTIVALS } from "@/lib/festivals";
 import { Suspense, type ReactNode } from "react";
+import { PlayHub } from "@/components/platform/PlayHub";
+import { GameRoute } from "@/components/games/GameRoute";
+import { SectionComingSoon } from "@/components/platform/SectionComingSoon";
+import { GAMES, gameBySlug } from "@/lib/platform/games";
+import { PLANNED_ROUTES } from "@/lib/routes/registry";
 
 const BUCKET_ACCENT: Record<
   BucketKey,
@@ -138,6 +143,16 @@ export function generateStaticParams() {
     { slug: ["privacy"] },
     { slug: ["terms"] },
   ];
+
+  // Games are real pages. Reserved sections get an honest landing page rather
+  // than a 404 from the nav, and never a fabricated placeholder listing.
+  paths.push({ slug: ["play"] });
+  for (const game of GAMES) paths.push({ slug: ["play", game.slug] });
+  paths.push({ slug: ["play", "daily"] });
+  for (const route of PLANNED_ROUTES) {
+    const seg = route.path.replace(/^\/|\/$/g, "");
+    if (seg && seg !== "play") paths.push({ slug: [seg] });
+  }
 
   const published = publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
   const bucketsWithContent = new Set(published.map((a) => a.bucket));
@@ -812,6 +827,41 @@ export default async function ArchiveRoute({
         <AdminHub />
       </main>
     );
+  }
+
+  if (path === "play") {
+    return <PlayHub />;
+  }
+
+  if (slug[0] === "play" && slug.length === 2) {
+    const g = slug[1]!;
+    if (g !== "daily" && !gameBySlug(g)) notFound();
+    return <GameRoute slug={g} />;
+  }
+
+  {
+    const reserved = PLANNED_ROUTES.find(
+      (r) => r.path === `/${path}/` && r.path !== "/play/",
+    );
+    if (reserved) {
+      const ICONS: Record<string, string> = {
+        learn: "learn", kids: "kids", agriculture: "agriculture", english: "english",
+        engineering: "engineering", it: "it", careers: "careers", temples: "temples",
+        community: "community", weather: "weather", government: "government",
+      };
+      return (
+        <SectionComingSoon
+          titleKey={reserved.labelKey}
+          icon={ICONS[reserved.section] ?? "explore"}
+          phase={reserved.plannedPhase ?? "later"}
+          alternatives={[
+            { href: "/play/", labelKey: "nav.play" },
+            { href: "/gallery/", labelKey: "nav.gallery" },
+            { href: "/search/", labelKey: "nav.search" },
+          ]}
+        />
+      );
+    }
   }
 
   if (path === "offline") {

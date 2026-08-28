@@ -14,6 +14,7 @@ import { useEditMode } from "@/lib/use-super-admin";
 import { useMemberAuth } from "./auth/MemberAuthProvider";
 import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
 import { useUiLang } from "./i18n/LanguageProvider";
+import { LanguageSwitcher } from "./i18n/LanguageSwitcher";
 
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
@@ -176,10 +177,10 @@ export function SiteHeader() {
         ref={drawerRef}
         className="nav-drawer"
         data-open={open || undefined}
-        aria-hidden={!open}
         role="dialog"
         aria-modal={open || undefined}
         aria-label="Site menu"
+        inert={!open}
       >
         <nav className="nav-drawer-links" aria-label="Mobile">
           {NAV.map((item) => (
@@ -277,6 +278,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="nav-actions">
+          <LanguageSwitcher className="nav-lang" />
           <NotificationBell />
           <ThemeToggle />
           {ready && isAdmin ? (

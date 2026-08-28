@@ -42,10 +42,11 @@ export function HomeHero() {
       </div>
 
       <div className="clean-hero-content home-hero-content">
-        {/* Wordmark lives in the logo artwork — keep one SEO H1, visually hidden. */}
-        <h1 id="home-hero-title" className="sr-only">
+        {/* PlatformHero above now carries the page h1. This stays as a
+            visually hidden label for the section, not a second heading. */}
+        <p id="home-hero-title" className="sr-only">
           {VILLAGE_ALSO_KNOWN_AS} Village — Heritage, Community, Progress
-        </h1>
+        </p>
         <m.div
           className="home-hero-logo-wrap"
           initial={reduce ? false : { opacity: 0, y: 16 }}

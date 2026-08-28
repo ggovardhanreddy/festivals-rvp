@@ -4,6 +4,10 @@ import { loadEvents, upcomingEvents } from "@/lib/events";
 import { toMediaCards } from "@/lib/media-card";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeBelowFold } from "@/components/home/HomeBelowFold";
+import { PlatformHero } from "@/components/platform/PlatformHero";
+import { AudienceDoors } from "@/components/platform/AudienceDoors";
+import { ExploreGrid } from "@/components/platform/ExploreGrid";
+import { PromiseBar } from "@/components/platform/PromiseBar";
 
 /**
  * Shared homepage body, rendered by both `/` and `/te/`.
@@ -45,6 +49,12 @@ export function HomePage() {
 
   return (
     <main>
+      {/* Platform entry: short hero, universal search, then the six doors and
+          the explore grid. The existing village sections follow underneath so
+          nothing that worked before is lost. */}
+      <PlatformHero />
+      <AudienceDoors />
+      <ExploreGrid />
       <HomeHero />
       <HomeBelowFold
         galleryItems={galleryItems}
@@ -56,6 +66,7 @@ export function HomePage() {
         liveSlugs={liveSlugs}
         stats={stats}
       />
+      <PromiseBar />
     </main>
   );
 }
