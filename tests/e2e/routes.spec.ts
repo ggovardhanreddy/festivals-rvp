@@ -51,11 +51,9 @@ test.describe("homepage integrity", () => {
 
   test("gallery renders with its filter controls", async ({ page }) => {
     // Asserts the homepage gallery still renders after the payload change that
-    // cut 869 KB to 239 KB. Clicking a filter is deliberately NOT asserted
-    // here: on first visit two consent dialogs stack over the page (see the
-    // test below), so a click assertion would be testing overlay timing rather
-    // than the gallery. The filter fields that survive the slimming are
-    // asserted directly in tests/unit/media-card.test.ts.
+    // cut 869 KB to 239 KB, and that a filter is actually clickable. This used
+    // to be untestable because two consent dialogs stacked over the page on a
+    // first visit; there is now one, and it does not open for 1.8s.
     await page.goto("/");
     await expect(page.locator(".gallery-filters .filter-chip").first()).toBeVisible();
     expect(await page.locator(".gallery-filters .filter-chip").count()).toBeGreaterThan(3);
@@ -63,25 +61,59 @@ test.describe("homepage integrity", () => {
     expect(await page.locator(".home-masonry img").count()).toBeGreaterThan(0);
   });
 
-  test("first visit stacks two consent dialogs over the page", async ({ page }) => {
-    // Documented, not accepted. A first-time visitor meets the notification
-    // popup queue and the location consent dialog before they can interact
-    // with anything. Both are dismissible and neither traps the user, so this
-    // is a UX defect rather than a blocker - recorded here so the Phase 1B
-    // polish pass has a failing-quality signal to work against, and so the
-    // behaviour cannot change silently.
+  test("the page is fully usable once consent is dismissed", async ({ page }) => {
+    // The regression this guards: an overlay left on top of the page after
+    // the visitor has answered, swallowing clicks. Previously two dialogs
+    // stacked and dismissing one still left the other intercepting.
     await page.goto("/");
-    await page.waitForTimeout(1200);
-    const overlays = page.locator(".notif-modal-backdrop, .location-consent");
-    const count = await overlays.count();
-    // Every overlay must be escapable - that part is non-negotiable.
-    for (let i = 0; i < count; i += 1) {
-      expect(
-        await overlays.nth(i).locator("button.ghost").count(),
-        "every blocking overlay needs a visible dismiss control",
-      ).toBeGreaterThan(0);
+    await page.waitForTimeout(2400);
+
+    // Everything that can appear on a first visit must be dismissible, and
+    // they must arrive one at a time rather than stacked. Dismiss whatever is
+    // on screen until nothing blocking is left.
+    const blocking = ".consent-card, .notif-modal-backdrop, .pwa-install";
+    for (let i = 0; i < 5; i += 1) {
+      const open = page.locator(blocking);
+      if ((await open.count()) === 0) break;
+      expect(await open.count(), "overlays never stack").toBeLessThanOrEqual(1);
+      await page.keyboard.press("Escape");
+      const close = open.locator("button").last();
+      if (await close.isVisible().catch(() => false)) {
+        await close.click({ force: true }).catch(() => {});
+      }
+      await page.waitForTimeout(700);
     }
-    expect(count, "overlays on first visit (target: at most 1)").toBeLessThanOrEqual(2);
+    await expect(page.locator(blocking)).toHaveCount(0);
+
+    const chip = page.locator(".gallery-filters .filter-chip").nth(1);
+    await chip.click({ timeout: 5000 });
+    await expect(chip).toBeVisible();
+  });
+
+  test("a first visit shows exactly one consent dialog", async ({ page }) => {
+    // Was: the notification permission card and the location consent card both
+    // appeared, stacked, and intercepted clicks. There is now a single
+    // first-run ask (components/consent/WelcomeConsent.tsx) covering both.
+    await page.goto("/");
+    await page.waitForTimeout(2600);
+
+    const consent = page.locator(".consent-card");
+    await expect(consent).toHaveCount(1);
+    await expect(consent).toBeVisible();
+
+    // No other blocking overlay may be on screen alongside it.
+    await expect(page.locator(".location-consent, .notif-permission")).toHaveCount(0);
+    await expect(page.locator(".pwa-install")).toHaveCount(0);
+
+    // It must be dismissible, and Escape must work.
+    await expect(consent.locator("button")).not.toHaveCount(0);
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".consent-card")).toHaveCount(0);
+
+    // Settled: a reload does not ask again.
+    await page.reload();
+    await page.waitForTimeout(2600);
+    await expect(page.locator(".consent-card")).toHaveCount(0);
   });
 });
 

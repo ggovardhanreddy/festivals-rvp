@@ -27,8 +27,9 @@ export function PlatformHero() {
           height={64}
           priority
         />
+        <p className="pf-hero-eyebrow">REDDIVARIPALLI</p>
         <h1 id="pf-hero-title" className="pf-hero-title">
-          REDDIVARIPALLI
+          {t("home.headline")}
         </h1>
         <p className="pf-hero-tagline">{t("home.tagline")}</p>
 

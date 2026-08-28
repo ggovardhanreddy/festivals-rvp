@@ -1,7 +1,13 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const ROUTES = ["/", "/about/", "/members/", "/events/", "/gallery/", "/contact/", "/te/"];
+const ROUTES = [
+  "/", "/about/", "/members/", "/events/", "/gallery/", "/contact/", "/te/",
+  // Added with the official-resource directory. These are the pages a senior
+  // citizen or a screen-reader user is most likely to arrive at from search.
+  "/government/", "/banking/", "/students/", "/farmers/", "/emergency/",
+  "/safety/", "/kids/", "/search/", "/te/government/",
+];
 
 test.describe("accessibility", () => {
   for (const path of ROUTES) {

@@ -36,7 +36,7 @@ import { MemoryHero } from "@/components/MemoryHero";
 import { PageVanta } from "@/components/vanta/PageVanta";
 import { PrivateNotice } from "@/components/PrivateNotice";
 import { Reveal } from "@/components/Reveal";
-import { SearchClient } from "@/components/SearchClient";
+import { SearchPage } from "@/components/search/SearchPage";
 import { YearGrid } from "@/components/YearGrid";
 import { AnnualArchivePage } from "@/components/archive/AnnualArchivePage";
 import { AppleBucketStage } from "@/components/home/AppleBucketStage";
@@ -64,6 +64,18 @@ import { GameRoute } from "@/components/games/GameRoute";
 import { SectionComingSoon } from "@/components/platform/SectionComingSoon";
 import { GAMES, gameBySlug } from "@/lib/platform/games";
 import { PLANNED_ROUTES } from "@/lib/routes/registry";
+import { KidsHub } from "@/components/kids/KidsHub";
+import { KidsRoute } from "@/components/kids/KidsRoute";
+import { KIDS_ROUTES, isKidsRoute } from "@/lib/kids/catalog";
+import { LearnPage } from "@/components/learn/LearnPage";
+import { AgriculturePage } from "@/components/agriculture/AgriculturePage";
+import { CareersPage } from "@/components/careers/CareersPage";
+import { WeatherPage } from "@/components/weather/WeatherPage";
+import { loadTyped } from "@/lib/content/load";
+import { DirectoryHub } from "@/components/directory/DirectoryHub";
+import { EmergencyPage } from "@/components/safety/EmergencyPage";
+import { SafetyPage } from "@/components/safety/SafetyPage";
+import { HUBS, hubBySlug } from "@/lib/directory";
 
 const BUCKET_ACCENT: Record<
   BucketKey,
@@ -149,9 +161,20 @@ export function generateStaticParams() {
   paths.push({ slug: ["play"] });
   for (const game of GAMES) paths.push({ slug: ["play", game.slug] });
   paths.push({ slug: ["play", "daily"] });
+  paths.push({ slug: ["kids"] });
+  for (const seg of ["learn", "agriculture", "careers", "weather", "emergency", "safety"]) {
+    paths.push({ slug: [seg] });
+  }
+  // Official resource hubs: /government/, /students/, /farmers/, /banking/
+  // and the documents hub, which lives under /government/ so it cannot
+  // collide with the existing Panchayat /documents/ page.
+  for (const hub of HUBS) {
+    paths.push(hub.slug === "documents" ? { slug: ["government", "documents"] } : { slug: [hub.slug] });
+  }
+  for (const slug of KIDS_ROUTES) paths.push({ slug: ["kids", slug] });
   for (const route of PLANNED_ROUTES) {
     const seg = route.path.replace(/^\/|\/$/g, "");
-    if (seg && seg !== "play") paths.push({ slug: [seg] });
+    if (seg) paths.push({ slug: [seg] });
   }
 
   const published = publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
@@ -728,10 +751,14 @@ export default async function ArchiveRoute({
           <h1>Search the village</h1>
           <p className="lede">
             Find members, festivals, photos, videos, developments, temple
-            records, documents, doctors, and teachers.
+            records, documents, doctors, and teachers — in English or Telugu.
           </p>
         </div>
-        <SearchClient />
+        <div className="section">
+          <Suspense fallback={<p className="muted">Loading search…</p>}>
+            <SearchPage />
+          </Suspense>
+        </div>
       </main>
     );
   }
@@ -831,6 +858,57 @@ export default async function ArchiveRoute({
 
   if (path === "play") {
     return <PlayHub />;
+  }
+
+  if (path === "kids") {
+    return <KidsHub />;
+  }
+
+  if (path === "learn") {
+    return <LearnPage courses={loadTyped("course")} />;
+  }
+
+  if (path === "agriculture") {
+    return (
+      <AgriculturePage
+        crops={loadTyped("crop")}
+        guides={loadTyped("agriculture-guide")}
+      />
+    );
+  }
+
+  if (path === "government/documents") {
+    return <DirectoryHub hub={hubBySlug("documents")!} />;
+  }
+
+  {
+    const hub = slug.length === 1 ? hubBySlug(path) : undefined;
+    if (hub && hub.slug !== "documents") {
+      return <DirectoryHub hub={hub} />;
+    }
+  }
+
+  if (path === "emergency") {
+    return <EmergencyPage />;
+  }
+
+  if (path === "safety") {
+    return <SafetyPage />;
+  }
+
+  if (path === "careers") {
+    return <CareersPage jobs={loadTyped("job")} />;
+  }
+
+  if (path === "weather") {
+    // Only a configured provider produces a forecast. No key, no numbers.
+    return <WeatherPage provider={process.env.NEXT_PUBLIC_WEATHER_PROVIDER || null} />;
+  }
+
+  if (slug[0] === "kids" && slug.length === 2) {
+    const child = slug[1]!;
+    if (!isKidsRoute(child)) notFound();
+    return <KidsRoute slug={child} />;
   }
 
   if (slug[0] === "play" && slug.length === 2) {

@@ -19,12 +19,12 @@ export type Door = {
 };
 
 export const AUDIENCE_DOORS: Door[] = [
-  { id: "kids",     href: "/kids/",        labelKey: "door.kids",     taglineKey: "door.kids.tag",     icon: "kids",     section: "kids" },
-  { id: "students", href: "/learn/",       labelKey: "door.students", taglineKey: "door.students.tag", icon: "students", section: "learn" },
-  { id: "farmers",  href: "/agriculture/", labelKey: "door.farmers",  taglineKey: "door.farmers.tag",  icon: "farmers",  section: "agriculture" },
-  { id: "careers",  href: "/careers/",     labelKey: "door.careers",  taglineKey: "door.careers.tag",  icon: "careers",  section: "careers" },
-  { id: "seniors",  href: "/settings/",    labelKey: "door.seniors",  taglineKey: "door.seniors.tag",  icon: "seniors",  section: "utility" },
-  { id: "explore",  href: "/explore/",     labelKey: "door.explore",  taglineKey: "door.explore.tag",  icon: "explore",  section: "village" },
+  { id: "government", href: "/government/", labelKey: "door.government", taglineKey: "door.government.tag", icon: "government", section: "government" },
+  { id: "students",   href: "/students/",   labelKey: "door.students",   taglineKey: "door.students.tag",   icon: "students",   section: "learn" },
+  { id: "farmers",    href: "/farmers/",    labelKey: "door.farmers",    taglineKey: "door.farmers.tag",    icon: "farmers",    section: "agriculture" },
+  { id: "banking",    href: "/banking/",    labelKey: "door.banking",    taglineKey: "door.banking.tag",    icon: "banking",    section: "government" },
+  { id: "kids",       href: "/kids/",       labelKey: "door.kids",       taglineKey: "door.kids.tag",       icon: "kids",       section: "kids" },
+  { id: "careers",    href: "/careers/",    labelKey: "door.careers",    taglineKey: "door.careers.tag",    icon: "careers",    section: "careers" },
 ];
 
 export type ExploreTile = {
@@ -35,6 +35,9 @@ export type ExploreTile = {
 };
 
 export const EXPLORE_TILES: ExploreTile[] = [
+  { id: "documents",     href: "/government/documents/", labelKey: "docs.title",  icon: "book" },
+  { id: "emergency",     href: "/emergency/",      labelKey: "emergency.title",   icon: "siren" },
+  { id: "safety",        href: "/safety/",         labelKey: "safety.title",      icon: "shield" },
   { id: "agriculture",   href: "/agriculture/",    labelKey: "nav.agriculture",   icon: "agriculture" },
   { id: "learn",         href: "/learn/",          labelKey: "nav.learn",         icon: "learn" },
   { id: "play",          href: "/play/",           labelKey: "nav.play",          icon: "play" },
@@ -46,7 +49,7 @@ export const EXPLORE_TILES: ExploreTile[] = [
   { id: "temples",       href: "/heritage/",       labelKey: "nav.temples",       icon: "temples" },
   { id: "weather",       href: "/weather/",        labelKey: "nav.weather",       icon: "weather" },
   { id: "community",     href: "/members/",        labelKey: "nav.community",     icon: "community" },
-  { id: "government",    href: "/services/",       labelKey: "nav.government",    icon: "government" },
+  { id: "government",    href: "/government/",     labelKey: "nav.government",    icon: "government" },
   { id: "digitalSkills", href: "/digital-skills/", labelKey: "nav.digitalSkills", icon: "digital" },
 ];
 
@@ -57,9 +60,11 @@ export function isReady(href: string): boolean {
 
 /** Popular searches shown under the hero. Only terms that return results. */
 export const POPULAR_SEARCHES = [
+  { key: "popular.aadhaar", query: "Aadhaar" },
+  { key: "popular.marksheet", query: "marksheet" },
+  { key: "popular.pmkisan", query: "PM Kisan" },
+  { key: "popular.adangal", query: "Adangal" },
+  { key: "popular.netbanking", query: "net banking" },
   { key: "popular.sankranthi", query: "Sankranthi" },
-  { key: "popular.ramalayam", query: "Ramalayam" },
   { key: "popular.members", query: "Members" },
-  { key: "popular.gallery", query: "Gallery" },
-  { key: "popular.developments", query: "Developments" },
 ] as const;

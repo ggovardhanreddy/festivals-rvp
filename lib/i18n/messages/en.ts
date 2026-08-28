@@ -137,6 +137,10 @@ export const en = {
   "empty.results": "No results.",
 
   // ---- homepage doors --------------------------------------------------
+  "door.government": "Government",
+  "door.government.tag": "Certificates & schemes",
+  "door.banking": "Banking",
+  "door.banking.tag": "Banks, UPI & pension",
   "door.kids": "Kids",
   "door.kids.tag": "Fun & Learn",
   "door.students": "Students",
@@ -149,6 +153,7 @@ export const en = {
   "door.seniors.tag": "Easy Mode",
   "door.explore": "Explore",
   "door.explore.tag": "Discover More",
+  "home.headline": "Everything useful, in one simple place",
   "home.whatDoYouWant": "What do you want to do?",
   "home.explore": "Explore",
   "home.today": "Today in Reddivaripalli",
@@ -171,6 +176,11 @@ export const en = {
   "home.promise.privacySub": "Your data stays yours",
 
   // ---- popular searches -------------------------------------------------
+  "popular.aadhaar": "Aadhaar",
+  "popular.marksheet": "Marksheet",
+  "popular.pmkisan": "PM-KISAN",
+  "popular.adangal": "Adangal",
+  "popular.netbanking": "Net banking",
   "popular.sankranthi": "Sankranthi",
   "popular.ramalayam": "Ramalayam",
   "popular.members": "Members",
@@ -187,7 +197,9 @@ export const en = {
   "game.word": "Word Game",
   "game.word.desc": "Unscramble the letters to make a word.",
   "game.quiz": "Quiz",
-  "game.quiz.desc": "General knowledge, science and village questions.",
+  "game.quiz.desc": "General knowledge, science, maths and English.",
+  "game.daily": "Today's challenge",
+  "game.daily.desc": "Ten questions, the same ten for everyone today.",
   "game.play": "Play now",
   "game.newGame": "New game",
   "game.check": "Check",
@@ -224,6 +236,247 @@ export const en = {
     "This part of the platform has not launched yet. Nothing is hidden behind a login \u2014 there is simply no content here to show you yet.",
   "section.notYet.meanwhile": "In the meantime",
   "section.plannedPhase": "Planned for phase {phase}",
+
+  // ---- first-run consent (one dialog, asked once) -----------------------
+  "consent.eyebrow": "Optional",
+  "consent.title": "Two optional extras",
+  "consent.body":
+    "Everything on this site works without either of these. Turn on only what you want \u2014 you can change both later in Settings.",
+  "consent.notifications.title": "Festival and birthday reminders",
+  "consent.notifications.body":
+    "A notification when a village festival, jathara or birthday is coming up.",
+  "consent.location.title": "Approximate location",
+  "consent.location.body":
+    "Used on this device only, to show how far you are from the village. Street-level location is never stored or sent anywhere.",
+  "consent.allow": "Allow",
+  "consent.requesting": "Requesting\u2026",
+  "consent.on": "On",
+  "consent.notNow": "Not now",
+  "consent.done": "Done",
+  "consent.continueWithout": "Continue without these",
+  "consent.note":
+    "We do not ask again. Change either one anytime in Settings.",
+
+  // ---- kids world -------------------------------------------------------
+  "kids.lede":
+    "Letters, numbers, arithmetic, drawing and quizzes \u2014 free, with no sign-up and no adverts.",
+  "kids.privacy":
+    "Nothing here asks for a name, an email, a phone number or a photograph. Practice progress is kept on this device only.",
+  "kids.available": "Activities",
+  "kids.notYet": "Not here yet",
+  "kids.notYet.body":
+    "These are listed so you know they are planned. They are not linked because there is nothing real behind them yet, and filling the space with invented material would be worse than an honest gap.",
+  "kids.pending.sourced": "Waiting on material we have permission to publish.",
+  "kids.pending.recorded": "Waiting on recordings from the village.",
+  "kids.pending.reviewed": "Waiting on review by a teacher.",
+  "kids.tapLetter": "Tap a letter to see how it is read.",
+
+  "kids.telugu": "Telugu letters",
+  "kids.telugu.desc": "The aksharamala \u2014 16 vowels and 36 consonants.",
+  "kids.telugu.vowels": "Achchulu \u00b7 vowels",
+  "kids.telugu.consonants": "Hallulu \u00b7 consonants",
+  "kids.english": "English letters",
+  "kids.english.desc": "A to Z, each with a word and its Telugu meaning.",
+  "kids.english.letters": "A \u2013 Z",
+  "kids.numbers": "Numbers",
+  "kids.numbers.desc": "0 to 20 in Telugu numerals, Telugu words and English words.",
+  "kids.numbers.hint": "Telugu numerals are shown beside the digit you already know.",
+  "kids.math": "Maths practice",
+  "kids.math.desc": "Addition, subtraction, multiplication and division. No timer.",
+  "kids.math.operation": "Operation",
+  "kids.math.level": "Level",
+  "kids.math.levelN": "Level {n}",
+  "kids.math.add": "Addition",
+  "kids.math.sub": "Subtraction",
+  "kids.math.mul": "Multiplication",
+  "kids.math.div": "Division",
+  "kids.math.score": "{correct} out of {total}",
+  "kids.math.again": "Practise again",
+  "kids.drawing": "Drawing",
+  "kids.drawing.desc": "A blank page, eight colours and three brushes.",
+  "kids.draw.colour": "Colour",
+  "kids.draw.size": "Brush size",
+  "kids.draw.canvas": "Drawing canvas",
+  "kids.draw.clear": "Start again",
+  "kids.draw.save": "Save picture",
+  "kids.draw.note": "The picture stays on this device unless you save it yourself.",
+  "kids.memory": "Memory game",
+  "kids.memory.desc": "Match the pairs.",
+  "kids.puzzles": "Puzzles",
+  "kids.puzzles.desc": "Sudoku, with a fresh grid every time.",
+  "kids.quiz": "Quiz",
+  "kids.quiz.desc": "Mixed questions from every topic.",
+  "kids.gk": "General knowledge",
+  "kids.gk.desc": "Questions about India, geography and the world.",
+  "kids.stories": "Stories",
+  "kids.stories.desc": "Reading practice in Telugu and English.",
+  "kids.rhymes": "Rhymes",
+  "kids.rhymes.desc": "Songs and rhymes to sing along to.",
+  "kids.science": "Science",
+  "kids.science.desc": "Simple explanations of how things work.",
+  "kids.videos": "Educational videos",
+  "kids.videos.desc": "Lessons to watch.",
+
+
+  // ---- agriculture -------------------------------------------------------
+  "agri.title": "Agriculture",
+  "agri.lede":
+    "Crop information for this region, with the source of every claim shown next to it.",
+  "agri.noReminders":
+    "This page never sends anything. There are no sowing alerts, no crop reminders and no scheduled notifications \u2014 open it when you want it.",
+  "agri.noGuides": "No crop guides published yet",
+  "agri.noGuides.body":
+    "A crop guide only goes up once it cites the document it came from, and a dosage only goes up with its own separate citation. None have passed that yet, so there are none here. The official sources below are what we would be quoting anyway.",
+  "agri.crops": "Crops",
+  "agri.guides": "Guides",
+  "agri.water.low": "Low water",
+  "agri.water.medium": "Medium water",
+  "agri.water.high": "High water",
+  "agri.official": "Official sources",
+  "agri.official.body":
+    "Department portals for schemes, advisories and payments. These are the authorities \u2014 we only link to them.",
+
+  // ---- careers -----------------------------------------------------------
+  "careers.title": "Careers",
+  "careers.lede": "Where to look for work, and what this page does not claim to have.",
+  "careers.listings": "Village listings",
+  "careers.none":
+    "No job listings. This page will only ever show a vacancy someone has submitted with a contact we can point at \u2014 an invented listing costs a job seeker a bus fare and a day.",
+  "careers.official": "Official job portals",
+
+  // ---- weather -----------------------------------------------------------
+  "weather.title": "Weather",
+  "weather.none": "No weather provider is configured.",
+  "weather.none.body":
+    "Rather than print a forecast from an unnamed source, this page links to the India Meteorological Department. When a provider is configured, the forecast will appear here with its source named.",
+  "weather.provider": "Forecast data from {provider}.",
+  "weather.imd": "Official forecasts, warnings and district bulletins.",
+
+  // ---- learning hub ------------------------------------------------------
+  "learn.lede":
+    "Free learning, in Telugu and English. Only what genuinely exists is linked.",
+  "learn.available": "Open now",
+  "learn.courses": "Courses",
+  "learn.noCourses":
+    "No courses yet. A course appears here when it has real lessons behind it, not a title and an empty page.",
+  "learn.planned": "Planned",
+  "learn.kids.desc": "Letters, numbers, arithmetic, drawing and quizzes.",
+  "learn.play.desc": "Sudoku, memory, maths, words and quizzes.",
+  "learn.english.desc": "Spoken and written English practice.",
+  "learn.it.desc": "Computers, the internet and everyday digital work.",
+  "learn.engineering.desc": "Entrance preparation and study material.",
+  "learn.digital.desc": "Using government portals, payments and phones safely.",
+
+  // ---- easy mode ---------------------------------------------------------
+  "easy.title": "Easy Mode",
+  "easy.body":
+    "Larger text, stronger contrast, bigger buttons and no moving decoration. Nothing is hidden \u2014 the same pages, easier to read.",
+  "easy.on": "Easy Mode is on",
+  "easy.off": "Easy Mode is off",
+  "easy.note": "This setting stays on this device.",
+
+  // ---- official resource directory --------------------------------------
+  "gov.title": "Government services",
+  "gov.lede":
+    "Direct links to the official website for the things people here actually need \u2014 certificates, Aadhaar, land records, pensions, licences.",
+  "gov.independent":
+    "Reddivaripalli is an independent community platform. These services belong to the departments named on each card; we only point the way.",
+  "gov.official": "Official",
+  "gov.open": "Open official website",
+  "gov.opensExternal": "Opens the official website in a new tab",
+  "gov.verified": "checked {date}",
+  "gov.filter": "Filter this page",
+  "gov.noMatch":
+    "Nothing on this page matches. Try the site-wide search, or a shorter word.",
+  "gov.notAllSites":
+    "This is a curated directory, not a list of every government website. For anything not here, start from the National Government Services Portal above.",
+  "gov.group.start": "Start here",
+  "gov.group.documents": "Identity and documents",
+  "gov.group.land": "Land and property",
+  "gov.group.welfare": "Work, pension and welfare",
+  "gov.group.health": "Health",
+  "gov.group.legal": "Complaints, courts and fraud",
+  "gov.group.business": "Business",
+  "gov.group.other": "Post, telecom and state",
+
+  "docs.title": "Documents and certificates",
+  "docs.lede":
+    "Where each document actually comes from. Reddivaripalli stores none of them \u2014 every link goes to the issuing authority.",
+  "docs.group.digilocker": "Start with DigiLocker",
+  "docs.group.identity": "Identity documents",
+  "docs.group.certificates": "Certificates from the state",
+  "docs.group.education": "Education documents",
+  "docs.group.land": "Land documents",
+
+  "students.title": "Student services",
+  "students.lede":
+    "Scholarships, marksheets, entrance exams and free courses \u2014 from the bodies that actually issue them.",
+  "students.group.money": "Scholarships and fees",
+  "students.group.documents": "Marksheets and student ID",
+  "students.group.learn": "Free learning",
+  "students.group.exams": "Exams and regulators",
+  "students.group.work": "Work and skills",
+
+  "farmers.title": "Farmer services",
+  "farmers.lede":
+    "Schemes, land records, soil and market prices. Crop advice is not here: that needs a cited source, and it lives under Agriculture.",
+  "farmers.group.money": "Money and insurance",
+  "farmers.group.land": "Land and crop registration",
+  "farmers.group.crop": "Soil, prices and research",
+  "farmers.group.state": "Andhra Pradesh",
+
+  "banking.title": "Banking and finance",
+  "banking.lede":
+    "Bank websites taken from the Reserve Bank of India's own list, so you can tell a real bank address from a look-alike.",
+  "banking.group.payments": "UPI and payments",
+  "banking.group.public": "Public sector banks",
+  "banking.group.private": "Private sector banks",
+  "banking.group.finance": "Tax, pension and insurance",
+
+  "safety.gov.title": "Before you go",
+  "safety.gov.body":
+    "Reddivaripalli takes no applications and charges no fee. It will never ask for your Aadhaar number, OTP or password. Every link below goes to a gov.in, nic.in or bank.in address \u2014 check the address bar before you type anything.",
+  "safety.bank.title": "Banking safety",
+  "safety.bank.body":
+    "Reddivaripalli will never ask for your banking password, OTP, ATM PIN, UPI PIN, CVV or card number, and never opens a bank login inside this site. Every bank link below goes to that bank's own address as listed by the Reserve Bank of India.",
+
+  "emergency.title": "Emergency numbers",
+  "emergency.lede": "Tap to call. Every number here was read from an official page.",
+  "emergency.call": "Call",
+
+  "safety.title": "Staying safe online",
+  "safety.lede":
+    "The scams that reach this village most often, in the words the caller actually uses.",
+  "safety.goldenRule":
+    "One rule covers almost all of it: no bank, no government office and no company will ever ask you for an OTP, a PIN or a password. Anyone who does is stealing from you \u2014 including someone who already knows your name, your village and your account number.",
+  "safety.common": "What the call usually sounds like",
+  "safety.report": "Where to report it",
+  "safety.report.body":
+    "If money has already left your account, call 1930 first \u2014 the sooner the report, the better the chance of a freeze.",
+  "safety.scam.otp.title": "\u201cRead me the OTP to confirm\u201d",
+  "safety.scam.otp.body":
+    "An OTP only ever confirms something you started. If you did not start it, the OTP completes their transaction, not yours.",
+  "safety.scam.upi.title": "\u201cEnter your PIN to receive the money\u201d",
+  "safety.scam.upi.body":
+    "A UPI PIN is never needed to receive money \u2014 only to send it. A request to approve a payment is a payment out of your account.",
+  "safety.scam.kyc.title": "\u201cYour KYC has expired, your account will be blocked today\u201d",
+  "safety.scam.kyc.body":
+    "Urgency is the tell. Hang up and call the number printed on your passbook or card, never the number the caller gives.",
+  "safety.scam.job.title": "\u201cYou have been selected \u2014 pay the registration fee\u201d",
+  "safety.scam.job.body":
+    "No genuine government recruitment asks for a fee over the phone or through a link. Check the department's own site.",
+  "safety.scam.loan.title": "\u201cLoan approved \u2014 just pay the processing charge\u201d",
+  "safety.scam.loan.body":
+    "A lender takes its charges out of the loan. Money demanded before a loan arrives is not coming back.",
+  "safety.scam.lottery.title": "\u201cYou have won a prize / KBC lottery\u201d",
+  "safety.scam.lottery.body":
+    "You cannot win a competition you never entered. There is no tax to pay to release a prize.",
+  "safety.scam.fakeSite.title": "A site that looks like the government one",
+  "safety.scam.fakeSite.body":
+    "Official addresses end in gov.in or nic.in, and Indian bank addresses end in bank.in. A search result that ends in anything else is not the department, whatever the page looks like.",
+  "safety.scam.support.title": "\u201cI am calling from customer care about your refund\u201d",
+  "safety.scam.support.body":
+    "Never install a screen-sharing or remote-support app for a caller. It hands them your phone, your bank app and your messages.",
 
   // ---- forms -----------------------------------------------------------
   "form.required": "Required",
