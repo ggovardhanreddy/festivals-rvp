@@ -1,7 +1,7 @@
 # Route Migration — Preserving Every Existing URL
 
 **Created:** Phase 0, 2026-08-28
-**Status:** plan only. **No route has been changed.**
+**Status:** IMPLEMENTED in Phase 1A/1B. See the status column below.
 **Target:** English at `/`, Telugu at `/te/`, plus the new platform sections.
 
 ---
@@ -204,3 +204,28 @@ pages. Reverting the commit removes the Telugu tree and restores the previous
 
 The one non-additive piece is the service worker cache key. Bumping it back is safe;
 users get one extra refresh.
+
+
+---
+
+## 8. Implementation status (Phase 1A/1B)
+
+| Group | Existing URL | Future URL | Status | Redirect | Notes |
+|---|---|---|---|---|---|
+| Home | `/` | `/` | **live** | none | Telugu twin `/te/` live |
+| Village | `/about/` `/heritage/` `/timeline/` `/years/` | unchanged | **live** | none | no Telugu twin yet |
+| Media | `/gallery/` `/rvp-birthdays/` `/years/<y>/` | unchanged | **live** | none | |
+| Festivals | 9 chapters + `/<y>/` | unchanged | **live** | none | |
+| Community | `/members/` `/events/` `/directory/` `/developments/` `/suggestions/` `/lost-found/` `/documents/` `/contact/` | unchanged | **live** | none | |
+| Utility | `/search/` `/settings/` `/offline/` `/privacy/` `/terms/` | unchanged | **live** | none | |
+| Gated | `/fun-trips/` `/chat/` `/login/` `/admin/` | unchanged | **live** | none | noindex, unchanged |
+| Removed | `/blood-donors*` | `/` | **live** | 301 | pre-existing, preserved |
+| **Telugu** | — | `/te/` | **new, live** | none | genuine Telugu entry point |
+| **Games** | — | `/play/` `/play/{sudoku,memory,maths,word,quiz,daily}/` | **new, live** | none | real playable games |
+| **Reserved** | — | `/learn/` `/kids/` `/agriculture/` `/english/` `/engineering/` `/it/` `/careers/` `/temples/` `/community/` `/weather/` `/services/` `/digital-skills/` `/explore/` | **landing only** | none | honest "being built" page naming the phase. No placeholder content |
+
+**Redirects required for existing content: zero.** 68 pages before, 89 after.
+
+`/temples/` and `/community/` are new sections; `/heritage/`, `/members/`,
+`/directory/` and `/events/` keep their URLs and are cross-linked rather than
+redirected.
