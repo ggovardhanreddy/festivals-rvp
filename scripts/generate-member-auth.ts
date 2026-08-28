@@ -1,6 +1,14 @@
 /**
  * Generate PBKDF2 password hashes for Fun Fest member login.
- * Initial password = case-sensitive username.
+ *
+ * DEPRECATED for credential rotation — use scripts/rotate-member-passwords.ts,
+ * which writes plaintext outside the repository and never to git.
+ *
+ * This script keeps existing records intact so `prepare:site` stays idempotent.
+ * For a member with no existing record it now mints a RANDOM password and
+ * writes it to $HOME/rvp-credentials/NEW-MEMBERS-<stamp>.csv rather than
+ * setting the password to the username. Deriving a password from a public
+ * username is what caused docs/SECURITY_INCIDENT.md finding S-1.
  *
  * Writes:
  *  - functions/_data/member-auth.json  (reference / backups)
@@ -11,6 +19,7 @@
  */
 import crypto from "node:crypto";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { assignMemberUsernames } from "../lib/auth";
 import type { Member } from "../lib/types";
@@ -28,6 +37,20 @@ type AuthRecord = {
   passwordHash: string;
   updatedAt: string;
 };
+
+const ALPHABET = "abcdefghijkmnpqrstuvwxyzACDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+/** Random, unambiguous temporary password for a member with no record yet. */
+function generatePassword(length = 14): string {
+  const bytes = crypto.randomBytes(length * 2);
+  let out = "";
+  for (let i = 0; out.length < length && i < bytes.length; i += 1) {
+    const b = bytes[i]!;
+    if (b >= 256 - (256 % ALPHABET.length)) continue;
+    out += ALPHABET[b % ALPHABET.length];
+  }
+  return out.length === length ? out : generatePassword(length);
+}
 
 function hashPassword(password: string): string {
   const salt = crypto.randomBytes(16).toString("hex");
@@ -57,6 +80,7 @@ function main() {
   ).members;
   const byId = new Map(existing.map((r) => [r.memberId, r]));
   const next: AuthRecord[] = [];
+  const minted: string[][] = [];
 
   for (const member of members) {
     const username = usernames.get(member.id);
@@ -66,14 +90,17 @@ function main() {
       next.push({ ...prev, name: member.name, username });
       continue;
     }
+    const tempPassword = generatePassword();
     next.push({
       memberId: member.id,
       username,
       name: member.name,
-      passwordHash: hashPassword(username),
+      passwordHash: hashPassword(tempPassword),
       updatedAt: new Date().toISOString(),
     });
-    console.log(`Hashed ${username} ← ${member.name}`);
+    minted.push([username, member.name, tempPassword]);
+    // Never log the password.
+    console.log(`Minted temporary credential for ${username} ← ${member.name}`);
   }
 
   const payload = {
@@ -101,6 +128,22 @@ function main() {
         2,
       )} as const;\n`,
   );
+  if (minted.length) {
+    const dir = path.join(os.homedir(), "rvp-credentials");
+    fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    const file = path.join(dir, `NEW-MEMBERS-${stamp}.csv`);
+    fs.writeFileSync(
+      file,
+      ["username,name,temporary_password"]
+        .concat(minted.map((r) => r.join(",")))
+        .join("\n") + "\n",
+      { mode: 0o600 },
+    );
+    console.log("");
+    console.log(`${minted.length} new member(s) got a random temporary password.`);
+    console.log(`  ${file}   (SENSITIVE — deliver individually, then delete)`);
+  }
   console.log(`Wrote ${next.length} auth records → ${path.relative(ROOT, OUT_JSON)}`);
   console.log(`Wrote Functions module → ${path.relative(ROOT, OUT_TS)}`);
 }
