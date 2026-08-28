@@ -98,6 +98,13 @@ export function TeluguCalendar({
     ...Array.from({ length: firstDow }, () => null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
+  // Pad the final week so every ARIA row holds exactly 7 gridcells; a row with
+  // a short cell count is announced incorrectly by screen readers.
+  while (cells.length % 7 !== 0) cells.push(null);
+  const weeks: (number | null)[][] = Array.from(
+    { length: cells.length / 7 },
+    (_, i) => cells.slice(i * 7, i * 7 + 7),
+  );
 
   const masaHint = selectedPanchang?.masaTe || "";
 
@@ -148,20 +155,24 @@ export function TeluguCalendar({
         role="grid"
         aria-label={`${monthLabel} Telugu calendar`}
       >
-        {WEEKDAYS_EN.map((en) => (
-          <div key={en} className="telugu-calendar-dow" role="columnheader">
-            <span>{VARA_TE_SHORT[en]}</span>
-            <span className="muted">{en.slice(0, 3)}</span>
-          </div>
-        ))}
-        {cells.map((day, i) => {
+        <div className="telugu-calendar-row" role="row">
+          {WEEKDAYS_EN.map((en) => (
+            <div key={en} className="telugu-calendar-dow" role="columnheader">
+              <span>{VARA_TE_SHORT[en]}</span>
+              <span className="muted">{en.slice(0, 3)}</span>
+            </div>
+          ))}
+        </div>
+        {weeks.map((week, w) => (
+        <div className="telugu-calendar-row" role="row" key={`w-${year}-${month}-${w}`}>
+        {week.map((day, i) => {
           if (!day) {
             return (
               <div
-                key={`e-${year}-${month}-${i}`}
+                key={`e-${year}-${month}-${w}-${i}`}
                 className="telugu-calendar-cell"
+                role="gridcell"
                 data-empty
-                aria-hidden
               />
             );
           }
@@ -208,6 +219,8 @@ export function TeluguCalendar({
             </button>
           );
         })}
+        </div>
+        ))}
       </div>
 
       {selectedPanchang ? (
