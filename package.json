@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare:site": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts && tsx scripts/generate-logo-system.ts && tsx scripts/generate-ambient-music.ts && tsx scripts/generate-member-auth.ts && tsx scripts/generate-all.ts && tsx scripts/rewrite-albums-r2.ts",
+    "prepare:site": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts && tsx scripts/sync-community-seeds.ts && tsx scripts/generate-logo-system.ts && tsx scripts/generate-ambient-music.ts && tsx scripts/generate-member-auth.ts && tsx scripts/generate-all.ts && tsx scripts/rewrite-albums-r2.ts",
     "auth:members": "tsx scripts/generate-member-auth.ts",
     "auth:members:force": "MEMBER_AUTH_FORCE=1 tsx scripts/generate-member-auth.ts",
     "sync": "tsx scripts/ensure-folders.ts && tsx scripts/sync-cms.ts",
