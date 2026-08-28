@@ -2,20 +2,23 @@
 
 All routes are **Cloudflare Pages Functions** under `functions/api/`. They require the production/preview Pages deployment with bindings (not available on pure `next dev` without Wrangler).
 
-CORS: reflect request origin; credentials allowed. JSON `content-type: application/json` unless streaming media.
+CORS: reflect request origin; credentials allowed; `Authorization` header allowed for native clients. JSON `content-type: application/json` unless streaming media.
 
 ---
 
 ## Admin — `/api/admin/*`
 
-Source: [`functions/api/admin/[[route]].ts`](../functions/api/admin/[[route]].ts)
+Source: [`functions/api/admin/[[route]].ts`](../functions/api/admin/[[route]].ts)  
+Shared auth: [`functions/_lib/admin-auth.ts`](../functions/_lib/admin-auth.ts)
 
 | Method | Path | Auth | Body / notes | Response |
 |---|---|---|---|---|
-| GET | `/api/admin/session` | Cookie optional | — | `{ ok, role, username }` |
-| POST | `/api/admin/login` | None | `{ username, password }` | `{ ok, role, username }` + `Set-Cookie: rvp_admin=…` |
+| GET | `/api/admin/session` | Cookie **or** `Authorization: Bearer` | — | `{ ok, role, username, expiresAt }` |
+| POST | `/api/admin/login` | None | `{ username, password }` | `{ ok, role, username, token, expiresAt }` + `Set-Cookie: rvp_admin=…` |
 | POST | `/api/admin/logout` | — | — | `{ ok: true }` clears cookie |
 | * | other | — | — | **403** — album CMS via Git; community via `/api/community/*` |
+
+**Native clients:** store `token` in the Keychain and send `Authorization: Bearer <token>` on subsequent calls. The token value is identical to the cookie payload (`<base64url(payload)>.<hmac>`).
 
 Errors: `503` if secrets missing; `401` invalid credentials; `400` bad JSON.
 
@@ -36,16 +39,20 @@ Errors: `503` if secrets missing; `401` invalid credentials; `400` bad JSON.
 
 Source: [`functions/api/community/[[route]].ts`](../functions/api/community/[[route]].ts)
 
-**Collections:** `directory` · `members` · `lost-found` · `panchayat-docs` · `heritage` · `site-settings` · `analytics` · `audit`
+**Collections:** `directory` · `members` · `lost-found` · `panchayat-docs` · `heritage` · `suggestions` · `site-settings` · `analytics` · `audit` · `events` · `announcements`
+
+Admin mutations accept **cookie or Bearer**. Successful admin writes append to `community/audit`.
 
 | Method | Auth | Behavior |
 |---|---|---|
-| GET | Public (filtered) | Returns `{ items, source }` or settings; approval collections hide non-approved unless `?admin=1` **and** admin cookie |
-| POST | Varies | Append/upsert `item`; `lost-found`/`heritage` set `pending` for non-admin; `directory`/`members`/`panchayat-docs` require admin; `analytics` accepts `{ hit }`; `audit` requires admin |
+| GET | Public (filtered) | Returns `{ items, source }` or settings; approval collections hide non-approved unless `?admin=1` **and** admin session |
+| POST | Varies | Append/upsert `item`; `lost-found`/`heritage` set `pending` for non-admin; `directory`/`members`/`panchayat-docs`/`events`/`announcements` require admin; `analytics` accepts `{ hit }`; `audit` requires admin |
 | PUT | Admin | Replace `{ items }` or `{ settings }` |
 | DELETE | Admin | `?id=` remove item |
 
 `site-settings`: GET returns defaults if empty; PUT requires admin.
+
+`events` / `announcements`: public GET; admin POST/PUT/DELETE. Website merges R2 overlay over Git seed at runtime (`lib/live-calendar.tsx`).
 
 ---
 
@@ -53,26 +60,28 @@ Source: [`functions/api/community/[[route]].ts`](../functions/api/community/[[ro
 
 Source: [`functions/api/media/[[route]].ts`](../functions/api/media/[[route]].ts)
 
-Requires R2 binding `MEDIA` (else `503`).
+Requires R2 binding `MEDIA` (else `503`). Admin routes accept **cookie or Bearer**.
 
 ### `POST /api/media/upload`
 
-- Auth: **admin** cookie
-- `multipart/form-data`: `file`, `category`, optional `originalName`, `width`, `height`, `duration`, **`year`**, **`album`** / `bucket`, `person`, `preserveOriginal`
+- Auth: **admin**
+- `multipart/form-data`: `file`, `category`, optional `originalName`, `width`, `height`, `duration`, **`year`**, **`album`** / `bucket`, `person`, `preserveOriginal`, `clientOptimized`
 - When `year` + `album` are set (gallery/videos/funfest), key is structured: `gallery/{year}/{album}/…` (discoverable by reindex)
 - Rejects protected `hero.webp` keys (festival/brand heroes)
 - HEIC/MOV: stored as-is; optional `originals/` paired copy — Workers do not convert formats
 - Categories: see [CLOUDFLARE_R2.md](./CLOUDFLARE_R2.md)
 - Response: `{ ok, key, publicUrl, private, size, mime, originalKey, note, next, … }`
+- Side effect: audit `media.upload`
 
 ### `POST /api/media/reindex`
 
-- Auth: **admin** cookie
+- Auth: **admin**
 - Lists R2 `gallery/`, `videos/`, `audio/`, `funfest/` via binding
 - Writes `catalog/albums.json` (+ `catalog/albums.array.json`)
 - Optional JSON body `{ "dispatch": true }` → GitHub `repository_dispatch` `content-sync` when `GITHUB_DISPATCH_TOKEN` is configured
 - Does **not** modify festival hero objects
 - Response: `{ ok, catalogKey, albums, media, objects, github, … }`
+- Side effect: audit `media.reindex`
 
 ### `GET /api/media/sign?key=`
 
@@ -85,8 +94,13 @@ Requires R2 binding `MEDIA` (else `503`).
 - Private keys require valid signature + expiry
 - Cache-Control: private short for private; long immutable for public
 
+### `GET /api/media/usage`
+
+- Auth: **admin**
+- R2 usage + Google Drive overflow status
+
 ---
 
 ## Related
 
-[AUTHENTICATION.md](./AUTHENTICATION.md) · [DATABASE.md](./DATABASE.md) · [MEDIA_MANAGEMENT.md](./MEDIA_MANAGEMENT.md)
+[AUTHENTICATION.md](./AUTHENTICATION.md) · [DATABASE.md](./DATABASE.md) · [MEDIA_MANAGEMENT.md](./MEDIA_MANAGEMENT.md) · [ios/VillageSuperAdmin/README.md](../ios/VillageSuperAdmin/README.md)

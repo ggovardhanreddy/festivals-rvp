@@ -33,12 +33,19 @@ import {
   recountR2Usage,
   shouldUseGoogleDriveOverflow,
 } from "../../_lib/r2-usage";
+import {
+  adminCorsHeaders,
+  hmacSign,
+  resolveAdminSession,
+} from "../../_lib/admin-auth";
+import { appendAdminAudit } from "../../_lib/audit";
 
 interface Env {
   MEDIA?: R2Bucket;
   RATE_LIMIT?: KVNamespace;
   ADMIN_PASSWORD_HASH?: string;
   ADMIN_SESSION_SECRET?: string;
+  SUPER_ADMIN_USERNAME?: string;
   MEMBER_SESSION_SECRET?: string;
   MEDIA_SIGNING_SECRET?: string;
   R2_PUBLIC_BASE?: string;
@@ -117,29 +124,6 @@ const ALLOWED_EXT = new Set([
   "ico",
 ]);
 
-const encoder = new TextEncoder();
-
-const base64url = (bytes: Uint8Array) => {
-  let binary = "";
-  for (let i = 0; i < bytes.length; i += 1) {
-    binary += String.fromCharCode(bytes[i]!);
-  }
-  return btoa(binary).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
-};
-
-async function hmacSign(value: string, secret: string) {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-  return base64url(
-    new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value))),
-  );
-}
-
 function decodePayload(value: string) {
   try {
     const pad = value + "=".repeat((4 - (value.length % 4)) % 4);
@@ -162,12 +146,7 @@ function json(
 }
 
 function cors(origin: string) {
-  return {
-    "access-control-allow-origin": origin,
-    "access-control-allow-credentials": "true",
-    "access-control-allow-headers": "content-type, authorization",
-    "access-control-allow-methods": "GET,POST,OPTIONS",
-  };
+  return adminCorsHeaders(origin, "GET,POST,OPTIONS");
 }
 
 async function listAllKeys(
@@ -257,13 +236,7 @@ function guessMime(name: string, mime?: string) {
 }
 
 async function requireAdmin(request: Request, env: Env) {
-  const cookie = request.headers.get("cookie") || "";
-  const match = cookie.match(/(?:^|;\s*)rvp_admin=([^;]+)/);
-  if (!match?.[1] || !env.ADMIN_SESSION_SECRET) return false;
-  const [value, sig] = match[1].split(".");
-  if (!value || !sig) return false;
-  const expected = await hmacSign(value, env.ADMIN_SESSION_SECRET);
-  return sig === expected;
+  return Boolean(await resolveAdminSession(request, env));
 }
 
 async function requireMember(request: Request, env: Env) {
@@ -421,7 +394,8 @@ async function handleMedia({
   }
 
   if (route === "upload" && request.method === "POST") {
-    if (!(await requireAdmin(request, env))) {
+    const adminSession = await resolveAdminSession(request, env);
+    if (!adminSession) {
       return json({ error: "Unauthorized" }, 401, headers);
     }
     const form = await request.formData();
@@ -704,6 +678,14 @@ async function handleMedia({
       );
     }
 
+    await appendAdminAudit(env, {
+      actor: adminSession.username,
+      action: "media.upload",
+      collection: "media",
+      target: key,
+      detail: `${category}${year && album ? ` ${year}/${album}` : ""}`,
+    });
+
     return json(
       {
         ok: true,
@@ -776,7 +758,8 @@ async function handleMedia({
   }
 
   if (route === "reindex" && request.method === "POST") {
-    if (!(await requireAdmin(request, env))) {
+    const adminSession = await resolveAdminSession(request, env);
+    if (!adminSession) {
       return json({ error: "Unauthorized" }, 401, headers);
     }
 
@@ -822,6 +805,14 @@ async function handleMedia({
     const gh = dispatch
       ? await maybeDispatchGithub(env, "gallery-reindex")
       : { dispatched: false as const, reason: "skipped" };
+
+    await appendAdminAudit(env, {
+      actor: adminSession.username,
+      action: "media.reindex",
+      collection: "media",
+      target: R2_ALBUMS_CATALOG_KEY,
+      detail: `${albums.length} albums, ${payload.mediaCount} media`,
+    });
 
     return json(
       {

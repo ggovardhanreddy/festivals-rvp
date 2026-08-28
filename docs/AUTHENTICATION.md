@@ -1,19 +1,25 @@
 # Authentication
 
-Two independent cookie sessions exist.
+Two independent sessions exist: Super Admin and Fun Fest member.
 
 ## Super Admin
 
 | Item | Value |
 |---|---|
 | Endpoints | `POST /api/admin/login`, `GET /api/admin/session`, `POST /api/admin/logout` |
-| Cookie | `rvp_admin` |
+| Cookie (web) | `rvp_admin` |
 | Cookie flags | HttpOnly; Secure; SameSite=**Strict**; Path=/; Max-Age=86400 |
+| Bearer (native) | Login returns `token` + `expiresAt`; send `Authorization: Bearer <token>` |
 | Password | `ADMIN_PASSWORD_HASH` = `pbkdf2:<salt>:<hash>` at **100,000** iterations |
 | Username | `SUPER_ADMIN_USERNAME` (case-insensitive compare); default `Govardhan` |
 | Payload | `{ sub, role: "super-admin", exp }` + HMAC via `ADMIN_SESSION_SECRET` |
+| Token format | Same as cookie value: `<base64url(payload)>.<hmac>` |
 
-Implementation: [`functions/api/admin/[[route]].ts`](../functions/api/admin/[[route]].ts).
+Implementation: [`functions/api/admin/[[route]].ts`](../functions/api/admin/[[route]].ts), shared verifier [`functions/_lib/admin-auth.ts`](../functions/_lib/admin-auth.ts).
+
+Community + media admin gates accept **cookie or Bearer**.
+
+Native app: [`ios/VillageSuperAdmin/`](../ios/VillageSuperAdmin/) stores the token in the iOS Keychain.
 
 **Workers note:** iterations must stay at 100k — higher values previously caused Worker error **1101** (CPU limit).
 
@@ -36,7 +42,7 @@ Username derivation: [`lib/auth.ts`](../lib/auth.ts) `memberUsername` / `assignM
 
 [`functions/_middleware.ts`](../functions/_middleware.ts) redirects unauthenticated requests under `/fun-trips/` to `/login/?next=…`.
 
-Private media signing also accepts either admin or member cookies ([`functions/api/media/[[route]].ts`](../functions/api/media/[[route]].ts)).
+Private media signing also accepts either admin (cookie/Bearer) or member cookies ([`functions/api/media/[[route]].ts`](../functions/api/media/[[route]].ts)).
 
 ## Client helpers
 

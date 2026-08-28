@@ -1,4 +1,11 @@
 import {
+  adminCorsHeaders,
+  base64url,
+  expectedAdminUsername,
+  mintAdminToken,
+  resolveAdminSession,
+} from "../../_lib/admin-auth";
+import {
   checkLoginRateLimit,
   clearLoginRateLimit,
   clientIp,
@@ -17,28 +24,6 @@ interface FunctionContext {
   params: { route?: string | string[] };
 }
 const encoder = new TextEncoder();
-
-/** Workers-safe base64url (avoid spread on TypedArray). */
-function base64url(bytes: Uint8Array) {
-  let binary = "";
-  for (let i = 0; i < bytes.length; i += 1) {
-    binary += String.fromCharCode(bytes[i]!);
-  }
-  return btoa(binary).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
-}
-
-async function sign(value: string, secret: string) {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-  return base64url(
-    new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value))),
-  );
-}
 
 /** Match member-auth iterations (100k). 210k exceeds Workers CPU and returns 1101. */
 async function passwordMatches(password: string, encoded: string | undefined) {
@@ -69,53 +54,27 @@ async function passwordMatches(password: string, encoded: string | undefined) {
   }
 }
 
-async function isAdmin(request: Request, env: Env) {
-  const cookie = request.headers.get("cookie") || "";
-  const match = cookie.match(/(?:^|;\s*)rvp_admin=([^;]+)/);
-  if (!match?.[1] || !env.ADMIN_SESSION_SECRET) return false;
-  const [value, sig] = match[1].split(".");
-  if (!value || !sig) return false;
-  const expected = await sign(value, env.ADMIN_SESSION_SECRET);
-  if (sig !== expected) return false;
-  try {
-    const pad = value + "=".repeat((4 - (value.length % 4)) % 4);
-    const b64 = pad.replace(/-/g, "+").replace(/_/g, "/");
-    const payload = JSON.parse(atob(b64)) as { exp?: number; role?: string };
-    return Boolean(payload.exp && Date.now() <= payload.exp);
-  } catch {
-    return false;
-  }
-}
-
 function routeName(params: FunctionContext["params"]) {
   const raw = params.route;
   if (Array.isArray(raw)) return raw.join("/");
   return raw || "";
 }
 
-function expectedUsername(env: Env) {
-  return (env.SUPER_ADMIN_USERNAME || "Govardhan").trim();
-}
-
 export const onRequest = async ({ request, env, params }: FunctionContext) => {
   const url = new URL(request.url);
-  const headers = {
-    "access-control-allow-origin": url.origin,
-    "access-control-allow-credentials": "true",
-    "access-control-allow-headers": "content-type",
-    "access-control-allow-methods": "GET,POST,OPTIONS",
-  };
+  const headers = adminCorsHeaders(url.origin, "GET,POST,OPTIONS");
   if (request.method === "OPTIONS") return new Response(null, { headers });
 
   const route = routeName(params);
 
   if ((route === "session" || url.pathname.endsWith("/session")) && request.method === "GET") {
-    const ok = await isAdmin(request, env);
+    const session = await resolveAdminSession(request, env);
     return new Response(
       JSON.stringify({
-        ok,
-        role: ok ? "super-admin" : "guest",
-        username: ok ? expectedUsername(env) : null,
+        ok: Boolean(session),
+        role: session ? "super-admin" : "guest",
+        username: session ? session.username || expectedAdminUsername(env) : null,
+        expiresAt: session?.exp ?? null,
       }),
       {
         headers: { ...headers, "content-type": "application/json" },
@@ -163,9 +122,9 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
           headers: { ...headers, "content-type": "application/json" },
         });
       }
+      const username = expectedAdminUsername(env);
       const userOk =
-        (payload.username || "").trim().toLowerCase() ===
-        expectedUsername(env).toLowerCase();
+        (payload.username || "").trim().toLowerCase() === username.toLowerCase();
       const passOk = await passwordMatches(
         payload.password ?? "",
         env.ADMIN_PASSWORD_HASH,
@@ -191,27 +150,20 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
         );
       }
       await clearLoginRateLimit(rateKey, env);
-      const value = base64url(
-        encoder.encode(
-          JSON.stringify({
-            sub: expectedUsername(env),
-            role: "super-admin",
-            exp: Date.now() + 86400000,
-          }),
-        ),
-      );
-      const sig = await sign(value, env.ADMIN_SESSION_SECRET);
+      const minted = await mintAdminToken(username, env.ADMIN_SESSION_SECRET);
       return new Response(
         JSON.stringify({
           ok: true,
           role: "super-admin",
-          username: expectedUsername(env),
+          username,
+          token: minted.token,
+          expiresAt: minted.expiresAt,
         }),
         {
           headers: {
             ...headers,
             "content-type": "application/json",
-            "set-cookie": `rvp_admin=${value}.${sig}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400`,
+            "set-cookie": `rvp_admin=${minted.cookieValue}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400`,
           },
         },
       );
