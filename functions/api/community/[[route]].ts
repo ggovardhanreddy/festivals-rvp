@@ -7,9 +7,18 @@
  * DELETE /api/community/:collection?id=
  */
 
+import {
+  adminCorsHeaders,
+  resolveAdminSession,
+  type AdminSession,
+} from "../../_lib/admin-auth";
+import { appendAdminAudit } from "../../_lib/audit";
+import { COMMUNITY_SEEDS } from "../../_data/community-seeds";
+
 interface Env {
   MEDIA?: R2Bucket;
   ADMIN_SESSION_SECRET?: string;
+  SUPER_ADMIN_USERNAME?: string;
 }
 
 interface FunctionContext {
@@ -28,32 +37,20 @@ const COLLECTIONS = new Set([
   "site-settings",
   "analytics",
   "audit",
+  "events",
+  "announcements",
 ]);
 
 const APPROVAL_COLLECTIONS = new Set(["lost-found", "heritage"]);
 
-const encoder = new TextEncoder();
-
-const base64url = (bytes: Uint8Array) => {
-  let binary = "";
-  for (let i = 0; i < bytes.length; i += 1) {
-    binary += String.fromCharCode(bytes[i]!);
-  }
-  return btoa(binary).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
-};
-
-async function hmacSign(value: string, secret: string) {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-  return base64url(
-    new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value))),
-  );
-}
+/** Collections that require Super Admin for POST/PUT/DELETE. */
+const ADMIN_WRITE_COLLECTIONS = new Set([
+  "directory",
+  "panchayat-docs",
+  "members",
+  "events",
+  "announcements",
+]);
 
 function json(data: unknown, status = 200, headers: Record<string, string> = {}) {
   return new Response(JSON.stringify(data), {
@@ -66,30 +63,11 @@ function json(data: unknown, status = 200, headers: Record<string, string> = {})
   });
 }
 
-function cors(origin: string) {
-  return {
-    "access-control-allow-origin": origin,
-    "access-control-allow-credentials": "true",
-    "access-control-allow-headers": "content-type",
-    "access-control-allow-methods": "GET,POST,PUT,DELETE,OPTIONS",
-  };
-}
-
 function routeParts(params: FunctionContext["params"]) {
   const raw = params.route;
   if (Array.isArray(raw)) return raw;
   if (typeof raw === "string") return raw.split("/").filter(Boolean);
   return [];
-}
-
-async function requireAdmin(request: Request, env: Env) {
-  const cookie = request.headers.get("cookie") || "";
-  const match = cookie.match(/(?:^|;\s*)rvp_admin=([^;]+)/);
-  if (!match?.[1] || !env.ADMIN_SESSION_SECRET) return false;
-  const [value, sig] = match[1].split(".");
-  if (!value || !sig) return false;
-  const expected = await hmacSign(value, env.ADMIN_SESSION_SECRET);
-  return sig === expected;
 }
 
 function r2Key(collection: string) {
@@ -104,6 +82,28 @@ async function readStore(env: Env, collection: string): Promise<unknown> {
     return await obj.json();
   } catch {
     return null;
+  }
+}
+
+/** When R2 key is missing, serve Git seed and self-heal into R2 (not when intentionally empty). */
+async function readItemsWithSeed(
+  env: Env,
+  collection: string,
+): Promise<{ items: Record<string, unknown>[]; source: string }> {
+  const raw = await readStore(env, collection);
+  if (raw !== null) {
+    return { items: asItems(raw), source: "r2" };
+  }
+
+  const seed = COMMUNITY_SEEDS[collection];
+  if (!seed?.length) return { items: [], source: "empty" };
+
+  try {
+    await writeStore(env, collection, { items: seed });
+    return { items: seed, source: "seed" };
+  } catch {
+    // R2 unavailable — still return seed so iOS/Android/web stay in sync
+    return { items: seed, source: "seed" };
   }
 }
 
@@ -122,9 +122,25 @@ function asItems(data: unknown): Record<string, unknown>[] {
   return [];
 }
 
+async function audit(
+  env: Env,
+  session: AdminSession | null,
+  action: string,
+  collection: string,
+  target?: string,
+) {
+  if (!session) return;
+  await appendAdminAudit(env, {
+    actor: session.username,
+    action,
+    collection,
+    target,
+  });
+}
+
 export const onRequest = async ({ request, env, params }: FunctionContext) => {
   const url = new URL(request.url);
-  const headers = cors(url.origin);
+  const headers = adminCorsHeaders(url.origin);
   if (request.method === "OPTIONS") return new Response(null, { headers });
 
   try {
@@ -134,7 +150,8 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
       return json({ error: "Unknown collection" }, 404, headers);
     }
 
-    const admin = await requireAdmin(request, env);
+    const session = await resolveAdminSession(request, env);
+    const admin = Boolean(session);
     const adminQuery = url.searchParams.get("admin") === "1";
 
     if (collection === "site-settings") {
@@ -157,6 +174,7 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
         const body = (await request.json()) as { settings?: Record<string, unknown> };
         const settings = body.settings || {};
         await writeStore(env, collection, settings);
+        await audit(env, session, "settings.update", collection);
         return json({ ok: true, settings }, 200, headers);
       }
       return json({ error: "Method not allowed" }, 405, headers);
@@ -215,20 +233,22 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
         }
         const next = body.items.slice(-1000);
         await writeStore(env, collection, { items: next });
+        await audit(env, session, "audit.replace", collection);
         return json({ ok: true, items: next }, 200, headers);
       }
       return json({ error: "Method not allowed" }, 405, headers);
     }
 
     if (request.method === "GET") {
-      let items = asItems(await readStore(env, collection));
+      const { items: seeded, source } = await readItemsWithSeed(env, collection);
+      let items = seeded;
       if (!items.length) {
         return json({ items: [], source: "empty" }, 200, headers);
       }
       if (APPROVAL_COLLECTIONS.has(collection) && !(admin && adminQuery)) {
         items = items.filter((i) => i.status === "approved");
       }
-      return json({ items, source: "r2" }, 200, headers);
+      return json({ items, source }, 200, headers);
     }
 
     if (request.method === "POST") {
@@ -244,15 +264,14 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
       if (APPROVAL_COLLECTIONS.has(collection) && !admin) {
         item.status = "pending";
       }
-      if (
-        collection === "directory" ||
-        collection === "panchayat-docs" ||
-        collection === "members"
-      ) {
+      if (ADMIN_WRITE_COLLECTIONS.has(collection)) {
         if (!admin) return json({ error: "Admin required" }, 401, headers);
       }
       const next = [...items.filter((i) => i.id !== item.id), item];
       await writeStore(env, collection, { items: next });
+      if (admin) {
+        await audit(env, session, `${collection}.upsert`, collection, String(item.id));
+      }
       return json({ ok: true, items: next, item }, 200, headers);
     }
 
@@ -263,6 +282,13 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
         return json({ error: "items array required" }, 400, headers);
       }
       await writeStore(env, collection, { items: body.items });
+      await audit(
+        env,
+        session,
+        `${collection}.replace`,
+        collection,
+        `${body.items.length} items`,
+      );
       return json({ ok: true, items: body.items }, 200, headers);
     }
 
@@ -272,6 +298,7 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
       if (!id) return json({ error: "id required" }, 400, headers);
       const items = asItems(await readStore(env, collection)).filter((i) => i.id !== id);
       await writeStore(env, collection, { items });
+      await audit(env, session, `${collection}.delete`, collection, id);
       return json({ ok: true, items }, 200, headers);
     }
 

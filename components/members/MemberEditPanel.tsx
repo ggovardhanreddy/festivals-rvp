@@ -2,13 +2,13 @@
 
 import { useEffect, useId, useState } from "react";
 import { RotateCw, Upload, X } from "lucide-react";
-import { withBase } from "@/lib/base";
 import { BLOOD_GROUPS } from "@/lib/community";
 import {
   MEMBER_GROUP_LABELS,
   memberInitials,
 } from "@/lib/member-groups";
 import {
+  memberPhotoSrc,
   prepareMemberImage,
   uploadMemberPhotoFile,
 } from "@/lib/member-image";
@@ -21,7 +21,7 @@ const STATUS_OPTIONS: MemberStatus[] = [
   "Archived",
 ];
 
-function applyStatus(status: MemberStatus, member: Member): Partial<Member> {
+function applyStatus(status: MemberStatus): Partial<Member> {
   if (status === "Archived") {
     return { status, archived: true, memorial: false };
   }
@@ -85,7 +85,7 @@ export function MemberEditPanel() {
 
   if (!editingMember || !draft) return null;
 
-  const photoSrc = preview || (draft.photo ? withBase(draft.photo) : null);
+  const photoSrc = preview || (draft.photo ? memberPhotoSrc(draft.photo) : null);
   const status = currentStatus(draft);
 
   function patch(p: Partial<Member>) {
@@ -123,7 +123,7 @@ export function MemberEditPanel() {
       if (pendingFile) {
         source = pendingFile;
       } else if (current.photo) {
-        const res = await fetch(withBase(current.photo));
+        const res = await fetch(memberPhotoSrc(current.photo));
         const blob = await res.blob();
         source = new File([blob], "member-photo.jpg", {
           type: blob.type || "image/jpeg",
@@ -158,7 +158,7 @@ export function MemberEditPanel() {
         photo = await uploadMemberPhotoFile(pendingFile);
         if (!photo) throw new Error("Upload returned no URL");
       }
-      const statusPatch = applyStatus(currentStatus(current), current);
+      const statusPatch = applyStatus(currentStatus(current));
       const next: Member = {
         ...current,
         ...statusPatch,
@@ -309,7 +309,7 @@ export function MemberEditPanel() {
             <select
               value={status}
               onChange={(e) =>
-                patch(applyStatus(e.target.value as MemberStatus, draft))
+                patch(applyStatus(e.target.value as MemberStatus))
               }
               disabled={busy}
             >

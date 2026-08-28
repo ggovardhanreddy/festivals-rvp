@@ -180,7 +180,7 @@ export function TeluguCalendar({
               data-selected={isSelected || undefined}
               data-has-birthday={bdays.length ? true : undefined}
               data-has-event={events.length ? true : undefined}
-              aria-pressed={isSelected}
+              aria-selected={isSelected}
               aria-label={`${day} ${monthLabel}${p ? `, ${p.tithiEn}, ${p.nakshatraEn}` : ""}`}
               onClick={() => setSelectedDay(day)}
             >

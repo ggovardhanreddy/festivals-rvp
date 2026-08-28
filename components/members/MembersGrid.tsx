@@ -21,7 +21,6 @@ import {
   Upload,
   GripVertical,
 } from "lucide-react";
-import { withBase } from "@/lib/base";
 import type { Member, MemberGroup } from "@/lib/types";
 import {
   MEMBER_GROUP_DESCRIPTIONS,
@@ -42,6 +41,7 @@ import { dobMonthDay, formatBirthdayLabel, monthDay } from "@/lib/dates";
 import { SITE_NAME } from "@/lib/site";
 import { useEditMode } from "@/lib/use-super-admin";
 import {
+  memberPhotoSrc,
   prepareMemberImage,
   uploadMemberPhotoFile,
 } from "@/lib/member-image";
@@ -158,7 +158,7 @@ function MemberCard({
       >
         {hasPhoto ? (
           <img
-            src={withBase(member.photo!)}
+            src={memberPhotoSrc(member.photo)}
             alt={member.name}
             width={400}
             height={400}
@@ -310,7 +310,12 @@ function MemberProfileModal({
           data-memorial={memorial || undefined}
         >
           {hasPhoto ? (
-            <img src={withBase(member.photo!)} alt="" width={320} height={320} />
+            <img
+              src={memberPhotoSrc(member.photo)}
+              alt=""
+              width={320}
+              height={320}
+            />
           ) : (
             <div className="member-avatar" aria-hidden>
               <span className="member-avatar-initials">
