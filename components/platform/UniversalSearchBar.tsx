@@ -6,6 +6,7 @@ import { Search, Mic, X } from "lucide-react";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { LOCALE_TAG } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/config";
+import { getSpeechRecognition, type SpeechRecognitionLike } from "@/lib/voice";
 
 /**
  * Universal search entry point.
@@ -14,26 +15,6 @@ import { withLocale } from "@/lib/i18n/config";
  * the button is not rendered at all where the API is missing, rather than
  * showing a control that does nothing.
  */
-type SpeechRecognitionLike = {
-  lang: string;
-  interimResults: boolean;
-  continuous: boolean;
-  start: () => void;
-  stop: () => void;
-  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
-  onerror: (() => void) | null;
-  onend: (() => void) | null;
-};
-
-function getSpeechRecognition(): (new () => SpeechRecognitionLike) | null {
-  if (typeof window === "undefined") return null;
-  const w = window as unknown as {
-    SpeechRecognition?: new () => SpeechRecognitionLike;
-    webkitSpeechRecognition?: new () => SpeechRecognitionLike;
-  };
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
-}
-
 export function UniversalSearchBar({
   autoFocus = false,
   size = "large",

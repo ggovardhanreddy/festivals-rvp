@@ -8,7 +8,7 @@
  * change, not a content migration.
  */
 import type { SearchDoc } from "./schema";
-import { expandQuery, normalize, tokens } from "./normalize";
+import { MIN_TOKEN_OVERLAP, expandQuery, normalize, tokens } from "./normalize";
 
 export type SearchHit = { doc: SearchDoc; score: number };
 
@@ -22,7 +22,19 @@ const W = {
   tokenOverlap: 3,
 } as const;
 
-function scoreDoc(doc: SearchDoc, needles: string[]): number {
+/**
+ * Score one document.
+ *
+ * `needles` are whole-query forms (the query plus its transliterations).
+ * `words` are the individual words of a multi-word query, scored at a
+ * fraction of the weight: "kisan loan" should still find PM-KISAN and the
+ * agricultural credit page even though no single document contains the
+ * phrase, but a document matching the whole phrase must always outrank one
+ * that matched a single word of it.
+ */
+const WORD_FACTOR = 0.35;
+
+function matchScore(doc: SearchDoc, needles: string[]): number {
   const title = normalize(doc.title);
   const description = normalize(doc.description);
   const content = normalize(doc.content);
@@ -40,13 +52,25 @@ function scoreDoc(doc: SearchDoc, needles: string[]): number {
     if (content.includes(q)) score += W.contentContains;
   }
 
+  return score;
+}
+
+function scoreDoc(doc: SearchDoc, needles: string[], words: string[]): number {
+  let score = matchScore(doc, needles);
+
+  if (words.length) {
+    score += matchScore(doc, words) * WORD_FACTOR;
+  }
+
   if (score === 0) {
-    // Token overlap catches multi-word and Telugu bigram matches.
+    // Token overlap catches Telugu partial words, where there is no space to
+    // split on and substring matching alone misses most real queries.
     const qt = new Set(needles.flatMap(tokens));
     const dt = new Set([...tokens(doc.title), ...tokens(doc.description)]);
     let overlap = 0;
     for (const t of qt) if (dt.has(t)) overlap += 1;
-    if (overlap) score += overlap * W.tokenOverlap;
+    // One or two shared bigrams are coincidence at this index size.
+    if (overlap >= MIN_TOKEN_OVERLAP) score += overlap * W.tokenOverlap;
   }
 
   return score * (doc.weight ?? 1);
@@ -64,6 +88,9 @@ export function search(
   options: SearchOptions = {},
 ): SearchHit[] {
   const needles = expandQuery(query);
+  // Individual words, only when the query has more than one of them.
+  const plain = normalize(query).split(" ").filter((w) => w.length > 1);
+  const words = plain.length > 1 ? plain.flatMap((w) => expandQuery(w)) : [];
   const pool = docs.filter((d) => {
     if (options.section && options.section !== "all" && d.section !== options.section) return false;
     if (options.language && options.language !== "all" && d.language !== options.language) return false;
@@ -81,7 +108,7 @@ export function search(
 
   const hits: SearchHit[] = [];
   for (const doc of pool) {
-    const score = scoreDoc(doc, needles);
+    const score = scoreDoc(doc, needles, words);
     if (score > 0) hits.push({ doc, score });
   }
   hits.sort((a, b) => b.score - a.score || a.doc.title.localeCompare(b.doc.title));

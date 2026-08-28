@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { search, facetCounts } from "@/lib/search/query";
 import { normalize, tokens, expandQuery, hasTelugu } from "@/lib/search/normalize";
@@ -73,5 +75,66 @@ describe("index safety", () => {
   });
   it("refuses private URLs even under a public section", () => {
     expect(isIndexable({ section: "village", url: "/admin/secret/" })).toBe(false);
+  });
+});
+
+/**
+ * Bilingual search over the built index.
+ *
+ * These assert the behaviour a villager depends on: the same query in either
+ * script reaches the same service, and a search box never surfaces a private
+ * document. They run against the real index when one has been built.
+ */
+describe("bilingual search over the built index", () => {
+  const indexPath = path.join(process.cwd(), "public", "search-index.json");
+  const shard = fs.existsSync(indexPath)
+    ? (JSON.parse(fs.readFileSync(indexPath, "utf8")) as { docs: SearchDoc[] })
+    : null;
+
+  const cases: Array<[string, RegExp]> = [
+    ["aadhaar", /aadhaar|ఆధార్/i],
+    ["ఆధార్", /aadhaar|ఆధార్/i],
+    ["pan", /pan|పాన్/i],
+    ["marksheet", /digilocker|డిజిలాకర్/i],
+    ["scholarship", /scholarship|jnanabhumi|స్కాలర్|జ్ఞానభూమి/i],
+    ["PM Kisan", /kisan|కిసాన్/i],
+    ["crop insurance", /bima|insurance|బీమా/i],
+    ["adangal", /meebhoomi|మీభూమి/i],
+    ["passport", /passport|పాస్‌పోర్ట్/i],
+    ["driving licence", /parivahan|పరివాహన్/i],
+    ["pension", /pension|epfo|nps|పింఛను|ఈపీఎఫ్/i],
+    ["SBI", /state bank|స్టేట్ బ్యాంక్/i],
+    ["UPI", /upi|npci|యూపీఐ/i],
+    ["cyber scam", /cyber|1930|సైబర్/i],
+    ["రైతు", /farmer|kisan|రైతు|కిసాన్/i],
+    ["ఉద్యోగాలు", /career|job|ఉద్యోగ/i],
+    ["భూమి", /meebhoomi|land|భూమి/i],
+  ];
+
+  for (const [query, expected] of cases) {
+    it(`"${query}" finds a relevant result`, () => {
+      if (!shard) return; // index is a build artefact
+      const hits = search(shard.docs, query, { limit: 5 });
+      expect(hits.length, query).toBeGreaterThan(0);
+      expect(hits[0]!.doc.title, query).toMatch(expected);
+    });
+  }
+
+  it("an empty query returns the pool, not an error", () => {
+    if (!shard) return;
+    expect(search(shard.docs, "").length).toBeGreaterThan(0);
+  });
+
+  it("a nonsense query returns nothing rather than noise", () => {
+    if (!shard) return;
+    expect(search(shard.docs, "zzzzqqqqxxxx").length).toBe(0);
+  });
+
+  it("nothing private is in the public index", () => {
+    if (!shard) return;
+    for (const doc of shard.docs) {
+      expect(doc.url, doc.id).not.toMatch(/^\/(admin|login|chat|fun-trips)\//);
+      expect(["gated", "admin"]).not.toContain(doc.section);
+    }
   });
 });

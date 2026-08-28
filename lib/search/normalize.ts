@@ -32,6 +32,16 @@ export function normalize(text: string): string {
     .trim();
 }
 
+/**
+ * Minimum token overlap before the fallback counts as a match.
+ *
+ * One or two shared Telugu bigrams are noise — unrelated words share them
+ * routinely, and the noise was showing up as villagers' names under
+ * queries like "cyber scam" and banks under "sankranthi". Three is the
+ * smallest threshold that removes it without losing real partial matches.
+ */
+export const MIN_TOKEN_OVERLAP = 3;
+
 export function tokens(text: string): string[] {
   const norm = normalize(text);
   if (!norm) return [];
@@ -71,6 +81,35 @@ export const TRANSLITERATIONS: Array<[string, string]> = [
   ["farmer", "రైతు"],
   ["agriculture", "వ్యవసాయం"],
   ["weather", "వాతావరణం"],
+  // Added with the official-resource directory: the words people type when
+  // they are looking for a government service, in both scripts. Still a
+  // hand-checked table, still a ranking boost only.
+  ["aadhaar", "ఆధార్"],
+  ["aadhar", "ఆధార్"],
+  ["pan", "పాన్"],
+  ["pension", "పింఛను"],
+  ["pension", "పెన్షన్"],
+  ["bank", "బ్యాంకు"],
+  ["net banking", "నెట్ బ్యాంకింగ్"],
+  ["scholarship", "స్కాలర్‌షిప్"],
+  ["certificate", "ధ్రువపత్రం"],
+  ["land", "భూమి"],
+  ["job", "ఉద్యోగం"],
+  ["jobs", "ఉద్యోగాలు"],
+  ["insurance", "బీమా"],
+  ["crop", "పంట"],
+  ["loan", "రుణం"],
+  ["market", "మార్కెట్"],
+  ["school", "బడి"],
+  ["student", "విద్యార్థి"],
+  ["health", "ఆరోగ్యం"],
+  ["hospital", "ఆసుపత్రి"],
+  ["police", "పోలీసు"],
+  ["document", "పత్రం"],
+  ["documents", "పత్రాలు"],
+  ["government", "ప్రభుత్వ"],
+  ["ration", "రేషన్"],
+  ["fertilizer", "ఎరువులు"],
 ];
 
 /** Both spellings of a query, so either script finds either script's content. */

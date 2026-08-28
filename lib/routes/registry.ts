@@ -64,7 +64,7 @@ export const LIVE_ROUTES: RouteEntry[] = [
   { path: "/lost-found/",   section: "community", labelKey: "nav.lostFound",       status: "live", hasTelugu: false },
   { path: "/documents/",    section: "community", labelKey: "nav.documents",       status: "live", hasTelugu: false },
   { path: "/contact/",      section: "community", labelKey: "nav.contact",         status: "live", hasTelugu: false },
-  { path: "/search/",       section: "utility",   labelKey: "nav.search",          status: "live", hasTelugu: false, noindex: true },
+  { path: "/search/",       section: "utility",   labelKey: "nav.search",          status: "live", hasTelugu: true,  noindex: true },
   { path: "/settings/",     section: "utility",   labelKey: "nav.settings",        status: "live", hasTelugu: false, noindex: true },
   { path: "/offline/",      section: "utility",   labelKey: "error.offline.title", status: "live", hasTelugu: false, noindex: true },
   { path: "/privacy/",      section: "utility",   labelKey: "nav.privacy",         status: "live", hasTelugu: false },
@@ -73,6 +73,25 @@ export const LIVE_ROUTES: RouteEntry[] = [
   { path: "/chat/",         section: "gated",     labelKey: "nav.community",       status: "live", hasTelugu: false, noindex: true, private: true },
   { path: "/login/",        section: "gated",     labelKey: "nav.funFest",         status: "live", hasTelugu: false, noindex: true, private: true },
   { path: "/admin/",        section: "admin",     labelKey: "nav.adminDashboard",  status: "live", hasTelugu: false, noindex: true, private: true },
+  { path: "/play/",         section: "games",     labelKey: "nav.play",            status: "live", hasTelugu: false },
+  { path: "/kids/",         section: "kids",      labelKey: "nav.kids",            status: "live", hasTelugu: false },
+  { path: "/kids/telugu/",  section: "kids",      labelKey: "kids.telugu",         status: "live", hasTelugu: false },
+  { path: "/kids/english/", section: "kids",      labelKey: "kids.english",        status: "live", hasTelugu: false },
+  { path: "/kids/numbers/", section: "kids",      labelKey: "kids.numbers",        status: "live", hasTelugu: false },
+  { path: "/kids/math/",    section: "kids",      labelKey: "kids.math",           status: "live", hasTelugu: false },
+  { path: "/kids/drawing/", section: "kids",      labelKey: "kids.drawing",        status: "live", hasTelugu: false },
+  { path: "/kids/gk/",      section: "kids",      labelKey: "kids.gk",             status: "live", hasTelugu: false },
+  { path: "/learn/",        section: "learn",     labelKey: "nav.learn",           status: "live", hasTelugu: false },
+  { path: "/agriculture/",  section: "agriculture", labelKey: "nav.agriculture",   status: "live", hasTelugu: false },
+  { path: "/government/",   section: "government", labelKey: "nav.government",     status: "live", hasTelugu: true  },
+  { path: "/government/documents/", section: "government", labelKey: "docs.title", status: "live", hasTelugu: false },
+  { path: "/banking/",      section: "government", labelKey: "banking.title",      status: "live", hasTelugu: true  },
+  { path: "/students/",     section: "learn",      labelKey: "students.title",     status: "live", hasTelugu: true  },
+  { path: "/farmers/",      section: "agriculture", labelKey: "farmers.title",     status: "live", hasTelugu: true  },
+  { path: "/emergency/",    section: "utility",    labelKey: "emergency.title",    status: "live", hasTelugu: false },
+  { path: "/safety/",       section: "utility",    labelKey: "safety.title",       status: "live", hasTelugu: false },
+  { path: "/careers/",      section: "careers",   labelKey: "nav.careers",         status: "live", hasTelugu: false },
+  { path: "/weather/",      section: "weather",   labelKey: "nav.weather",         status: "live", hasTelugu: false },
 ];
 
 /**
@@ -91,18 +110,11 @@ export const FESTIVAL_SECTION: SectionId = "temples";
  */
 export const PLANNED_ROUTES: RouteEntry[] = [
   { path: "/explore/",       section: "village",     labelKey: "nav.explore",       status: "planned", hasTelugu: false, plannedPhase: "1B" },
-  { path: "/learn/",         section: "learn",       labelKey: "nav.learn",         status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/play/",          section: "games",       labelKey: "nav.play",          status: "planned", hasTelugu: false, plannedPhase: "2" },
-  { path: "/kids/",          section: "kids",        labelKey: "nav.kids",          status: "planned", hasTelugu: false, plannedPhase: "2" },
-  { path: "/agriculture/",   section: "agriculture", labelKey: "nav.agriculture",   status: "planned", hasTelugu: false, plannedPhase: "4" },
   { path: "/english/",       section: "english",     labelKey: "nav.english",       status: "planned", hasTelugu: false, plannedPhase: "3" },
   { path: "/engineering/",   section: "engineering", labelKey: "nav.engineering",   status: "planned", hasTelugu: false, plannedPhase: "3" },
   { path: "/it/",            section: "it",          labelKey: "nav.it",            status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/careers/",       section: "careers",     labelKey: "nav.careers",       status: "planned", hasTelugu: false, plannedPhase: "3" },
   { path: "/temples/",       section: "temples",     labelKey: "nav.temples",       status: "planned", hasTelugu: false, plannedPhase: "5" },
   { path: "/community/",     section: "community",   labelKey: "nav.community",     status: "planned", hasTelugu: false, plannedPhase: "5" },
-  { path: "/weather/",       section: "weather",     labelKey: "nav.weather",       status: "planned", hasTelugu: false, plannedPhase: "4" },
-  { path: "/services/",      section: "government",  labelKey: "nav.government",    status: "planned", hasTelugu: false, plannedPhase: "5" },
   { path: "/digital-skills/",section: "government",  labelKey: "nav.digitalSkills", status: "planned", hasTelugu: false, plannedPhase: "5" },
 ];
 

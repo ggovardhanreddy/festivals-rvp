@@ -1,46 +1,25 @@
 import fs from "node:fs";
 import path from "node:path";
-import { publicAlbums, allMedia, years } from "../lib/content";
+import { publicAlbums, years } from "../lib/content";
 import { BUCKETS, albumHref, OFFICIAL_TITLE } from "../lib/site";
-import { loadMembers } from "../lib/members";
-import { loadEvents } from "../lib/events";
-import { loadDevelopments } from "../lib/developments";
-import {
-  loadDirectorySeed,
-  loadHeritageSeed,
-  loadPanchayatDocsSeed,
-} from "../lib/community";
-import { loadVillageHeritage } from "../lib/village-heritage";
+import { buildSearchIndex } from "./build-search-index";
+import { indexableRoutes } from "../lib/routes/registry";
 
 const root = process.cwd();
 const url =
   process.env.NEXT_PUBLIC_SITE_URL || "https://www.reddivaripalli.com";
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const albums = publicAlbums();
-const media = allMedia();
 
 const live = albums.filter((a) => (a.media?.length ?? 0) > 0);
 const bucketsWithContent = BUCKETS.filter((b) =>
   live.some((a) => a.bucket === b.key),
 );
 const routes = [
-  "",
-  "about",
-  "years",
-  "events",
-  "gallery",
-  "developments",
-  "suggestions",
-  "contact",
-  "members",
-  "timeline",
-  "directory",
-  "lost-found",
-  "documents",
-  "heritage",
-  "privacy",
-  "terms",
-  "rvp-birthdays",
+  // Static pages come from the route registry, so a new live section is in
+  // the sitemap the moment it is registered rather than when someone
+  // remembers to add it to a second list here.
+  ...indexableRoutes().map((r) => r.path.replace(/^\/|\/$/g, "")),
   // Public festival chapters with media (exclude private fun-trips from SEO)
   ...bucketsWithContent
     .filter((b) => b.key !== "fun-trips")
@@ -59,127 +38,12 @@ const routes = [
     .map((album) => albumHref(album).replace(/^\/|\/$/g, "")),
 ];
 
-const searchIndex = [
-  ...media
-    .filter((item) => item.album.bucket !== "fun-trips")
-    .map((item) => ({
-      id: item.id,
-      title: item.title,
-      date: item.date,
-      tags: item.tags,
-      type: item.type,
-      kind: "media",
-      file: item.file,
-      thumb: item.thumb,
-      poster: item.poster,
-      album: item.album.title,
-      albumSlug: item.album.slug,
-      bucket: item.album.bucket,
-      year: item.album.year,
-      category: item.album.category,
-      url: `${base}${albumHref(item.album)}`,
-    })),
-  ...loadMembers().map((m) => ({
-    title: m.name,
-    kind: "member",
-    tags: [m.designation, m.group].filter(Boolean) as string[],
-    body: m.designation || "Village member",
-    url: `${base}/members/`,
-  })),
-  ...loadDirectorySeed().map((d) => ({
-    title: d.name,
-    kind: "directory",
-    tags: [d.category, d.profession, d.designation].filter(Boolean) as string[],
-    body: `${d.profession}${d.designation ? ` · ${d.designation}` : ""}`,
-    url: `${base}/directory/`,
-  })),
-  ...loadEvents().map((e) => ({
-    title: e.title,
-    date: e.date,
-    kind: "event",
-    tags: [e.category, e.slug].filter(Boolean) as string[],
-    body: e.description,
-    url: `${base}${e.slug ? `/${e.slug}/` : "/events/"}`,
-  })),
-  ...loadDevelopments().map((d) => ({
-    title: d.title,
-    kind: "development",
-    tags: [d.status],
-    body: d.description.slice(0, 160),
-    url: `${base}/developments/`,
-  })),
-  ...loadPanchayatDocsSeed().map((d) => ({
-    title: d.title,
-    date: d.date,
-    kind: "document",
-    tags: [d.category],
-    body: d.description || d.category,
-    url: `${base}/documents/`,
-  })),
-  ...loadHeritageSeed()
-    .filter((h) => !h.status || h.status === "approved")
-    .map((h) => ({
-      title: h.title,
-      date: h.date,
-      kind: "heritage",
-      tags: [h.category],
-      body: h.description,
-      url: `${base}/heritage/`,
-    })),
-  ...(() => {
-    const vh = loadVillageHeritage();
-    return [
-      {
-        title: vh.title,
-        date: "1850-01-01",
-        kind: "heritage",
-        tags: ["Our Heritage", "History"],
-        body: vh.lede,
-        url: `${base}/about/`,
-      },
-      {
-        title: "Festivals of Reddivaripalli",
-        date: undefined,
-        kind: "heritage",
-        tags: ["Festivals"],
-        body: vh.festivals.items.map((f) => f.name).join(", "),
-        url: `${base}/about/#festivals`,
-      },
-      {
-        title: "Sacred Temples of Reddivaripalli",
-        date: undefined,
-        kind: "heritage",
-        tags: ["Temples"],
-        body: vh.temples.items.map((t) => t.name).join(", "),
-        url: `${base}/about/#temples`,
-      },
-      {
-        title: "In Loving Memory",
-        date: undefined,
-        kind: "heritage",
-        tags: ["Memorial", "Legends"],
-        body: [
-          ...(vh.memorial.legends || []),
-          ...vh.memorial.foreverRemembered,
-        ].join("; "),
-        url: `${base}/about/#memorial`,
-      },
-      {
-        title: "Farmers — The Backbone of Reddivaripalli",
-        date: undefined,
-        kind: "heritage",
-        tags: ["Farmers"],
-        body: vh.farmers.names.join(", "),
-        url: `${base}/about/#farmers`,
-      },
-    ];
-  })(),
-];
-
+const shard = buildSearchIndex();
 fs.writeFileSync(
   path.join(root, "public", "search-index.json"),
-  JSON.stringify(searchIndex, null, 2),
+  JSON.stringify(shard),
 );
+console.log(`search index: ${shard.count} documents`);
 
 const sitemapLastmod = new Date().toISOString().slice(0, 10);
 fs.writeFileSync(

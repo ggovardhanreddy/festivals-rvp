@@ -22,6 +22,24 @@ export type SearchDoc = {
 
   image?: string;
   category?: string;
+  /**
+   * Present only on gallery documents, so a media hit can render as a real
+   * thumbnail in the results grid instead of a text row. Kept deliberately
+   * minimal — the same field list as lib/media-card.ts.
+   */
+  media?: {
+    file: string;
+    thumb: string;
+    poster?: string;
+    type: string;
+    width?: number;
+    height?: number;
+    blurDataURL?: string;
+    album: string;
+    albumSlug: string;
+    bucket?: string;
+    year: string;
+  };
   level?: string;
   date?: string;
   source?: string;
