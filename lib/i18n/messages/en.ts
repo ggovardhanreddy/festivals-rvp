@@ -478,6 +478,100 @@ export const en = {
   "safety.scam.support.body":
     "Never install a screen-sharing or remote-support app for a caller. It hands them your phone, your bank app and your messages.",
 
+  // ---- children's library ------------------------------------------------
+  "kids.abc": "Letters and sounds",
+  "kids.abc.desc": "Tap a letter, hear it, see the picture.",
+  "kids.abc.lede":
+    "Tap the big letter to hear it. Every letter has a word and a picture, and you can hear it as many times as you like.",
+  "kids.abc.english": "A \u2013 Z",
+  "kids.abc.listen": "Listen",
+  "kids.abc.tapToHear": "Tap to hear the letter {letter}",
+  "kids.abc.chooseSet": "Choose a set of letters",
+  "kids.abc.noVoice":
+    "This device has no voice for this language, so there is nothing to play here.",
+  "kids.abc.note":
+    "The sound comes from your own device, not from us \u2014 which is why it works offline, and why some devices can read Telugu aloud and others cannot.",
+
+  "kids.stories.lede":
+    "Stories to read, and to listen to where someone has recorded them.",
+  "kids.stories.emptyTitle": "No stories published yet",
+  "kids.stories.emptyHelp":
+    "If you know a story from the village and would be happy for it to be written down and shared here, tell us \u2014 with your name on it as the person who told it.",
+  "kids.rhymes.lede": "Songs and rhymes, with the words to sing along.",
+  "kids.rhymes.emptyTitle": "No recordings yet",
+  "kids.rhymes.emptyHelp":
+    "These have to be sung by someone here. If you would record one, we will publish it with your name.",
+  "kids.rhymes.telugu": "Telugu",
+  "kids.rhymes.english": "English",
+  "kids.rhymes.counting": "Counting",
+  "kids.rhymes.festival": "Festival",
+  "kids.science.lede": "How things work, explained simply \u2014 and things to try.",
+  "kids.science.emptyTitle": "Nothing published yet",
+  "kids.science.emptyHelp":
+    "Science written for children is easy to get subtly wrong, so nothing goes up until a teacher has read it.",
+  "kids.science.living": "Living things",
+  "kids.science.plants": "Plants",
+  "kids.science.weather": "Weather",
+  "kids.science.space": "Space",
+  "kids.science.body": "Our body",
+  "kids.science.materials": "What you need",
+  "kids.science.steps": "What to do",
+  "kids.science.supervision": "Do this one with a grown-up.",
+  "kids.videos.lede": "Lessons to watch, sorted by what they teach.",
+  "kids.videos.emptyTitle": "No videos yet",
+  "kids.videos.emptyHelp":
+    "We only link video we have permission to show, or that the maker has published for anyone to use.",
+  "kids.listen": "Listen",
+  "kids.lyrics": "Words",
+  "kids.transcript": "Transcript",
+  "kids.related": "More like this",
+  "kids.readingTime": "About {minutes} minutes to read",
+  "kids.reviewedBy": "Checked by {name}",
+
+  "video.cat.alphabet": "Alphabet & reading",
+  "video.cat.numbers": "Numbers & maths",
+  "video.cat.general": "General",
+
+  "age.preschool": "Before school",
+  "age.5to7": "5\u20137",
+  "age.8to10": "8\u201310",
+  "age.11to13": "11\u201313",
+
+  "player.play": "Play {label}",
+  "player.pause": "Pause",
+  "player.replay": "Play again",
+  "player.progress": "Position",
+  "player.audio": "Audio",
+  "player.video": "Video",
+  "player.audioUnavailable": "This recording could not be played.",
+  "player.loadsExternal": "Plays from an external site",
+
+  "learn.status.planned": "Planned. Not built yet.",
+  "learn.status.draft": "Written, not published yet.",
+
+  // ---- digital skills ----------------------------------------------------
+  "digital.title": "Digital Skills",
+  "digital.notLaunched":
+    "Digital Skills is being built. This part of the platform has not launched yet. Nothing is hidden behind a login \u2014 there is simply no content here to show you yet.",
+  "digital.plan": "What it will cover",
+  "digital.plan.body":
+    "The modules below are the plan, not lessons pretending to exist. Each will hold real material when it is written and checked.",
+  "digital.mod.phone": "Using a smartphone",
+  "digital.mod.phone.desc": "Settings, storage, keyboards, Telugu typing, accessibility.",
+  "digital.mod.internet": "The internet",
+  "digital.mod.internet.desc": "Browsers, search, downloads, data use, what a link really is.",
+  "digital.mod.gov": "Government portals",
+  "digital.mod.gov.desc": "Applying, tracking and downloading without paying a middleman.",
+  "digital.mod.payments": "Payments",
+  "digital.mod.payments.desc": "UPI, bank apps, receipts, and what a refund actually looks like.",
+  "digital.mod.safety": "Staying safe",
+  "digital.mod.safety.desc": "Scams, passwords, permissions, what never to share.",
+  "digital.mod.documents": "Documents",
+  "digital.mod.documents.desc": "DigiLocker, scanning, storing and sharing safely.",
+  "digital.useNow": "Useful right now",
+  "digital.useNow.body":
+    "These are official, free and working today \u2014 they are where to go while this section is being built.",
+
   // ---- forms -----------------------------------------------------------
   "form.required": "Required",
   "form.optional": "Optional",

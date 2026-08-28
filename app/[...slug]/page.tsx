@@ -66,7 +66,27 @@ import { GAMES, gameBySlug } from "@/lib/platform/games";
 import { PLANNED_ROUTES } from "@/lib/routes/registry";
 import { KidsHub } from "@/components/kids/KidsHub";
 import { KidsRoute } from "@/components/kids/KidsRoute";
-import { KIDS_ROUTES, isKidsRoute } from "@/lib/kids/catalog";
+import { KIDS_ROUTES, isKidsLibrary, isKidsRoute } from "@/lib/kids/catalog";
+import { AlphabetRoute } from "@/components/kids/AlphabetRoute";
+import {
+  RhymesPage,
+  SciencePage,
+  StoriesPage,
+  VideoLibrary,
+} from "@/components/learning/sections";
+import {
+  RhymeDetail,
+  ScienceDetail,
+  StoryDetail,
+  VideoDetail,
+} from "@/components/learning/DetailPages";
+import { DigitalSkillsPage } from "@/components/learning/DigitalSkillsPage";
+import {
+  loadRhymes,
+  loadScienceTopics,
+  loadStories,
+  loadVideos,
+} from "@/lib/learning/server";
 import { LearnPage } from "@/components/learn/LearnPage";
 import { AgriculturePage } from "@/components/agriculture/AgriculturePage";
 import { CareersPage } from "@/components/careers/CareersPage";
@@ -172,6 +192,13 @@ export function generateStaticParams() {
     paths.push(hub.slug === "documents" ? { slug: ["government", "documents"] } : { slug: [hub.slug] });
   }
   for (const slug of KIDS_ROUTES) paths.push({ slug: ["kids", slug] });
+  // Detail pages exist only for content that exists. With an empty library
+  // this loop adds nothing, and the listing page carries the honest state.
+  for (const item of loadStories()) paths.push({ slug: ["kids", "stories", item.slug] });
+  for (const item of loadRhymes()) paths.push({ slug: ["kids", "rhymes", item.slug] });
+  for (const item of loadScienceTopics()) paths.push({ slug: ["kids", "science", item.slug] });
+  for (const item of loadVideos()) paths.push({ slug: ["kids", "videos", item.slug] });
+  paths.push({ slug: ["digital-skills"] });
   for (const route of PLANNED_ROUTES) {
     const seg = route.path.replace(/^\/|\/$/g, "");
     if (seg) paths.push({ slug: [seg] });
@@ -905,10 +932,45 @@ export default async function ArchiveRoute({
     return <WeatherPage provider={process.env.NEXT_PUBLIC_WEATHER_PROVIDER || null} />;
   }
 
+  if (path === "digital-skills") {
+    return <DigitalSkillsPage courses={loadTyped("course")} videos={loadVideos()} />;
+  }
+
   if (slug[0] === "kids" && slug.length === 2) {
     const child = slug[1]!;
     if (!isKidsRoute(child)) notFound();
+    if (child === "alphabet") return <AlphabetRoute />;
+    if (child === "stories") return <StoriesPage stories={loadStories()} />;
+    if (child === "rhymes") return <RhymesPage rhymes={loadRhymes()} />;
+    if (child === "science") return <SciencePage topics={loadScienceTopics()} />;
+    if (child === "videos") return <VideoLibrary videos={loadVideos()} />;
     return <KidsRoute slug={child} />;
+  }
+
+  if (slug[0] === "kids" && slug.length === 3 && isKidsLibrary(slug[1]!)) {
+    const [, section, itemSlug] = slug as [string, string, string];
+    if (section === "stories") {
+      const story = loadStories().find((entry) => entry.slug === itemSlug);
+      if (!story) notFound();
+      return <StoryDetail story={story} />;
+    }
+    if (section === "rhymes") {
+      const rhyme = loadRhymes().find((r) => r.slug === itemSlug);
+      if (!rhyme) notFound();
+      return <RhymeDetail rhyme={rhyme} />;
+    }
+    if (section === "science") {
+      const topic = loadScienceTopics().find((x) => x.slug === itemSlug);
+      if (!topic) notFound();
+      return <ScienceDetail topic={topic} />;
+    }
+    const videos = loadVideos();
+    const video = videos.find((v) => v.slug === itemSlug);
+    if (!video) notFound();
+    const related = videos.filter(
+      (v) => v.id !== video.id && (video.relatedIds?.includes(v.id) || v.category === video.category),
+    );
+    return <VideoDetail video={video} related={related.slice(0, 4)} />;
   }
 
   if (slug[0] === "play" && slug.length === 2) {
@@ -918,25 +980,63 @@ export default async function ArchiveRoute({
   }
 
   {
-    const reserved = PLANNED_ROUTES.find(
-      (r) => r.path === `/${path}/` && r.path !== "/play/",
-    );
+    const reserved = PLANNED_ROUTES.find((r) => r.path === `/${path}/`);
     if (reserved) {
       const ICONS: Record<string, string> = {
         learn: "learn", kids: "kids", agriculture: "agriculture", english: "english",
         engineering: "engineering", it: "it", careers: "careers", temples: "temples",
         community: "community", weather: "weather", government: "government",
       };
+      /**
+       * Where to send someone instead.
+       *
+       * Per section, not a generic three links. Most of these are reserved
+       * names for a fuller treatment of something the site already covers —
+       * /temples/ is planned, but the temple history is on /about/ today —
+       * so the honest page says "not yet" and then points at what does exist
+       * rather than leaving a visitor at a dead end.
+       */
+      const ALTERNATIVES: Record<string, { href: string; labelKey: string }[]> = {
+        "/explore/": [
+          { href: "/search/", labelKey: "search.title" },
+          { href: "/government/", labelKey: "gov.title" },
+          { href: "/gallery/", labelKey: "nav.gallery" },
+        ],
+        "/english/": [
+          { href: "/kids/english/", labelKey: "kids.english" },
+          { href: "/kids/alphabet/", labelKey: "kids.abc" },
+          { href: "/students/", labelKey: "students.title" },
+        ],
+        "/engineering/": [
+          { href: "/students/", labelKey: "students.title" },
+          { href: "/careers/", labelKey: "careers.title" },
+        ],
+        "/it/": [
+          { href: "/digital-skills/", labelKey: "digital.title" },
+          { href: "/students/", labelKey: "students.title" },
+        ],
+        "/temples/": [
+          { href: "/heritage/", labelKey: "nav.heritageArchive" },
+          { href: "/about/", labelKey: "nav.heritage" },
+          { href: "/events/", labelKey: "nav.events" },
+        ],
+        "/community/": [
+          { href: "/members/", labelKey: "nav.members" },
+          { href: "/directory/", labelKey: "nav.directory" },
+          { href: "/developments/", labelKey: "nav.developments" },
+        ],
+      };
       return (
         <SectionComingSoon
           titleKey={reserved.labelKey}
           icon={ICONS[reserved.section] ?? "explore"}
           phase={reserved.plannedPhase ?? "later"}
-          alternatives={[
-            { href: "/play/", labelKey: "nav.play" },
-            { href: "/gallery/", labelKey: "nav.gallery" },
-            { href: "/search/", labelKey: "nav.search" },
-          ]}
+          alternatives={
+            ALTERNATIVES[reserved.path] ?? [
+              { href: "/search/", labelKey: "search.title" },
+              { href: "/gallery/", labelKey: "nav.gallery" },
+            ]
+          }
         />
       );
     }

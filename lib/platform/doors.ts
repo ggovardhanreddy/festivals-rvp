@@ -35,6 +35,10 @@ export type ExploreTile = {
 };
 
 export const EXPLORE_TILES: ExploreTile[] = [
+  { id: "abc",           href: "/kids/alphabet/",  labelKey: "kids.abc",          icon: "letter" },
+  { id: "stories",       href: "/kids/stories/",   labelKey: "kids.stories",      icon: "book" },
+  { id: "rhymes",        href: "/kids/rhymes/",    labelKey: "kids.rhymes",       icon: "music" },
+  { id: "videos",        href: "/kids/videos/",    labelKey: "kids.videos",       icon: "video" },
   { id: "documents",     href: "/government/documents/", labelKey: "docs.title",  icon: "book" },
   { id: "emergency",     href: "/emergency/",      labelKey: "emergency.title",   icon: "siren" },
   { id: "safety",        href: "/safety/",         labelKey: "safety.title",      icon: "shield" },

@@ -7,6 +7,10 @@ const ROUTES = [
   // citizen or a screen-reader user is most likely to arrive at from search.
   "/government/", "/banking/", "/students/", "/farmers/", "/emergency/",
   "/safety/", "/kids/", "/search/", "/te/government/",
+  // The children's sections. A child using a screen reader or a switch is
+  // exactly the visitor most likely to be let down by a decorative layout.
+  "/kids/alphabet/", "/kids/stories/", "/kids/rhymes/", "/kids/science/",
+  "/kids/videos/", "/digital-skills/",
 ];
 
 test.describe("accessibility", () => {

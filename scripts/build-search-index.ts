@@ -31,6 +31,13 @@ import { isIndexable, type SearchDoc, type SearchShard } from "../lib/search/sch
 import { TRANSLITERATIONS } from "../lib/search/normalize";
 import { translate } from "../lib/i18n";
 import { DIRECTORY, HELPLINES, HUBS } from "../lib/directory";
+import {
+  loadRhymes,
+  loadScienceTopics,
+  loadStories,
+  loadVideos,
+} from "../lib/learning/server";
+import { isPublished } from "../lib/learning";
 import { LOCALES } from "../lib/i18n/config";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -186,6 +193,65 @@ function directoryDocs(): SearchDoc[] {
     });
   }
 
+  return docs;
+}
+
+/**
+ * The children's library.
+ *
+ * Only published items are indexed. An item still waiting on permission or a
+ * teacher's review has a page that says so, but putting it in search would
+ * promise a reader something the page cannot deliver.
+ */
+function libraryDocs(): SearchDoc[] {
+  const docs: SearchDoc[] = [];
+
+  const add = (
+    items: Array<{
+      id: string;
+      slug: string;
+      title: { en: string; te?: string };
+      description: { en: string; te?: string };
+      status?: string;
+      language?: string[];
+      keywords?: string[];
+    }>,
+    section: SectionId,
+    prefix: string,
+  ) => {
+    for (const item of items) {
+      if (!isPublished(item as { status?: undefined })) continue;
+      docs.push({
+        id: `${prefix}:${item.id}`,
+        title: item.title.en,
+        description: item.description.en,
+        url: `${base}/kids/${prefix}/${item.slug}/`,
+        section,
+        language: "en",
+        keywords: [...(item.keywords ?? []), item.title.te ?? ""].filter(Boolean),
+        content: clean(`${item.title.en} ${item.description.en}`),
+        weight: WEIGHT.page,
+      });
+      if (item.title.te) {
+        docs.push({
+          id: `${prefix}:te:${item.id}`,
+          title: item.title.te,
+          description: item.description.te ?? item.description.en,
+          url: `${base}/kids/${prefix}/${item.slug}/`,
+          section,
+          language: "te",
+          keywords: [item.title.en],
+          content: clean(item.title.te),
+          weight: WEIGHT.page,
+        });
+      }
+    }
+  };
+
+  add(loadStories(), "kids", "stories");
+  add(loadRhymes(), "kids", "rhymes");
+  add(loadScienceTopics(), "kids", "science");
+  add(loadVideos(), "kids", "videos");
   return docs;
 }
 
@@ -390,6 +456,7 @@ export function buildSearchIndex(): SearchShard {
   const docs = [
     ...pageDocs(),
     ...directoryDocs(),
+    ...libraryDocs(),
     ...communityDocs(),
     ...mediaDocs(),
   ].filter((doc) =>

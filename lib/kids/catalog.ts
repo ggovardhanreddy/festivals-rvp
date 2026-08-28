@@ -22,6 +22,14 @@ export type KidsActivity = {
 
 export const KIDS_ACTIVITIES: KidsActivity[] = [
   {
+    id: "alphabet",
+    href: "/kids/alphabet/",
+    labelKey: "kids.abc",
+    descriptionKey: "kids.abc.desc",
+    icon: "letter",
+    ready: true,
+  },
+  {
     id: "telugu",
     href: "/kids/telugu/",
     labelKey: "kids.telugu",
@@ -99,8 +107,7 @@ export const KIDS_ACTIVITIES: KidsActivity[] = [
     labelKey: "kids.stories",
     descriptionKey: "kids.stories.desc",
     icon: "book",
-    ready: false,
-    pendingKey: "kids.pending.sourced",
+    ready: true,
   },
   {
     id: "rhymes",
@@ -108,8 +115,7 @@ export const KIDS_ACTIVITIES: KidsActivity[] = [
     labelKey: "kids.rhymes",
     descriptionKey: "kids.rhymes.desc",
     icon: "music",
-    ready: false,
-    pendingKey: "kids.pending.recorded",
+    ready: true,
   },
   {
     id: "science",
@@ -117,8 +123,7 @@ export const KIDS_ACTIVITIES: KidsActivity[] = [
     labelKey: "kids.science",
     descriptionKey: "kids.science.desc",
     icon: "science",
-    ready: false,
-    pendingKey: "kids.pending.reviewed",
+    ready: true,
   },
   {
     id: "videos",
@@ -126,13 +131,32 @@ export const KIDS_ACTIVITIES: KidsActivity[] = [
     labelKey: "kids.videos",
     descriptionKey: "kids.videos.desc",
     icon: "video",
-    ready: false,
-    pendingKey: "kids.pending.sourced",
+    ready: true,
   },
 ];
 
 /** Only these resolve to a page. Everything else stays on the hub. */
-export const KIDS_ROUTES = ["telugu", "english", "numbers", "math", "drawing", "gk"] as const;
+export const KIDS_ROUTES = [
+  "alphabet",
+  "telugu",
+  "english",
+  "numbers",
+  "math",
+  "drawing",
+  "gk",
+  "stories",
+  "rhymes",
+  "science",
+  "videos",
+] as const;
+
+/** Sections whose pages list content items rather than run an activity. */
+export const KIDS_LIBRARIES = ["stories", "rhymes", "science", "videos"] as const;
+export type KidsLibrary = (typeof KIDS_LIBRARIES)[number];
+
+export function isKidsLibrary(slug: string): slug is KidsLibrary {
+  return (KIDS_LIBRARIES as readonly string[]).includes(slug);
+}
 export type KidsRouteSlug = (typeof KIDS_ROUTES)[number];
 
 export function isKidsRoute(slug: string): slug is KidsRouteSlug {

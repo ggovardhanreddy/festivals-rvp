@@ -7407,6 +7407,505 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   max-width: 62ch;
 }
 
+/* ── Children's library ───────────────────────────────────────────────── */
+.library-head,
+.abc-head {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+
+.libgrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.85rem;
+}
+
+.libcard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  height: 100%;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-elevated);
+  text-decoration: none;
+  color: inherit;
+  min-height: 4.5rem;
+}
+
+a.libcard:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+
+a.libcard:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.libcard.is-pending {
+  opacity: 0.68;
+  border-style: dashed;
+  background: transparent;
+}
+
+.libcard-art {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 11%, transparent);
+}
+
+.libcard-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.libcard-body {
+  display: grid;
+  gap: 0.25rem;
+  align-content: start;
+  min-width: 0;
+}
+
+.libcard-title {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.libcard-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.libcard-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.1rem;
+}
+
+.libcard-tag {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-pill);
+  color: var(--color-accent-ink, var(--accent));
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.libcard-tag--lang {
+  color: var(--muted);
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.status-block {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid color-mix(in srgb, var(--accent) 55%, var(--line));
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  border-radius: 0 var(--radius-md, 12px) var(--radius-md, 12px) 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 62ch;
+}
+
+.status-inline {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.empty-library {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.5rem 1.25rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  max-width: 62ch;
+}
+
+.empty-library h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.empty-library-reason {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Detail pages */
+.detail-h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.6rem;
+}
+
+.detail-body p {
+  max-width: 66ch;
+  line-height: 1.75;
+  font-size: 1.02rem;
+}
+
+.detail-lyrics {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-md, 12px);
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  max-width: 60ch;
+}
+
+.detail-activity ol,
+.detail-activity ul {
+  max-width: 62ch;
+  line-height: 1.7;
+}
+
+.detail-activity h3 {
+  font-size: 0.95rem;
+  margin: 1rem 0 0.4rem;
+}
+
+.detail-supervision {
+  margin: 0.4rem 0;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-md, 12px);
+  background: color-mix(in srgb, #e8590c 12%, transparent);
+  font-size: 0.9rem;
+}
+
+.detail-reviewed,
+.detail-source {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Players */
+.audioplayer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-elevated);
+  max-width: 34rem;
+}
+
+.player-btn {
+  width: 3rem;
+  height: 3rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--color-bg);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.player-btn--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.player-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.player-scrub {
+  flex: 1 1 8rem;
+  min-width: 6rem;
+  display: flex;
+}
+
+.player-scrub input {
+  width: 100%;
+  accent-color: var(--accent);
+  min-height: 2.5rem;
+}
+
+.player-time {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.player-failed {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md, 12px);
+  background: color-mix(in srgb, #e03131 10%, transparent);
+  font-size: 0.9rem;
+}
+
+.videoplayer {
+  position: relative;
+  width: 100%;
+  max-width: 46rem;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #000;
+}
+
+.videoplayer video,
+.videoplayer iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.videoplayer--facade {
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  color: #fff;
+}
+
+.videoplayer-play {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  background: rgb(0 0 0 / 55%);
+}
+
+.videoplayer-facade-note {
+  font-size: 0.78rem;
+  background: rgb(0 0 0 / 55%);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+}
+
+/* ── Alphabet ─────────────────────────────────────────────────────────── */
+.abc {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+.abc-count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.abc-card {
+  width: min(26rem, 100%);
+  min-height: min(58vh, 24rem);
+  display: grid;
+  place-content: center;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  border: 2px solid var(--line);
+  border-radius: 28px;
+  background: var(--color-bg-elevated);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.18s var(--ease-out),
+    border-color 0.18s var(--ease-out),
+    background 0.18s var(--ease-out);
+}
+
+.abc-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+
+.abc-card:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.abc-card.is-tapped {
+  transform: scale(1.04);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--color-bg-elevated));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abc-card,
+  .abc-card.is-tapped {
+    transition: none;
+    transform: none;
+  }
+}
+
+.abc-glyph {
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 22vw, 8rem);
+  line-height: 1;
+  color: var(--color-forest, var(--ink));
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.15em;
+}
+
+.dark .abc-glyph {
+  color: var(--color-accent-soft, var(--ink));
+}
+
+.abc-glyph-lower {
+  font-size: 0.72em;
+  color: var(--accent);
+}
+
+.abc-picture {
+  font-size: clamp(3rem, 14vw, 4.5rem);
+  line-height: 1.1;
+}
+
+.abc-word {
+  display: grid;
+  gap: 0.1rem;
+  font-size: clamp(1.3rem, 5vw, 1.9rem);
+  font-weight: 600;
+}
+
+.abc-gloss {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.abc-roman {
+  font-size: 1.1rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.abc-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.abc-nav {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--color-bg-elevated);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.abc-nav:hover {
+  border-color: var(--accent);
+}
+
+.abc-nav:focus-visible,
+.abc-speak:focus-visible,
+.abc-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.abc-speak {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 3.5rem;
+  padding: 0 1.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.abc-speak.is-speaking {
+  animation: abc-pulse 1s ease-in-out infinite;
+}
+
+@keyframes abc-pulse {
+  50% { opacity: 0.72; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abc-speak.is-speaking { animation: none; }
+}
+
+.abc-novoice {
+  margin: 0;
+  max-width: 22rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.abc-strip {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem;
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 40rem;
+}
+
+.abc-chip {
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--color-bg-elevated);
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.abc-chip.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--color-bg-elevated));
+  font-weight: 700;
+}
+
+.abc-note {
+  font-size: 0.8rem;
+  max-width: 60ch;
+}
+
+.digital-phase {
+  font-size: 0.8rem;
+}
+
 /* ── Kids World ───────────────────────────────────────────────────────── */
 .kids-intro {
   display: grid;
