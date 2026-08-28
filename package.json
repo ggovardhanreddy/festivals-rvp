@@ -46,7 +46,13 @@
     "backup:r2": "tsx scripts/backup-r2.ts",
     "backup:r2:verify": "tsx scripts/backup-r2.ts --verify",
     "migrate:verify:pre": "tsx scripts/verify-media-migration.ts --pre",
-    "migrate:verify:post": "tsx scripts/verify-media-migration.ts --post"
+    "migrate:verify:post": "tsx scripts/verify-media-migration.ts --post",
+    "fonts:sync": "tsx scripts/sync-fonts.ts",
+    "content:validate": "tsx scripts/validate-content.ts",
+    "i18n:check": "tsx scripts/i18n-check.ts",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:a11y": "playwright test tests/e2e/a11y.spec.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -72,6 +78,9 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
     "@cloudflare/workers-types": "^5.20260730.1",
+    "@fontsource/noto-sans-telugu": "^5.3.0",
+    "@fontsource/playfair-display": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
     "@playwright/test": "^1.49.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.19.43",
@@ -81,12 +90,14 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "eslint-config-prettier": "^10.1.8",
+    "http-server": "^14.1.1",
     "prettier": "^3.9.6",
     "tailwindcss": "^4",
     "tsx": "^4.23.5",
     "typescript": "^5",
     "vitest": "^2.1.8",
-    "wrangler": "^4.118.0"
+    "wrangler": "^4.118.0",
+    "zod": "^3.24.1"
   },
   "allowScripts": {
     "sharp@0.34.5": true,

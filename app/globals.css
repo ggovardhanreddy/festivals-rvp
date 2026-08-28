@@ -6388,7 +6388,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--accent) 16%, transparent);
-  color: var(--accent);
+  color: var(--color-accent-ink);
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -6497,7 +6497,9 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 .footer-copy .footer-build {
   margin-top: 0.35rem;
   font-size: 0.72rem;
-  opacity: 0.72;
+  /* `opacity` was diluting this to 3.18:1 against the footer. An explicit
+     muted colour reaches 5.7:1 and looks the same. */
+  color: var(--color-muted);
   letter-spacing: 0.02em;
 }
 
@@ -9567,4 +9569,39 @@ body {
 .footer-tagline-te {
   font-size: 0.92em;
   opacity: 0.9;
+}
+
+/* ─── Telugu typography ───────────────────────────────────────────────
+   Applied by language, not by component, so any Telugu string anywhere
+   picks up the right face and leading without a per-component override.
+   `:lang(te)` matches <html lang="te"> and any element with lang="te",
+   which is how the bilingual panchangam labels get correct rendering even
+   on an English page. */
+:lang(te) {
+  font-family: var(--font-telugu-stack);
+  line-height: var(--leading-telugu);
+  letter-spacing: var(--tracking-telugu);
+}
+
+:lang(te) h1,
+:lang(te) h2,
+:lang(te) h3,
+:lang(te) .eyebrow,
+:lang(te) .btn {
+  line-height: var(--leading-telugu-tight);
+}
+
+/* Telugu runs wider than Latin at the same point size; nudge small UI text up
+   so it stays legible on a 360px phone. */
+:lang(te) .eyebrow,
+:lang(te) .muted,
+:lang(te) small {
+  font-size: calc(var(--text-sm) * 1.05);
+}
+
+/* Calendar rows exist for ARIA only (grid > row > gridcell). `display: contents`
+   keeps the seven-column CSS grid visually identical while making the
+   accessibility tree correct. */
+.telugu-calendar-row {
+  display: contents;
 }

@@ -26,6 +26,11 @@ html {
   --color-glass-strong: rgba(255, 255, 255, 0.92);
   --color-line: rgba(26, 31, 28, 0.1);
   --color-focus-ring: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  /* Gold at --color-accent measures 3.99:1 on a 16% gold tint, below the 4.5:1
+     WCAG AA threshold for small text. This darker step is for small text and
+     badges only; --color-accent stays the brand colour for larger type and
+     non-text use. Verified by tests/e2e/a11y.spec.ts. */
+  --color-accent-ink: #7a5a2a;
 
   /* Legacy aliases used across the app */
   --bg: var(--color-bg);
@@ -40,10 +45,20 @@ html {
   --line: var(--color-line);
   --focus: 0 0 0 3px var(--color-focus-ring);
 
-  /* Typography */
-  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
-  --font-body: var(--font-poppins), system-ui, sans-serif;
-  --font-accent: var(--font-poppins), system-ui, sans-serif;
+  /* Typography — Telugu faces come first in every stack so Telugu glyphs
+     resolve to Noto Sans Telugu instead of an arbitrary device fallback.
+     Latin text is unaffected: Noto Sans Telugu has no Latin coverage, so the
+     browser falls through to Playfair / Poppins for Latin characters. */
+  --font-telugu-stack: var(--font-telugu), "Noto Sans Telugu", Gautami, sans-serif;
+  --font-display: var(--font-playfair), var(--font-telugu), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-poppins), var(--font-telugu), system-ui, sans-serif;
+  --font-accent: var(--font-poppins), var(--font-telugu), system-ui, sans-serif;
+
+  /* Telugu needs more leading than Latin at the same size: taller ascenders,
+     deeper descenders, and stacked vowel signs. */
+  --leading-telugu: 1.85;
+  --leading-telugu-tight: 1.35;
+  --tracking-telugu: 0;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -143,6 +158,7 @@ html {
   --color-muted: #a8b8ae;
   --color-accent: #d4a45a;
   --color-accent-soft: #f0c98a;
+  --color-accent-ink: #e2b877;
   --color-forest: #2a4a38;
   --color-glass: rgba(23, 32, 26, 0.72);
   --color-glass-strong: rgba(23, 32, 26, 0.9);
