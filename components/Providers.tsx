@@ -12,7 +12,7 @@ import { ServiceWorkerManager } from "./pwa/ServiceWorkerManager";
 import { LiveCalendarBridge } from "./calendar/LiveCalendarBridge";
 import { MemberAuthProvider } from "./auth/MemberAuthProvider";
 import { LocationProvider } from "./location/LocationProvider";
-import { LocationConsentDialog } from "./location/LocationConsentDialog";
+import { WelcomeConsent } from "./consent/WelcomeConsent";
 import { AnalyticsTracker } from "./analytics/AnalyticsTracker";
 import { ErrorReporter } from "./analytics/ErrorReporter";
 import { PlausibleScript } from "./analytics/PlausibleScript";
@@ -31,6 +31,20 @@ const SmoothScroll = dynamic(
   () => import("./experience/SmoothScroll").then((m) => m.SmoothScroll),
   { ssr: false },
 );
+
+/**
+ * Marks the document as hydrated.
+ *
+ * Static export means every page ships fully-rendered HTML that is not yet
+ * interactive. Tests (and anything else that needs to know) can wait for
+ * this flag rather than guessing with a timeout.
+ */
+function HydrationFlag() {
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = "1";
+  }, []);
+  return null;
+}
 
 function DesktopExtras() {
   const [desktop, setDesktop] = useState(false);
@@ -56,6 +70,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <LazyMotion features={domAnimation}>
         <AutoDayNightSync />
+        <HydrationFlag />
         <LanguageProvider>
           <SuperAdminProvider>
             <MemberAuthProvider>
@@ -78,7 +93,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                       {children}
                       <MobileBottomNav />
                       <InstallAppPrompt />
-                      <LocationConsentDialog />
+                      <WelcomeConsent />
                     </AudioDeckProvider>
                   </MusicProvider>
                 </LiveCalendarBridge>

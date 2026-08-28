@@ -20,6 +20,7 @@ import {
   type NotificationPrefs,
 } from "@/lib/notifications";
 import { withBase } from "@/lib/base";
+import { isConsentOpen } from "@/lib/consent";
 import type { Announcement, Development, Member, SiteEvent } from "@/lib/types";
 
 type Ctx = {
@@ -90,7 +91,6 @@ export function NotificationProvider({
     NotificationPermission | "unsupported"
   >("default");
   const [ready, setReady] = useState(false);
-  const [askPermission, setAskPermission] = useState(false);
   const [prefs, setPrefsState] = useState<NotificationPrefs>(
     DEFAULT_NOTIFICATION_PREFS,
   );
@@ -123,20 +123,24 @@ export function NotificationProvider({
     const popups = items.filter((i) => i.popup && !shown.has(i.id));
     setPopupQueue(popups);
 
-    const asked = localStorage.getItem(NOTIFICATION_ASKED_KEY) === "1";
-    if (
-      !asked &&
-      typeof Notification !== "undefined" &&
-      Notification.permission === "default"
-    ) {
-      setAskPermission(true);
-    }
+    // The first-run permission ask is owned by WelcomeConsent, which asks once
+    // for notifications and location together. Explicit in-app buttons (the
+    // bell, Settings) still call requestBrowserPermission directly.
 
     const pending =
       document.documentElement.classList.contains("intro-pending") ||
       document.documentElement.classList.contains("intro-active");
 
-    const arm = () => setReady(true);
+    // Celebration popups queue behind the first-run consent dialog rather
+    // than landing on top of it. They are real content, not a prompt, so
+    // they still appear — just one after the other.
+    const arm = () => {
+      if (isConsentOpen()) {
+        window.setTimeout(arm, 500);
+        return;
+      }
+      setReady(true);
+    };
     if (!pending) {
       const t = window.setTimeout(arm, 600);
       return () => window.clearTimeout(t);
@@ -225,7 +229,6 @@ export function NotificationProvider({
   const requestBrowserPermission = useCallback(async () => {
     if (typeof Notification === "undefined") return;
     localStorage.setItem(NOTIFICATION_ASKED_KEY, "1");
-    setAskPermission(false);
     const result = await Notification.requestPermission();
     setPermission(result);
     if (result === "granted") {
@@ -233,11 +236,6 @@ export function NotificationProvider({
       fireBrowserNotifications(unreadItems);
     }
   }, [items, read, fireBrowserNotifications]);
-
-  const declinePermissionAsk = useCallback(() => {
-    localStorage.setItem(NOTIFICATION_ASKED_KEY, "1");
-    setAskPermission(false);
-  }, []);
 
   const unread = items.filter((i) => !read.has(i.id)).length;
 
@@ -267,34 +265,6 @@ export function NotificationProvider({
   return (
     <NotificationContext.Provider value={value}>
       {children}
-      {ready && askPermission && !activePopup ? (
-        <div className="notif-permission" role="dialog" aria-labelledby="notif-ask-title">
-          <div className="notif-permission-card">
-            <p className="eyebrow">Stay connected</p>
-            <h2 id="notif-ask-title">Enable celebration reminders?</h2>
-            <p className="lede">
-              We can gently remind you about birthdays, festivals, and village
-              events. You can change this anytime in Settings.
-            </p>
-            <div className="notif-modal-actions">
-              <button
-                type="button"
-                className="btn"
-                onClick={() => void requestBrowserPermission()}
-              >
-                Allow notifications
-              </button>
-              <button
-                type="button"
-                className="btn ghost"
-                onClick={declinePermissionAsk}
-              >
-                Not now
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
       {activePopup ? (
         <div
           className="notif-modal-backdrop"

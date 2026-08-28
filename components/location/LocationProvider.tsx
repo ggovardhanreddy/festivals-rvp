@@ -107,10 +107,10 @@ export function LocationProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (pref === "unknown") {
-      const t = window.setTimeout(() => setShowConsent(true), 2800);
-      return () => window.clearTimeout(t);
-    }
+    // No auto-prompt here. The single first-run ask lives in
+    // components/consent/WelcomeConsent.tsx; two providers each popping their
+    // own dialog is what produced the stacked consent overlays.
+    if (pref === "unknown") return;
 
     if (pref === "granted") {
       if (cache) {

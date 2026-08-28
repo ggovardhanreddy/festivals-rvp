@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { withBase } from "@/lib/base";
 import { SITE_NAME, VILLAGE_ALSO_KNOWN_AS } from "@/lib/site";
+import { consentSettled, isConsentOpen } from "@/lib/consent";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -185,9 +186,21 @@ export function InstallAppPrompt() {
     };
     window.addEventListener("beforeinstallprompt", onBeforeInstall);
 
-    // Show promptly — do not wait forever on location/notification dialogs.
+    // A first-time visitor gets exactly one interruption: the consent dialog.
+    // If consent has not been answered yet when this mounts, the install
+    // prompt sits out this whole page view rather than queueing behind it —
+    // asking someone to install an app they have not read a word of is worse
+    // than not asking at all.
+    const firstVisit = !consentSettled();
+    let retry = 0;
     const show = () => {
-      if (isStandalone() || wasDismissed()) return;
+      if (firstVisit || isStandalone() || wasDismissed()) return;
+      if (isConsentOpen()) {
+        if (retry > 20) return;
+        retry += 1;
+        window.setTimeout(show, 1000);
+        return;
+      }
       setOpen(true);
     };
 
