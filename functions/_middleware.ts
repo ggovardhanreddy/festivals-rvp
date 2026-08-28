@@ -67,10 +67,9 @@ async function hasMemberSession(
   if (!match?.[1]) return false;
   const [value, sig] = match[1].split(".");
   if (!value || !sig) return false;
-  const secret =
-    env.MEMBER_SESSION_SECRET ||
-    env.ADMIN_SESSION_SECRET ||
-    "rvp-funfest-dev-secret";
+  const secret = env.MEMBER_SESSION_SECRET || env.ADMIN_SESSION_SECRET;
+  // Fail closed: no signing key means no valid session, never a default key.
+  if (!secret) return false;
   const expected = await hmacSign(value, secret);
   if (sig !== expected) return false;
   const payload = decodePayload(value);

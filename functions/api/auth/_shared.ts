@@ -4,7 +4,12 @@ export interface AuthEnv {
   MEMBER_SESSION_SECRET?: string;
   ADMIN_SESSION_SECRET?: string;
   RATE_LIMIT?: KVNamespace;
+  /** R2 bucket binding. Holds the authoritative credential store at AUTH_R2_KEY. */
+  MEDIA?: R2Bucket;
 }
+
+/** Authoritative credential store, kept out of git. See docs/SECURITY_INCIDENT.md. */
+export const AUTH_R2_KEY = "auth/members.json";
 
 export const COOKIE = "rvp_member";
 export const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -88,15 +93,38 @@ export function cors(origin: string) {
   };
 }
 
-export function sessionSecret(env: AuthEnv) {
-  return (
-    env.MEMBER_SESSION_SECRET ||
-    env.ADMIN_SESSION_SECRET ||
-    "rvp-funfest-dev-secret"
-  );
+/**
+ * Session signing key. Returns null when unconfigured so callers fail CLOSED.
+ * There is deliberately no fallback literal: a hardcoded default would be a
+ * published signing key (see docs/SECURITY_INCIDENT.md, finding S-2).
+ */
+export function sessionSecret(env: AuthEnv): string | null {
+  return env.MEMBER_SESSION_SECRET || env.ADMIN_SESSION_SECRET || null;
 }
 
-export function authMembers(): MemberAuthRecord[] {
+/**
+ * Credential source, in priority order:
+ *   1. R2 `auth/members.json` — authoritative, not in git
+ *   2. `functions/_data/member-auth-data.ts` — legacy git fallback
+ *
+ * The fallback exists only so a missing or malformed R2 object cannot lock
+ * every member out. Once R2 is populated and verified, the git module and its
+ * JSON should be deleted and this fallback removed with them.
+ */
+export async function authMembers(env: AuthEnv): Promise<MemberAuthRecord[]> {
+  if (env.MEDIA) {
+    try {
+      const obj = await env.MEDIA.get(AUTH_R2_KEY);
+      if (obj) {
+        const data = (await obj.json()) as { members?: MemberAuthRecord[] };
+        if (Array.isArray(data?.members) && data.members.length) {
+          return data.members;
+        }
+      }
+    } catch {
+      /* fall through to the git fallback */
+    }
+  }
   return MEMBER_AUTH.members as MemberAuthRecord[];
 }
 
@@ -106,7 +134,9 @@ export async function parseSession(request: Request, env: AuthEnv) {
   if (!match?.[1]) return null;
   const [value, sig] = match[1].split(".");
   if (!value || !sig) return null;
-  const expected = await hmacSign(value, sessionSecret(env));
+  const secret = sessionSecret(env);
+  if (!secret) return null;
+  const expected = await hmacSign(value, secret);
   if (sig !== expected) return null;
   const payload = decodePayload<{
     memberId?: string;

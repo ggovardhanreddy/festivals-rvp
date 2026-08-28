@@ -245,10 +245,8 @@ async function requireMember(request: Request, env: Env) {
   if (!match?.[1]) return false;
   const [value, sig] = match[1].split(".");
   if (!value || !sig) return false;
-  const secret =
-    env.MEMBER_SESSION_SECRET ||
-    env.ADMIN_SESSION_SECRET ||
-    "rvp-funfest-dev-secret";
+  const secret = env.MEMBER_SESSION_SECRET || env.ADMIN_SESSION_SECRET;
+  if (!secret) return false;
   const expected = await hmacSign(value, secret);
   if (sig !== expected) return false;
   const payload = decodePayload(value);

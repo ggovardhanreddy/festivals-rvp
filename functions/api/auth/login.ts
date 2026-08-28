@@ -22,6 +22,15 @@ export const onRequestOptions: PagesFunction<AuthEnv> = async ({ request }) =>
 
 export const onRequestPost: PagesFunction<AuthEnv> = async ({ request, env }) => {
   const headers = cors(new URL(request.url).origin);
+  const secret = sessionSecret(env);
+  if (!secret) {
+    // No signing key configured: refuse rather than sign with a known default.
+    return json(
+      { ok: false, error: "Sign-in is temporarily unavailable." },
+      503,
+      headers,
+    );
+  }
   const rateKey = `member-login:${clientIp(request)}`;
   const limited = await checkLoginRateLimit(rateKey, env);
   if (!limited.ok) {
@@ -40,7 +49,7 @@ export const onRequestPost: PagesFunction<AuthEnv> = async ({ request, env }) =>
   };
   const username = (body.username ?? "").trim();
   const password = (body.password ?? "").trim();
-  const record = authMembers().find((m) => m.username === username);
+  const record = (await authMembers(env)).find((m) => m.username === username);
   if (!record || !(await passwordMatches(password, record.passwordHash))) {
     const fail = await recordLoginFailure(rateKey, env);
     return json(
@@ -65,7 +74,7 @@ export const onRequestPost: PagesFunction<AuthEnv> = async ({ request, env }) =>
     exp: Date.now() + MAX_AGE_MS,
   };
   const value = encodePayload(payload);
-  const sig = await hmacSign(value, sessionSecret(env));
+  const sig = await hmacSign(value, secret);
   return json(
     {
       ok: true,
