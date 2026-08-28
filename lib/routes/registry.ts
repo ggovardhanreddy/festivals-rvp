@@ -49,6 +49,7 @@ export type RouteEntry = {
  * tests/unit/routes.test.ts.
  */
 export const LIVE_ROUTES: RouteEntry[] = [
+  { path: "/ai/",            section: "ai",         labelKey: "nav.ai",            status: "live",  hasTelugu: true },
   { path: "/",              section: "village",   labelKey: "nav.home",            status: "live", hasTelugu: true },
   { path: "/about/",        section: "heritage",  labelKey: "nav.heritage",        status: "live", hasTelugu: false },
   { path: "/heritage/",     section: "heritage",  labelKey: "nav.heritageArchive", status: "live", hasTelugu: false },
