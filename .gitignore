@@ -44,3 +44,8 @@ generated/*
 .idea/
 
 .wrangler/
+
+# iOS / Xcode
+ios/**/xcuserdata/
+ios/**/DerivedData/
+*.xcuserstate

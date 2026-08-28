@@ -271,6 +271,11 @@ self.addEventListener("fetch",e=>{
     e.respondWith(fetch(req,{cache:"no-store"}).catch(()=>caches.match(req)));
     return;
   }
+  // Member portraits are edge-proxied from R2 — never serve a stale cached 404
+  if(/^\\/members\\/.+\\.(?:webp|avif|jpe?g|png)$/i.test(url.pathname)){
+    e.respondWith(fetch(req,{cache:"no-store"}));
+    return;
+  }
   // Fun Fest private media is signed via /api/media — never cache strip-local 404/redirects
   if(url.pathname.includes("/fun-trips/")||url.pathname.includes("/funfest/")){
     e.respondWith(fetch(req,{cache:"no-store"}));
