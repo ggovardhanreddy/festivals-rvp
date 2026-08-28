@@ -38,6 +38,59 @@ export const Provenance = z.object({
   notes: z.string().optional(),
 });
 
+/**
+ * Publication status.
+ *
+ * Only `published` ever renders as content. Every other value renders as an
+ * honest notice saying what is being waited on, which is why the states are
+ * named after the real-world blocker rather than a generic "unavailable":
+ * a parent reading "waiting on recordings from the village" learns something
+ * true, where "coming soon" teaches them nothing.
+ */
+export const PublicationStatus = z.enum([
+  "published",
+  "draft",
+  "awaiting-permission",
+  "awaiting-teacher-review",
+  "coming-soon",
+  "planned",
+]);
+
+/**
+ * Permission to publish a recording.
+ *
+ * Required on every audio or video asset. The village's own songs and stories
+ * belong to the people who sing and tell them; a recording without a named
+ * person who agreed to it being published is not ours to put on the internet,
+ * and the schema refuses it rather than leaving that to review.
+ */
+export const Permission = z.object({
+  /** Who granted it, by name. */
+  grantedBy: z.string().min(1),
+  /** ISO date the permission was given. */
+  grantedOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  notes: z.string().optional(),
+});
+
+/**
+ * An audio or video file attached to a content item.
+ *
+ * `provider: "r2"` is a village recording we host. `provider: "youtube"` is an
+ * embed — the platform never rehosts third-party video.
+ */
+export const MediaAsset = z.object({
+  type: z.enum(["audio", "video"]),
+  provider: z.enum(["r2", "youtube"]).default("r2"),
+  /** R2 key or path for provider "r2"; ignored for youtube. */
+  src: z.string().min(1).optional(),
+  /** Video id for provider "youtube". */
+  externalId: z.string().min(1).optional(),
+  durationSeconds: z.number().int().positive().optional(),
+  /** WebVTT captions path. Optional, but strongly preferred. */
+  captions: z.string().optional(),
+  permission: Permission,
+});
+
 const BaseDoc = z.object({
   id: z.string().min(1),
   slug: z.string().regex(/^[a-z0-9-]+$/),
@@ -46,6 +99,9 @@ const BaseDoc = z.object({
   image: z.string().optional(),
   keywords: z.array(z.string()).default([]),
   draft: z.boolean().default(false),
+  status: PublicationStatus.default("draft"),
+  /** Languages the item genuinely exists in. Not an aspiration. */
+  language: z.array(LocaleCode).default(["en"]),
 });
 
 const Level = z.enum(["beginner", "intermediate", "advanced"]);
@@ -96,12 +152,76 @@ export const GameSchema = BaseDoc.extend({
   ageGroup: z.array(AgeGroup).default([]),
 });
 
+export const VideoCategory = z.enum([
+  "alphabet-reading",
+  "numbers-maths",
+  "stories",
+  "rhymes",
+  "science",
+  "digital-skills",
+  "general",
+]);
+
 export const VideoSchema = BaseDoc.extend({
   kind: z.literal("video"),
-  /** Embed only. The platform never rehosts third-party video. */
-  provider: z.enum(["youtube"]),
-  externalId: z.string().min(1),
-  durationSeconds: z.number().int().positive().optional(),
+  category: VideoCategory,
+  ageGroup: z.array(AgeGroup).default([]),
+  media: MediaAsset,
+  /** Full text, for a child who cannot hear it or a parent who cannot play it. */
+  transcript: LocalizedText.optional(),
+  relatedIds: z.array(z.string()).default([]),
+  provenance: Provenance,
+});
+
+/** ---- children's library --------------------------------------------- */
+
+export const StorySchema = BaseDoc.extend({
+  kind: z.literal("story"),
+  /** The story itself. Absent until someone has written or transcribed it. */
+  body: LocalizedText.optional(),
+  ageGroup: z.array(AgeGroup).default([]),
+  readingMinutes: z.number().int().positive().optional(),
+  /** Narration, when a recording exists and may be published. */
+  audio: MediaAsset.optional(),
+  /**
+   * Where the story came from. A folk tale retold by a named person, a
+   * public-domain text, a licensed collection — never "traditional" with no
+   * one behind it.
+   */
+  provenance: Provenance,
+});
+
+export const RhymeSchema = BaseDoc.extend({
+  kind: z.literal("rhyme"),
+  /** Lyrics, in whichever languages they genuinely exist. */
+  lyrics: LocalizedText.optional(),
+  ageGroup: z.array(AgeGroup).default([]),
+  category: z.enum(["telugu", "english", "counting", "festival", "lullaby", "action"]).optional(),
+  audio: MediaAsset.optional(),
+  video: MediaAsset.optional(),
+  provenance: Provenance,
+});
+
+export const ScienceTopicSchema = BaseDoc.extend({
+  kind: z.literal("science-topic"),
+  topic: z.enum(["living-world", "plants", "weather", "space", "materials", "body", "energy", "earth"]),
+  ageGroup: z.array(AgeGroup).default([]),
+  explanation: LocalizedText.optional(),
+  /** A thing a child can actually do, with what it needs. */
+  activity: z
+    .object({
+      title: LocalizedText,
+      materials: z.array(LocalizedText).default([]),
+      steps: z.array(LocalizedText).min(1),
+      supervision: z.boolean().default(false),
+    })
+    .optional(),
+  video: MediaAsset.optional(),
+  /**
+   * Who checked it. A science explanation for children that no teacher has
+   * read is exactly what `awaiting-teacher-review` exists to hold back.
+   */
+  reviewedBy: z.string().min(1).nullable().default(null),
   provenance: Provenance,
 });
 
@@ -214,6 +334,9 @@ export const ContentSchemas = {
   video: VideoSchema,
   crop: CropSchema,
   "agriculture-guide": AgricultureGuideSchema,
+  story: StorySchema,
+  rhyme: RhymeSchema,
+  "science-topic": ScienceTopicSchema,
   "government-scheme": GovernmentSchemeSchema,
   job: JobSchema,
   service: ServiceSchema,
@@ -228,10 +351,20 @@ export type ContentKind = keyof typeof ContentSchemas;
 
 /** Kinds that must carry provenance. Enforced by validate-content.ts. */
 export const REQUIRES_PROVENANCE: ContentKind[] = [
+  "story",
+  "rhyme",
+  "science-topic",
   "crop", "agriculture-guide", "government-scheme", "job", "service", "video",
 ];
 
 export type Course = z.infer<typeof CourseSchema>;
+export type Story = z.infer<typeof StorySchema>;
+export type Rhyme = z.infer<typeof RhymeSchema>;
+export type ScienceTopic = z.infer<typeof ScienceTopicSchema>;
+export type Video = z.infer<typeof VideoSchema>;
+export type Lesson2 = z.infer<typeof LessonSchema>;
+export type MediaAssetT = z.infer<typeof MediaAsset>;
+export type PublicationStatusT = z.infer<typeof PublicationStatus>;
 export type Lesson = z.infer<typeof LessonSchema>;
 export type AgricultureGuide = z.infer<typeof AgricultureGuideSchema>;
 export type GovernmentScheme = z.infer<typeof GovernmentSchemeSchema>;
