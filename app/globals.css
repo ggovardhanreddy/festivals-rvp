@@ -8296,32 +8296,9 @@ body {
   }
 }
 
+/* Update prompts removed — PWA refreshes silently */
 .update-banner {
-  position: fixed;
-  left: 50%;
-  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%);
-  z-index: 130;
-  width: min(28rem, calc(100vw - 1.5rem));
-  padding: 1rem 1.1rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--line));
-  background: color-mix(in srgb, var(--color-bg-elevated) 94%, var(--color-dawn));
-  box-shadow: var(--elevation-3);
-  color: var(--color-ink);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.update-banner p {
-  margin: 0 0 0.75rem;
-  font-size: 0.95rem;
-}
-
-.update-banner .btn-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
+  display: none !important;
 }
 
 .theme-toggle {

@@ -2,14 +2,11 @@
 
 import { useEffect } from "react";
 import { withBase } from "@/lib/base";
-import {
-  PWA_BUILD_KEY,
-  announcePwaUpdate,
-} from "@/lib/pwa-update";
+import { PWA_BUILD_KEY, applyPwaUpdate } from "@/lib/pwa-update";
 
 /**
- * Registers the service worker and detects new deploys.
- * Surfaces updates via UpdateAvailablePrompt instead of silent reload.
+ * Registers the service worker and silently applies new deploys.
+ * Users never see an "Update Available" prompt — content refreshes automatically.
  */
 export function ServiceWorkerManager() {
   useEffect(() => {
@@ -18,12 +15,13 @@ export function ServiceWorkerManager() {
     const swUrl = withBase("/sw.js");
     const versionUrl = withBase("/version.json");
 
-    const notifyWaiting = (reg: ServiceWorkerRegistration) => {
+    const silentApply = (buildId?: string) => {
+      void applyPwaUpdate(buildId);
+    };
+
+    const activateWaiting = (reg: ServiceWorkerRegistration) => {
       if (reg.waiting && navigator.serviceWorker.controller) {
-        announcePwaUpdate({
-          buildId: `sw-${Date.now()}`,
-          reason: "service-worker",
-        });
+        silentApply();
       }
     };
 
@@ -46,15 +44,14 @@ export function ServiceWorkerManager() {
         }
 
         if (prev && prev !== data.buildId) {
-          announcePwaUpdate({ buildId: data.buildId, reason: "version" });
           if (reg) {
             try {
               await reg.update();
             } catch {
               /* ignore */
             }
-            notifyWaiting(reg);
           }
+          silentApply(data.buildId);
           return;
         }
 
@@ -79,7 +76,7 @@ export function ServiceWorkerManager() {
         const check = () => {
           void reg.update().catch(() => undefined);
           void checkDeployVersion(reg);
-          notifyWaiting(reg);
+          activateWaiting(reg);
         };
 
         check();
@@ -97,10 +94,7 @@ export function ServiceWorkerManager() {
               worker.state === "installed" &&
               navigator.serviceWorker.controller
             ) {
-              announcePwaUpdate({
-                buildId: `sw-${Date.now()}`,
-                reason: "service-worker",
-              });
+              silentApply();
             }
           });
         });

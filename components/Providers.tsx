@@ -9,8 +9,7 @@ import { MusicProvider } from "./music/MusicProvider";
 import { MusicRouteSync } from "./music/MusicRouteSync";
 import { InstallAppPrompt } from "./pwa/InstallAppPrompt";
 import { ServiceWorkerManager } from "./pwa/ServiceWorkerManager";
-import { UpdateAvailablePrompt } from "./pwa/UpdateAvailablePrompt";
-import { NotificationProvider } from "./notifications/NotificationProvider";
+import { LiveCalendarBridge } from "./calendar/LiveCalendarBridge";
 import { MemberAuthProvider } from "./auth/MemberAuthProvider";
 import { LocationProvider } from "./location/LocationProvider";
 import { LocationConsentDialog } from "./location/LocationConsentDialog";
@@ -60,10 +59,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <SuperAdminProvider>
             <MemberAuthProvider>
               <LocationProvider>
-                <NotificationProvider
+                <LiveCalendarBridge
                   members={membersData as Member[]}
-                  events={eventsData as SiteEvent[]}
-                  announcements={announcementsData as Announcement[]}
+                  seedEvents={eventsData as SiteEvent[]}
+                  seedAnnouncements={announcementsData as Announcement[]}
                   developments={developmentsData as Development[]}
                 >
                   <MusicProvider>
@@ -71,7 +70,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
                       <MusicRouteSync />
                       <DesktopExtras />
                       <ServiceWorkerManager />
-                      <UpdateAvailablePrompt />
                       <AnalyticsTracker />
                       <ErrorReporter />
                       <PlausibleScript />
@@ -81,7 +79,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                       <LocationConsentDialog />
                     </AudioDeckProvider>
                   </MusicProvider>
-                </NotificationProvider>
+                </LiveCalendarBridge>
               </LocationProvider>
             </MemberAuthProvider>
           </SuperAdminProvider>

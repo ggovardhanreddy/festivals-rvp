@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { withBase } from "@/lib/base";
 import type { Member } from "@/lib/types";
 import { formatBirthdayLabel, formatCountdown } from "@/lib/dates";
 import { memberAge } from "@/lib/member-groups";
+import { memberPhotoSrc } from "@/lib/member-image";
 import { daysUntilNextBirthday } from "@/lib/member-birthdays";
 import { panchangHintForDob } from "@/lib/telugu-panchangam";
 
@@ -82,7 +82,7 @@ export function UpcomingBirthdays({
               >
                 {hasPhoto ? (
                   <img
-                    src={withBase(member.photo!)}
+                    src={memberPhotoSrc(member.photo)}
                     alt={member.name}
                     width={120}
                     height={120}

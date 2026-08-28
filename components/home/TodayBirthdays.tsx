@@ -3,9 +3,9 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
-import { withBase } from "@/lib/base";
 import type { Member } from "@/lib/types";
 import { memberAge } from "@/lib/member-groups";
+import { memberPhotoSrc } from "@/lib/member-image";
 import { formatBirthdayLabel } from "@/lib/dates";
 import { panchangHintForDob } from "@/lib/telugu-panchangam";
 
@@ -67,7 +67,7 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
         >
           {featured.photo ? (
             <img
-              src={withBase(featured.photo)}
+              src={memberPhotoSrc(featured.photo)}
               alt={featured.name}
               width={280}
               height={280}
@@ -113,7 +113,7 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
                 >
                   {hasPhoto ? (
                     <img
-                      src={withBase(member.photo!)}
+                      src={memberPhotoSrc(member.photo)}
                       alt={member.name}
                       width={120}
                       height={120}

@@ -27,8 +27,9 @@ Regenerated as part of `npm run generate` / `prepare:site`.
 
 [`public/version.json`](../public/version.json) + [`lib/pwa-update.ts`](../lib/pwa-update.ts):
 
-- Clients compare build ids and dispatch `rvp:update-available`
-- UI can prompt reload / apply update (`applyPwaUpdate`)
+- Clients compare build ids and **silently** apply updates (`applyPwaUpdate`) — no “Update Available” prompt
+- Service worker + version polling clear caches and reload automatically
+- Community data (members, events, announcements) also silent-refreshes on focus / every 60s
 
 Build id is refreshed during site prepare / deploy alignment (`lib/build-id.ts`).
 

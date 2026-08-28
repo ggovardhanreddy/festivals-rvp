@@ -21,9 +21,13 @@ import { TodayBirthdays } from "./TodayBirthdays";
 import { UpcomingBirthdays } from "./UpcomingBirthdays";
 import { LocationHomeNote } from "@/components/location/LocationHomeNote";
 
-/** PWA/mobile soft-nav can leave Members blank — hard navigate instead. */
+/** Soft-nav can leave Members blank/404 on installed PWA — always hard navigate. */
 function onMobileHardNav(event: MouseEvent<HTMLAnchorElement>, href: string) {
-  if (!isMobileShell()) return;
+  const mustHard =
+    isMobileShell() ||
+    href === "/members/" ||
+    href.startsWith("/members/");
+  if (!mustHard) return;
   event.preventDefault();
   window.location.assign(withBase(href));
 }

@@ -144,13 +144,17 @@ export function SiteHeader() {
   const toggle = () => setOpen((v) => !v);
 
   /**
-   * Mobile/PWA: hard-navigate from the drawer.
-   * Soft nav + inert/pointer-events races were leaving pages blank/stuck.
+   * Hard-navigate from the drawer for Members (and always on mobile/PWA).
+   * Soft nav was leaving Members blank/404 on installed apps.
    */
   const onDrawerNav = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
     unlockBodyScroll();
     setOpen(false);
-    if (!isMobileShell()) return;
+    const mustHard =
+      isMobileShell() ||
+      href === "/members/" ||
+      href.startsWith("/members/");
+    if (!mustHard) return;
     event.preventDefault();
     const target = withBase(href);
     window.setTimeout(() => {

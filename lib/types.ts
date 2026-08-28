@@ -93,6 +93,11 @@ export type SiteEvent = {
   slug?: string;
   reminderDaysBefore?: number;
   recurring?: boolean;
+  /** Optional CMS fields (Super Admin / live R2 overlay) */
+  time?: string;
+  venue?: string;
+  contact?: string;
+  mapsUrl?: string;
 };
 
 export type Announcement = {
@@ -325,6 +330,11 @@ export type SiteSettings = {
   requireConsentForPersonalData?: boolean;
   /** Soft maintenance banner / lock for public writes */
   maintenanceMode?: boolean;
+  contactEmail?: string;
+  contactPhone?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
 };
 
 export type AnalyticsHit = {

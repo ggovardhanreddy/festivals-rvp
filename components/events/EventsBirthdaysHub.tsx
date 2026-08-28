@@ -1,14 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Member, SiteEvent } from "@/lib/types";
 import { EventsCalendar } from "@/components/events/EventsCalendar";
 import { TodayBirthdays } from "@/components/home/TodayBirthdays";
 import { UpcomingBirthdays } from "@/components/home/UpcomingBirthdays";
 import { dobMonthDay, monthDay } from "@/lib/dates";
+import { useLiveEvents } from "@/lib/live-calendar";
 
 type Tab = "events" | "birthdays";
+
+function splitUpcomingArchive(events: SiteEvent[], from = new Date()) {
+  const today = from.toISOString().slice(0, 10);
+  const upcoming = events
+    .filter((e) => e.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const archive = events
+    .filter((e) => e.date < today)
+    .sort((a, b) => b.date.localeCompare(a.date));
+  return { upcoming, archive };
+}
 
 export function EventsBirthdaysHub({
   upcoming,
@@ -23,6 +35,9 @@ export function EventsBirthdaysHub({
   members?: Member[];
   initialTab?: Tab;
 }) {
+  const seed = useMemo(() => [...upcoming, ...archive], [upcoming, archive]);
+  const liveEvents = useLiveEvents(seed);
+  const liveSplit = useMemo(() => splitUpcomingArchive(liveEvents), [liveEvents]);
   const [tab, setTab] = useState<Tab>(initialTab);
   const [todayMembers, setTodayMembers] = useState<Member[]>([]);
 
@@ -84,8 +99,8 @@ export function EventsBirthdaysHub({
       {tab === "events" ? (
         <div role="tabpanel" aria-label="Events">
           <EventsCalendar
-            upcoming={upcoming}
-            archive={archive}
+            upcoming={liveSplit.upcoming}
+            archive={liveSplit.archive}
             liveSlugs={liveSlugs}
             members={members}
             showBirthdays
@@ -99,8 +114,8 @@ export function EventsBirthdaysHub({
           <TodayBirthdays members={todayMembers} />
           <UpcomingBirthdays members={members} />
           <EventsCalendar
-            upcoming={upcoming}
-            archive={archive}
+            upcoming={liveSplit.upcoming}
+            archive={liveSplit.archive}
             liveSlugs={liveSlugs}
             members={members}
             showBirthdays
