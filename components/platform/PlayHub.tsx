@@ -48,6 +48,20 @@ export function PlayHub() {
       ) : null}
 
       <section className="section">
+        <Link className="daily-card" href={withLocale("/play/daily/", lang)}>
+          <span className="daily-card-icon" aria-hidden>
+            <SectionIcon name="question" size={26} />
+          </span>
+          <span className="daily-card-text">
+            <span className="eyebrow">{t("game.daily")}</span>
+            <strong>{t("game.daily.desc")}</strong>
+          </span>
+          <span className="daily-card-cta">{t("game.play")}</span>
+        </Link>
+      </section>
+
+      <section className="section">
+        <h2 className="play-grid-title">{t("nav.play")}</h2>
         <ul className="game-grid">
           {GAMES.map((g) => (
             <li key={g.id}>

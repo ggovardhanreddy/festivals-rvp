@@ -33,7 +33,7 @@ export const QUESTIONS: Question[] = [
   { id: "gk-5", topic: "gk", prompt: { en: "What is the national bird of India?" }, options: ["Parrot", "Peacock", "Eagle", "Swan"], correct: 1 },
   { id: "eng-1", topic: "english", prompt: { en: "Which word is a verb?" }, options: ["Quickly", "Beautiful", "Run", "Happiness"], correct: 2 },
   { id: "eng-2", topic: "english", prompt: { en: "What is the plural of 'child'?" }, options: ["Childs", "Childes", "Children", "Childrens"], correct: 2 },
-  { id: "eng-3", topic: "english", prompt: { en: "Choose the correct spelling." }, options: ["Recieve", "Receive", "Receve", "Recieve"], correct: 1 },
+  { id: "eng-3", topic: "english", prompt: { en: "Choose the correct spelling." }, options: ["Recieve", "Receive", "Receeve", "Reciev"], correct: 1 },
   { id: "eng-4", topic: "english", prompt: { en: "What is the opposite of 'ancient'?" }, options: ["Old", "Modern", "Historic", "Past"], correct: 1 },
   { id: "eng-5", topic: "english", prompt: { en: "Which is a complete sentence?" }, options: ["Running fast", "The tall tree", "She reads books", "In the morning"], correct: 2 },
 ];
