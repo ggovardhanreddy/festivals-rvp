@@ -8,14 +8,14 @@ import {
   TELUGU_CONSONANTS,
   TELUGU_VOWELS,
 } from "@/lib/kids/alphabet";
-import type { KidsRouteSlug } from "@/lib/kids/catalog";
+type ActivitySlug = "telugu" | "english" | "numbers" | "math" | "drawing" | "gk";
 import { LetterBoard } from "./LetterBoard";
 import { NumberBoard } from "./NumberBoard";
 import { MathPractice } from "./MathPractice";
 import { DrawingPad } from "./DrawingPad";
 import { TopicQuiz } from "./TopicQuiz";
 
-const TITLE_KEY: Record<KidsRouteSlug, string> = {
+const TITLE_KEY: Record<ActivitySlug, string> = {
   telugu: "kids.telugu",
   english: "kids.english",
   numbers: "kids.numbers",
@@ -24,7 +24,7 @@ const TITLE_KEY: Record<KidsRouteSlug, string> = {
   gk: "kids.gk",
 };
 
-const DESC_KEY: Record<KidsRouteSlug, string> = {
+const DESC_KEY: Record<ActivitySlug, string> = {
   telugu: "kids.telugu.desc",
   english: "kids.english.desc",
   numbers: "kids.numbers.desc",
@@ -33,7 +33,7 @@ const DESC_KEY: Record<KidsRouteSlug, string> = {
   gk: "kids.gk.desc",
 };
 
-export function KidsRoute({ slug }: { slug: KidsRouteSlug }) {
+export function KidsRoute({ slug }: { slug: ActivitySlug }) {
   const { t, lang } = useUiLang();
 
   return (
