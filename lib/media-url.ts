@@ -7,10 +7,15 @@
 
 import { isPrivateR2Key } from "./r2-storage";
 
-const R2_PUBLIC = (process.env.NEXT_PUBLIC_R2_PUBLIC_URL || "").replace(
-  /\/$/,
-  "",
-);
+/** Public R2 CDN — env preferred; baked-in fallback so member photos never 404 after strip-local. */
+const R2_PUBLIC_FALLBACK =
+  "https://pub-f2609804d6a040368903177488b01d2d.r2.dev";
+
+const R2_PUBLIC = (
+  process.env.NEXT_PUBLIC_R2_PUBLIC_URL ||
+  process.env.R2_PUBLIC_BASE ||
+  R2_PUBLIC_FALLBACK
+).replace(/\/$/, "");
 
 /** Path prefixes migrated to R2. */
 const R2_PREFIXES = [

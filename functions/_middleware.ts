@@ -7,8 +7,23 @@ type MiddlewareContext = {
   env: {
     MEMBER_SESSION_SECRET?: string;
     ADMIN_SESSION_SECRET?: string;
+    R2_PUBLIC_BASE?: string;
+    MEDIA?: {
+      get: (key: string) => Promise<{
+        body: ReadableStream | null;
+        httpMetadata?: { contentType?: string };
+      } | null>;
+    };
   };
 };
+
+const R2_PUBLIC_FALLBACK =
+  "https://pub-f2609804d6a040368903177488b01d2d.r2.dev";
+
+/** Member portraits live on R2; Pages strip-local removes them from `out/`. */
+function isMemberPhotoPath(pathname: string) {
+  return /^\/members\/.+\.(webp|avif|jpe?g|png)$/i.test(pathname);
+}
 
 const encoder = new TextEncoder();
 
@@ -117,6 +132,43 @@ export async function onRequest(context: MiddlewareContext) {
       next.endsWith("/") || next.includes(".") ? next : `${next}/`,
     );
     return Response.redirect(login.toString(), 302);
+  }
+
+  // Proxy member portraits from R2 as same-origin 200 (no redirect).
+  // Old PWAs still request /members/*.webp; redirects break under the SW.
+  if (isMemberPhotoPath(url.pathname)) {
+    const key = url.pathname.replace(/^\//, ""); // members/foo.webp
+    const headers = new Headers({
+      "cache-control":
+        "public, max-age=86400, stale-while-revalidate=604800",
+      "access-control-allow-origin": url.origin,
+      "x-member-photo": "r2-proxy",
+    });
+
+    try {
+      if (context.env.MEDIA) {
+        const obj = await context.env.MEDIA.get(key);
+        if (obj?.body) {
+          headers.set(
+            "content-type",
+            obj.httpMetadata?.contentType || "image/webp",
+          );
+          return new Response(obj.body, { status: 200, headers });
+        }
+      }
+
+      const base = (
+        context.env.R2_PUBLIC_BASE || R2_PUBLIC_FALLBACK
+      ).replace(/\/$/, "");
+      const remote = await fetch(`${base}/${key}`);
+      if (!remote.ok) {
+        return new Response("Member photo not found", { status: 404, headers });
+      }
+      headers.set("content-type", remote.headers.get("content-type") || "image/webp");
+      return new Response(remote.body, { status: 200, headers });
+    } catch {
+      return new Response("Member photo unavailable", { status: 502, headers });
+    }
   }
 
   return context.next();

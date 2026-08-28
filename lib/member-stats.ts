@@ -117,6 +117,7 @@ function preferPhoto(
   const rAbs = /^https?:\/\//i.test(r);
   const sAbs = /^https?:\/\//i.test(s);
   if (sAbs && !rAbs) return s;
+  // Keep site-relative /members/… paths — edge middleware proxies them from R2.
   return r;
 }
 

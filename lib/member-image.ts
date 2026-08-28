@@ -3,6 +3,16 @@
  * HEIC/HEIF often cannot be decoded in-browser — callers should show a graceful message.
  */
 
+import { withBase } from "./base";
+import { resolveMediaUrl } from "./media-url";
+
+/** Display URL for a member portrait (R2 CDN when available). */
+export function memberPhotoSrc(photo: string | null | undefined): string {
+  if (!photo) return "";
+  const resolved = resolveMediaUrl(photo);
+  return /^https?:\/\//i.test(resolved) ? resolved : withBase(resolved);
+}
+
 export type PreparedMemberImage = {
   file: File;
   previewUrl: string;

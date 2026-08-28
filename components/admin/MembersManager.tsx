@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { withBase } from "@/lib/base";
 import { BLOOD_GROUPS, newCommunityId } from "@/lib/community";
 import { useCommunityList } from "@/lib/use-community";
 import type { Member, MemberGroup, MemberStatus } from "@/lib/types";
 import { MEMBER_GROUP_LABELS } from "@/lib/member-groups";
 import { mergeMemberRosters } from "@/lib/member-stats";
 import {
+  memberPhotoSrc,
   prepareMemberImage,
   uploadMemberPhotoFile,
 } from "@/lib/member-image";
@@ -232,7 +232,7 @@ export function MembersManager() {
             <div className="admin-member-photo-row">
               {member.photo ? (
                 <img
-                  src={withBase(member.photo)}
+                  src={memberPhotoSrc(member.photo)}
                   alt=""
                   width={72}
                   height={72}
