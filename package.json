@@ -15,7 +15,7 @@
     "sync:r2": "CMS_MERGE_R2=1 npm run sync",
     "validate": "tsx scripts/validate-site.ts",
     "test": "tsx scripts/smoke-test.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.functions.json",
     "optimize": "tsx scripts/sync-cms.ts",
     "media:optimize": "tsx scripts/media-optimize.ts",
     "ingest": "tsx scripts/ingest-zips.ts",
@@ -39,7 +39,14 @@
     "pages:fix-assets": "tsx scripts/fix-pages-asset-names.ts",
     "seo:indexnow": "tsx scripts/submit-indexnow.ts",
     "deploy:cf": "npm run build && npm run media:strip-local && npm run pages:fix-assets && wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true && npm run seo:indexnow",
-    "deploy:cf:r2": "npm run media:migrate:r2 && npm run deploy:cf"
+    "deploy:cf:r2": "npm run media:migrate:r2 && npm run deploy:cf",
+    "typecheck:app": "tsc --noEmit",
+    "typecheck:functions": "tsc --noEmit -p tsconfig.functions.json",
+    "rotate:members": "tsx scripts/rotate-member-passwords.ts",
+    "backup:r2": "tsx scripts/backup-r2.ts",
+    "backup:r2:verify": "tsx scripts/backup-r2.ts --verify",
+    "migrate:verify:pre": "tsx scripts/verify-media-migration.ts --pre",
+    "migrate:verify:post": "tsx scripts/verify-media-migration.ts --post"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -63,6 +70,9 @@
     "three": "^0.185.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@cloudflare/workers-types": "^5.20260730.1",
+    "@playwright/test": "^1.49.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.19.43",
     "@types/react": "^19",
@@ -75,6 +85,7 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.5",
     "typescript": "^5",
+    "vitest": "^2.1.8",
     "wrangler": "^4.118.0"
   },
   "allowScripts": {

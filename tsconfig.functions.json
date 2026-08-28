@@ -1,0 +1,29 @@
+{
+  "//": "Cloudflare Pages Functions run on the Workers runtime, not the browser or Node. They are excluded from tsconfig.json so `next build` does not try to check them under DOM/Node libs. This second config checks them properly. See docs/BASELINE.md section 8.",
+  "//include": "Exactly the functions/ tree plus the lib/ modules it imports, transitively. Do NOT widen this to lib/**: most of lib/ is browser or Node code and will not typecheck under WebWorker libs.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "WebWorker"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "types": ["@cloudflare/workers-types"],
+    "baseUrl": ".",
+    "paths": { "@/*": ["./*"] }
+  },
+  "include": [
+    "functions/**/*.ts",
+    "lib/cms.ts",
+    "lib/media-formats.ts",
+    "lib/media-pipeline/constants.ts",
+    "lib/media-pipeline/validate.ts",
+    "lib/r2-catalog.ts",
+    "lib/slug.ts",
+    "lib/types.ts"
+  ]
+}
