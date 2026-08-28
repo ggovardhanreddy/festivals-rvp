@@ -298,11 +298,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       className={fontVariables}
     >
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var d=document.documentElement;var t=localStorage.getItem("rvp-theme");var sys=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var r=t==="light"||t==="dark"?t:sys;if(r==="dark")d.classList.add("dark");else d.classList.remove("dark");d.style.colorScheme=r;var mobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)||window.matchMedia("(max-width:820px)").matches;d.classList.remove("intro-pending","intro-active","intro-locked");if(mobile)d.classList.add("rvp-mobile");window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__rvpDeferredInstall=e;window.dispatchEvent(new CustomEvent("rvp:install-ready"));});}catch(e){}})();`,
-          }}
-        />
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
