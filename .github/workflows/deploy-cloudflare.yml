@@ -186,22 +186,52 @@ jobs:
           fi
           echo "Required Pages secrets are present."
 
-      - name: Preflight — Fun Fest credentials have been rotated
+      - name: Preflight — Fun Fest credentials are not the compromised set
         run: |
           set -euo pipefail
           node -e '
-            const d = require("./functions/_data/member-auth.json");
-            const total = d.members.length;
-            const stale = d.members.filter((m) => !m.mustChangePassword).length;
-            if (stale > 0) {
+            const fs = require("fs");
+            const crypto = require("crypto");
+            const FILE = "functions/_data/member-auth.json";
+
+            // Rotation writes its output OUTSIDE the repo, for upload to R2 as
+            // auth/members.json. functions/_data/member-auth.json is only the
+            // git fallback authMembers() uses when R2 is unreadable — so the
+            // question this gate asks is not "did a script run" but "are the
+            // credentials that would ship still the ones the audit flagged".
+            if (!fs.existsSync(FILE)) {
+              console.log("Git credential fallback removed; R2 is authoritative.");
+              process.exit(0);
+            }
+
+            // sha256 over the sorted passwordHash values only. Ignores
+            // generatedAt and updatedAt, so a build timestamp cannot look like
+            // a rotation — which is exactly how 0dc81e8 slipped through review.
+            const d = JSON.parse(fs.readFileSync(FILE, "utf8"));
+            const digest = crypto
+              .createHash("sha256")
+              .update(d.members.map((m) => m.passwordHash).sort().join("|"))
+              .digest("hex");
+
+            const COMPROMISED =
+              "06b9da598e614d2b1fe8f2bac65e73d1750d1664332c8e6f515bfa8612ebf0a6";
+
+            if (digest === COMPROMISED) {
               console.error(
-                "::error::" + stale + " of " + total + " Fun Fest credentials are unrotated. " +
-                "The Phase 0 audit treats them as compromised. Run `npm run rotate:members`, " +
-                "commit functions/_data/member-auth.json, and keep the generated CSV out of git."
+                "::error::The " + d.members.length + " Fun Fest credentials in " + FILE +
+                " are the set the Phase 0 audit found derived from usernames. " +
+                "Rotate before deploying:\n" +
+                "  1. npm run rotate:members\n" +
+                "  2. npx wrangler r2 object put reddivaripalli/auth/members.json \\\n" +
+                "       --file ~/rvp-credentials/members-auth-<stamp>.json \\\n" +
+                "       --content-type application/json --remote\n" +
+                "  3. verify a member login against the deployed preview\n" +
+                "  4. delete " + FILE + " (and its .ts module) so the fallback cannot serve them\n" +
+                "The CSV in ~/rvp-credentials is plaintext — deliver it out of band, never commit it."
               );
               process.exit(1);
             }
-            console.log("All " + total + " credentials carry a post-rotation stamp.");
+            console.log("Credentials differ from the compromised set.");
           '
 
       # Mirrors local `npm run deploy:cf` (build → strip → fix assets → wrangler).
