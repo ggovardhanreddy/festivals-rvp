@@ -156,7 +156,7 @@ jobs:
       #
       #  2. The Fun Fest passwords must have been rotated. The Phase 0 audit
       #     found them derived from usernames and therefore compromised;
-      #     `npm run rotate:passwords` stamps mustChangePassword on each
+      #     `npm run rotate:members` stamps mustChangePassword on each
       #     record. Shipping while they are still live is the one thing the
       #     remediation existed to prevent.
       #
@@ -196,7 +196,7 @@ jobs:
             if (stale > 0) {
               console.error(
                 "::error::" + stale + " of " + total + " Fun Fest credentials are unrotated. " +
-                "The Phase 0 audit treats them as compromised. Run `npm run rotate:passwords`, " +
+                "The Phase 0 audit treats them as compromised. Run `npm run rotate:members`, " +
                 "commit functions/_data/member-auth.json, and keep the generated CSV out of git."
               );
               process.exit(1);
