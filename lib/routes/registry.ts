@@ -18,7 +18,7 @@ export type SectionId =
   | "village" | "media" | "community" | "heritage" | "temples"
   | "utility" | "gated" | "admin"
   | "learn" | "games" | "kids" | "agriculture" | "english"
-  | "engineering" | "it" | "careers" | "government" | "weather";
+  | "engineering" | "it" | "careers" | "government" | "weather" | "ai";
 
 export type RouteStatus =
   /** Live today, rendered by the existing catch-all. */
