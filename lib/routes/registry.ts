@@ -116,12 +116,12 @@ export const FESTIVAL_SECTION: SectionId = "temples";
  * shape without anyone fabricating a placeholder page.
  */
 export const PLANNED_ROUTES: RouteEntry[] = [
-  { path: "/explore/",       section: "village",     labelKey: "nav.explore",       status: "planned", hasTelugu: false, plannedPhase: "1B" },
-  { path: "/english/",       section: "english",     labelKey: "nav.english",       status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/engineering/",   section: "engineering", labelKey: "nav.engineering",   status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/it/",            section: "it",          labelKey: "nav.it",            status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/temples/",       section: "temples",     labelKey: "nav.temples",       status: "planned", hasTelugu: false, plannedPhase: "5" },
-  { path: "/community/",     section: "community",   labelKey: "nav.community",     status: "planned", hasTelugu: false, plannedPhase: "5" },
+  { path: "/explore/",       section: "village",     labelKey: "nav.explore",       status: "live", hasTelugu: false, plannedPhase: "1B" },
+  { path: "/english/",       section: "english",     labelKey: "nav.english",       status: "live", hasTelugu: false, plannedPhase: "3" },
+  { path: "/engineering/",   section: "engineering", labelKey: "nav.engineering",   status: "live", hasTelugu: false, plannedPhase: "3" },
+  { path: "/it/",            section: "it",          labelKey: "nav.it",            status: "live", hasTelugu: false, plannedPhase: "3" },
+  { path: "/temples/",       section: "temples",     labelKey: "nav.temples",       status: "live", hasTelugu: false, plannedPhase: "5" },
+  { path: "/community/",     section: "community",   labelKey: "nav.community",     status: "live", hasTelugu: false, plannedPhase: "5" },
 ];
 
 export const ALL_ROUTES: RouteEntry[] = [...LIVE_ROUTES, ...PLANNED_ROUTES];
