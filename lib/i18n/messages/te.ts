@@ -17,7 +17,6 @@ export const te: Partial<Record<keyof typeof en, string>> = {
   "nav.heritage": "మన వారసత్వం",
   "nav.ai": "ఎఐ సహాయక",
   "nav.heritageArchive": "వారసత్వ ఆర్కైవ్",
-  "nav.ai": "ఎఐ సహాయక",
   "nav.events": "కార్యక్రమాలు & పుట్టినరోజులు",
   "nav.developments": "అభివృద్ధి",
   "nav.gallery": "గ్యాలరీ",
