@@ -1,0 +1,15 @@
+[
+  {
+    "id": "waiting-village-stories",
+    "title": "Village Stories",
+    "description": "Traditional stories from Reddivaripalli village",
+    "content": "We are collecting authentic village stories to share with children. Stories will include traditional tales, local history, and community narratives told by village elders.",
+    "language": "en",
+    "imageUrl": null,
+    "audioUrl": null,
+    "status": "awaiting-permission",
+    "permission": null,
+    "category": "village",
+    "ageGroup": "5-12"
+  }
+]
