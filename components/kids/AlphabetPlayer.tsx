@@ -70,7 +70,7 @@ export function AlphabetPlayer({
       window.setTimeout(() => setPulse(false), 320);
       const started = speak(phrase(l), {
         locale,
-        rate: 0.75,
+        rate: 0.5,
         onEnd: () => setSpeaking(false),
       });
       setSpeaking(started);
