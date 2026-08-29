@@ -46,7 +46,6 @@ export const en = {
   "nav.admin": "Admin",
   "nav.ai": "AI Assistant",
   "nav.adminDashboard": "Admin dashboard",
-  "nav.ai": "AI Assistant",
   "nav.editMode": "Edit Mode",
   "nav.editing": "Editing",
   "nav.enterEdit": "Enter Edit Mode",
