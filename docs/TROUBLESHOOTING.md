@@ -59,10 +59,10 @@ Wrangler OAuth (`npx wrangler login`) works for **local** `npm run deploy:cf`, b
 gh secret set CLOUDFLARE_API_TOKEN
 # paste token, Enter
 gh secret set CLOUDFLARE_ACCOUNT_ID -b "9e9bfe3d5a15e0ddee2e6270e74f6f40"
-gh workflow run "Deploy Cloudflare Pages"
+gh workflow run "Production Deploy"
 ```
 
-6. Confirm the run is green: `gh run list --workflow=deploy-cloudflare.yml --limit 3`
+6. Confirm the run is green: `gh run list --workflow=deploy.yml --limit 3`
 
 ### Other deploy failures
 

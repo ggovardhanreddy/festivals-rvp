@@ -1,42 +1,298 @@
-# Mirror deploy to GitHub Pages. Primary production is Cloudflare Pages
-# (see deploy-cloudflare.yml). Keep this lean so it does not dominate CI minutes.
-name: Deploy GitHub Pages
+# ─────────────────────────────────────────────────────────────────────────────
+# Production Deploy — www.reddivaripalli.com (Cloudflare Pages: festivals-rvp)
+#
+# This is the ONLY workflow that deploys production. Cloudflare Pages' own Git
+# integration stays disabled for this project so Actions is the single deployer.
+#
+# Order: Checkout → Setup Node → Install → Validate → Build → Verify → Deploy
+# Nothing is deployed unless every preceding step passes.
+#
+# Required repository secrets:
+#   CLOUDFLARE_API_TOKEN   — token with Cloudflare Pages Edit (Account)
+#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account ID
+#
+# Recommended repository variable:
+#   NEXT_PUBLIC_R2_PUBLIC_URL — public R2 base, no trailing slash. Enables
+#   media:strip-local so Pages uploads the app shell, not ~2 GiB of media.
+#
+# Optional secrets (live R2 discovery during sync-cms when the sparse checkout
+# leaves no local media and generated/albums.json is stale):
+#   R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET
+#
+# Pages Function secrets are set with wrangler, never here:
+#   MEMBER_SESSION_SECRET, ADMIN_SESSION_SECRET, MEDIA_SIGNING_SECRET,
+#   GITHUB_DISPATCH_TOKEN, GITHUB_REPO
+# ─────────────────────────────────────────────────────────────────────────────
+name: Production Deploy
+
 on:
   push:
     branches: [main]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why this deploy was triggered"
+        required: false
+        default: "manual"
+  # Admin → reindex fires this from functions/api/media/[[route]].ts.
+  repository_dispatch:
+    types: [content-sync]
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  deployments: write
+
 jobs:
-  build:
+  deploy:
+    name: Build and deploy to Cloudflare Pages
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    timeout-minutes: 25
     env:
-      NEXT_PUBLIC_BASE_PATH: /festivals-rvp
-      NEXT_PUBLIC_SITE_URL: https://ggovardhanreddy.github.io/festivals-rvp
-      NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL }}
+      NEXT_PUBLIC_BASE_PATH: ""
+      NEXT_PUBLIC_SITE_URL: https://www.reddivaripalli.com
+      # Repo variable first; fall back to the known public R2 base (not a secret).
+      NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://pub-f2609804d6a040368903177488b01d2d.r2.dev' }}
+      # Media already lives on R2; skip the slow EXIF walk.
       CMS_READ_EXIF: "0"
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+
     steps:
-      - uses: actions/checkout@v4
+      # ── 1. Checkout ─────────────────────────────────────────────────────────
+      # Skip ~2 GiB of media blobs already served from R2. Non-cone patterns keep
+      # content/*/metadata.json and the committed album catalogs while omitting
+      # the heavy originals.
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v4
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/public/images/**
+            !/public/videos/**
+            !/public/thumbs/**
+            !/public/audio/**
+            !/public/festivals/**
+            !/public/docs/**
+            !/content/**/*.jpg
+            !/content/**/*.JPG
+            !/content/**/*.jpeg
+            !/content/**/*.JPEG
+            !/content/**/*.png
+            !/content/**/*.PNG
+            !/content/**/*.webp
+            !/content/**/*.WEBP
+            !/content/**/*.gif
+            !/content/**/*.GIF
+            !/content/**/*.heic
+            !/content/**/*.HEIC
+            !/content/**/*.mp4
+            !/content/**/*.MP4
+            !/content/**/*.mov
+            !/content/**/*.MOV
+            !/content/**/*.avi
+            !/content/**/*.AVI
+            !/originals/**
+            /generated/albums.json
+            /generated/albums.r2.json
+
+      - name: Record start time
+        id: clock
+        run: echo "started=$(date +%s)" >> "$GITHUB_OUTPUT"
+
+      # ── 2. Setup Node ───────────────────────────────────────────────────────
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+
+      # ── 3. Install ──────────────────────────────────────────────────────────
+      # npm ci only: it installs exactly package-lock.json and never rewrites it.
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Validate ─────────────────────────────────────────────────────────
+      - name: Validate — content JSON
+        id: validate_json
+        run: |
+          node --input-type=module <<'EOF'
+          import fs from "node:fs";
+          import path from "node:path";
+          const root = "content/data";
+          if (!fs.existsSync(root)) {
+            console.log("No content/data — skip JSON validate");
+            process.exit(0);
+          }
+          let failed = 0;
+          for (const name of fs.readdirSync(root)) {
+            if (!name.endsWith(".json")) continue;
+            const file = path.join(root, name);
+            try {
+              JSON.parse(fs.readFileSync(file, "utf8"));
+              console.log("OK", file);
+            } catch (e) {
+              failed += 1;
+              console.error("INVALID JSON", file, e.message);
+            }
+          }
+          const members = path.join(root, "members.json");
+          if (!fs.existsSync(members)) {
+            failed += 1;
+            console.error("Missing members seed:", members);
+          } else {
+            const list = JSON.parse(fs.readFileSync(members, "utf8"));
+            if (!Array.isArray(list) || list.length === 0) {
+              failed += 1;
+              console.error("members.json must be a non-empty array");
+            } else {
+              console.log(`Members seed: ${list.length} rows`);
+            }
+          }
+          if (failed) process.exit(1);
+          EOF
+
+      - name: Validate — lint
+        id: validate_lint
+        run: npm run lint
+
+      - name: Validate — typecheck
+        id: validate_typecheck
+        run: npm run typecheck
+
+      - name: Validate — unit tests
+        id: validate_unit
+        run: npm run test:unit
+
+      # Session signing fails CLOSED (functions/api/auth/_shared.ts) — there is
+      # deliberately no fallback literal, because the previous one was a
+      # published key. Deploying without MEMBER_SESSION_SECRET returns 503 to
+      # every Fun Fest member the moment it goes live. Checked before the build
+      # so a misconfiguration costs a red run, not a broken site.
+      - name: Validate — required Pages secrets exist
+        id: validate_secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Names only — `secret list` never returns values.
+          names="$(npx wrangler pages secret list --project-name=festivals-rvp 2>/dev/null || true)"
+          if [ -z "$names" ]; then
+            echo "::error::Could not list Pages secrets. Check CLOUDFLARE_API_TOKEN has Pages Edit on this account."
+            exit 1
+          fi
+          missing=""
+          for key in MEMBER_SESSION_SECRET ADMIN_SESSION_SECRET MEDIA_SIGNING_SECRET; do
+            echo "$names" | grep -q "$key" || missing="$missing $key"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing Pages secret(s):$missing"
+            echo "Set each with: npx wrangler pages secret put <NAME> --project-name=festivals-rvp"
+            echo "MEMBER_SESSION_SECRET is the critical one — sign-in fails closed without it."
+            exit 1
+          fi
+          echo "Required Pages secrets are present."
+
+      # ── 5. Build ────────────────────────────────────────────────────────────
+      # npm run build = prepare:site (sync-cms → member-auth → generate-all →
+      # rewrite-albums-r2) then next build. Runs exactly once in this pipeline.
       - name: Build
-        run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: out
-      - id: deployment
-        uses: actions/deploy-pages@v4
+        id: build
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          NEXT_PUBLIC_CONTACT_EMAIL: reddivaripalli.rvp@gmail.com
+          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: www.reddivaripalli.com
+        run: |
+          set -euo pipefail
+          echo "Trigger: ${{ github.event_name }} — ${{ github.event.client_payload.reason || github.event.inputs.reason || 'push' }}"
+          npm run build
+          npm run media:strip-local
+          npm run pages:fix-assets
+
+      # ── 6. Verify the artifact that is about to ship ────────────────────────
+      - name: Verify build output
+        id: verify
+        run: |
+          set -euo pipefail
+          npm run validate
+          npm test
+          size="$(du -sh out | cut -f1)"
+          echo "Artifact size: $size"
+          echo "size=$size" >> "$GITHUB_OUTPUT"
+          if [ -f out/version.json ]; then cat out/version.json; fi
+
+      # ── 7. Deploy ───────────────────────────────────────────────────────────
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          npx wrangler pages deploy out \
+            --project-name=festivals-rvp \
+            --branch=main \
+            --commit-dirty=true 2>&1 | tee /tmp/deploy.log
+          url="$(grep -oE 'https://[a-z0-9.-]+\.pages\.dev' /tmp/deploy.log | tail -n 1 || true)"
+          echo "preview_url=${url:-unavailable}" >> "$GITHUB_OUTPUT"
+
+      - name: Ping IndexNow and sitemaps
+        continue-on-error: true
+        run: |
+          sleep 15
+          npm run seo:indexnow
+
+      # ── Result ──────────────────────────────────────────────────────────────
+      - name: Report success
+        if: success()
+        run: |
+          elapsed=$(( $(date +%s) - ${{ steps.clock.outputs.started }} ))
+          {
+            echo "## ✅ Production deploy succeeded"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Commit | \`${GITHUB_SHA:0:7}\` |"
+            echo "| Branch | \`${GITHUB_REF_NAME}\` |"
+            echo "| Live URL | https://www.reddivaripalli.com |"
+            echo "| Cloudflare deployment | ${{ steps.deploy.outputs.preview_url }} |"
+            echo "| Artifact size | ${{ steps.verify.outputs.size }} |"
+            echo "| Duration | $((elapsed / 60))m $((elapsed % 60))s |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report failure
+        if: failure()
+        run: |
+          elapsed=$(( $(date +%s) - ${{ steps.clock.outputs.started }} ))
+          failed="unknown"
+          for pair in \
+            "Validate — content JSON:${{ steps.validate_json.outcome }}" \
+            "Validate — lint:${{ steps.validate_lint.outcome }}" \
+            "Validate — typecheck:${{ steps.validate_typecheck.outcome }}" \
+            "Validate — unit tests:${{ steps.validate_unit.outcome }}" \
+            "Validate — required Pages secrets:${{ steps.validate_secrets.outcome }}" \
+            "Build:${{ steps.build.outcome }}" \
+            "Verify build output:${{ steps.verify.outcome }}" \
+            "Deploy to Cloudflare Pages:${{ steps.deploy.outcome }}" ; do
+            name="${pair%:*}"; outcome="${pair##*:}"
+            if [ "$outcome" = "failure" ]; then failed="$name"; break; fi
+          done
+          {
+            echo "## ❌ Production deploy failed"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Failed step | **${failed}** |"
+            echo "| Commit | \`${GITHUB_SHA:0:7}\` |"
+            echo "| Branch | \`${GITHUB_REF_NAME}\` |"
+            echo "| Duration before failure | $((elapsed / 60))m $((elapsed % 60))s |"
+            echo ""
+            echo "Nothing was deployed — the live site is unchanged."
+            echo "Open the failed step above for the full log."
+          } >> "$GITHUB_STEP_SUMMARY"

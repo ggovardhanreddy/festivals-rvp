@@ -19,7 +19,7 @@ npx wrangler r2 bucket dev-url enable reddivaripalli --force
 # npx wrangler r2 bucket domain add reddivaripalli --domain media.reddivaripalli.com --zone-id <ZONE_ID>
 ```
 
-CI currently falls back to a known public `r2.dev` URL when the repo variable is unset (see `deploy-cloudflare.yml`). Prefer setting `vars.NEXT_PUBLIC_R2_PUBLIC_URL` explicitly.
+CI currently falls back to a known public `r2.dev` URL when the repo variable is unset (see `deploy.yml`). Prefer setting `vars.NEXT_PUBLIC_R2_PUBLIC_URL` explicitly.
 
 ## Object prefixes
 

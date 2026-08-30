@@ -5,8 +5,7 @@
 | Target | URL | Workflow |
 |---|---|---|
 | Custom domain (primary) | https://www.reddivaripalli.com | Hostinger DNS → Cloudflare Pages |
-| Cloudflare Pages | https://festivals-rvp.pages.dev | `.github/workflows/deploy-cloudflare.yml` |
-| GitHub Pages (mirror) | https://ggovardhanreddy.github.io/festivals-rvp/ | `.github/workflows/deploy.yml` |
+| Cloudflare Pages | https://festivals-rvp.pages.dev | `.github/workflows/deploy.yml` |
 
 Deploy branch: **`main`**.
 
@@ -14,14 +13,16 @@ Deploy branch: **`main`**.
 
 ```text
 Git push to main
-  → Deploy Cloudflare Pages (fast path)
-       checkout (depth 1) + npm ci (cached)
-       → npm run build
-       → npm run media:strip-local
+  → Production Deploy (the only production deployer)
+       sparse checkout (depth 1) + npm ci (cached)
+       → validate: content JSON, lint, typecheck, unit tests, Pages secrets
+       → npm run build            (prepare:site + next build, once)
+       → npm run media:strip-local && npm run pages:fix-assets
+       → verify: npm run validate && npm test
        → wrangler pages deploy out --project-name=festivals-rvp
-  → Deploy GitHub Pages (mirror, optional)
+       → seo:indexnow (non-blocking)
 Pull requests
-  → CI (lint, typecheck, prepare:site, validate, test, build)
+  → PR Checks (lint, typecheck, unit tests, build, validate) — never deploys
 ```
 
 Keep **Cloudflare Pages Git integration disabled** so only GitHub Actions deploys (avoids double publishes).
@@ -41,12 +42,22 @@ Project name: `festivals-rvp`.
 
 ## Environment variables
 
-| Variable | Cloudflare / custom domain | GitHub Pages |
-|---|---|---|
-| `NEXT_PUBLIC_BASE_PATH` | `""` | `/festivals-rvp` |
-| `NEXT_PUBLIC_SITE_URL` | `https://www.reddivaripalli.com` | `https://ggovardhanreddy.github.io/festivals-rvp` |
-| `NEXT_PUBLIC_R2_PUBLIC_URL` | repo variable | repo variable |
-| `CMS_READ_EXIF` | `0` in deploy (PR CI can opt in) | `0` |
+| Variable | Value |
+|---|---|
+| `NEXT_PUBLIC_BASE_PATH` | `""` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.reddivaripalli.com` |
+| `NEXT_PUBLIC_R2_PUBLIC_URL` | repo variable `NEXT_PUBLIC_R2_PUBLIC_URL` (workflow falls back to the public `r2.dev` base) |
+| `CMS_READ_EXIF` | `0` |
+
+### Retired: the GitHub Pages mirror
+
+`ggovardhanreddy.github.io/festivals-rvp` was a second copy of the site built by
+a `deploy.yml` that ran alongside the Cloudflare deploy on every push. It roughly
+doubled Actions minutes (~226 s vs ~88 s per push) and uploaded a ~1.8 GB
+`github-pages` artifact each time, because it built without `media:strip-local`.
+Nothing links to it, so it was removed. The pages already published there stay
+online, frozen at the last mirrored commit; take the site down in
+**Settings → Pages** if that frozen copy is not wanted.
 
 ### Hostinger DNS
 

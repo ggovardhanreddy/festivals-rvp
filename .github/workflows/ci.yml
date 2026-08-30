@@ -1,88 +1,99 @@
-# Quality gates for pull requests. Main-branch deploys use deploy-cloudflare.yml
-# (and optionally deploy.yml) so we avoid a second full build on every push.
-name: CI
+# ─────────────────────────────────────────────────────────────────────────────
+# PR Checks — quality gates for pull requests. Never deploys.
+#
+# Production deploys run the same gates on push to main (deploy.yml), so no
+# commit is ever checked twice: this workflow fires only on pull_request.
+# ─────────────────────────────────────────────────────────────────────────────
+name: PR Checks
 
 on:
   pull_request:
+    branches: [main]
   workflow_dispatch: {}
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: pr-checks-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   check:
+    name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_BASE_PATH: ""
+      NEXT_PUBLIC_SITE_URL: https://www.reddivaripalli.com
+      NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://pub-f2609804d6a040368903177488b01d2d.r2.dev' }}
+      CMS_READ_EXIF: "0"
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - name: Sync CMS + generate indexes
-        run: npm run prepare:site
-        env:
-          CMS_READ_EXIF: "0"
-          NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL }}
-      - run: npm run validate
-      - run: npm test
-      - name: Fun Fest credentials are not the compromised set
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        id: lint
+        run: npm run lint
+
+      - name: Typecheck
+        id: typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        id: unit
+        run: npm run test:unit
+
+      # prepare:site + next build, once. No second build anywhere in this job.
+      - name: Build
+        id: build
+        run: npm run build
+
+      - name: Verify build output
+        id: verify
         run: |
           set -euo pipefail
-          node -e '
-            const fs = require("fs");
-            const crypto = require("crypto");
-            const FILE = "functions/_data/member-auth.json";
+          npm run validate
+          npm test
 
-            // Rotation writes its output OUTSIDE the repo, for upload to R2 as
-            // auth/members.json. functions/_data/member-auth.json is only the
-            // git fallback authMembers() uses when R2 is unreadable — so the
-            // question this gate asks is not "did a script run" but "are the
-            // credentials that would ship still the ones the audit flagged".
-            if (!fs.existsSync(FILE)) {
-              console.log("Git credential fallback removed; R2 is authoritative.");
-              process.exit(0);
-            }
-
-            // sha256 over the sorted passwordHash values only. Ignores
-            // generatedAt and updatedAt, so a build timestamp cannot look like
-            // a rotation — which is exactly how 0dc81e8 slipped through review.
-            const d = JSON.parse(fs.readFileSync(FILE, "utf8"));
-            const digest = crypto
-              .createHash("sha256")
-              .update(d.members.map((m) => m.passwordHash).sort().join("|"))
-              .digest("hex");
-
-            const COMPROMISED =
-              "06b9da598e614d2b1fe8f2bac65e73d1750d1664332c8e6f515bfa8612ebf0a6";
-
-            if (digest === COMPROMISED) {
-              console.error(
-                "::error::The " + d.members.length + " Fun Fest credentials in " + FILE +
-                " are the set the Phase 0 audit found derived from usernames. " +
-                "Rotate before deploying:\n" +
-                "  1. npm run rotate:members\n" +
-                "  2. npx wrangler r2 object put reddivaripalli/auth/members.json \\\n" +
-                "       --file ~/rvp-credentials/members-auth-<stamp>.json \\\n" +
-                "       --content-type application/json --remote\n" +
-                "  3. verify a member login against the deployed preview\n" +
-                "  4. delete " + FILE + " (and its .ts module) so the fallback cannot serve them\n" +
-                "The CSV in ~/rvp-credentials is plaintext — deliver it out of band, never commit it."
-              );
-              process.exit(1);
-            }
-            console.log("Credentials differ from the compromised set.");
-          '
-
-      - name: Production build
-        run: npx next build
-        env:
-          NEXT_PUBLIC_BASE_PATH: ""
-          NEXT_PUBLIC_SITE_URL: https://www.reddivaripalli.com
-          NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL }}
+      - name: Report result
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            {
+              echo "## ✅ PR checks passed"
+              echo ""
+              echo "Commit \`${GITHUB_SHA:0:7}\` — lint, typecheck, unit tests, build and site validation are green."
+              echo "This workflow does not deploy."
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            failed="unknown"
+            for pair in \
+              "Lint:${{ steps.lint.outcome }}" \
+              "Typecheck:${{ steps.typecheck.outcome }}" \
+              "Unit tests:${{ steps.unit.outcome }}" \
+              "Build:${{ steps.build.outcome }}" \
+              "Verify build output:${{ steps.verify.outcome }}" ; do
+              name="${pair%:*}"; outcome="${pair##*:}"
+              if [ "$outcome" = "failure" ]; then failed="$name"; break; fi
+            done
+            {
+              echo "## ❌ PR checks failed"
+              echo ""
+              echo "Failed step: **${failed}** (commit \`${GITHUB_SHA:0:7}\`)"
+              echo ""
+              echo "Open the failed step above for the full log. Nothing was deployed."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

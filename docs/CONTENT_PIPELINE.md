@@ -97,7 +97,7 @@ Workers **reject** raw HEIC/MOV for gallery-like categories — use client optim
 
 ## 4. Auto deployment
 
-Workflow: **`.github/workflows/Deploy Cloudflare Pages`** → file `deploy-cloudflare.yml`
+Workflow: **Production Deploy** → file `.github/workflows/deploy.yml`
 
 | Trigger | Behavior |
 |---|---|

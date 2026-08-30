@@ -4,13 +4,16 @@ Primary production target: **Cloudflare Pages** project `festivals-rvp` → **ht
 
 ## Automatic (recommended)
 
-Push to **`main`** runs [`.github/workflows/deploy-cloudflare.yml`](../.github/workflows/deploy-cloudflare.yml):
+Push to **`main`** runs [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) — "Production Deploy", the only workflow that publishes production:
 
 1. Sparse checkout (excludes heavy media already on R2)
 2. `npm ci`
-3. `npm run build`
-4. `npm run media:strip-local`
-5. `npx wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true`
+3. Validate: content JSON, `npm run lint`, `npm run typecheck`, `npm run test:unit`, required Pages secrets
+4. `npm run build`
+5. `npm run media:strip-local` and `npm run pages:fix-assets`
+6. Verify: `npm run validate` and `npm test`
+7. `npx wrangler pages deploy out --project-name=festivals-rvp --commit-dirty=true`
+8. `npm run seo:indexnow` (non-blocking)
 
 Env in workflow:
 
@@ -23,11 +26,9 @@ Keep **Cloudflare Pages Git integration disabled** so Actions is the only deploy
 
 ### Pull request CI
 
-[`.github/workflows/ci.yml`](../.github/workflows/ci.yml): lint → typecheck → `prepare:site` → validate → test → `next build`.
-
-### Optional mirror
-
-[`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) — GitHub Pages mirror with `NEXT_PUBLIC_BASE_PATH=/festivals-rvp`.
+[`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — "PR Checks": lint →
+typecheck → unit tests → `npm run build` → validate → smoke test. It never
+deploys, and it runs only on `pull_request`, so a commit is never built twice.
 
 ## Manual deploy
 

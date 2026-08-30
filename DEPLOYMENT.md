@@ -6,10 +6,16 @@ Primary documentation lives in [docs/08-DEPLOYMENT.md](./docs/08-DEPLOYMENT.md).
 
 Push to `main` → GitHub Actions:
 
-1. **Cloudflare Pages** (`.github/workflows/deploy-cloudflare.yml`): `npm ci` → `build` → `media:strip-local` → `wrangler pages deploy`
-2. **GitHub Pages** mirror (`.github/workflows/deploy.yml`) — optional secondary host
+**Production Deploy** (`.github/workflows/deploy.yml`) is the only workflow that
+publishes production:
 
-PR quality gates live in `.github/workflows/ci.yml` (lint / typecheck / validate / test / build).
+`checkout` → `setup-node` → `npm ci` → validate (content JSON, lint, typecheck,
+unit tests, Pages secrets) → `npm run build` → `media:strip-local` →
+`pages:fix-assets` → verify (`validate` + `test`) → `wrangler pages deploy`.
+
+PR quality gates live in `.github/workflows/ci.yml` ("PR Checks": lint /
+typecheck / unit tests / build / validate). It never deploys, and it runs only on
+pull requests — so no commit is checked twice.
 
 Keep Cloudflare Pages **Git integration off** so Actions is the only CF deployer.
 
@@ -70,12 +76,6 @@ npm run deploy:cf
 
 Binding: R2 bucket `MEDIA` → `reddivaripalli` (see `wrangler.toml`).
 
-For GitHub Pages builds, set:
-
-```bash
-export NEXT_PUBLIC_BASE_PATH=/festivals-rvp
-export NEXT_PUBLIC_SITE_URL=https://ggovardhanreddy.github.io/festivals-rvp
-```
 
 ## Do not deploy if
 
