@@ -217,6 +217,26 @@ export const HOME_QUICK_LINKS = NAV.slice(1);
 export const VILLAGE_SHORT_DESCRIPTION =
   "Reddivaripalli is a historic village in Andhra Pradesh, known for its temples, agriculture, festivals and the community traditions that have held families together across generations.";
 
+/**
+ * Optional photographic backdrop for the homepage hero.
+ *
+ * `null` today, deliberately: the only wide image in the project is a
+ * watermarked satellite screenshot, and inventing a village photograph is not
+ * an option. The hero renders its approved badge treatment while this is null.
+ *
+ * To switch it on, drop a genuine photograph into public/brand/ and set this
+ * to its path — for example "/brand/village-photo.webp". Everything else is
+ * already in place: the image is full-bleed and object-fit: cover at every
+ * breakpoint, a scrim keeps the heading above 4.5:1 over whatever the
+ * photograph does, and it loads as the LCP candidate with fetchpriority high.
+ * Supply roughly 2000px wide, landscape, with the subject slightly right of
+ * centre so the badge on the left does not cover it.
+ */
+export const HOME_HERO_PHOTO: string | null = null;
+
+/** Alt text for HOME_HERO_PHOTO. Describe the actual photograph when set. */
+export const HOME_HERO_PHOTO_ALT = "";
+
 /** Homepage identity lines. */
 export const HOME_HERO_TITLE = "REDDIVARIPALLI";
 export const HOME_HERO_PILLARS = SITE_TAGLINE_PILLARS;

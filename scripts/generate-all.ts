@@ -195,10 +195,14 @@ fs.writeFileSync(
   JSON.stringify(
     {
       id: startUrl,
-      name: "RVP Youth · Reddivaripalli",
-      short_name: "RVP Youth",
+      // The badge, the hero and every page title say Reddivaripalli; the
+      // installed app said "RVP Youth", so the icon landed on a home screen
+      // under a name the site never uses. RVP Youth are the stewards, not the
+      // village.
+      name: "Reddivaripalli — Heritage · Community · Progress",
+      short_name: "Reddivaripalli",
       description:
-        "Install the Reddivaripalli App for faster access, offline support, and instant notifications.",
+        "Reddivaripalli village — heritage, people, events, memories and development. Faster access, offline support and reminders.",
       start_url: startUrl,
       scope: base || "/",
       display: "standalone",

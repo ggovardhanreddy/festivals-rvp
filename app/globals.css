@@ -168,6 +168,7 @@ select {
       transparent 66%
     );
   }
+
 }
 
 /* Full-viewport brand watermark — behind page copy so blend never eats paragraph text */
@@ -238,12 +239,14 @@ html.dark body:has(.village-hero) .logo-watermark {
   body:has(.village-hero) .logo-watermark {
     opacity: 0.04;
   }
+
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .logo-watermark {
     opacity: 0.03;
   }
+
 }
 
 .hero-logo {
@@ -419,6 +422,7 @@ html.dark body:has(.village-hero) .logo-watermark {
   .mobile-nav {
     display: none;
   }
+
 }
 
 .page {
@@ -701,12 +705,14 @@ button:focus-visible {
   .masonry {
     columns: 2;
   }
+
 }
 
 @media (min-width: 980px) {
   .masonry {
     columns: 3;
   }
+
 }
 
 .tile {
@@ -860,6 +866,7 @@ button:focus-visible {
     height: 4.25rem;
     min-height: 4.25rem;
   }
+
 }
 
 .notes {
@@ -1294,6 +1301,7 @@ button:focus-visible {
     grid-template-columns: 1.6fr 1fr;
     align-items: stretch;
   }
+
 }
 
 .village-map-stage {
@@ -1402,12 +1410,14 @@ button:focus-visible {
   .memory-wall {
     columns: 2;
   }
+
 }
 
 @media (min-width: 1100px) {
   .memory-wall {
     columns: 3;
   }
+
 }
 
 .memory-card {
@@ -1688,12 +1698,14 @@ button:focus-visible {
   .landing-hero-portrait img {
     aspect-ratio: 16 / 11;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
   .landing-hero-sparkles {
     animation: none;
   }
+
 }
 
 .village-canvas,
@@ -1973,6 +1985,7 @@ button:focus-visible {
     grid-template-columns: 1.7fr 1fr;
     align-items: stretch;
   }
+
 }
 
 .card-3d {
@@ -2109,6 +2122,7 @@ button:focus-visible {
     text-align: center;
     justify-items: center;
   }
+
 }
 
 .loader-rays {
@@ -2156,6 +2170,7 @@ button:focus-visible {
     width: 100%;
     border-radius: 0;
   }
+
 }
 
 .empty-state,
@@ -2293,6 +2308,7 @@ button:focus-visible {
   .village-depth-stage {
     min-height: 52vh;
   }
+
 }
 
 .skeleton {
@@ -2407,6 +2423,7 @@ html.rvp-mobile .cinematic-landing {
   .lede {
     color: var(--muted);
   }
+
 }
 
 body {
@@ -2894,6 +2911,7 @@ body {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
+
 }
 
 @media (min-height: 900px) {
@@ -2901,6 +2919,7 @@ body {
   .aaa-logo-wrap {
     height: min(42vh, 380px);
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2910,6 +2929,7 @@ body {
   .aaa-scroll-arrow {
     animation: none !important;
   }
+
 }
 
 .cinematic-landing.is-flying .cinematic-landing-stage {
@@ -3535,6 +3555,7 @@ html.cursor-magnetic .liquid-cursor-blob {
   .music-mini {
     bottom: max(4.25rem, 9vh);
   }
+
 }
 
 .glass-music {
@@ -3799,6 +3820,7 @@ html.intro-active .glass-music {
   .glass-music-fab-label {
     max-width: 96px;
   }
+
 }
 
 /* ——— Apple full-screen floating tiles home ——— */
@@ -4004,6 +4026,7 @@ html.intro-active .glass-music {
   .apple-festival-hero-img {
     object-position: center 40%;
   }
+
 }
 
 .apple-chapter-head {
@@ -4426,6 +4449,7 @@ html.intro-active .glass-music {
     content-visibility: auto;
     contain-intrinsic-size: 600px;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4447,6 +4471,7 @@ html.intro-active .glass-music {
   .night-village-leaves {
     display: none !important;
   }
+
 }
 
 /* ─── PWA install / download popup ─── */
@@ -4508,6 +4533,7 @@ html.intro-active .glass-music {
   .pwa-install-actions {
     justify-content: center;
   }
+
 }
 
 @keyframes pwa-fade-in {
@@ -4668,6 +4694,7 @@ html.intro-active .glass-music {
     place-items: end end;
     padding: 1.25rem;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4675,6 +4702,7 @@ html.intro-active .glass-music {
   .pwa-install-backdrop {
     animation: none;
   }
+
 }
 
 /* —— Members / Events / Notifications —— */
@@ -5088,6 +5116,7 @@ html.intro-active .glass-music {
   .member-profile-modal {
     grid-template-columns: 1fr;
   }
+
 }
 
 @media (max-width: 520px) {
@@ -5106,6 +5135,7 @@ html.intro-active .glass-music {
   .members-group-count {
     grid-column: 2;
   }
+
 }
 
 .birthday-strip,
@@ -5622,6 +5652,7 @@ button.linkish {
   .calendar-event-dot {
     display: none;
   }
+
 }
 
 /* =============================================================================
@@ -5634,10 +5665,6 @@ button.linkish {
 #main-content > main > .page,
 .home-redesign .section[id] {
   scroll-margin-top: 5.75rem;
-}
-
-.home-redesign {
-  padding-top: 3.25rem;
 }
 
 .home-redesign .section {
@@ -5686,6 +5713,7 @@ button.linkish {
   .nav-menu-btn {
     display: none;
   }
+
 }
 
 .nav-drawer-backdrop {
@@ -5786,6 +5814,7 @@ button.linkish {
   .nav-drawer-backdrop {
     display: none;
   }
+
 }
 
 html.nav-drawer-open,
@@ -5806,70 +5835,9 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   display: none !important;
 }
 
-/* Clean hero */
-.clean-hero {
-  position: relative;
-  min-height: 100svh;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  color: #f7f3ea;
-}
-
-.clean-hero-media {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.clean-hero-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.clean-hero-veil {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(15, 20, 17, 0.35), rgba(15, 20, 17, 0.62) 55%, rgba(250, 250, 248, 0.97));
-}
-
 .dark .clean-hero-veil {
   background:
     linear-gradient(180deg, rgba(8, 12, 10, 0.4), rgba(8, 12, 10, 0.75) 55%, var(--color-bg));
-}
-
-.clean-hero-content {
-  position: relative;
-  z-index: 3;
-  pointer-events: auto;
-  text-align: center;
-  padding: clamp(6.5rem, 14vh, 8.5rem) var(--page-gutter) 5rem;
-  max-width: 48rem;
-}
-
-.clean-hero h1 {
-  font-family: var(--font-display);
-  font-size: var(--text-hero);
-  line-height: var(--leading-tight);
-  margin: 0.35rem 0 0.85rem;
-  color: #fff;
-  text-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-}
-
-.clean-hero-eyebrow {
-  color: color-mix(in srgb, #fff 82%, var(--accent-soft));
-  letter-spacing: 0.18em;
-}
-
-.clean-hero-lede {
-  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
-  line-height: 1.55;
-  color: color-mix(in srgb, #fff 90%, transparent);
-  max-width: 36ch;
-  margin: 0 auto 1.75rem;
 }
 
 .clean-hero-cta .btn {
@@ -5883,29 +5851,6 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   transform: translateY(-2px);
 }
 
-.clean-hero-scroll {
-  position: absolute;
-  bottom: 1.75rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  display: grid;
-  justify-items: center;
-  gap: 0.45rem;
-  color: color-mix(in srgb, #fff 80%, transparent);
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.clean-hero-scroll-line {
-  width: 1px;
-  height: 2.25rem;
-  background: linear-gradient(to bottom, currentColor, transparent);
-  animation: clean-scroll-pulse 1.8s ease-in-out infinite;
-}
-
 @keyframes clean-scroll-pulse {
   0%,
   100% {
@@ -5916,53 +5861,6 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
     opacity: 1;
     transform: scaleY(1);
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .clean-hero-scroll-line {
-    animation: none;
-  }
-}
-
-/* Stats */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-@media (min-width: 920px) {
-  .stats-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-}
-
-.stat-card {
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--elevation-1);
-  padding: 1.35rem 1.25rem;
-  transition:
-    transform var(--motion-base) var(--ease-out),
-    box-shadow var(--motion-base) var(--ease-out);
-}
-
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--elevation-2);
-}
-
-.stat-card-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  margin-bottom: 0.85rem;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .stat-counter strong {
@@ -5989,6 +5887,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
     grid-template-columns: 1.05fr 0.95fr;
     gap: 3rem;
   }
+
 }
 
 .about-teaser-copy h2 {
@@ -6038,6 +5937,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
     left: 50%;
     transform: translateX(-50%);
   }
+
 }
 
 .history-timeline-item {
@@ -6072,6 +5972,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
     top: 1.5rem;
     transform: translateX(-50%);
   }
+
 }
 
 .history-timeline-axis {
@@ -6163,50 +6064,6 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   margin: 1rem 0 1.25rem;
 }
 
-/* Home masonry */
-.home-masonry {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-
-@media (min-width: 720px) {
-  .home-masonry {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
-  }
-}
-
-.home-masonry-item {
-  display: block;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  aspect-ratio: 1;
-  box-shadow: var(--elevation-1);
-  background: var(--bg-2);
-}
-
-.home-masonry-item[data-span="wide"] {
-  grid-column: span 2;
-  aspect-ratio: 16 / 10;
-}
-
-.home-masonry-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--motion-slow) var(--ease-out);
-}
-
-.home-masonry-item:hover img {
-  transform: scale(1.04);
-}
-
-.home-gallery-grid {
-  margin-top: 0.5rem;
-}
-
 /* Events / festival cards */
 .event-card--link {
   display: grid;
@@ -6240,12 +6097,14 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .culture-traditions .culture-festival-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
 }
 
 @media (min-width: 1100px) {
   .culture-traditions .culture-festival-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
 }
 
 .culture-festival-card {
@@ -6336,12 +6195,14 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .festival-calendar-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
 }
 
 @media (min-width: 1100px) {
   .festival-calendar-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
 }
 
 .festival-card {
@@ -6458,6 +6319,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .footer-inner--minimal {
     grid-template-columns: 1.5fr 1fr 1.1fr 0.9fr;
   }
+
 }
 
 .footer-village {
@@ -6669,6 +6531,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .contact-grid--form .contact-card--map {
     grid-column: 1 / -1;
   }
+
 }
 
 .contact-card {
@@ -6757,6 +6620,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
     justify-self: start;
     min-width: 10rem;
   }
+
 }
 
 .contact-map {
@@ -6777,12 +6641,6 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
     aspect-ratio: 1 / 1;
   }
 
-  .home-hero-cta {
-    display: grid;
-    gap: 0.65rem;
-    width: 100%;
-  }
-
   .home-hero-cta .btn {
     min-height: 48px;
     width: 100%;
@@ -6799,27 +6657,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .filter-chip {
     min-height: 44px;
   }
-}
 
-.home-quick-actions {
-  flex-wrap: wrap;
-}
-
-.members-teaser-card {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-  padding: 1.5rem 1.35rem;
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--elevation-1);
-}
-
-.members-teaser-card h2 {
-  margin: 0.2rem 0 0.5rem;
 }
 
 .nav-auth-btn {
@@ -6832,6 +6670,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .nav-auth-btn {
     display: inline-flex;
   }
+
 }
 
 /* Play hub — daily challenge */
@@ -6892,6 +6731,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .daily-card-cta {
     grid-column: 2;
   }
+
 }
 
 /* ── Easy Mode ────────────────────────────────────────────────────────────
@@ -7217,6 +7057,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .oflink:hover .oflink-arrow {
     transform: none;
   }
+
 }
 
 .oflink-source {
@@ -7236,6 +7077,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .oflink-cta {
     justify-self: start;
   }
+
 }
 
 /* Emergency */
@@ -7309,6 +7151,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
   .emergency-call {
     grid-column: 2;
   }
+
 }
 
 /* Cyber safety */
@@ -11817,6 +11660,50 @@ body {
     radial-gradient(90% 70% at 50% 0%, rgba(240, 215, 160, 0.22), transparent 62%),
     linear-gradient(168deg, #16301f 0%, var(--color-forest) 52%, #12261c 100%);
   color: #f6f2e7;
+}
+
+/* Photographic hero, active only when HOME_HERO_PHOTO is set in lib/site.ts.
+   The badge treatment is the default; this is the path a real photograph
+   takes when one exists. */
+.village-hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.village-hero-photo img {
+  width: 100%;
+  height: 100%;
+  /* Cover at every breakpoint; the focal point sits right of centre so the
+     badge in the left column never lands on the subject. */
+  object-fit: cover;
+  object-position: 65% 50%;
+  display: block;
+}
+
+.village-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(12, 26, 18, 0.88) 0%, rgba(12, 26, 18, 0.62) 55%, rgba(12, 26, 18, 0.45) 100%),
+    linear-gradient(180deg, rgba(12, 26, 18, 0.35), rgba(12, 26, 18, 0.7));
+}
+
+@media (max-width: 920px) {
+  .village-hero-photo img {
+    object-position: 50% 45%;
+  }
+
+  /* Centred layout: the text sits over the middle of the photograph, so the
+     scrim has to be even rather than weighted to one side. */
+  .village-hero-scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(12, 26, 18, 0.68),
+      rgba(12, 26, 18, 0.82)
+    );
+  }
 }
 
 .village-hero-glow {

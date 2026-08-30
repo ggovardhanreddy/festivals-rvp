@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "RVP Youth · Reddivaripalli",
-  "short_name": "RVP Youth",
-  "description": "Install the Reddivaripalli App for faster access, offline support, and instant notifications.",
+  "name": "Reddivaripalli — Heritage · Community · Progress",
+  "short_name": "Reddivaripalli",
+  "description": "Reddivaripalli village — heritage, people, events, memories and development. Faster access, offline support and reminders.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

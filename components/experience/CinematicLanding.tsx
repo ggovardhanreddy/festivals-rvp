@@ -308,7 +308,7 @@ function PostIntroHero() {
           transition={{ duration: 0.8 }}
         >
           <img
-            src={withBase("/brand/rvp-youth-festival.webp")}
+            src={withBase("/brand/vinayaka-hero.webp")}
             alt={`${SITE_NAME} — friends of ${VILLAGE_NAME}`}
             width={1400}
             height={900}

@@ -5,6 +5,8 @@ import { m, useReducedMotion } from "framer-motion";
 import { useEffect } from "react";
 import { withBase } from "@/lib/base";
 import {
+  HOME_HERO_PHOTO,
+  HOME_HERO_PHOTO_ALT,
   HOME_HERO_PILLARS,
   HOME_HERO_SUPPORT,
   HOME_HERO_TITLE,
@@ -49,7 +51,25 @@ export function VillageHero() {
   });
 
   return (
-    <section className="village-hero" aria-labelledby="village-hero-title">
+    <section
+      className="village-hero"
+      data-photo={HOME_HERO_PHOTO ? true : undefined}
+      aria-labelledby="village-hero-title"
+    >
+      {HOME_HERO_PHOTO ? (
+        <div className="village-hero-photo">
+          <img
+            src={withBase(HOME_HERO_PHOTO)}
+            alt={HOME_HERO_PHOTO_ALT}
+            fetchPriority="high"
+            decoding="async"
+          />
+          {/* The scrim is what makes the heading readable over a photograph we
+              cannot predict. It is not decoration — without it contrast
+              depends on whatever the sky was doing that day. */}
+          <div className="village-hero-scrim" aria-hidden />
+        </div>
+      ) : null}
       <div className="village-hero-glow" aria-hidden />
       <div className="village-hero-inner">
         <m.img
