@@ -1,9 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Announcement, SiteEvent } from "./types";
-import { daysUntil } from "./dates";
+import { daysUntil, eventPhase } from "./dates";
 
-export { daysUntil, formatCountdown } from "./dates";
+export {
+  daysUntil,
+  eventPhase,
+  eventStatusLabel,
+  formatCountdown,
+  formatEventDate,
+  formatEventDateRange,
+} from "./dates";
 
 const EVENTS_PATH = path.join(process.cwd(), "content", "data", "events.json");
 const ANNOUNCEMENTS_PATH = path.join(
@@ -38,25 +45,40 @@ export function loadAnnouncements(): Announcement[] {
   return announcementsCache;
 }
 
+/**
+ * Events that have not finished yet, in the village's timezone.
+ * An event whose last day is in the past is never returned here.
+ */
 export function upcomingEvents(limit = 5, from = new Date()): SiteEvent[] {
   return loadEvents()
-    .filter((e) => daysUntil(e.endDate || e.date, from) >= 0)
+    .filter((e) => eventPhase(e.date, e.endDate, from) !== "completed")
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, limit);
 }
 
 export function pastEvents(from = new Date()): SiteEvent[] {
   return loadEvents()
-    .filter((e) => daysUntil(e.endDate || e.date, from) < 0)
+    .filter((e) => eventPhase(e.date, e.endDate, from) === "completed")
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export function todaysEvents(from = new Date()): SiteEvent[] {
-  return loadEvents().filter((e) => {
-    const start = daysUntil(e.date, from);
-    const end = daysUntil(e.endDate || e.date, from);
-    return start <= 0 && end >= 0;
-  });
+  return loadEvents().filter(
+    (e) => eventPhase(e.date, e.endDate, from) === "today",
+  );
+}
+
+/**
+ * The newest announcement that has actually been published (dated today or
+ * earlier). Returns null when there is nothing to say — the homepage hides the
+ * band rather than inventing an update.
+ */
+export function latestAnnouncement(from = new Date()): Announcement | null {
+  const live = loadAnnouncements()
+    .filter((a) => !a.date || daysUntil(a.date, from) <= 0)
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  const important = live.find((a) => a.important);
+  return important ?? live[0] ?? null;
 }
 
 export function eventsNeedingReminder(from = new Date()): SiteEvent[] {

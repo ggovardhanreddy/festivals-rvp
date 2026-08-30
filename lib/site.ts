@@ -76,11 +76,14 @@ export const VILLAGE_ADDRESS_LINE = [
   VILLAGE_ADDRESS.state,
 ].join(", ");
 
-export const SEO_TITLE =
-  "Reddivaripalli | Official Website of Reddivaripalli Gram Panchayat";
+export const SEO_TITLE = "Reddivaripalli | Heritage \u00b7 Community \u00b7 Progress";
 
+/**
+ * Homepage description. The first sentence is the promise; the locality tail
+ * stays because it is what local search actually matches on.
+ */
 export const SEO_DESCRIPTION =
-  "Official website of Reddivaripalli (Kondreddigaripalli) Gram Panchayat, Sambepalle Mandal, Annamayya / YSR Kadapa, Andhra Pradesh 516215. Heritage, festivals, members, gallery, and village updates from RVP Youth.";
+  "Discover Reddivaripalli \u2014 its heritage, people, traditions, events, memories and village development. Reddivaripalli (Kondreddigaripalli) Gram Panchayat, Sambepalle Mandal, Annamayya / YSR Kadapa, Andhra Pradesh 516215.";
 
 /** Public contact inbox — override with NEXT_PUBLIC_CONTACT_EMAIL at build time. */
 export const SITE_CONTACT_EMAIL =
@@ -136,33 +139,82 @@ export const VILLAGE_COORDS = {
 } as const;
 
 /**
- * Primary nav — priority order (desktop + drawer + footer quick links).
- * Events & Birthdays share /events/ (tabbed hub); birthday albums remain at /rvp-birthdays/.
+ * Primary navigation — seven items, never more.
+ *
+ * Everything else lives behind More (MORE_NAV) or in the footer. Nothing is
+ * removed from the site by being absent here: every route below still resolves
+ * and is still reachable, it just stops competing for space in the header.
  */
 export const NAV = [
   { href: "/", label: "Home" },
-  { href: "/members/", label: "Members" },
-  { href: "/about/", label: "Our Heritage" },
-  { href: "/events/", label: "Events & Birthdays" },
+  { href: "/about/", label: "Our Village" },
+  { href: "/members/", label: "People" },
+  { href: "/events/", label: "Events" },
   { href: "/developments/", label: "Developments" },
   { href: "/gallery/", label: "Gallery" },
 ] as const;
 
 /**
- * Secondary community links (drawer / footer) — remaining modules after primary.
+ * Secondary destinations, shown under "More" in the header and drawer.
  * Fun Fest stays here; SiteHeader applies member-auth gating for /fun-trips/.
  */
-export const COMMUNITY_NAV = [
+export const MORE_NAV = [
   { href: "/directory/", label: "Directory" },
-  { href: "/contact/", label: "Contact" },
   { href: "/heritage/", label: "Heritage Archive" },
+  { href: "/timeline/", label: "Timeline" },
   { href: "/fun-trips/", label: "Fun Fest" },
   { href: "/suggestions/", label: "Suggestions" },
+  { href: "/contact/", label: "Contact" },
+  { href: "/services/", label: "Village Services" },
+  { href: "/learn/", label: "Learning & Education" },
+  { href: "/agriculture/", label: "Agriculture" },
+  { href: "/careers/", label: "Careers" },
+  { href: "/emergency/", label: "Emergency Information" },
+] as const;
+
+/**
+ * Kept for compatibility with anything still reading the old name.
+ * @deprecated Prefer MORE_NAV.
+ */
+export const COMMUNITY_NAV = MORE_NAV;
+
+/** Footer column: community pages. */
+export const FOOTER_COMMUNITY = [
+  { href: "/directory/", label: "Directory" },
+  { href: "/heritage/", label: "Heritage Archive" },
   { href: "/timeline/", label: "Timeline" },
+  { href: "/suggestions/", label: "Suggestions" },
+  { href: "/fun-trips/", label: "Fun Fest" },
+  { href: "/contact/", label: "Contact" },
+] as const;
+
+/** Footer column: everyday services. */
+export const FOOTER_SERVICES = [
+  { href: "/services/", label: "Village Services" },
+  { href: "/emergency/", label: "Emergency Information" },
+  { href: "/learn/", label: "Learning & Education" },
+  { href: "/agriculture/", label: "Agriculture" },
+  { href: "/careers/", label: "Careers" },
+] as const;
+
+/** Footer column: legal. The disclaimer is a section of the Terms page. */
+export const FOOTER_LEGAL = [
+  { href: "/privacy/", label: "Privacy Policy" },
+  { href: "/terms/", label: "Terms & Conditions" },
+  { href: "/terms/#disclaimer", label: "Disclaimer" },
 ] as const;
 
 /** Homepage shortcuts — mirrors primary priority (excludes Home). */
 export const HOME_QUICK_LINKS = NAV.slice(1);
+
+/** Short village description used on the homepage and in the footer. */
+export const VILLAGE_SHORT_DESCRIPTION =
+  "Reddivaripalli is a historic village in Andhra Pradesh, known for its temples, agriculture, festivals and the community traditions that have held families together across generations.";
+
+/** Homepage identity lines. */
+export const HOME_HERO_TITLE = "REDDIVARIPALLI";
+export const HOME_HERO_PILLARS = SITE_TAGLINE_PILLARS;
+export const HOME_HERO_SUPPORT = "One Village · One Family · One Heritage";
 
 export const BUCKETS = [
   ...CULTURE_FESTIVALS.map((f) => ({

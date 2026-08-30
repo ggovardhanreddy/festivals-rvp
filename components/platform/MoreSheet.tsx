@@ -4,17 +4,34 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { isReady } from "@/lib/platform/doors";
 import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
 import { SectionIcon } from "./SectionIcon";
 import { EasyModeToggle } from "@/components/easy/EasyModeToggle";
 
 /**
- * Ordered by what people come here for, not alphabetically. The four
- * directories that answer a real errand come first; browsing sections follow.
+ * Ordered by what people come here for, not alphabetically. The village
+ * sections come first, then the service directories that answer a real errand,
+ * then the browsing sections.
+ *
+ * Sections that have not launched (English, IT, Engineering, Explore, Temples,
+ * Community) are deliberately absent: their routes still resolve, but a menu
+ * entry that leads to "not launched yet" costs a tap and returns nothing.
  */
 const SECTIONS = [
+  { href: "/about/",                labelKey: "nav.ourVillage",    icon: "temples" },
+  { href: "/members/",              labelKey: "nav.people",        icon: "community" },
+  { href: "/developments/",         labelKey: "nav.developments",  icon: "engineering" },
+  { href: "/directory/",            labelKey: "nav.directory",     icon: "community" },
+  { href: "/heritage/",             labelKey: "nav.heritageArchive", icon: "temples" },
+  { href: "/timeline/",             labelKey: "nav.timeline",      icon: "book" },
+  { href: "/fun-trips/",            labelKey: "nav.funFest",       icon: "play" },
+  { href: "/suggestions/",          labelKey: "nav.suggestions",   icon: "book" },
+  { href: "/services/",             labelKey: "nav.villageServices", icon: "government" },
+  { href: "/emergency/",            labelKey: "nav.emergencyInfo", icon: "siren" },
+  { href: "/learn/",                labelKey: "nav.learningEducation", icon: "learn" },
+  { href: "/play/",                 labelKey: "nav.play",          icon: "play" },
   { href: "/government/",           labelKey: "nav.government",    icon: "government" },
   { href: "/banking/",              labelKey: "banking.title",     icon: "banking" },
   { href: "/students/",             labelKey: "students.title",    icon: "students" },
@@ -31,11 +48,6 @@ const SECTIONS = [
   { href: "/weather/",              labelKey: "nav.weather",       icon: "weather" },
   { href: "/safety/",               labelKey: "safety.title",      icon: "shield" },
   { href: "/emergency/",            labelKey: "emergency.title",   icon: "siren" },
-  { href: "/heritage/",             labelKey: "nav.temples",       icon: "temples" },
-  { href: "/members/",              labelKey: "nav.community",     icon: "community" },
-  { href: "/english/",              labelKey: "nav.english",       icon: "english" },
-  { href: "/it/",                   labelKey: "nav.it",            icon: "it" },
-  { href: "/engineering/",          labelKey: "nav.engineering",   icon: "engineering" },
   { href: "/digital-skills/",       labelKey: "nav.digitalSkills", icon: "digital" },
 ];
 
@@ -81,7 +93,7 @@ export function MoreSheet({ open, onClose }: { open: boolean; onClose: () => voi
           {SECTIONS.map((s) => (
             <li key={s.href}>
               <Link
-                href={withLocale(s.href, lang)}
+                href={navHref(s.href, lang)}
                 onClick={onClose}
                 data-pending={isReady(s.href) ? undefined : true}
               >
@@ -97,7 +109,7 @@ export function MoreSheet({ open, onClose }: { open: boolean; onClose: () => voi
           <ul>
             {UTILITY.map((u) => (
               <li key={u.href}>
-                <Link href={withLocale(u.href, lang)} onClick={onClose}>
+                <Link href={navHref(u.href, lang)} onClick={onClose}>
                   {t(u.labelKey)}
                 </Link>
               </li>

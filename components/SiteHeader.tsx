@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
 import { createPortal } from "react-dom";
-import { Menu, Pencil, X } from "lucide-react";
-import { COMMUNITY_NAV, NAV } from "@/lib/site";
+import { ChevronDown, Menu, Pencil, Search, X } from "lucide-react";
+import { MORE_NAV, NAV } from "@/lib/site";
 import { withBase } from "@/lib/base";
 import { ThemeToggle } from "./Theme";
 import { Logo } from "./Logo";
@@ -19,7 +26,7 @@ import { LanguageSwitcher } from "./i18n/LanguageSwitcher";
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
   if (href.startsWith("/#")) return normalized === "/";
-  // Birthday albums live under /rvp-birthdays/ but belong to Events & Birthdays.
+  // Birthday albums live under /rvp-birthdays/ but belong to Events.
   if (href === "/events/" && normalized.startsWith("/rvp-birthdays/")) {
     return true;
   }
@@ -40,14 +47,24 @@ function isMobileShell() {
   );
 }
 
+/**
+ * Site header.
+ *
+ * Six destinations plus More. Search is an icon, Settings lives in More, and
+ * every secondary page the header used to carry is still one click away —
+ * nothing was removed from the site, only from the top row.
+ */
 export function SiteHeader() {
   const pathname = usePathname() || "/";
   const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const menuId = useId();
+  const moreId = useId();
   const btnRef = useRef<HTMLButtonElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const { ready, isAdmin, editMode, toggleEditMode } = useEditMode();
   const { session: memberSession, ready: memberReady } = useMemberAuth();
@@ -59,28 +76,31 @@ export function SiteHeader() {
     setMounted(true);
   }, []);
 
-  const onFunFestNav = (event: MouseEvent<HTMLAnchorElement>) => {
-    unlockBodyScroll();
-    setOpen(false);
-    if (!memberReady) {
+  const onFunFestNav = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      unlockBodyScroll();
+      setOpen(false);
+      setMoreOpen(false);
+      if (!memberReady) {
+        event.preventDefault();
+        return;
+      }
+      if (!memberSession) {
+        event.preventDefault();
+        setFunFestLoginOpen(true);
+        return;
+      }
       event.preventDefault();
-      return;
-    }
-    if (!memberSession) {
-      event.preventDefault();
-      setFunFestLoginOpen(true);
-      return;
-    }
-    if (isMobileShell()) {
-      event.preventDefault();
-      window.setTimeout(() => {
-        window.location.assign(withBase("/fun-trips/"));
-      }, 0);
-      return;
-    }
-    event.preventDefault();
-    router.push("/fun-trips/");
-  };
+      if (isMobileShell()) {
+        window.setTimeout(() => {
+          window.location.assign(withBase("/fun-trips/"));
+        }, 0);
+        return;
+      }
+      router.push("/fun-trips/");
+    },
+    [memberReady, memberSession, router],
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -92,6 +112,7 @@ export function SiteHeader() {
   // Close drawer on route change and always restore scroll
   useEffect(() => {
     setOpen(false);
+    setMoreOpen(false);
     unlockBodyScroll();
   }, [pathname]);
 
@@ -138,6 +159,23 @@ export function SiteHeader() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // Desktop "More" menu: close on Escape or a click outside.
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMoreOpen(false);
+    };
+    const onPointer = (event: PointerEvent) => {
+      if (!moreRef.current?.contains(event.target as Node)) setMoreOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointer);
+    };
+  }, [moreOpen]);
+
   const close = () => {
     setOpen(false);
     unlockBodyScroll();
@@ -152,9 +190,7 @@ export function SiteHeader() {
     unlockBodyScroll();
     setOpen(false);
     const mustHard =
-      isMobileShell() ||
-      href === "/members/" ||
-      href.startsWith("/members/");
+      isMobileShell() || href === "/members/" || href.startsWith("/members/");
     if (!mustHard) return;
     event.preventDefault();
     const target = withBase(href);
@@ -183,6 +219,7 @@ export function SiteHeader() {
         inert={!open}
       >
         <nav className="nav-drawer-links" aria-label="Mobile">
+          <p className="nav-drawer-group">Explore</p>
           {NAV.map((item) => (
             <Link
               key={item.href}
@@ -193,7 +230,9 @@ export function SiteHeader() {
               {t(item.href, item.label)}
             </Link>
           ))}
-          {COMMUNITY_NAV.map((item) =>
+
+          <p className="nav-drawer-group">More</p>
+          {MORE_NAV.map((item) =>
             item.href === "/fun-trips/" ? (
               <Link
                 key={item.href}
@@ -214,6 +253,8 @@ export function SiteHeader() {
               </Link>
             ),
           )}
+
+          <p className="nav-drawer-group">Tools</p>
           <Link href="/search/" onClick={(event) => onDrawerNav(event, "/search/")}>
             {t("/search/")}
           </Link>
@@ -259,13 +300,11 @@ export function SiteHeader() {
 
   return (
     <>
-      <header
-        className="nav nav-sticky"
-        data-scrolled={scrolled || undefined}
-      >
-        <Link href="/" className="brand-link" aria-label="RVP Youth home">
+      <header className="nav nav-sticky" data-scrolled={scrolled || undefined}>
+        <Link href="/" className="brand-link" aria-label="Reddivaripalli home">
           <Logo />
         </Link>
+
         <nav className="nav-links" aria-label={t("primary-nav")}>
           {NAV.map((item) => (
             <Link
@@ -276,8 +315,57 @@ export function SiteHeader() {
               {t(item.href, item.label)}
             </Link>
           ))}
+
+          <div className="nav-more" ref={moreRef}>
+            <button
+              type="button"
+              className="nav-more-btn"
+              aria-expanded={moreOpen}
+              aria-controls={moreId}
+              aria-haspopup="true"
+              onClick={() => setMoreOpen((v) => !v)}
+            >
+              {t("nav.more")}
+              <ChevronDown size={15} aria-hidden />
+            </button>
+            <div
+              id={moreId}
+              className="nav-more-panel"
+              data-open={moreOpen || undefined}
+              hidden={!moreOpen}
+            >
+              <ul>
+                {MORE_NAV.map((item) => (
+                  <li key={item.href}>
+                    {item.href === "/fun-trips/" ? (
+                      <Link href={item.href} onClick={onFunFestNav}>
+                        {t(item.href, item.label)}
+                      </Link>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        data-active={isActive(item.href, normalized)}
+                        onClick={() => setMoreOpen(false)}
+                      >
+                        {t(item.href, item.label)}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </nav>
+
         <div className="nav-actions">
+          <Link
+            className="icon-btn nav-search-btn"
+            href="/search/"
+            aria-label={t("nav.search")}
+            title={t("nav.search")}
+          >
+            <Search size={20} aria-hidden />
+          </Link>
           <LanguageSwitcher className="nav-lang" />
           <NotificationBell />
           <ThemeToggle />

@@ -202,3 +202,27 @@ export const cmsAlbumFolders = () => CMS_ALBUMS;
 
 export { albumHref } from "./site";
 export { slugify };
+
+/**
+ * Newest public photographs, for the homepage "Latest Memories" strip.
+ *
+ * Only images, only albums everyone may see (Fun Fest is member-gated), and
+ * only as many as the homepage renders — the full archive, with its category,
+ * year and media-type filters, stays on /gallery/.
+ */
+export function latestMemories(limit = 6): MediaWithAlbum[] {
+  return liveAlbums()
+    .filter((album) => album.bucket !== "fun-trips")
+    .flatMap((album) =>
+      album.media
+        .filter((media) => media.type === "image")
+        .map((media) => ({ ...media, album })),
+    )
+    .sort(
+      (a, b) =>
+        String(b.date || b.album.year).localeCompare(
+          String(a.date || a.album.year),
+        ) || String(a.id).localeCompare(String(b.id)),
+    )
+    .slice(0, limit);
+}

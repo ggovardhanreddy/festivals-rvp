@@ -11773,3 +11773,912 @@ body {
 .quiz-option[data-state="wrong"] { border-color: var(--color-danger);
   background: color-mix(in srgb, var(--color-danger) 14%, transparent); }
 .quiz-option:disabled { cursor: default; }
+
+/* =============================================================================
+   HOMEPAGE — 2026 rebuild
+   -----------------------------------------------------------------------------
+   Hero → Village update → Our Village + Our Community → Events + Birthdays →
+   Latest Memories → Village Progress. Deep forest green, warm gold, white and
+   soft neutrals, all from styles/tokens.css. Card treatment is deliberately
+   quiet: 14–16px radius, a hairline border, one very light shadow.
+   ============================================================================= */
+
+/* Rhythm inside the homepage comes from one gap value, not from each section
+   carrying its own margin — otherwise the two `.section` blocks sit in a
+   different rhythm from the panels above them. */
+.home .section {
+  margin: 0;
+}
+
+.home {
+  width: min(100% - (2 * var(--page-gutter)), var(--content-max));
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  padding-block: clamp(1.75rem, 5vw, 3rem) clamp(3rem, 8vw, 5rem);
+}
+
+/* ---- Hero ---------------------------------------------------------------- */
+
+.village-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(2.5rem, 8vw, 5.5rem) var(--page-gutter);
+  background:
+    radial-gradient(90% 70% at 50% 0%, rgba(240, 215, 160, 0.22), transparent 62%),
+    linear-gradient(168deg, #16301f 0%, var(--color-forest) 52%, #12261c 100%);
+  color: #f6f2e7;
+}
+
+.village-hero-glow {
+  position: absolute;
+  inset: auto -10% -45% -10%;
+  height: 70%;
+  background: radial-gradient(50% 60% at 50% 100%, rgba(196, 152, 85, 0.28), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.village-hero-inner {
+  width: min(100%, var(--content-max));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(200px, 320px) 1fr;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.village-hero-emblem {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  justify-self: center;
+  filter: drop-shadow(0 18px 38px rgba(0, 0, 0, 0.35));
+}
+
+.village-hero-copy {
+  min-width: 0;
+}
+
+.village-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 7vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: 0.04em;
+  margin: 0;
+  color: #ffffff;
+}
+
+.village-hero-pillars {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-accent);
+  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  /* Dawn gold, not the mid gold: on the forest gradient it measures 8.4:1
+     against 4.5:1, and the hero carries a gold wash that eats the difference. */
+  color: var(--color-dawn);
+}
+
+.village-hero-support {
+  margin: 0.85rem 0 0;
+  font-size: var(--text-lg);
+  color: rgba(246, 242, 231, 0.82);
+}
+
+.village-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+}
+
+.village-hero-cta .btn {
+  background: var(--color-accent-soft);
+  color: #1b2d22;
+  border: 1px solid transparent;
+}
+
+.village-hero-cta .btn.ghost {
+  background: transparent;
+  color: #f6f2e7;
+  border: 1px solid rgba(246, 242, 231, 0.45);
+}
+
+.village-hero-cta .btn:hover {
+  filter: brightness(1.06);
+}
+
+/* ---- Village update ------------------------------------------------------ */
+
+.village-update-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid var(--color-line);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  box-shadow: var(--elevation-1);
+}
+
+.village-update-body {
+  min-width: 0;
+  flex: 1 1 22rem;
+}
+
+.village-update-label {
+  margin: 0 0 0.35rem;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
+}
+
+.village-update-title {
+  margin: 0;
+  font-size: var(--text-xl);
+  line-height: 1.3;
+}
+
+.village-update-text {
+  margin: 0.4rem 0 0;
+  color: var(--color-muted);
+  max-width: 68ch;
+}
+
+.village-update-date {
+  margin: 0.4rem 0 0;
+  font-size: var(--text-sm);
+}
+
+/* ---- Two-column bands ---------------------------------------------------- */
+
+.home-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 1.75rem);
+  align-items: stretch;
+}
+
+.home-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  box-shadow: var(--elevation-1);
+}
+
+.home-panel > h2 {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+}
+
+.home-panel .eyebrow {
+  margin: 0;
+}
+
+.home-panel-lede {
+  margin: 0.75rem 0 0;
+  color: var(--color-muted);
+  line-height: var(--leading-normal);
+  max-width: 60ch;
+}
+
+.home-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+.home-empty {
+  margin: 1rem 0 0;
+  padding: 1rem;
+  border: 1px dashed var(--color-line);
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.home-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+}
+
+.home-section-head h2 {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  line-height: 1.2;
+}
+
+/* ---- Our Village --------------------------------------------------------- */
+
+.home-village-alt {
+  margin: 0.6rem 0 0;
+  font-size: var(--text-sm);
+}
+
+.home-heritage-teaser {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-forest) 7%, transparent);
+}
+
+.home-heritage-teaser p {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.home-heritage-teaser-mark {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+/* ---- Our Community ------------------------------------------------------- */
+
+.community-stat-grid {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.community-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.community-stat-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  color: var(--color-accent-ink);
+}
+
+.community-stat .stat-counter {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.community-stat .stat-counter strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.6vw, 1.9rem);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.community-stat .stat-counter span {
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+}
+
+/* ---- Upcoming events ----------------------------------------------------- */
+
+.home-event-list,
+.home-birthday-list {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.home-event,
+.home-birthday {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  transition: border-color var(--motion-fast) var(--ease-soft),
+    transform var(--motion-fast) var(--ease-soft);
+}
+
+.home-event:hover,
+.home-event:focus-visible {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-line));
+  transform: translateY(-1px);
+}
+
+.home-event-media {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-forest) 8%, transparent);
+}
+
+.home-event-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-event-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.home-event-name {
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+}
+
+.home-event-date {
+  font-size: var(--text-sm);
+}
+
+.home-event-status {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  color: var(--color-accent-ink);
+}
+
+/* Status is carried by the word itself, not only by colour. */
+.home-event-status[data-phase="today"] {
+  border-color: color-mix(in srgb, var(--color-success) 45%, transparent);
+  background: color-mix(in srgb, var(--color-success) 14%, transparent);
+  color: var(--color-success);
+}
+
+/* ---- Birthdays ----------------------------------------------------------- */
+
+.home-birthday-photo {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--color-forest) 10%, transparent);
+}
+
+.home-birthday-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-birthday-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.home-birthday-name {
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+}
+
+.home-birthday-date {
+  font-size: var(--text-sm);
+}
+
+.home-birthday-today {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  border: 1px solid color-mix(in srgb, var(--color-success) 45%, transparent);
+  background: color-mix(in srgb, var(--color-success) 14%, transparent);
+  color: var(--color-success);
+}
+
+.home-birthday[data-today] {
+  border-color: color-mix(in srgb, var(--color-success) 40%, var(--color-line));
+}
+
+/* ---- Latest memories ----------------------------------------------------- */
+
+.home-memories {
+  padding: 0;
+}
+
+.home-memory-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1.6vw, 0.9rem);
+}
+
+.home-memory-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-forest) 8%, transparent);
+  border: 1px solid var(--color-line);
+}
+
+.home-memory-tile img,
+.home-memory-tile .media-image-skeleton,
+.home-memory-tile .media-image-empty {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--motion-base) var(--ease-soft);
+}
+
+.home-memory-tile:hover img {
+  transform: scale(1.04);
+}
+
+.home-memory-meta {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.7rem 0.55rem;
+  font-size: var(--text-xs);
+  color: #f6f2e7;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 20, 15, 0) 0%,
+    rgba(11, 20, 15, 0.55) 45%,
+    rgba(11, 20, 15, 0.9) 100%
+  );
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+.home-memory-meta .muted {
+  color: rgba(246, 242, 231, 0.78);
+}
+
+/* ---- Village progress ---------------------------------------------------- */
+
+.home-progress {
+  padding: 0;
+}
+
+.progress-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.progress-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--card-bg);
+  box-shadow: var(--elevation-1);
+  transition: transform var(--motion-fast) var(--ease-soft),
+    box-shadow var(--motion-fast) var(--ease-soft);
+}
+
+.progress-card:hover,
+.progress-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-2);
+}
+
+.progress-card-media {
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: color-mix(in srgb, var(--color-forest) 8%, transparent);
+}
+
+.progress-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* No project photo yet: show the village emblem whole rather than a crop of it. */
+.progress-card-media[data-placeholder] img {
+  object-fit: contain;
+  padding: 1.25rem;
+  background: color-mix(in srgb, var(--color-forest) 6%, transparent);
+}
+
+.progress-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem;
+}
+
+.progress-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  align-self: flex-start;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  color: var(--color-accent-ink);
+}
+
+.progress-status[data-tone="completed"] {
+  border-color: color-mix(in srgb, var(--color-success) 45%, transparent);
+  background: color-mix(in srgb, var(--color-success) 14%, transparent);
+  color: var(--color-success);
+}
+
+.progress-status[data-tone="critical"] {
+  border-color: color-mix(in srgb, var(--color-danger) 40%, transparent);
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  color: var(--color-danger);
+}
+
+.progress-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.3;
+}
+
+.progress-card-text {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.progress-card-stage {
+  font-size: var(--text-xs);
+}
+
+/* ---- Header: More menu + search ------------------------------------------ */
+
+.nav-more {
+  position: relative;
+}
+
+.nav-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.6rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.nav-more-btn[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+.nav-more-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 60;
+  min-width: 15rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--elevation-3);
+}
+
+.nav-more-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-more-panel a {
+  display: block;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.nav-more-panel a:hover,
+.nav-more-panel a:focus-visible {
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+.nav-drawer-group {
+  margin: 1rem 0 0.25rem;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.nav-drawer-group:first-child {
+  margin-top: 0;
+}
+
+/* ---- Footer -------------------------------------------------------------- */
+
+.footer-about {
+  max-width: 40ch;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+/* ---- Village Services page ----------------------------------------------- */
+
+.services-intro h1 {
+  font-family: var(--font-display);
+  margin: 0.25rem 0 0;
+}
+
+.services-group h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  margin: 0 0 1rem;
+}
+
+.services-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.service-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  height: 100%;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  font-size: var(--text-sm);
+  transition: border-color var(--motion-fast) var(--ease-soft),
+    transform var(--motion-fast) var(--ease-soft);
+}
+
+.service-tile:hover,
+.service-tile:focus-visible {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-line));
+  transform: translateY(-1px);
+}
+
+.service-tile-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-forest) 10%, transparent);
+  color: var(--color-forest);
+}
+
+.dark .service-tile-icon {
+  color: var(--color-accent-soft);
+}
+
+/* ---- Village updates list (Events page) ---------------------------------- */
+
+.village-update-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.9rem;
+}
+
+.village-update-list li article {
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--color-line);
+  border-left: 3px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+}
+
+.village-update-list li[data-important] article {
+  border-left-color: var(--color-accent);
+}
+
+.village-update-list h3 {
+  margin: 0 0 0.25rem;
+  font-size: var(--text-lg);
+  line-height: 1.3;
+}
+
+.village-update-list p {
+  margin: 0.25rem 0 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+/* ---- Responsive ---------------------------------------------------------- */
+
+@media (max-width: 920px) {
+  .village-hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .village-hero-emblem {
+    max-width: 240px;
+  }
+
+  .village-hero-cta {
+    justify-content: center;
+  }
+
+  .home-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-more {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .home-memory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .village-hero-emblem {
+    max-width: 190px;
+  }
+
+  .village-hero-cta .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .community-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-panel-actions .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .village-update-cta {
+    flex: 1 1 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* Never animate the hero or the panels for someone who asked us not to. */
+@media (prefers-reduced-motion: reduce) {
+  .home-memory-tile img,
+  .home-event,
+  .progress-card,
+  .service-tile {
+    transition: none;
+  }
+
+  .home-memory-tile:hover img {
+    transform: none;
+  }
+}
+
+/* ---- Status tones in dark mode -------------------------------------------
+   --color-success and --color-danger are tuned for the light theme and are
+   not overridden in styles/tokens.css. Read on the dark surface they fall to
+   ~2.5:1, so the status pills get their own lightened pair rather than
+   inheriting a colour that cannot be read. */
+
+.dark .home-event-status[data-phase="today"],
+.dark .home-birthday-today,
+.dark .progress-status[data-tone="completed"] {
+  border-color: rgba(126, 205, 160, 0.5);
+  background: rgba(126, 205, 160, 0.16);
+  color: #8fdcb0;
+}
+
+.dark .progress-status[data-tone="critical"] {
+  border-color: rgba(230, 138, 128, 0.5);
+  background: rgba(230, 138, 128, 0.14);
+  color: #f0a49b;
+}
+
+.dark .home-birthday[data-today] {
+  border-color: rgba(126, 205, 160, 0.4);
+}
+
+/* ---- Focus is always visible --------------------------------------------- */
+
+.home-event:focus-visible,
+.home-memory-tile:focus-visible,
+.progress-card:focus-visible,
+.service-tile:focus-visible,
+.nav-more-btn:focus-visible,
+.nav-more-panel a:focus-visible,
+.village-hero-cta .btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ---- Header breakpoint ---------------------------------------------------
+   Seven top-level items plus the action icons need about 1100px before they
+   stop wrapping onto a second row. Below that the drawer carries navigation —
+   it lists the same Explore group first, so nothing becomes harder to reach.
+   The two rules must move together: hiding the links without restoring the
+   menu button would leave a header with no navigation at all. */
+
+@media (max-width: 1099px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-menu-btn {
+    display: grid;
+  }
+}

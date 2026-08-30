@@ -121,6 +121,22 @@ async function makeTransparentMaster() {
 
   await sharp(emblem).png().toFile(path.join(OUT, "logo-master.png"));
   await sharp(emblem).png().toFile(path.join(OUT, "logo-mark.png"));
+
+  // WebP delivery copies. The PNGs stay as the archival masters; these are what
+  // the site actually loads, so the hero lockup costs tens of KB instead of
+  // most of a megabyte.
+  await sharp(trimmed)
+    .resize({ width: 900, withoutEnlargement: true })
+    .webp({ quality: 88 })
+    .toFile(path.join(OUT, "logo-vertical.webp"));
+  await sharp(emblem)
+    .resize(512, 512, { fit: "inside" })
+    .webp({ quality: 90 })
+    .toFile(path.join(OUT, "logo-master.webp"));
+  await sharp(emblem)
+    .resize(192, 192, { fit: "inside" })
+    .webp({ quality: 90 })
+    .toFile(path.join(OUT, "logo-mark.webp"));
   fs.copyFileSync(MASTER, path.join(OUT, "logo-source.png"));
   return path.join(OUT, "logo-master.png");
 }

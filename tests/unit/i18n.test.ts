@@ -52,8 +52,14 @@ describe("translate fallback chain", () => {
     expect(translate("en", "does.not.exist", "Literal")).toBe("Literal");
   });
   it("resolves legacy href keys used by the header and footer", () => {
-    expect(translate("te", "/members/")).toBe("సభ్యులు");
-    expect(translate("en", "/members/")).toBe("Members");
+    // The header labels /members/ "People" and /about/ "Our Village"; the page
+    // headings still read Members and Our Heritage. The aliases are what keeps
+    // those two vocabularies from having to be the same word.
+    expect(translate("en", "/members/")).toBe("People");
+    expect(translate("te", "/members/")).toBe("మన వారు");
+    expect(translate("en", "/about/")).toBe("Our Village");
+    expect(translate("en", "/services/")).toBe("Village Services");
+    expect(translate("en", "nav.members")).toBe("Members");
   });
   it("interpolates and leaves unknown placeholders visible", () => {
     expect(interpolate("{a} and {b}", { a: "1", b: "2" })).toBe("1 and 2");

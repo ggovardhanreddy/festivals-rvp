@@ -1,72 +1,52 @@
-import { allMedia, bucketsWithContent, years } from "@/lib/content";
-import { countByGroup, loadMembers } from "@/lib/members";
-import { loadEvents, upcomingEvents } from "@/lib/events";
+import { bucketsWithContent, latestMemories } from "@/lib/content";
+import { activeMembers } from "@/lib/members";
+import { loadAnnouncements, upcomingEvents } from "@/lib/events";
+import { loadDevelopments } from "@/lib/developments";
 import { toMediaCards } from "@/lib/media-card";
-import { HomeHero } from "@/components/home/HomeHero";
+import { VillageHero } from "@/components/home/VillageHero";
+import { VillageIntro } from "@/components/home/VillageIntro";
+import { VillageProgress } from "@/components/home/VillageProgress";
 import { HomeBelowFold } from "@/components/home/HomeBelowFold";
-import { PlatformHero } from "@/components/platform/PlatformHero";
-import { AudienceDoors } from "@/components/platform/AudienceDoors";
-import { ExploreGrid } from "@/components/platform/ExploreGrid";
-import { PromiseBar } from "@/components/platform/PromiseBar";
 
 /**
  * Shared homepage body, rendered by both `/` and `/te/`.
  *
+ * The front door, not the whole building:
+ *
+ *   hero → village update → our village + our community →
+ *   upcoming events + birthdays → latest memories → village progress
+ *
+ * Services, the audience doors, the explore grid, the full festival calendar,
+ * the culture chapters, gallery filtering, quick actions and the member and
+ * directory listings all still exist — they moved to /services/, /events/,
+ * /about/, /gallery/, /members/ and /directory/, which is where someone
+ * looking for them would go.
+ *
  * Language is not a prop: the shell reads it from the URL through
- * LanguageProvider, so one implementation serves both locales and there is no
- * second copy to keep in sync.
+ * LanguageProvider, so one implementation serves both locales.
  */
 export function HomePage() {
-  const media = allMedia();
-  // HomeGallery renders at most 24 items for any filter combination, so
-  // sending an album's entire run is wasted payload. Cap per album: every
-  // single-bucket / single-year view stays complete, and the tail that could
-  // never be rendered never crosses to the client.
-  const HOME_PER_ALBUM = 24;
-  const perAlbum = new Map<string, number>();
-  const homeImages = media.filter((m) => {
-    if (m.type !== "image" || m.album.bucket === "fun-trips") return false;
-    const key = `${m.album.year}/${m.album.slug}`;
-    const seen = perAlbum.get(key) ?? 0;
-    if (seen >= HOME_PER_ALBUM) return false;
-    perAlbum.set(key, seen + 1);
-    return true;
-  });
-  const galleryItems = toMediaCards(homeImages);
-  const yearList = years();
-  const members = loadMembers();
-  const nextEvents = upcomingEvents(5);
-  const festivals = loadEvents().filter((e) => e.category === "festival");
+  // Only what the homepage renders crosses to the client. The archive is 500+
+  // images; six of them appear here, so six of them are sent.
+  const memories = toMediaCards(latestMemories(6));
+  const members = activeMembers();
+  const nextEvents = upcomingEvents(3);
+  const announcements = loadAnnouncements();
+  const developments = loadDevelopments();
   const liveSlugs = bucketsWithContent();
-
-  const groupCounts = countByGroup();
-  const stats = [
-    { value: groupCounts.legacy, label: "Legacy Circle", icon: "legacy" as const },
-    { value: groupCounts.core, label: "Core Members", icon: "core" as const },
-    { value: groupCounts.nextgen, label: "NextGen", icon: "nextgen" as const },
-    { value: members.length, label: "Total Members", icon: "total" as const },
-  ];
 
   return (
     <main>
-      {/* Platform entry: short hero, universal search, then the six doors and
-          the explore grid. The existing village sections follow underneath so
-          nothing that worked before is lost. */}
-      <PlatformHero />
-      <AudienceDoors />
-      <ExploreGrid />
-      <HomeHero />
+      <VillageHero />
       <HomeBelowFold
-        galleryItems={galleryItems}
-        yearList={yearList}
+        villageIntro={<VillageIntro />}
+        progress={<VillageProgress developments={developments} limit={4} />}
+        announcements={announcements}
         members={members}
         upcomingEvents={nextEvents}
-        festivals={festivals}
-        timeline={[]}
+        memories={memories}
         liveSlugs={liveSlugs}
-        stats={stats}
       />
-      <PromiseBar />
     </main>
   );
 }

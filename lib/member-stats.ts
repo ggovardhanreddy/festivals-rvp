@@ -71,8 +71,34 @@ export type MemberDirectoryStats = {
   byProfession: Record<ProfessionKey, number>;
 };
 
+/** The roster the site publishes: not archived, not retired. */
+export function publishedMembers(members: Member[]): Member[] {
+  return members.filter((m) => !m.archived && !REMOVED_MEMBER_IDS.has(m.id));
+}
+
+export type CommunityStat = {
+  key: "total" | "legacy" | "core" | "nextgen";
+  label: string;
+  value: number;
+};
+
+/**
+ * The four homepage numbers, derived from the roster that is actually
+ * published. Never hard-coded: add a member to members.json (or through the
+ * admin overlay) and these move on the next render.
+ */
+export function communityStats(members: Member[]): CommunityStat[] {
+  const { total, byGroup } = computeMemberStats(members);
+  return [
+    { key: "total", label: "Total Members", value: total },
+    { key: "legacy", label: "Legacy Circle", value: byGroup.legacy },
+    { key: "core", label: "Core Members", value: byGroup.core },
+    { key: "nextgen", label: "Next Generation", value: byGroup.nextgen },
+  ];
+}
+
 export function computeMemberStats(members: Member[]): MemberDirectoryStats {
-  const active = members.filter((m) => !m.archived);
+  const active = publishedMembers(members);
   const byGroup: Record<MemberGroup, number> = {
     legacy: 0,
     core: 0,

@@ -3,16 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Home, BookOpen, Gamepad2, Search, Menu } from "lucide-react";
+import { Home, CalendarDays, Images, Search, Menu } from "lucide-react";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { stripLocale, withLocale } from "@/lib/i18n/config";
+import { stripLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { MoreSheet } from "./MoreSheet";
 
+/**
+ * Four fixed destinations plus More. These mirror the header's priorities —
+ * Learn and Play moved into the More sheet, where every other section already
+ * lives, so the bar reflects what this site is for.
+ */
 const ITEMS = [
-  { id: "home",   href: "/",        labelKey: "nav.home",   Icon: Home },
-  { id: "learn",  href: "/learn/",  labelKey: "nav.learn",  Icon: BookOpen },
-  { id: "play",   href: "/play/",   labelKey: "nav.play",   Icon: Gamepad2 },
-  { id: "search", href: "/search/", labelKey: "nav.search", Icon: Search },
+  { id: "home",   href: "/",         labelKey: "nav.home",       Icon: Home },
+  { id: "events", href: "/events/",  labelKey: "nav.eventsShort", Icon: CalendarDays },
+  { id: "gallery", href: "/gallery/", labelKey: "nav.gallery",   Icon: Images },
+  { id: "search", href: "/search/",  labelKey: "nav.search",     Icon: Search },
 ] as const;
 
 /**
@@ -47,7 +53,7 @@ export function MobileBottomNav() {
             return (
               <li key={id}>
                 <Link
-                  href={withLocale(href, lang)}
+                  href={navHref(href, lang)}
                   data-active={active || undefined}
                   aria-current={active ? "page" : undefined}
                 >

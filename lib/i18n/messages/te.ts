@@ -12,6 +12,12 @@ import type { en } from "./en";
 
 export const te: Partial<Record<keyof typeof en, string>> = {
   // ---- navigation (carried over from lib/i18n-chrome.ts) ---------------
+  "nav.ourVillage": "\u0c2e\u0c28 \u0c17\u0c4d\u0c30\u0c3e\u0c2e\u0c02",
+  "nav.people": "\u0c2e\u0c28 \u0c35\u0c3e\u0c30\u0c41",
+  "nav.eventsShort": "\u0c15\u0c3e\u0c30\u0c4d\u0c2f\u0c15\u0c4d\u0c30\u0c2e\u0c3e\u0c32\u0c41",
+  "nav.villageServices": "\u0c17\u0c4d\u0c30\u0c3e\u0c2e \u0c38\u0c47\u0c35\u0c32\u0c41",
+  "nav.learningEducation": "\u0c1a\u0c26\u0c41\u0c35\u0c41 \u0c2e\u0c30\u0c3f\u0c2f\u0c41 \u0c35\u0c3f\u0c26\u0c4d\u0c2f",
+  "nav.emergencyInfo": "\u0c05\u0c24\u0c4d\u0c2f\u0c35\u0c38\u0c30 \u0c38\u0c2e\u0c3e\u0c1a\u0c3e\u0c30\u0c02",
   "nav.home": "హోమ్",
   "nav.members": "సభ్యులు",
   "nav.heritage": "మన వారసత్వం",

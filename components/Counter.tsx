@@ -3,42 +3,57 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
 
-export function Counter({ value, label }: { value: number; label: string }) {
+/**
+ * Animated statistic.
+ *
+ * The real number is what renders on the server and on first paint — the
+ * count-up is decoration layered on top. Starting at zero and relying on an
+ * IntersectionObserver to reach the truth is how a page ends up telling
+ * visitors the village has 0 members.
+ */
+export function Counter({
+  value,
+  label,
+  id,
+}: {
+  value: number;
+  label: string;
+  id?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
-  // Generous rootMargin so mobile Safari / short viewports still trigger
   const inView = useInView(ref, { once: true, amount: 0.2, margin: "0px 0px -5% 0px" });
   const reduce = useReducedMotion();
-  const [n, setN] = useState(0);
+  const [n, setN] = useState(value);
+  const animated = useRef(false);
 
   useEffect(() => {
-    // Fallback if IntersectionObserver never fires (some WebViews)
-    const fallback = window.setTimeout(() => {
-      setN((prev) => (prev === 0 ? value : prev));
-    }, 1800);
-    return () => window.clearTimeout(fallback);
+    setN(value);
   }, [value]);
 
   useEffect(() => {
-    if (!inView) return;
-
-    if (reduce) {
-      const frame = window.requestAnimationFrame(() => setN(value));
-      return () => window.cancelAnimationFrame(frame);
-    }
+    if (!inView || reduce || animated.current || value <= 0) return;
+    animated.current = true;
 
     let frame = 0;
-    const total = 28;
+    const total = 24;
+    setN(0);
     const id = window.setInterval(() => {
       frame += 1;
       setN(Math.round((value * frame) / total));
-      if (frame >= total) window.clearInterval(id);
-    }, 28);
-    return () => window.clearInterval(id);
+      if (frame >= total) {
+        setN(value);
+        window.clearInterval(id);
+      }
+    }, 26);
+    return () => {
+      window.clearInterval(id);
+      setN(value);
+    };
   }, [inView, value, reduce]);
 
   return (
     <div ref={ref} className="stat-counter">
-      <strong>{n.toLocaleString()}</strong>
+      <strong id={id}>{n.toLocaleString("en-IN")}</strong>
       <span className="muted">{label}</span>
     </div>
   );

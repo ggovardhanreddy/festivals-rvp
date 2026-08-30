@@ -193,7 +193,7 @@ function IntroStages() {
                 <div className="aaa-logo-glow" aria-hidden />
                 <div className="aaa-logo-glass" aria-hidden />
                 <img
-                  src={withBase("/logo/logo-vertical.png")}
+                  src={withBase("/logo/logo-vertical.webp")}
                   alt={SITE_NAME}
                   className="aaa-logo-img"
                   width={640}
@@ -319,7 +319,7 @@ function PostIntroHero() {
         </m.figure>
         <div className="landing-hero-copy festival-copy">
           <img
-            src={withBase("/logo/logo-vertical.png")}
+            src={withBase("/logo/logo-vertical.webp")}
             alt={SITE_NAME}
             className="landing-hero-brand landing-hero-brand-vertical"
             width={140}

@@ -10,6 +10,8 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Member, MemberGroup } from "./types";
 import { monthDay } from "./dates";
+import { daysUntilNextBirthday } from "./member-birthdays";
+import removedMemberIds from "@/content/data/members-removed.json";
 import { resolveMediaUrl } from "./media-url";
 import {
   normalizeStoredGroup,
@@ -32,6 +34,8 @@ export {
 export const MEMBERS_SEED_PATH = "content/data/members.json";
 
 const DATA_PATH = path.join(process.cwd(), MEMBERS_SEED_PATH);
+
+const REMOVED_MEMBER_IDS = new Set<string>(removedMemberIds as string[]);
 
 let cache: Member[] | null = null;
 
@@ -72,21 +76,35 @@ export function membersByGroup(group?: MemberGroup): Member[] {
   return all.filter((m) => resolveMemberGroup(m) === group);
 }
 
+/**
+ * Live counts per group.
+ *
+ * Archived members and ids retired in members-removed.json are excluded, so
+ * this matches exactly what the Members page lists — the homepage can never
+ * advertise a total the People page does not show.
+ */
 export function countByGroup(): Record<MemberGroup, number> {
   const counts: Record<MemberGroup, number> = {
     legacy: 0,
     core: 0,
     nextgen: 0,
   };
-  for (const member of loadMembers()) {
+  for (const member of activeMembers()) {
     counts[resolveMemberGroup(member)] += 1;
   }
   return counts;
 }
 
+/** Members the site actually publishes: not archived, not retired. */
+export function activeMembers(): Member[] {
+  return loadMembers().filter(
+    (m) => !m.archived && !REMOVED_MEMBER_IDS.has(m.id),
+  );
+}
+
 export function todaysBirthdays(date = new Date()): Member[] {
   const key = monthDay(date);
-  return loadMembers().filter((m) => {
+  return activeMembers().filter((m) => {
     if (!m.dob) return false;
     if (/^\d{4}-\d{2}-\d{2}/.test(m.dob)) {
       return m.dob.slice(5, 10) === key;
@@ -96,28 +114,13 @@ export function todaysBirthdays(date = new Date()): Member[] {
 }
 
 export function upcomingBirthdays(withinDays = 30, date = new Date()): Member[] {
-  const members = loadMembers().filter((m) => m.dob);
-  const out: { member: Member; days: number }[] = [];
-  for (const member of members) {
-    if (!member.dob) continue;
-    let mm: number;
-    let dd: number;
-    if (/^\d{4}-\d{2}-\d{2}/.test(member.dob)) {
-      mm = Number(member.dob.slice(5, 7));
-      dd = Number(member.dob.slice(8, 10));
-    } else {
-      [mm, dd] = member.dob.split("-").map(Number);
-    }
-    const next = new Date(date.getFullYear(), (mm || 1) - 1, dd || 1);
-    if (next < new Date(date.getFullYear(), date.getMonth(), date.getDate())) {
-      next.setFullYear(next.getFullYear() + 1);
-    }
-    const days = Math.round(
-      (next.getTime() -
-        new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()) /
-        86400000,
-    );
-    if (days >= 0 && days <= withinDays) out.push({ member, days });
-  }
-  return out.sort((a, b) => a.days - b.days).map((x) => x.member);
+  return activeMembers()
+    .filter((m) => m.dob)
+    .map((member) => ({
+      member,
+      days: daysUntilNextBirthday(member.dob!, date),
+    }))
+    .filter((x) => Number.isFinite(x.days) && x.days >= 0 && x.days <= withinDays)
+    .sort((a, b) => a.days - b.days)
+    .map((x) => x.member);
 }

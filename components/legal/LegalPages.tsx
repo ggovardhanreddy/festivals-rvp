@@ -143,6 +143,16 @@ export function TermsPage() {
             Official notices may reflect Gram Panchayat communications.
           </p>
 
+          <h2 id="disclaimer">Disclaimer</h2>
+          <p>
+            This website is a community archive. Festival dates, directory
+            entries, development statuses and member details are published in
+            good faith and may be incomplete or out of date. Nothing here is an
+            official notification of {OFFICIAL_TITLE} unless it says so, and
+            nothing here should be relied on in place of the relevant office,
+            professional or authority.
+          </p>
+
           <h2>No professional advice</h2>
           <p>
             Directory listings and developments are community information, not

@@ -96,6 +96,11 @@ import { DirectoryHub } from "@/components/directory/DirectoryHub";
 import { EmergencyPage } from "@/components/safety/EmergencyPage";
 import { SafetyPage } from "@/components/safety/SafetyPage";
 import { HUBS, hubBySlug } from "@/lib/directory";
+import { VillageServicesPage } from "@/components/services/VillageServicesPage";
+import { CultureTraditions } from "@/components/home/CultureTraditions";
+import { FestivalCalendar } from "@/components/home/FestivalCalendar";
+import { VillageUpdatesList } from "@/components/events/VillageUpdatesList";
+import { loadAnnouncements, loadEvents } from "@/lib/events";
 
 const BUCKET_ACCENT: Record<
   BucketKey,
@@ -174,6 +179,7 @@ export function generateStaticParams() {
     { slug: ["fun-trips"] },
     { slug: ["privacy"] },
     { slug: ["terms"] },
+    { slug: ["services"] },
   ];
 
   // Games are real pages. Reserved sections get an honest landing page rather
@@ -297,6 +303,14 @@ export async function generateMetadata({
       title: "Gallery",
       description: `Festival and village photo gallery from ${VILLAGE_ALSO_KNOWN_AS} — Vinayaka Chavithi, Sankranthi, temples, and community memories.`,
     },
+    services: {
+      title: "Village Services",
+      description: `Emergency numbers, government services, learning, agriculture and careers for ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat, Sambepalle.`,
+    },
+    about: {
+      title: `Our Village — ${VILLAGE_ALSO_KNOWN_AS}`,
+      description: `${VILLAGE_ALSO_KNOWN_AS} — One Village • One Family • One Heritage. Village history, culture and traditions, agriculture, festivals, temples, and memorials.`,
+    },
     events: {
       title: "Events & Birthdays",
       description: `Upcoming festivals, birthdays, and gatherings in ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat, Sambepalle.`,
@@ -304,10 +318,6 @@ export async function generateMetadata({
     members: {
       title: "Members",
       description: `Meet RVP Youth Legacy, Core, and NextGen members of ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat.`,
-    },
-    about: {
-      title: `About ${VILLAGE_ALSO_KNOWN_AS}`,
-      description: `${VILLAGE_ALSO_KNOWN_AS} — One Village • One Family • One Heritage. Village history, agriculture, festivals, temples, and memorials.`,
     },
     years: {
       title: "Annual Archive",
@@ -694,6 +704,10 @@ export default async function ArchiveRoute({
     );
   }
 
+  if (path === "services") {
+    return <VillageServicesPage />;
+  }
+
   if (path === "settings") {
     return (
       <main className="page">
@@ -745,6 +759,13 @@ export default async function ArchiveRoute({
           liveSlugs={liveSlugs}
           members={loadMembers()}
         />
+        {/* Moved off the homepage: the full annual festival calendar and the
+            announcement archive now live with the rest of the calendar. */}
+        <FestivalCalendar
+          festivals={loadEvents().filter((e) => e.category === "festival")}
+          liveSlugs={liveSlugs}
+        />
+        <VillageUpdatesList announcements={loadAnnouncements()} />
       </main>
     );
   }
@@ -813,6 +834,9 @@ export default async function ArchiveRoute({
           secondaryLabel="Gallery"
         />
         <VillageHeritageStory />
+        {/* Moved off the homepage: the culture and traditions chapters belong
+            with the rest of Our Village. */}
+        <CultureTraditions />
         <Reveal className="section">
           <VillageDepthMap />
         </Reveal>

@@ -49,7 +49,6 @@ export type RouteEntry = {
  * tests/unit/routes.test.ts.
  */
 export const LIVE_ROUTES: RouteEntry[] = [
-  { path: "/ai/",            section: "ai",         labelKey: "nav.ai",            status: "live",  hasTelugu: true },
   { path: "/",              section: "village",   labelKey: "nav.home",            status: "live", hasTelugu: true },
   { path: "/about/",        section: "heritage",  labelKey: "nav.heritage",        status: "live", hasTelugu: false },
   { path: "/heritage/",     section: "heritage",  labelKey: "nav.heritageArchive", status: "live", hasTelugu: false },
@@ -65,6 +64,7 @@ export const LIVE_ROUTES: RouteEntry[] = [
   { path: "/lost-found/",   section: "community", labelKey: "nav.lostFound",       status: "live", hasTelugu: false },
   { path: "/documents/",    section: "community", labelKey: "nav.documents",       status: "live", hasTelugu: false },
   { path: "/contact/",      section: "community", labelKey: "nav.contact",         status: "live", hasTelugu: false },
+  { path: "/services/",     section: "utility",   labelKey: "nav.villageServices", status: "live", hasTelugu: false },
   { path: "/search/",       section: "utility",   labelKey: "nav.search",          status: "live", hasTelugu: true,  noindex: true },
   { path: "/settings/",     section: "utility",   labelKey: "nav.settings",        status: "live", hasTelugu: false, noindex: true },
   { path: "/offline/",      section: "utility",   labelKey: "error.offline.title", status: "live", hasTelugu: false, noindex: true },
@@ -116,12 +116,12 @@ export const FESTIVAL_SECTION: SectionId = "temples";
  * shape without anyone fabricating a placeholder page.
  */
 export const PLANNED_ROUTES: RouteEntry[] = [
-  { path: "/explore/",       section: "village",     labelKey: "nav.explore",       status: "live", hasTelugu: false, plannedPhase: "1B" },
-  { path: "/english/",       section: "english",     labelKey: "nav.english",       status: "live", hasTelugu: false, plannedPhase: "3" },
-  { path: "/engineering/",   section: "engineering", labelKey: "nav.engineering",   status: "live", hasTelugu: false, plannedPhase: "3" },
-  { path: "/it/",            section: "it",          labelKey: "nav.it",            status: "live", hasTelugu: false, plannedPhase: "3" },
-  { path: "/temples/",       section: "temples",     labelKey: "nav.temples",       status: "live", hasTelugu: false, plannedPhase: "5" },
-  { path: "/community/",     section: "community",   labelKey: "nav.community",     status: "live", hasTelugu: false, plannedPhase: "5" },
+  { path: "/explore/",       section: "village",     labelKey: "nav.explore",       status: "planned", hasTelugu: false, plannedPhase: "1B" },
+  { path: "/english/",       section: "english",     labelKey: "nav.english",       status: "planned", hasTelugu: false, plannedPhase: "3" },
+  { path: "/engineering/",   section: "engineering", labelKey: "nav.engineering",   status: "planned", hasTelugu: false, plannedPhase: "3" },
+  { path: "/it/",            section: "it",          labelKey: "nav.it",            status: "planned", hasTelugu: false, plannedPhase: "3" },
+  { path: "/temples/",       section: "temples",     labelKey: "nav.temples",       status: "planned", hasTelugu: false, plannedPhase: "5" },
+  { path: "/community/",     section: "community",   labelKey: "nav.community",     status: "planned", hasTelugu: false, plannedPhase: "5" },
 ];
 
 export const ALL_ROUTES: RouteEntry[] = [...LIVE_ROUTES, ...PLANNED_ROUTES];
@@ -160,4 +160,18 @@ export function localeAlternate(path: string, target: Locale): { href: string; e
     return { href: `/te${entry.path}`, exact: true };
   }
   return { href: "/te/", exact: false };
+}
+
+/**
+ * Href for a navigation item in a given locale.
+ *
+ * `withLocale` prefixes /te/ unconditionally, which is right for a language
+ * switcher and wrong for navigation: it produced links like /te/events/ and
+ * /te/gallery/ for pages that have no Telugu version, so a Telugu visitor
+ * tapping Events got a 404. Here the registry decides — a locale prefix is
+ * only added when a Telugu page genuinely exists.
+ */
+export function navHref(path: string, locale: Locale): string {
+  if (locale === "en") return path;
+  return findRoute(path)?.hasTelugu ? `/te${path}` : path;
 }
