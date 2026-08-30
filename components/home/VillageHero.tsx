@@ -73,12 +73,13 @@ export function VillageHero() {
           <m.p className="village-hero-support" {...rise(0.18)}>
             {HOME_HERO_SUPPORT}
           </m.p>
+          {/* One call to action. The badge, the pillars and the motto line
+              already say "heritage" three times; a second button saying it a
+              fourth was a duplicate, not a choice. The Heritage Archive is
+              reachable from Our Village and from the More menu. */}
           <m.div className="village-hero-cta" {...rise(0.24)}>
             <Link className="btn" href="/about/">
               Explore Our Village <span aria-hidden>→</span>
-            </Link>
-            <Link className="btn ghost" href="/heritage/">
-              Our Heritage <span aria-hidden>→</span>
             </Link>
           </m.div>
         </div>

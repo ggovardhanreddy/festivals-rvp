@@ -255,6 +255,9 @@ export function SiteHeader() {
           )}
 
           <p className="nav-drawer-group">Tools</p>
+          {/* The header hides the language switcher on narrow screens so the
+              menu button fits; this is where it goes instead, not away. */}
+          <LanguageSwitcher className="nav-drawer-lang" />
           <Link href="/search/" onClick={(event) => onDrawerNav(event, "/search/")}>
             {t("/search/")}
           </Link>

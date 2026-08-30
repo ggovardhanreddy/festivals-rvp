@@ -179,7 +179,14 @@ select {
   place-items: center;
   pointer-events: none;
   user-select: none;
-  opacity: 0.11;
+  /* The badge is a full-colour illustration, not the flat mark this was built
+     for. At 11% colour you could read "COMMUNITY" through the page and the
+     multiply blend darkened unevenly behind cards. Desaturated and taken well
+     down, it reads as paper texture instead of a picture behind the text. */
+  opacity: 0.06;
+  /* Blur is what makes it a watermark rather than a picture: without it the
+     wordmark stays legible through the page and reads as a mistake. */
+  filter: grayscale(1) blur(3px);
   mix-blend-mode: multiply;
 }
 
@@ -205,17 +212,17 @@ select {
 }
 
 .dark .logo-watermark {
-  opacity: 0.12;
+  opacity: 0.07;
   mix-blend-mode: soft-light;
 }
 
-/* On home, keep watermark over Vanta but below hero copy */
-body:has(.home-hero) .logo-watermark {
-  opacity: 0.1;
+/* The homepage hero is its own dark panel; the watermark must not fight it. */
+body:has(.village-hero) .logo-watermark {
+  opacity: 0.04;
 }
 
-html.dark body:has(.home-hero) .logo-watermark {
-  opacity: 0.12;
+html.dark body:has(.village-hero) .logo-watermark {
+  opacity: 0.06;
 }
 
 @media (max-width: 820px) {
@@ -225,17 +232,17 @@ html.dark body:has(.home-hero) .logo-watermark {
   }
 
   .logo-watermark {
-    opacity: 0.1;
+    opacity: 0.05;
   }
 
-  body:has(.home-hero) .logo-watermark {
-    opacity: 0.09;
+  body:has(.village-hero) .logo-watermark {
+    opacity: 0.04;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .logo-watermark {
-    opacity: 0.08;
+    opacity: 0.03;
   }
 }
 
@@ -11840,11 +11847,29 @@ body {
 
 .village-hero-copy {
   min-width: 0;
+  /* An inline-size container takes its width from its parent, never from its
+     content — so it MUST be stretched. Under the centred mobile grid
+     (justify-items: center) the item is content-sized, the container measured
+     0, and 10.5cqw resolved to nothing. */
+  width: 100%;
+  /* Makes this column the sizing basis for the title below. It also stops the
+     h1's min-content width from stretching the grid track, which is what let
+     an unbreakable 14-letter word push the hero wider than the screen. */
+  container-type: inline-size;
 }
 
 .village-hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 7vw, 4.4rem);
+  /* REDDIVARIPALLI is one 14-character word that cannot break, and in Playfair
+     it measures 8.77x the font size. What it has to fit inside is the copy
+     COLUMN, not the viewport — between 921px and 1280px the hero is two
+     columns, so at 1024px the column is 531px while a vw-based clamp was still
+     handing it a 70px font that needs 616px. Sizing on cqw ties the type to
+     the box it actually lives in; 10.5cqw leaves about 8% slack at every
+     width. The vw line above it is the fallback for browsers without
+     container queries, tuned to fit that same 1024px column. */
+  font-size: clamp(1.6rem, 5.4vw, 3.4rem);
+  font-size: clamp(1.6rem, 10.5cqw, 4.4rem);
   line-height: 1.02;
   letter-spacing: 0.04em;
   margin: 0;
@@ -11975,6 +12000,15 @@ body {
   max-width: 60ch;
 }
 
+/* The village description is the one paragraph of prose on the homepage and
+   sits alone in its panel. Setting it as a lead paragraph gives the card the
+   weight the statistics grid opposite it has, without adding anything to it. */
+.home-village .home-panel-lede {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-ink);
+}
+
 .home-panel-actions {
   display: flex;
   flex-wrap: wrap;
@@ -12009,34 +12043,6 @@ body {
 }
 
 /* ---- Our Village --------------------------------------------------------- */
-
-.home-village-alt {
-  margin: 0.6rem 0 0;
-  font-size: var(--text-sm);
-}
-
-.home-heritage-teaser {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  margin-top: 1.25rem;
-  padding: 0.9rem 1rem;
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-forest) 7%, transparent);
-}
-
-.home-heritage-teaser p {
-  margin: 0;
-  font-size: var(--text-sm);
-  line-height: var(--leading-normal);
-}
-
-.home-heritage-teaser-mark {
-  flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-}
 
 /* ---- Our Community ------------------------------------------------------- */
 
@@ -12386,6 +12392,35 @@ body {
   font-size: var(--text-xs);
 }
 
+/* One project should read as a feature, not as a tile that got stretched.
+   With `repeat(auto-fit, minmax(260px, 1fr))` a lone card fills the full
+   1180px column and its 16:9 media becomes a ~660px-tall photograph — the
+   single most prominent thing on the page, for one road repair. Laid on its
+   side it keeps the same information at a sane size. */
+@media (min-width: 721px) {
+  .progress-grid[data-count="1"] .progress-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .progress-grid[data-count="1"] .progress-card-media {
+    flex: 0 0 38%;
+    aspect-ratio: auto;
+  }
+
+  .progress-grid[data-count="1"] .progress-card-body {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: clamp(1rem, 3vw, 2rem);
+  }
+
+  .progress-grid[data-count="1"] .progress-card-text {
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    max-width: 70ch;
+  }
+}
+
 /* ---- Header: More menu + search ------------------------------------------ */
 
 .nav-more {
@@ -12681,4 +12716,34 @@ body {
   .nav-menu-btn {
     display: grid;
   }
+}
+
+/* ---- Header action row must always leave room for the menu button --------
+   `.nav-actions` children are flex-shrink:0, so the row keeps its full width
+   whatever the viewport and simply runs off the edge — and because
+   `html { overflow-x: hidden }` clips it, nothing looks wrong while the menu
+   button sits outside the screen. Measured at 320px it landed at x=372–416:
+   entirely off-screen and not tappable, which leaves a phone with no way into
+   the navigation at all.
+
+   The fix is to drop the controls that are duplicated elsewhere, not to shrink
+   tap targets below 44px. Search is a tab in the bottom nav and a link in the
+   drawer; the language switcher moves into the drawer; theme lives on
+   /settings/ and follows the auto day/night sync in the meantime. */
+
+@media (max-width: 1099px) {
+  .nav-search-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .nav-actions .nav-lang,
+  .nav-actions .theme-toggle {
+    display: none;
+  }
+}
+
+.nav-drawer-lang {
+  margin: 0.25rem 0 0.5rem;
 }

@@ -40,7 +40,7 @@ export function VillageProgress({
         </Link>
       </div>
 
-      <ul className="progress-grid">
+      <ul className="progress-grid" data-count={shown.length}>
         {shown.map((project) => {
           const meta = STATUS_META[project.status];
           const image = project.images?.[0];
