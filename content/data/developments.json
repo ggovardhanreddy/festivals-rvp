@@ -14,7 +14,9 @@
       "construction",
       "completion"
     ],
-    "images": ["/brand/rama-navami-hero.webp"],
+    "images": [
+      "/brand/rama-navami-hero.webp"
+    ],
     "milestones": [
       {
         "date": "2025-01-01",
@@ -31,6 +33,7 @@
         "title": "Critical decision stage",
         "description": "The project remains in planning — awaiting collective commitments, fundraising clarity, and formal approvals before any construction begins."
       }
-    ]
+    ],
+    "summary": "Community planning and discussions are currently underway."
   }
 ]

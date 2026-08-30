@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 import {
   ENGLISH_ALPHABET,
@@ -34,7 +34,7 @@ export function AlphabetRoute() {
     <main className="page abc-page">
       <div className="section abc-head">
         <p className="eyebrow">
-          <Link href={withLocale("/kids/", lang)}>{t("nav.kids")}</Link>
+          <Link href={navHref("/kids/", lang)}>{t("nav.kids")}</Link>
         </p>
         <span className="kids-intro-icon" aria-hidden>
           <SectionIcon name="letter" size={32} />

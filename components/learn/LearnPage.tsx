@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 
 type Course = { id: string; title: { en: string; te?: string }; summary?: { en: string; te?: string } };
@@ -44,7 +44,7 @@ export function LearnPage({ courses }: { courses: Course[] }) {
         <ul className="kids-grid">
           {ready.map((a) => (
             <li key={a.id}>
-              <Link className="kids-card" href={withLocale(a.href, lang)}>
+              <Link className="kids-card" href={navHref(a.href, lang)}>
                 <span className="kids-card-icon" aria-hidden>
                   <SectionIcon name={a.icon} size={26} />
                 </span>

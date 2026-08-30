@@ -495,20 +495,25 @@ function BucketPage({ bucket }: { bucket: BucketKey }) {
 
         {!albums.length && (
           <Reveal className="section">
+            {/* This is what a villager sees on a festival page with no album
+                yet. It used to read "Add photos under content/<YEAR>/dasara/
+                and rebuild" with a button to /admin/ — a build instruction and
+                a staff link, shown to the public. */}
             <EmptyState
+              eyebrow="Archive"
               title={
                 bucket === "rvp-birthdays"
-                  ? "Birthday gallery coming soon"
-                  : "Photos coming soon"
+                  ? "No birthday albums yet"
+                  : "No photographs yet"
               }
               description={
                 bucket === "rvp-birthdays"
-                  ? "Birthday albums will appear here as photos are added under content/<YEAR>/rvp-birthdays/."
-                  : `Add photos under content/<YEAR>/${bucket}/ and rebuild.`
+                  ? "Birthday albums appear here as families share their photographs with the village archive."
+                  : `Photographs from ${meta.title} will appear here once they are added to the village archive.`
               }
-              actionHref={bucket === "rvp-birthdays" ? "/events/?tab=birthdays" : "/admin/"}
+              actionHref={bucket === "rvp-birthdays" ? "/events/?tab=birthdays" : "/gallery/"}
               actionLabel={
-                bucket === "rvp-birthdays" ? "View birthdays" : "CMS guide"
+                bucket === "rvp-birthdays" ? "View birthdays" : "Browse the gallery"
               }
             />
           </Reveal>

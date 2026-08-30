@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 import { isPublished, ordered, type LearningItem } from "@/lib/learning";
 import { LibraryCard } from "./LibraryCard";
@@ -58,7 +58,7 @@ export function LibrarySection({
     <main className="page library-page">
       <div className="section library-head">
         <p className="eyebrow">
-          <Link href={withLocale("/kids/", lang)}>{t("nav.kids")}</Link>
+          <Link href={navHref("/kids/", lang)}>{t("nav.kids")}</Link>
         </p>
         <span className="kids-intro-icon" aria-hidden>
           <SectionIcon name={icon} size={32} />

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { POPULAR_SEARCHES } from "@/lib/platform/doors";
 import { UniversalSearchBar } from "./UniversalSearchBar";
 
@@ -42,7 +42,7 @@ export function PlatformHero() {
               <li key={p.key}>
                 <Link
                   className="pf-chip"
-                  href={`${withLocale("/search/", lang)}?q=${encodeURIComponent(p.query)}`}
+                  href={`${navHref("/search/", lang)}?q=${encodeURIComponent(p.query)}`}
                 >
                   {t(p.key)}
                 </Link>

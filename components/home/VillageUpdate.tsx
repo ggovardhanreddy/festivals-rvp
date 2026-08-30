@@ -47,8 +47,14 @@ export function VillageUpdate({ seed }: { seed: Announcement[] }) {
           ) : null}
           {date ? <p className="village-update-date muted">{date}</p> : null}
         </div>
-        <Link className="btn ghost village-update-cta" href="/events/#updates">
-          View All Updates <span aria-hidden>→</span>
+        {/* A notice can carry its own destination — the contact notice sends
+            people to Contact rather than to a list of notices. Everything else
+            falls back to the full list. */}
+        <Link
+          className="btn ghost village-update-cta"
+          href={announcement.href || "/events/#updates"}
+        >
+          {announcement.cta || "View All Updates"} <span aria-hidden>→</span>
         </Link>
       </div>
     </section>

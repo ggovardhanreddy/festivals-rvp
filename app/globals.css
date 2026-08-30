@@ -12240,6 +12240,17 @@ body {
   gap: clamp(0.5rem, 1.6vw, 0.9rem);
 }
 
+/* One or two photographs should not sit in a three-column grid with the rest
+   of the row empty — that reads as images that failed to load. */
+.home-memory-grid[data-count="1"] {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 620px;
+}
+
+.home-memory-grid[data-count="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .home-memory-tile {
   position: relative;
   display: block;
@@ -12382,14 +12393,23 @@ body {
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
   display: -webkit-box;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
+  /* A homepage card summarises; three lines is the cap even if a project has
+     no summary and falls back to its full description. */
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.progress-card-stage {
-  font-size: var(--text-xs);
+.progress-card-cta {
+  margin-top: 0.35rem;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-ink);
+}
+
+.progress-card:hover .progress-card-cta {
+  text-decoration: underline;
 }
 
 /* One project should read as a feature, not as a tile that got stretched.
@@ -12415,8 +12435,6 @@ body {
   }
 
   .progress-grid[data-count="1"] .progress-card-text {
-    -webkit-line-clamp: 6;
-    line-clamp: 6;
     max-width: 70ch;
   }
 }

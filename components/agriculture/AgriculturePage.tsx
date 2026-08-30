@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 import { OfficialLinkList } from "@/components/directory/OfficialLink";
 import { byIds } from "@/lib/directory";
@@ -129,9 +129,9 @@ export function AgriculturePage({
         <p className="muted">{t("agri.official.body")}</p>
         <OfficialLinkList items={farming} />
         <p className="muted">
-          <Link href={withLocale("/farmers/", lang)}>{t("farmers.title")}</Link>
+          <Link href={navHref("/farmers/", lang)}>{t("farmers.title")}</Link>
           {" · "}
-          <Link href={withLocale("/government/", lang)}>{t("gov.title")}</Link>
+          <Link href={navHref("/government/", lang)}>{t("gov.title")}</Link>
         </p>
       </section>
     </main>

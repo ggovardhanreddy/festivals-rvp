@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 import { byIds } from "@/lib/directory";
 import { OfficialLinkList } from "@/components/directory/OfficialLink";
@@ -60,7 +60,7 @@ export function SafetyPage() {
         <p className="muted">{t("safety.report.body")}</p>
         <OfficialLinkList items={report} />
         <p className="muted">
-          <Link href={withLocale("/emergency/", lang)}>{t("emergency.title")}</Link>
+          <Link href={navHref("/emergency/", lang)}>{t("emergency.title")}</Link>
         </p>
       </section>
     </main>

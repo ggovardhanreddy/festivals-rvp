@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import {
   ENGLISH_ALPHABET,
   TELUGU_CONSONANTS,
@@ -40,7 +40,7 @@ export function KidsRoute({ slug }: { slug: ActivitySlug }) {
     <main className="page kids-page">
       <div className="section">
         <p className="eyebrow">
-          <Link href={withLocale("/kids/", lang)}>{t("nav.kids")}</Link>
+          <Link href={navHref("/kids/", lang)}>{t("nav.kids")}</Link>
         </p>
         <h1>{t(TITLE_KEY[slug])}</h1>
         <p className="lede">{t(DESC_KEY[slug])}</p>

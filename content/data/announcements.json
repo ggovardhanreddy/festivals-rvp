@@ -9,9 +9,11 @@
   {
     "id": "contact-inbox-2026",
     "title": "Community inbox is open",
-    "body": "Reach RVP Youth at reddivaripalli.rvp@gmail.com via the Contact page, or visit Ramalayam using the map link.",
+    "body": "Have a suggestion or need to reach the community?",
     "date": "2026-08-04",
-    "important": true
+    "important": true,
+    "href": "/contact/",
+    "cta": "Contact Us"
   },
   {
     "id": "ramalayam-dev-2026",

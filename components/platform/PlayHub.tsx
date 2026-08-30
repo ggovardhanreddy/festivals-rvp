@@ -4,7 +4,7 @@ import Link from "next/link";
 import { GAMES } from "@/lib/platform/games";
 import { loadProfile, resetProfile, BADGES, type PlayerProfile } from "@/lib/platform/player";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "./SectionIcon";
 import { useEffect, useState } from "react";
 
@@ -48,7 +48,7 @@ export function PlayHub() {
       ) : null}
 
       <section className="section">
-        <Link className="daily-card" href={withLocale("/play/daily/", lang)}>
+        <Link className="daily-card" href={navHref("/play/daily/", lang)}>
           <span className="daily-card-icon" aria-hidden>
             <SectionIcon name="question" size={26} />
           </span>
@@ -65,7 +65,7 @@ export function PlayHub() {
         <ul className="game-grid">
           {GAMES.map((g) => (
             <li key={g.id}>
-              <Link className="game-card" href={withLocale(`/play/${g.slug}/`, lang)}>
+              <Link className="game-card" href={navHref(`/play/${g.slug}/`, lang)}>
                 <span className="game-card-icon" aria-hidden>
                   <SectionIcon name={g.icon} size={28} />
                 </span>

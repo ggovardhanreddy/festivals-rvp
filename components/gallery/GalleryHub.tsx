@@ -444,8 +444,8 @@ export function GalleryHub({
             </div>
           ) : (
             <p className="muted">
-              Photos for {activeFest.title} are coming soon. Add media under{" "}
-              <code>content/&lt;YEAR&gt;/{activeFest.buckets[0]}/</code>.
+              No photographs from {activeFest.title} have been added to the
+              archive yet.
             </p>
           )}
         </section>

@@ -25,6 +25,7 @@ export function NotificationBell() {
         type="button"
         className="notif-bell-btn"
         aria-label={unread ? `${unread} unread notifications` : "Notifications"}
+        title={unread ? `${unread} unread notifications` : "Notifications"}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >

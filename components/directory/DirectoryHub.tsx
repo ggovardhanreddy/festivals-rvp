@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useState } from "react";
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 import {
   DIRECTORY,
@@ -105,7 +105,7 @@ export function DirectoryHub({ hub }: { hub: HubDef }) {
         <div className="section">
           <p className="careers-empty">{t("gov.noMatch")}</p>
           <p className="muted">
-            <Link href={withLocale("/search/", lang)}>{t("search.title")}</Link>
+            <Link href={navHref("/search/", lang)}>{t("search.title")}</Link>
           </p>
         </div>
       ) : null}

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { EXPLORE_TILES, isReady } from "@/lib/platform/doors";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "./SectionIcon";
 
 export function ExploreGrid() {
@@ -21,7 +21,7 @@ export function ExploreGrid() {
           <li key={tile.id}>
             <Link
               className="explore-tile"
-              href={withLocale(tile.href, lang)}
+              href={navHref(tile.href, lang)}
               data-pending={isReady(tile.href) ? undefined : true}
             >
               <span className="explore-tile-icon" aria-hidden>

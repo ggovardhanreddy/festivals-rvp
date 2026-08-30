@@ -146,7 +146,7 @@ export function buildNotifications(input: {
           image: event.image,
           dayKey,
           popup: true,
-          banner: "Coming soon",
+          banner: "In 2 days",
         });
       }
       continue;

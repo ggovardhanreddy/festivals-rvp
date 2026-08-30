@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 import { byIds } from "@/lib/directory";
 import { OfficialLinkList } from "@/components/directory/OfficialLink";
@@ -57,7 +57,6 @@ export function DigitalSkillsPage({
         </span>
         <h1>{t("digital.title")}</h1>
         <p className="lede">{t("digital.notLaunched")}</p>
-        <p className="muted digital-phase">{t("section.plannedPhase", undefined, { phase: "5" })}</p>
       </div>
 
       <section className="section" aria-labelledby="digital-plan">
@@ -85,7 +84,7 @@ export function DigitalSkillsPage({
           <ul className="libgrid">
             {published.map((c) => (
               <li key={c.id}>
-                <Link className="libcard" href={withLocale(`/digital-skills/${c.slug}/`, lang)}>
+                <Link className="libcard" href={navHref(`/digital-skills/${c.slug}/`, lang)}>
                   <span className="libcard-body">
                     <strong className="libcard-title">{text(c.title, lang)}</strong>
                     <span className="libcard-desc">{text(c.description, lang)}</span>
@@ -101,7 +100,7 @@ export function DigitalSkillsPage({
         <section className="section">
           <h2>{t("kids.videos")}</h2>
           <p className="muted">
-            <Link href={withLocale("/kids/videos/", lang)}>{t("common.viewAll")}</Link>
+            <Link href={navHref("/kids/videos/", lang)}>{t("common.viewAll")}</Link>
           </p>
         </section>
       ) : null}
@@ -111,9 +110,9 @@ export function DigitalSkillsPage({
         <p className="muted">{t("digital.useNow.body")}</p>
         <OfficialLinkList items={byIds(["skillindia", "digilocker", "sanchar-saathi"])} />
         <p className="muted">
-          <Link href={withLocale("/safety/", lang)}>{t("safety.title")}</Link>
+          <Link href={navHref("/safety/", lang)}>{t("safety.title")}</Link>
           {" · "}
-          <Link href={withLocale("/government/", lang)}>{t("gov.title")}</Link>
+          <Link href={navHref("/government/", lang)}>{t("gov.title")}</Link>
         </p>
       </section>
     </main>

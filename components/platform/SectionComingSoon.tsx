@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "./SectionIcon";
 
 /**
@@ -16,12 +16,16 @@ import { SectionIcon } from "./SectionIcon";
 export function SectionComingSoon({
   titleKey,
   icon,
-  phase,
   alternatives,
 }: {
   titleKey: string;
   icon: string;
-  phase: string;
+  /**
+   * Kept so the registry can go on recording which phase a section belongs to,
+   * but never rendered: "Planned for phase 3" is our roadmap, not something a
+   * villager can act on.
+   */
+  phase?: string;
   alternatives: { href: string; labelKey: string }[];
 }) {
   const { t, lang } = useUiLang();
@@ -35,9 +39,6 @@ export function SectionComingSoon({
         </span>
         <h1>{t("section.notYet.title", undefined, { section: title })}</h1>
         <p className="lede">{t("section.notYet.body")}</p>
-        <p className="muted section-soon-phase">
-          {t("section.plannedPhase", undefined, { phase })}
-        </p>
 
         {alternatives.length ? (
           <>
@@ -45,7 +46,7 @@ export function SectionComingSoon({
             <ul className="section-soon-alts">
               {alternatives.map((a) => (
                 <li key={a.href}>
-                  <Link className="btn ghost" href={withLocale(a.href, lang)}>
+                  <Link className="btn ghost" href={navHref(a.href, lang)}>
                     {t(a.labelKey)}
                   </Link>
                 </li>

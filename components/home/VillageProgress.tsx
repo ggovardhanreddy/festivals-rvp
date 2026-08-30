@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { withBase } from "@/lib/base";
-import { STATUS_META, stageLabel } from "@/lib/development-status";
+import { STATUS_META } from "@/lib/development-status";
 import type { Development } from "@/lib/types";
 
 const FALLBACK_IMAGE = "/logo/logo-mark.webp";
@@ -31,9 +31,6 @@ export function VillageProgress({
         <div>
           <p className="eyebrow">Developments</p>
           <h2 id="home-progress-heading">Village Progress</h2>
-          <p className="home-panel-lede">
-            Building a better tomorrow for future generations.
-          </p>
         </div>
         <Link className="btn ghost" href="/developments/">
           View All Developments <span aria-hidden>→</span>
@@ -66,14 +63,15 @@ export function VillageProgress({
                     {meta?.label ?? project.status}
                   </span>
                   <span className="progress-card-title">{project.title}</span>
+                  {/* Summary, not description. The full account of a project —
+                      stages, milestones, what it needs from the village — is
+                      what the Developments page is for. */}
                   <span className="progress-card-text muted">
                     {project.summary || project.description}
                   </span>
-                  {project.currentStage ? (
-                    <span className="progress-card-stage muted">
-                      Current stage: {stageLabel(project.currentStage)}
-                    </span>
-                  ) : null}
+                  <span className="progress-card-cta">
+                    View Project <span aria-hidden>→</span>
+                  </span>
                 </span>
               </Link>
             </li>

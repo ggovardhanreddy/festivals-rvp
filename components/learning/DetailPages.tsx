@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import {
   isPlayable,
   mediaUrl,
@@ -36,7 +36,7 @@ function Back({ href, labelKey }: { href: string; labelKey: string }) {
   const { t, lang } = useUiLang();
   return (
     <p className="eyebrow">
-      <Link href={withLocale(href, lang)}>{t(labelKey)}</Link>
+      <Link href={navHref(href, lang)}>{t(labelKey)}</Link>
     </p>
   );
 }
@@ -234,7 +234,7 @@ export function VideoDetail({ video, related }: { video: VideoItem; related: Vid
           <ul className="libgrid">
             {related.map((r) => (
               <li key={r.id}>
-                <Link className="libcard" href={withLocale(`/kids/videos/${r.slug}/`, lang)}>
+                <Link className="libcard" href={navHref(`/kids/videos/${r.slug}/`, lang)}>
                   <span className="libcard-body">
                     <strong className="libcard-title">{text(r.title, lang)}</strong>
                   </span>

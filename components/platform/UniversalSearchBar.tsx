@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Search, Mic, X } from "lucide-react";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { LOCALE_TAG } from "@/lib/i18n/config";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { getSpeechRecognition, type SpeechRecognitionLike } from "@/lib/voice";
 
 /**
@@ -39,7 +39,7 @@ export function UniversalSearchBar({
     event.preventDefault();
     const q = value.trim();
     if (!q) return;
-    router.push(`${withLocale("/search/", lang)}?q=${encodeURIComponent(q)}`);
+    router.push(`${navHref("/search/", lang)}?q=${encodeURIComponent(q)}`);
   }
 
   function toggleVoice() {

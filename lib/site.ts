@@ -178,13 +178,19 @@ export const MORE_NAV = [
  */
 export const COMMUNITY_NAV = MORE_NAV;
 
-/** Footer column: community pages. */
+/**
+ * Footer column: community pages.
+ *
+ * Fun Fest is deliberately absent. It is member-gated and noindex — a visitor
+ * who follows it from the footer gets a login dialog, and a search engine that
+ * follows it gets a page we asked it not to index. It stays in the More menu,
+ * where the people who have an account will look for it.
+ */
 export const FOOTER_COMMUNITY = [
   { href: "/directory/", label: "Directory" },
   { href: "/heritage/", label: "Heritage Archive" },
   { href: "/timeline/", label: "Timeline" },
   { href: "/suggestions/", label: "Suggestions" },
-  { href: "/fun-trips/", label: "Fun Fest" },
   { href: "/contact/", label: "Contact" },
 ] as const;
 

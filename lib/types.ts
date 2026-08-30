@@ -106,6 +106,13 @@ export type Announcement = {
   body: string;
   date: string;
   important?: boolean;
+  /**
+   * Optional call to action for this specific notice. Without it the homepage
+   * band links to the full list, which is the right default — an announcement
+   * about a festival should not send people to the contact form.
+   */
+  href?: string;
+  cta?: string;
 };
 
 export type Media = {

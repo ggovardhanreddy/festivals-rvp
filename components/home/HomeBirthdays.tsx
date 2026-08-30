@@ -87,7 +87,7 @@ export function HomeBirthdays({
         </ul>
       ) : (
         <p className="home-empty">
-          Birthday dates appear here as they are added for each member.
+          No birthdays are coming up just now.
         </p>
       )}
 

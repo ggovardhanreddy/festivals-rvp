@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import type { PlayerProfile } from "@/lib/platform/player";
 
 export function GameShell({
@@ -24,7 +24,7 @@ export function GameShell({
     <main className="page game-page">
       <div className="game-head">
         <div>
-          <Link className="game-back" href={withLocale("/play/", lang)}>
+          <Link className="game-back" href={navHref("/play/", lang)}>
             &larr; {t("nav.play")}
           </Link>
           <h1>{t(titleKey)}</h1>

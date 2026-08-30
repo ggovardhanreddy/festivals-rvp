@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AUDIENCE_DOORS, isReady } from "@/lib/platform/doors";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { withLocale } from "@/lib/i18n/config";
+import { navHref } from "@/lib/routes/registry";
 import { SectionIcon } from "./SectionIcon";
 
 export function AudienceDoors() {
@@ -18,7 +18,7 @@ export function AudienceDoors() {
           <li key={door.id}>
             <Link
               className="door-card"
-              href={withLocale(door.href, lang)}
+              href={navHref(door.href, lang)}
               data-door={door.id}
               data-pending={isReady(door.href) ? undefined : true}
             >
