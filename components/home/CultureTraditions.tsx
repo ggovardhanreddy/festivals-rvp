@@ -9,13 +9,21 @@ import {
 } from "@/lib/festivals";
 import { Reveal } from "@/components/Reveal";
 
+/**
+ * Visual index of the festival chapters.
+ *
+ * Lives on Our Village, below the written Culture & Traditions section — the
+ * prose is the account, this is the way in to each chapter's own page. It does
+ * not repeat the heading or the id of that section: two "Culture & Traditions"
+ * blocks on one page, both anchored at #culture, is what this used to be.
+ */
 export function CultureTraditions() {
   return (
-    <Reveal className="section culture-traditions" id="culture">
+    <Reveal className="section culture-traditions" id="festival-chapters">
       <div className="section-head">
         <div>
           <p className="eyebrow">Village life</p>
-          <h2>Our Culture &amp; Traditions</h2>
+          <h2>Festival Chapters</h2>
           <p className="lede">{CULTURE_DESCRIPTION}</p>
         </div>
       </div>
