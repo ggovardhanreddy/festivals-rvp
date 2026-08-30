@@ -273,6 +273,29 @@ export const BUCKETS = [
 
 export type BucketKey = (typeof BUCKETS)[number]["key"];
 
+/**
+ * Telugu names for the CMS buckets.
+ *
+ * Album titles come from folder names in the media pipeline and are therefore
+ * English ("Devapatlamma Jathara 2026"), which left one English string on an
+ * otherwise Telugu homepage. These are the same festival proper nouns already
+ * used for event titles, so a Telugu album label can be composed from the
+ * bucket and the year without the pipeline having to carry a second title.
+ */
+export const BUCKET_TITLE_TE: Partial<Record<BucketKey, string>> = {
+  ugadi: "\u0c09\u0c17\u0c3e\u0c26\u0c3f",
+  "sri-rama-navami": "\u0c36\u0c4d\u0c30\u0c40 \u0c30\u0c3e\u0c2e \u0c28\u0c35\u0c2e\u0c3f",
+  "mathamma-jathara": "\u0c2e\u0c3e\u0c24\u0c2e\u0c4d\u0c2e \u0c1c\u0c3e\u0c24\u0c30",
+  "devapatlamma-jathara": "\u0c26\u0c47\u0c35\u0c2a\u0c1f\u0c4d\u0c32\u0c2e\u0c4d\u0c2e \u0c1c\u0c3e\u0c24\u0c30",
+  "varalakshmi-vratam": "\u0c35\u0c30\u0c32\u0c15\u0c4d\u0c37\u0c4d\u0c2e\u0c40 \u0c35\u0c4d\u0c30\u0c24\u0c02",
+  "vinayaka-chavithi": "\u0c35\u0c3f\u0c28\u0c3e\u0c2f\u0c15 \u0c1a\u0c35\u0c3f\u0c24\u0c3f",
+  dasara: "\u0c26\u0c38\u0c30\u0c3e",
+  deepavali: "\u0c26\u0c40\u0c2a\u0c3e\u0c35\u0c33\u0c3f",
+  sankranthi: "\u0c38\u0c02\u0c15\u0c4d\u0c30\u0c3e\u0c02\u0c24\u0c3f",
+  "rvp-birthdays": "\u0c2a\u0c41\u0c1f\u0c4d\u0c1f\u0c3f\u0c28\u0c30\u0c4b\u0c1c\u0c41\u0c32\u0c41",
+  "fun-trips": "\u0c2b\u0c28\u0c4d \u0c2b\u0c46\u0c38\u0c4d\u0c1f\u0c4d",
+};
+
 /** Festival chapter heroes under /public/festivals/<folder>/hero.webp */
 export const FESTIVAL_HERO_VERSION = FESTIVAL_ASSET_VERSION;
 

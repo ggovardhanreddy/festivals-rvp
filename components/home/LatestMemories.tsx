@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MediaImage } from "@/components/media/MediaImage";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { BUCKET_TITLE_TE } from "@/lib/site";
 import type { Album, MediaWithAlbum } from "@/lib/types";
 
 /**
@@ -10,9 +11,13 @@ import type { Album, MediaWithAlbum } from "@/lib/types";
  * appending album.year produced "Devapatlamma Jathara 2026 · 2026" on every
  * tile and in every alt attribute.
  */
-function albumLabel(album: Pick<Album, "title" | "year">): string {
-  const title = (album.title || "Village memories").trim();
-  return title.endsWith(album.year) ? title : `${title} · ${album.year}`;
+function albumLabel(
+  album: Pick<Album, "title" | "year" | "bucket">,
+  lang: string,
+): string {
+  const te = lang === "te" && album.bucket ? BUCKET_TITLE_TE[album.bucket] : null;
+  const title = (te || album.title || "Village memories").trim();
+  return title.endsWith(album.year) ? title : `${title} \u00b7 ${album.year}`;
 }
 
 /**
@@ -27,7 +32,7 @@ function albumLabel(album: Pick<Album, "title" | "year">): string {
  * actually is.
  */
 export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
-  const { t } = useUiLang();
+  const { t, lang } = useUiLang();
   if (!items.length) return null;
 
   const albums = new Set(items.map((i) => `${i.album.slug}/${i.album.year}`));
@@ -42,7 +47,7 @@ export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
           <p className="home-panel-lede">
             {single
               ? t("home.memories.ledeAlbum", undefined, {
-                  album: albumLabel(single),
+                  album: albumLabel(single, lang),
                 })
               : t("home.memories.lede")}
           </p>
@@ -67,7 +72,7 @@ export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
                 alt={t("home.memories.photoAlt", undefined, {
                   n: index + 1,
                   total: items.length,
-                  album: albumLabel(item.album),
+                  album: albumLabel(item.album, lang),
                 })}
                 loading="lazy"
                 decoding="async"
