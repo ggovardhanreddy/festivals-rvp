@@ -75,7 +75,11 @@ export function SiteFooter() {
   );
 
   return (
-    <footer className="site-footer" id="contact">
+    // The build id stays reachable for support — document.querySelector(
+    // ".site-footer").dataset.build, and public/version.json — but a 40-character
+    // commit hash printed under the copyright line tells a villager nothing and
+    // reads as something broken.
+    <footer className="site-footer" id="contact" data-build={BUILD_ID}>
       <div className="footer-inner footer-inner--minimal">
         <div className="footer-brand">
           <Logo />
@@ -106,9 +110,6 @@ export function SiteFooter() {
         <p>
           © {year} {OFFICIAL_TITLE}. Stewards: {SITE_NAME}.{" "}
           {VILLAGE_ALSO_KNOWN_AS} · {VILLAGE_NAME}.
-        </p>
-        <p className="footer-build" title="Build id from public/version.json / generate-all">
-          Build {BUILD_ID}
         </p>
       </div>
       <FunFestLoginDialog

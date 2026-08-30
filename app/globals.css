@@ -11655,6 +11655,13 @@ body {
   background: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
+/* The drawer's link bands. `display: contents` keeps the existing flex
+   layout of .nav-drawer-links intact while giving each band a real
+   role="group" wrapper for assistive tech. */
+.nav-drawer-band {
+  display: contents;
+}
+
 .nav-drawer-group {
   margin: 1rem 0 0.25rem;
   font-size: var(--text-xs);

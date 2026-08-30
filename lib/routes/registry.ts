@@ -87,7 +87,6 @@ export const LIVE_ROUTES: RouteEntry[] = [
   { path: "/kids/rhymes/",  section: "kids",      labelKey: "kids.rhymes",         status: "live", hasTelugu: false },
   { path: "/kids/science/", section: "kids",      labelKey: "kids.science",        status: "live", hasTelugu: false },
   { path: "/kids/videos/",  section: "kids",      labelKey: "kids.videos",         status: "live", hasTelugu: false },
-  { path: "/digital-skills/", section: "government", labelKey: "nav.digitalSkills", status: "live", hasTelugu: false },
   { path: "/learn/",        section: "learn",     labelKey: "nav.learn",           status: "live", hasTelugu: false },
   { path: "/agriculture/",  section: "agriculture", labelKey: "nav.agriculture",   status: "live", hasTelugu: false },
   { path: "/government/",   section: "government", labelKey: "nav.government",     status: "live", hasTelugu: true  },
@@ -122,6 +121,10 @@ export const PLANNED_ROUTES: RouteEntry[] = [
   { path: "/it/",            section: "it",          labelKey: "nav.it",            status: "planned", hasTelugu: false, plannedPhase: "3" },
   { path: "/temples/",       section: "temples",     labelKey: "nav.temples",       status: "planned", hasTelugu: false, plannedPhase: "5" },
   { path: "/community/",     section: "community",   labelKey: "nav.community",     status: "planned", hasTelugu: false, plannedPhase: "5" },
+  // Renders "Digital Skills is being built … has not launched yet", so it is
+  // reserved like the others. The route still resolves; it is simply not
+  // offered in navigation or the sitemap until it holds something.
+  { path: "/digital-skills/", section: "government",  labelKey: "nav.digitalSkills", status: "planned", hasTelugu: false, plannedPhase: "5" },
 ];
 
 export const ALL_ROUTES: RouteEntry[] = [...LIVE_ROUTES, ...PLANNED_ROUTES];

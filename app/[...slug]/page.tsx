@@ -1041,8 +1041,8 @@ export default async function ArchiveRoute({
           { href: "/careers/", labelKey: "careers.title" },
         ],
         "/it/": [
-          { href: "/digital-skills/", labelKey: "digital.title" },
           { href: "/students/", labelKey: "students.title" },
+          { href: "/careers/", labelKey: "nav.careers" },
         ],
         "/temples/": [
           { href: "/heritage/", labelKey: "nav.heritageArchive" },

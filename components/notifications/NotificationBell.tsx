@@ -35,7 +35,13 @@ export function NotificationBell() {
             d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm7-6V11a7 7 0 1 0-14 0v5L3 18v1h18v-1l-2-2Z"
           />
         </svg>
-        {unread > 0 ? <span className="notif-badge">{unread > 9 ? "9+" : unread}</span> : null}
+        {/* aria-hidden: the button's own label already says "N unread
+            notifications", so the badge would otherwise be announced twice. */}
+        {unread > 0 ? (
+          <span className="notif-badge" aria-hidden>
+            {unread > 9 ? "9+" : unread}
+          </span>
+        ) : null}
       </button>
       {open ? (
         <div className="notif-panel" role="menu">

@@ -48,7 +48,6 @@ const SECTIONS = [
   { href: "/weather/",              labelKey: "nav.weather",       icon: "weather" },
   { href: "/safety/",               labelKey: "safety.title",      icon: "shield" },
   { href: "/emergency/",            labelKey: "emergency.title",   icon: "siren" },
-  { href: "/digital-skills/",       labelKey: "nav.digitalSkills", icon: "digital" },
 ];
 
 const UTILITY = [

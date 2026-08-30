@@ -219,7 +219,14 @@ export function SiteHeader() {
         inert={!open}
       >
         <nav className="nav-drawer-links" aria-label="Mobile">
-          <p className="nav-drawer-group">Explore</p>
+          {/* "Explore", "More" and "Tools" are group LABELS, not controls —
+              they name the three bands of the drawer. Marked up as real groups
+              so assistive tech announces them that way instead of reading a
+              stray word before a run of links. */}
+          <p className="nav-drawer-group" id={`${menuId}-explore`}>
+            Explore
+          </p>
+          <div role="group" aria-labelledby={`${menuId}-explore`} className="nav-drawer-band">
           {NAV.map((item) => (
             <Link
               key={item.href}
@@ -230,8 +237,12 @@ export function SiteHeader() {
               {t(item.href, item.label)}
             </Link>
           ))}
+          </div>
 
-          <p className="nav-drawer-group">More</p>
+          <p className="nav-drawer-group" id={`${menuId}-more`}>
+            More
+          </p>
+          <div role="group" aria-labelledby={`${menuId}-more`} className="nav-drawer-band">
           {MORE_NAV.map((item) =>
             item.href === "/fun-trips/" ? (
               <Link
@@ -253,8 +264,12 @@ export function SiteHeader() {
               </Link>
             ),
           )}
+          </div>
 
-          <p className="nav-drawer-group">Tools</p>
+          <p className="nav-drawer-group" id={`${menuId}-tools`}>
+            Tools
+          </p>
+          <div role="group" aria-labelledby={`${menuId}-tools`} className="nav-drawer-band">
           {/* The header hides the language switcher on narrow screens so the
               menu button fits; this is where it goes instead, not away. */}
           <LanguageSwitcher className="nav-drawer-lang" />
@@ -296,6 +311,7 @@ export function SiteHeader() {
           >
             {t("install-app")}
           </button>
+          </div>
         </nav>
       </div>
     </>
