@@ -6,6 +6,8 @@ import type { Member } from "@/lib/types";
 import { formatBirthdayLabel } from "@/lib/dates";
 import { memberPhotoSrc } from "@/lib/member-image";
 import { daysUntilNextBirthday } from "@/lib/member-birthdays";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { LOCALE_TAG } from "@/lib/i18n/config";
 
 function initials(name: string) {
   return name
@@ -31,6 +33,7 @@ export function HomeBirthdays({
   members: Member[];
   limit?: number;
 }) {
+  const { t, lang } = useUiLang();
   const upcoming = useMemo(
     () =>
       members
@@ -47,13 +50,13 @@ export function HomeBirthdays({
       className="home-panel home-birthdays"
       aria-labelledby="home-birthdays-heading"
     >
-      <p className="eyebrow">Celebrations</p>
-      <h2 id="home-birthdays-heading">Upcoming Birthdays</h2>
+      <p className="eyebrow">{t("home.eyebrow.celebrations")}</p>
+      <h2 id="home-birthdays-heading">{t("home.upcomingBirthdays")}</h2>
 
       {upcoming.length ? (
         <ul className="home-birthday-list">
           {upcoming.map(({ member, days }) => {
-            const label = formatBirthdayLabel(member.dob);
+            const label = formatBirthdayLabel(member.dob, LOCALE_TAG[lang]);
             return (
               <li key={member.id} className="home-birthday" data-today={days === 0 || undefined}>
                 <span className="home-birthday-photo" data-placeholder={!member.photo || undefined}>
@@ -75,25 +78,23 @@ export function HomeBirthdays({
                 <span className="home-birthday-body">
                   <span className="home-birthday-name">{member.name}</span>
                   <span className="home-birthday-date muted">
-                    {label || "Date to be confirmed"}
+                    {label || t("home.birthdays.dateTbc")}
                   </span>
                 </span>
                 {days === 0 ? (
-                  <span className="home-birthday-today">Today</span>
+                  <span className="home-birthday-today">{t("common.today")}</span>
                 ) : null}
               </li>
             );
           })}
         </ul>
       ) : (
-        <p className="home-empty">
-          No birthdays are coming up just now.
-        </p>
+        <p className="home-empty">{t("home.birthdays.empty")}</p>
       )}
 
       <div className="home-panel-actions">
         <Link className="btn ghost" href="/events/?tab=birthdays">
-          View All Birthdays <span aria-hidden>→</span>
+          {t("home.viewAllBirthdays")} <span aria-hidden>→</span>
         </Link>
       </div>
     </section>

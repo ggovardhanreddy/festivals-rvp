@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { m, useReducedMotion } from "framer-motion";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { useEffect } from "react";
 import { withBase } from "@/lib/base";
 import {
@@ -26,6 +27,7 @@ import {
  */
 export function VillageHero() {
   const reduce = useReducedMotion();
+  const { t } = useUiLang();
 
   // The loading screen locks the document until the first surface says it is
   // ready. That contract predates this component; keep honouring it.
@@ -85,13 +87,13 @@ export function VillageHero() {
 
         <div className="village-hero-copy">
           <m.h1 id="village-hero-title" className="village-hero-title" {...rise(0.06)}>
-            {HOME_HERO_TITLE}
+            {t("village.name", HOME_HERO_TITLE)}
           </m.h1>
           <m.p className="village-hero-pillars" {...rise(0.12)}>
-            {HOME_HERO_PILLARS}
+            {t("home.hero.pillars", HOME_HERO_PILLARS)}
           </m.p>
           <m.p className="village-hero-support" {...rise(0.18)}>
-            {HOME_HERO_SUPPORT}
+            {t("home.hero.support", HOME_HERO_SUPPORT)}
           </m.p>
           {/* One call to action. The badge, the pillars and the motto line
               already say "heritage" three times; a second button saying it a
@@ -99,7 +101,7 @@ export function VillageHero() {
               reachable from Our Village and from the More menu. */}
           <m.div className="village-hero-cta" {...rise(0.24)}>
             <Link className="btn" href="/about/">
-              Explore Our Village <span aria-hidden>→</span>
+              {t("home.exploreOurVillage")} <span aria-hidden>→</span>
             </Link>
           </m.div>
         </div>

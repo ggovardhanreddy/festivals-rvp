@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { MediaImage } from "@/components/media/MediaImage";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 import type { Album, MediaWithAlbum } from "@/lib/types";
 
 /**
@@ -26,6 +27,7 @@ function albumLabel(album: Pick<Album, "title" | "year">): string {
  * actually is.
  */
 export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
+  const { t } = useUiLang();
   if (!items.length) return null;
 
   const albums = new Set(items.map((i) => `${i.album.slug}/${i.album.year}`));
@@ -35,16 +37,18 @@ export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
     <section className="section home-memories" aria-labelledby="home-memories-heading">
       <div className="home-section-head">
         <div>
-          <p className="eyebrow">Gallery</p>
-          <h2 id="home-memories-heading">Latest Memories</h2>
+          <p className="eyebrow">{t("home.eyebrow.gallery")}</p>
+          <h2 id="home-memories-heading">{t("home.latestMemories")}</h2>
           <p className="home-panel-lede">
             {single
-              ? `The newest photographs in the archive, from ${albumLabel(single)}.`
-              : "The most recent photographs added to the village archive."}
+              ? t("home.memories.ledeAlbum", undefined, {
+                  album: albumLabel(single),
+                })
+              : t("home.memories.lede")}
           </p>
         </div>
         <Link className="btn ghost" href="/gallery/">
-          View Gallery <span aria-hidden>→</span>
+          {t("home.viewGallery")} <span aria-hidden>→</span>
         </Link>
       </div>
 
@@ -60,7 +64,11 @@ export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
                 src={item.thumb || item.file}
                 // Distinct per tile: six identical alt strings read as six
                 // identical links to anyone using a screen reader.
-                alt={`Photograph ${index + 1} of ${items.length} — ${albumLabel(item.album)}`}
+                alt={t("home.memories.photoAlt", undefined, {
+                  n: index + 1,
+                  total: items.length,
+                  album: albumLabel(item.album),
+                })}
                 loading="lazy"
                 decoding="async"
               />

@@ -81,13 +81,14 @@ export function dobMonthDay(dob: string | null | undefined): string | null {
 /** Human label e.g. "10 October" or null. */
 export function formatBirthdayLabel(
   dob: string | null | undefined,
+  locale = "en-GB",
 ): string | null {
   const md = dobMonthDay(dob);
   if (!md) return null;
   const [mm, dd] = md.split("-").map(Number);
   const d = new Date(Date.UTC(2000, (mm || 1) - 1, dd || 1));
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString("en-GB", {
+  return d.toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     timeZone: "UTC",
@@ -95,12 +96,15 @@ export function formatBirthdayLabel(
 }
 
 /** Long label e.g. "14 September 2026". Stable across server and client. */
-export function formatEventDate(iso: string | null | undefined): string {
+export function formatEventDate(
+  iso: string | null | undefined,
+  locale = "en-GB",
+): string {
   if (!iso || !/^\d{4}-\d{2}-\d{2}/.test(iso)) return "";
   const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
   const date = new Date(Date.UTC(y!, (m || 1) - 1, d || 1));
   if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-GB", {
+  return date.toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -112,10 +116,11 @@ export function formatEventDate(iso: string | null | undefined): string {
 export function formatEventDateRange(
   start: string,
   end?: string | null,
+  locale = "en-GB",
 ): string {
-  const a = formatEventDate(start);
+  const a = formatEventDate(start, locale);
   if (!end || end.slice(0, 10) === start.slice(0, 10)) return a;
-  const b = formatEventDate(end);
+  const b = formatEventDate(end, locale);
   return b ? `${a} – ${b}` : a;
 }
 

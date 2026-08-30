@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import { VILLAGE_NAME, VILLAGE_SHORT_DESCRIPTION } from "@/lib/site";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { VILLAGE_NAME } from "@/lib/site";
 
 /**
  * Three or four lines about the village, and one door to the full story.
@@ -10,21 +13,23 @@ import { VILLAGE_NAME, VILLAGE_SHORT_DESCRIPTION } from "@/lib/site";
  * here made the word appear four times above the fold and gave the panel two
  * competing calls to action.
  *
- * The founding history, temples, agriculture, notable people and the whole
- * culture-and-traditions section live on /about/ and /heritage/, where someone
- * who wants them can read them properly.
+ * A client component because /te/ renders this same tree and the copy has to
+ * come from the catalogue, not from a hard-coded English string.
  */
 export function VillageIntro() {
+  const { t } = useUiLang();
   return (
     <section className="home-panel home-village" aria-labelledby="home-village-heading">
-      {/* The village's other name, kept because half the district searches for it. */}
-      <p className="eyebrow">{VILLAGE_NAME}</p>
-      <h2 id="home-village-heading">Our Village</h2>
-      <p className="home-panel-lede">{VILLAGE_SHORT_DESCRIPTION}</p>
+      {/* The village's other name, kept because half the district searches for
+          it. A proper noun — never translated, only transliterated by the
+          catalogue if a Telugu spelling is supplied. */}
+      <p className="eyebrow">{t("village.altName", VILLAGE_NAME)}</p>
+      <h2 id="home-village-heading">{t("home.ourVillage")}</h2>
+      <p className="home-panel-lede">{t("home.village.lede")}</p>
 
       <div className="home-panel-actions">
         <Link className="btn" href="/about/">
-          Read Our Story <span aria-hidden>→</span>
+          {t("home.readOurStory")} <span aria-hidden>→</span>
         </Link>
       </div>
     </section>

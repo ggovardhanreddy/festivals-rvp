@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Award, Rocket, Star, Users } from "lucide-react";
 import { Counter } from "@/components/Counter";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 import type { CommunityStat } from "@/lib/member-stats";
 
 const ICONS = {
@@ -29,6 +30,7 @@ export function CommunityStats({
   stats: CommunityStat[];
   loading?: boolean;
 }) {
+  const { t } = useUiLang();
   const hasData = stats.some((s) => s.value > 0);
 
   return (
@@ -36,12 +38,9 @@ export function CommunityStats({
       className="home-panel home-community"
       aria-labelledby="home-community-heading"
     >
-      <p className="eyebrow">People</p>
-      <h2 id="home-community-heading">Our Community</h2>
-      <p className="home-panel-lede">
-        Legacy Circle, Core Members and Next Generation — the people who steward
-        Reddivaripalli.
-      </p>
+      <p className="eyebrow">{t("home.eyebrow.people")}</p>
+      <h2 id="home-community-heading">{t("home.ourCommunity")}</h2>
+      <p className="home-panel-lede">{t("home.community.lede")}</p>
 
       {hasData ? (
         <ul className="community-stat-grid">
@@ -52,7 +51,10 @@ export function CommunityStats({
                 <span className="community-stat-icon" aria-hidden>
                   <Icon size={18} strokeWidth={1.75} />
                 </span>
-                <Counter value={stat.value} label={stat.label} />
+                <Counter
+                  value={stat.value}
+                  label={t(`home.stat.${stat.key}`, stat.label)}
+                />
               </li>
             );
           })}
@@ -60,14 +62,14 @@ export function CommunityStats({
       ) : (
         <p className="home-empty" role="status">
           {loading
-            ? "Loading community numbers…"
-            : "Member numbers are being updated."}
+            ? t("home.community.loading")
+            : t("home.community.unavailable")}
         </p>
       )}
 
       <div className="home-panel-actions">
         <Link className="btn" href="/members/">
-          Meet Our People <span aria-hidden>→</span>
+          {t("home.meetOurPeople")} <span aria-hidden>→</span>
         </Link>
       </div>
     </section>

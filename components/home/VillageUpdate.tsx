@@ -5,6 +5,8 @@ import { useMemo } from "react";
 import type { Announcement } from "@/lib/types";
 import { daysUntil, formatEventDate } from "@/lib/dates";
 import { useLiveAnnouncements } from "@/lib/live-calendar";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { LOCALE_TAG } from "@/lib/i18n/config";
 
 /** Newest announcement that has actually been published. */
 function pickLatest(list: Announcement[]): Announcement | null {
@@ -23,6 +25,7 @@ function pickLatest(list: Announcement[]): Announcement | null {
  * an invented one, and this component never writes copy of its own.
  */
 export function VillageUpdate({ seed }: { seed: Announcement[] }) {
+  const { t, lang } = useUiLang();
   const live = useLiveAnnouncements(seed);
   const announcement = useMemo(
     () => pickLatest(live.length ? live : seed),
@@ -30,20 +33,22 @@ export function VillageUpdate({ seed }: { seed: Announcement[] }) {
   );
 
   if (!announcement) return null;
-  const date = formatEventDate(announcement.date);
+  const date = formatEventDate(announcement.date, LOCALE_TAG[lang]);
 
   return (
     <section className="village-update" aria-labelledby="village-update-heading">
       <div className="village-update-card">
         <div className="village-update-body">
           <p className="village-update-label">
-            <span aria-hidden>📢</span> Village Update
+            <span aria-hidden>📢</span> {t("home.villageUpdate")}
           </p>
           <h2 className="village-update-title" id="village-update-heading">
-            {announcement.title}
+            {(lang === "te" && announcement.titleTe) || announcement.title}
           </h2>
           {announcement.body ? (
-            <p className="village-update-text">{announcement.body}</p>
+            <p className="village-update-text">
+              {(lang === "te" && announcement.bodyTe) || announcement.body}
+            </p>
           ) : null}
           {date ? <p className="village-update-date muted">{date}</p> : null}
         </div>
@@ -54,7 +59,10 @@ export function VillageUpdate({ seed }: { seed: Announcement[] }) {
           className="btn ghost village-update-cta"
           href={announcement.href || "/events/#updates"}
         >
-          {announcement.cta || "View All Updates"} <span aria-hidden>→</span>
+          {(lang === "te" && announcement.ctaTe) ||
+            announcement.cta ||
+            t("home.viewAllUpdates")}{" "}
+          <span aria-hidden>→</span>
         </Link>
       </div>
     </section>

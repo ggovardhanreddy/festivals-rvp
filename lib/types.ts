@@ -85,6 +85,11 @@ export type SiteEventCategory = "festival" | "village" | "birthday" | "other";
 export type SiteEvent = {
   id: string;
   title: string;
+  /**
+   * Telugu name. Festival names are proper nouns with settled Telugu
+   * spellings, so these are transliterations rather than translations.
+   */
+  titleTe?: string;
   date: string;
   endDate?: string;
   image?: string;
@@ -113,6 +118,14 @@ export type Announcement = {
    */
   href?: string;
   cta?: string;
+  /**
+   * Telugu wording, supplied by the village. Absent means /te/ shows the
+   * English text: a notice in the village's own words is better untranslated
+   * than machine-translated on their behalf.
+   */
+  titleTe?: string;
+  bodyTe?: string;
+  ctaTe?: string;
 };
 
 export type Media = {
@@ -197,6 +210,9 @@ export type Development = {
   currentStage?: DevelopmentWorkflowStage;
   highlight?: boolean;
   summary?: string;
+  /** Telugu wording, supplied by the village. See Announcement.titleTe. */
+  titleTe?: string;
+  summaryTe?: string;
 };
 
 export type SuggestionCategory =
