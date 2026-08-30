@@ -80,7 +80,7 @@ async function main() {
   // Logo master
   const logoSrc = path.join(DOWNLOADS, "Photos/Logo/logo.png");
   if (fs.existsSync(logoSrc)) {
-    const master = path.join(BRAND, "rvp-youth-logo-master.png");
+    const master = path.join(BRAND, "reddivaripalli-logo-master.png");
     fs.copyFileSync(logoSrc, master);
     console.log("Logo master updated:", master);
   } else {

@@ -218,8 +218,12 @@ fs.writeFileSync(
           purpose: "any",
         },
         {
-          src: `${iconBase}/logo/android-icon.png`,
-          sizes: "192x192",
+          // A launcher crops maskable icons to a circle or squircle. Pointing
+          // it at the same file as "any" meant the badge's outer ring was
+          // shaved off on Android; this one keeps the artwork inside the 80%
+          // safe zone on the badge's own cream.
+          src: `${iconBase}/logo/maskable-icon.png`,
+          sizes: "512x512",
           type: "image/png",
           purpose: "maskable",
         },
@@ -228,12 +232,6 @@ fs.writeFileSync(
           sizes: "512x512",
           type: "image/png",
           purpose: "any",
-        },
-        {
-          src: `${iconBase}/logo/app-icon.png`,
-          sizes: "512x512",
-          type: "image/png",
-          purpose: "maskable",
         },
         {
           src: `${iconBase}/logo/apple-touch-icon.png`,

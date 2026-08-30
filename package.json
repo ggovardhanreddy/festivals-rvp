@@ -30,7 +30,6 @@
     "sample-data": "tsx scripts/sample-data.ts",
     "ensure-folders": "tsx scripts/ensure-folders.ts",
     "migrate:cms": "tsx scripts/migrate-cms-layout.ts",
-    "brand:assets": "tsx scripts/generate-brand-assets.ts",
     "brand:logo": "tsx scripts/generate-logo-system.ts",
     "brand:music": "tsx scripts/generate-ambient-music.ts",
     "media:migrate:r2": "tsx scripts/migrate-media-to-r2.ts",

@@ -66,7 +66,9 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: withBase("/logo/favicon.svg"), type: "image/svg+xml" },
+      // No SVG favicon: the village badge is a detailed illustration, so an
+      // "SVG" of it would just be a base64 PNG in a wrapper — bigger than the
+      // PNG, with none of the crispness an SVG favicon is chosen for.
       { url: withBase("/logo/favicon-32x32.png"), sizes: "32x32", type: "image/png" },
       { url: withBase("/logo/favicon-16x16.png"), sizes: "16x16", type: "image/png" },
       { url: withBase("/logo/android-icon.png"), sizes: "192x192", type: "image/png" },
@@ -133,7 +135,7 @@ const jsonLd = [
       name: OFFICIAL_TITLE,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl("/logo/logo-master.png", siteUrl),
+        url: absoluteUrl("/logo/app-icon.png", siteUrl),
       },
     },
     potentialAction: {
@@ -150,7 +152,7 @@ const jsonLd = [
     url: siteUrl,
     logo: {
       "@type": "ImageObject",
-      url: absoluteUrl("/logo/logo-master.png", siteUrl),
+      url: absoluteUrl("/logo/app-icon.png", siteUrl),
       width: 512,
       height: 512,
     },
@@ -232,7 +234,7 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "ImageObject",
     contentUrl: absoluteUrl("/logo/social-banner.png", siteUrl),
-    url: absoluteUrl("/logo/logo-master.png", siteUrl),
+    url: absoluteUrl("/logo/app-icon.png", siteUrl),
     name: `${VILLAGE_ALSO_KNOWN_AS} — ${SITE_NAME}`,
     description: `Official logo and social preview for ${VILLAGE_ALSO_KNOWN_AS} village digital archive.`,
     creditText: SITE_NAME,

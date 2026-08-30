@@ -21,9 +21,9 @@ export function PlatformHero() {
       <div className="pf-hero-inner">
         <Image
           className="pf-hero-logo"
-          src="/brand/logo-mark.svg"
+          src="/logo/logo-mark.webp"
           alt=""
-          width={64}
+          width={80}
           height={64}
           priority
         />

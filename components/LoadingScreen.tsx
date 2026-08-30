@@ -44,10 +44,10 @@ export function LoadingScreen() {
           style={{ pointerEvents: "none" }}
         >
           <img
-            src={withBase("/logo/loading-logo.svg")}
-            alt="RVP Youth"
-            width={200}
-            height={56}
+            src={withBase("/logo/logo-master.webp")}
+            alt="Reddivaripalli Village"
+            width={320}
+            height={256}
             className="landing-loader-logo"
           />
         </m.div>

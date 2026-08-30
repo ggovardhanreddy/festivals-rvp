@@ -34,8 +34,16 @@ export function VillageHero() {
     window.dispatchEvent(new CustomEvent("rvp:intro-complete"));
   }, []);
 
+  /**
+   * Entrance motion that never hides anything.
+   *
+   * Starting at opacity 0 puts `style="opacity:0"` in the server-rendered
+   * HTML: the badge is the largest element on the page, so it becomes the LCP
+   * candidate and stays invisible until hydration — and stays invisible
+   * forever if the JavaScript fails. The lift alone reads as an entrance.
+   */
   const rise = (delay: number) => ({
-    initial: reduce ? false : ({ opacity: 0, y: 14 } as const),
+    initial: reduce ? false : ({ opacity: 1, y: 14 } as const),
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const },
   });
@@ -48,8 +56,8 @@ export function VillageHero() {
           className="village-hero-emblem"
           src={withBase("/logo/logo-vertical.webp")}
           alt="Reddivaripalli Village — Heritage, Community, Progress"
-          width={420}
-          height={560}
+          width={640}
+          height={513}
           fetchPriority="high"
           decoding="async"
           {...rise(0)}

@@ -15,8 +15,15 @@ type LogoVariant =
   | "vertical";
 
 /**
- * Brand artwork — circular emblem (header) or full vertical lockup (hero).
- * Source: public/brand/rvp-youth-logo-master.png → scripts/generate-logo-system.ts
+ * Brand artwork — the Reddivaripalli village badge.
+ *
+ * The badge is one piece: scene, wordmark and motto ring together. There is no
+ * separate emblem to show without the name, so every variant here is the same
+ * artwork at a different size, and `variant` only chooses which file is light
+ * enough for the context it renders in.
+ *
+ * Source: public/brand/reddivaripalli-logo-master.png
+ *         → scripts/generate-logo-system.ts (npm run brand:logo)
  */
 export function Logo({
   className = "",
@@ -63,8 +70,10 @@ export function Logo({
         className={`brand-logo ${vertical ? "brand-logo-vertical" : ""} ${className}`.trim()}
         src={src}
         alt="Reddivaripalli Village — Heritage, Community, Progress"
-        width={mark ? 40 : vertical ? 120 : 168}
-        height={mark ? 40 : vertical ? 160 : 48}
+        // Intrinsic size of the file being loaded, so the browser reserves the
+        // right box and the header does not jump as the badge decodes.
+        width={mark ? 192 : vertical ? 640 : 320}
+        height={mark ? 154 : vertical ? 513 : 256}
         draggable={false}
         decoding={priority ? "sync" : "async"}
         loading={priority ? "eager" : "lazy"}

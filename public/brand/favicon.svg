@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Reddivaripalli">
-  <title>Reddivaripalli</title>
-  <rect width="32" height="32" rx="7" fill="#1E5E3A"/>
-  <circle cx="16" cy="12.5" r="6.5" fill="#D4A017"/>
-  <path d="M16 4c3.9 0 7 2.9 7 6.5 0 .8-.2 1.6-.5 2.3 1.9.6 3.3 2.2 3.3 4.1 0 2.4-2 4.3-4.5 4.3h-10.6C8.2 21.2 6.2 19.3 6.2 16.9c0-1.9 1.4-3.5 3.3-4.1-.3-.7-.5-1.5-.5-2.3C9 6.9 12.1 4 16 4Z" fill="#2FA24F"/>
-  <rect x="15" y="20" width="2" height="4" rx=".8" fill="#F5F1E6"/>
-  <path d="M4 26c4-2 7.3-2 10.6 0 3.3-2 6.7-2 10 0v2H4v-2Z" fill="#F5F1E6"/>
-</svg>

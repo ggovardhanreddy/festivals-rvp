@@ -37,8 +37,13 @@ function checkPublicAssets() {
     "public/manifest.webmanifest",
     "public/logo/social-banner.png",
     "public/logo/app-icon.png",
-    "public/logo/logo.svg",
-    "public/logo/favicon.svg",
+    "public/logo/android-icon.png",
+    "public/logo/maskable-icon.png",
+    "public/logo/apple-touch-icon.png",
+    "public/logo/favicon.ico",
+    "public/logo/logo-master.webp",
+    "public/logo/logo-vertical.webp",
+    "public/logo/logo-mark.webp",
   ]) {
     if (!exists(file)) errors.push(`Missing required asset: ${file}`);
   }
