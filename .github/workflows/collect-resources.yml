@@ -1,0 +1,221 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Collect Learning Resources
+#
+# Checks the approved sources in content/resources/sources.json, collects new
+# and updated educational resources, and commits the catalog. The existing
+# Production Deploy then publishes it.
+#
+# Two safety properties this workflow is built around:
+#
+#  1. Scheduled runs do nothing until the repository variable
+#     RESOURCE_COLLECTOR_ENABLED is set to "true". Section 23 of the brief says
+#     to test in review mode before enabling automatic collection, so the
+#     schedule ships disabled and a human turns it on. Manual dispatch always
+#     works, so it can be tested from day one.
+#
+#  2. Nothing auto-publishes. Every source in the registry has
+#     autoPublish:false, so collected resources land at "new" or
+#     "needs-review" and appear on the site only after an admin approves them.
+#     Turning that on is a per-source decision, made in the registry.
+#
+# Optional secret: DATA_GOV_IN_API_KEY — enables the data.gov.in source.
+# Without it that source is skipped rather than crawled (its robots.txt
+# refuses automated fetching; the keyed API is the sanctioned route).
+# ─────────────────────────────────────────────────────────────────────────────
+name: Collect Learning Resources
+
+on:
+  schedule:
+    # Times are UTC. IST is UTC+5:30.
+    - cron: "0 */6 * * *"    # 6-hourly tier: exam and notification sources
+    - cron: "30 1 * * *"     # daily tier, 07:00 IST
+    - cron: "0 2 * * 0"      # weekly tier, Sunday 07:30 IST
+    - cron: "0 3 1 * *"      # monthly tier, 1st of the month 08:30 IST
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: "Which sources to check"
+        required: true
+        default: "all"
+        type: choice
+        options: ["all", "6-hourly", "12-hourly", "daily", "weekly", "monthly"]
+      source:
+        description: "A single source id (overrides tier, ignores the schedule)"
+        required: false
+        type: string
+      dry_run:
+        description: "Fetch and classify but write nothing"
+        required: true
+        default: true
+        type: boolean
+      max_per_source:
+        description: "Cap on candidates per source"
+        required: false
+        default: "40"
+        type: string
+
+concurrency:
+  # Never two collectors at once: they would both write the catalog.
+  group: collect-resources
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  collect:
+    name: Check approved sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Decide whether to run
+        id: gate
+        env:
+          ENABLED: ${{ vars.RESOURCE_COLLECTOR_ENABLED }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Manual dispatch — running."
+            exit 0
+          fi
+          if [ "${ENABLED:-}" = "true" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Scheduled run — collector is enabled."
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Collector is not enabled"
+              echo ""
+              echo "Scheduled collection is off. Set the repository variable"
+              echo "\`RESOURCE_COLLECTOR_ENABLED\` to \`true\` (Settings → Actions → Variables)"
+              echo "once you are happy with the output of a manual dry run."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Map the schedule to a tier
+        id: tier
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          set -euo pipefail
+          case "${{ github.event.schedule }}" in
+            "0 */6 * * *")  tier="6-hourly" ;;
+            "30 1 * * *")   tier="daily" ;;
+            "0 2 * * 0")    tier="weekly" ;;
+            "0 3 1 * *")    tier="monthly" ;;
+            *)              tier="${{ inputs.tier || 'all' }}" ;;
+          esac
+          echo "tier=$tier" >> "$GITHUB_OUTPUT"
+          echo "Tier: $tier"
+
+      - name: Checkout
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.gate.outputs.run == 'true'
+        run: npm ci
+
+      - name: Collect
+        id: collect
+        if: steps.gate.outputs.run == 'true'
+        env:
+          DATA_GOV_IN_API_KEY: ${{ secrets.DATA_GOV_IN_API_KEY }}
+        run: |
+          set -euo pipefail
+          args=(--tier "${{ steps.tier.outputs.tier }}" --max "${{ inputs.max_per_source || '40' }}")
+          if [ -n "${{ inputs.source }}" ]; then args=(--source "${{ inputs.source }}"); fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then args+=(--dry-run); fi
+          npm run resources:collect -- "${args[@]}" 2>&1 | tee /tmp/collect.log
+
+      # Downloaded files are untrusted input (section 18). Real AV runs here
+      # rather than in the collector, because a scanner belongs outside the
+      # process that fetched the file. Skipped entirely when nothing was
+      # hosted, which is the normal case: only three sources permit hosting.
+      - name: Scan any downloaded files
+        if: steps.gate.outputs.run == 'true' && inputs.dry_run != 'true'
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain public/resources 2>/dev/null)" ]; then
+            echo "No files were downloaded — nothing to scan."
+            exit 0
+          fi
+          echo "New files present. Installing ClamAV."
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq clamav
+          sudo systemctl stop clamav-freshclam 2>/dev/null || true
+          sudo freshclam --quiet || echo "::warning::Signature update failed; scanning with the bundled database."
+          # --infected only prints hits; a non-zero exit means something was found.
+          if ! clamscan --recursive --infected --no-summary public/resources; then
+            echo "::error::ClamAV flagged a downloaded file. Nothing will be committed."
+            exit 1
+          fi
+          echo "ClamAV found nothing."
+
+      - name: Validate the catalog
+        if: steps.gate.outputs.run == 'true'
+        run: npm run resources:validate
+
+      - name: Commit the catalog
+        id: commit
+        if: steps.gate.outputs.run == 'true' && inputs.dry_run != 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "reddivaripalli-collector[bot]"
+          git config user.email "reddivaripalli.rvp@gmail.com"
+          git add -A generated/resources.json generated/resource-runs.json \
+                     generated/resource-notifications.json \
+                     content/resources/sources.json public/resources 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing changed — no commit."
+            exit 0
+          fi
+          new=$(grep -oE 'New Resources: *[0-9]+' /tmp/collect.log | grep -oE '[0-9]+' | head -1 || echo 0)
+          upd=$(grep -oE 'Updated Resources: *[0-9]+' /tmp/collect.log | grep -oE '[0-9]+' | head -1 || echo 0)
+          git commit -q -m "resources: ${new} new, ${upd} updated (${{ steps.tier.outputs.tier }})" \
+            -m "Collected automatically. Nothing is published until an admin approves it in /admin/ → Resources."
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with GITHUB_TOKEN deliberately does not trigger other
+      # workflows, so the deploy is asked for explicitly. workflow_dispatch is
+      # the documented exception that GITHUB_TOKEN may still fire.
+      - name: Ask Production Deploy to publish
+        if: steps.gate.outputs.run == 'true' && steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref main -f reason="new learning resources collected"
+
+      - name: Report
+        if: always() && steps.gate.outputs.run == 'true'
+        run: |
+          {
+            if [ "${{ job.status }}" = "success" ]; then
+              echo "## ✅ Collection run finished"
+            else
+              echo "## ❌ Collection run failed"
+            fi
+            echo ""
+            echo "Tier: \`${{ steps.tier.outputs.tier }}\`${{ inputs.source && format(' · single source: `{0}`', inputs.source) || '' }}"
+            echo "Mode: ${{ inputs.dry_run == 'true' && 'dry run — nothing written' || 'live' }}"
+            echo ""
+            if [ -f /tmp/collect.log ]; then
+              echo '```'
+              sed -n '/^Resource Collector$/,$p' /tmp/collect.log | head -60
+              echo '```'
+            fi
+            echo ""
+            echo "Collected resources are held for review. Approve them in **/admin/ → Resources**."
+          } >> "$GITHUB_STEP_SUMMARY"

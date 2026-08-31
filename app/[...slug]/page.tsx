@@ -64,6 +64,22 @@ import { GameRoute } from "@/components/games/GameRoute";
 import { SectionComingSoon } from "@/components/platform/SectionComingSoon";
 import { GAMES, gameBySlug } from "@/lib/platform/games";
 import { PLANNED_ROUTES } from "@/lib/routes/registry";
+import { LearningCenter } from "@/components/resources/LearningCenter";
+import { ResourceCategoryPage } from "@/components/resources/ResourceCategoryPage";
+import { ResourceDetailPage } from "@/components/resources/ResourceDetailPage";
+import {
+  loadCollectorNotifications,
+  loadCollectorRuns,
+  loadResourceCatalog,
+  loadResourceSources,
+} from "@/lib/resources/server";
+import {
+  CATEGORY_KEYS,
+  findBySlug,
+  publicResources,
+  resourceSlug,
+  type CategoryKey,
+} from "@/lib/resources";
 import { KidsHub } from "@/components/kids/KidsHub";
 import { KidsRoute } from "@/components/kids/KidsRoute";
 import { KIDS_ROUTES, isKidsLibrary, isKidsRoute } from "@/lib/kids/catalog";
@@ -87,7 +103,6 @@ import {
   loadStories,
   loadVideos,
 } from "@/lib/learning/server";
-import { LearnPage } from "@/components/learn/LearnPage";
 import { AgriculturePage } from "@/components/agriculture/AgriculturePage";
 import { CareersPage } from "@/components/careers/CareersPage";
 import { WeatherPage } from "@/components/weather/WeatherPage";
@@ -205,6 +220,13 @@ export function generateStaticParams() {
   for (const item of loadScienceTopics()) paths.push({ slug: ["kids", "science", item.slug] });
   for (const item of loadVideos()) paths.push({ slug: ["kids", "videos", item.slug] });
   paths.push({ slug: ["digital-skills"] });
+  // Learning Center: one page per category, plus a page per PUBLISHED
+  // resource. Nothing at "new" or "needs-review" gets a URL, so an
+  // unreviewed document cannot be reached even by guessing.
+  for (const key of CATEGORY_KEYS) paths.push({ slug: ["learn", key] });
+  for (const r of publicResources(loadResourceCatalog())) {
+    paths.push({ slug: ["learn", "resource", resourceSlug(r)] });
+  }
   for (const route of PLANNED_ROUTES) {
     const seg = route.path.replace(/^\/|\/$/g, "");
     if (seg) paths.push({ slug: [seg] });
@@ -907,7 +929,14 @@ export default async function ArchiveRoute({
   if (path === "admin") {
     return (
       <main className="page">
-        <AdminHub />
+        <AdminHub
+          collector={{
+            resources: loadResourceCatalog(),
+            sources: loadResourceSources(),
+            runs: loadCollectorRuns(),
+            notifications: loadCollectorNotifications(),
+          }}
+        />
       </main>
     );
   }
@@ -921,7 +950,32 @@ export default async function ArchiveRoute({
   }
 
   if (path === "learn") {
-    return <LearnPage courses={loadTyped("course")} />;
+    return (
+      <LearningCenter
+        resources={loadResourceCatalog()}
+        sources={loadResourceSources()}
+        courses={loadTyped("course")}
+      />
+    );
+  }
+
+  // /learn/<category>/ and /learn/resource/<slug>/
+  if (slug[0] === "learn" && slug.length === 2 && CATEGORY_KEYS.includes(slug[1] as CategoryKey)) {
+    return (
+      <ResourceCategoryPage
+        category={slug[1] as CategoryKey}
+        resources={loadResourceCatalog()}
+        sources={loadResourceSources()}
+      />
+    );
+  }
+
+  if (slug[0] === "learn" && slug[1] === "resource" && slug.length === 3) {
+    const published = publicResources(loadResourceCatalog());
+    const resource = findBySlug(published, slug[2]!);
+    if (!resource) notFound();
+    const source = loadResourceSources().find((s) => s.id === resource.sourceId);
+    return <ResourceDetailPage resource={resource} source={source} />;
   }
 
   if (path === "agriculture") {

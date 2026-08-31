@@ -11932,3 +11932,532 @@ body {
 .nav-drawer-lang {
   margin: 0.25rem 0 0.5rem;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Learning Center — automatically collected resources
+   Reuses the existing tokens and card idioms; nothing here restyles an
+   existing component. Every colour goes through a var so both themes and
+   the high-contrast mode keep working.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resource-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem 1.05rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  min-width: 0;
+}
+
+.resource-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.resource-type,
+.resource-lang,
+.resource-status,
+.licence-badge,
+.admin-badge {
+  display: inline-block;
+  padding: 0.14rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.resource-type {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--ink);
+}
+
+.resource-lang--te {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.resource-card-title {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  /* Long unbroken PDF names are common; they must wrap, not overflow. */
+  overflow-wrap: anywhere;
+}
+
+.resource-card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resource-card-title a:hover,
+.resource-card-title a:focus-visible {
+  text-decoration: underline;
+}
+
+.resource-card-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  /* Extracted PDF text can be long; three lines is enough to judge by. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.resource-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  margin: 0.1rem 0 0;
+  font-size: 0.82rem;
+}
+
+.resource-card-meta > div {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.resource-card-meta dt {
+  color: var(--muted);
+  margin: 0;
+}
+
+.resource-card-meta dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.resource-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.resource-card-actions .btn {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.7rem;
+}
+
+.resource-card-source {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.resource-count {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.resource-source-list {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.resource-source-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.7rem;
+  align-items: baseline;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.resource-source-list .muted {
+  font-size: 0.8rem;
+}
+
+/* ---- filters ---------------------------------------------------------- */
+
+.resource-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-end;
+}
+
+.resource-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.82rem;
+  min-width: 0;
+}
+
+.resource-filters label > span {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.resource-filters input,
+.resource-filters select {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  min-width: 9rem;
+  max-width: 100%;
+}
+
+.resource-filter-count {
+  margin: 0 0 0.3rem;
+  font-size: 0.85rem;
+}
+
+/* ---- detail page ------------------------------------------------------ */
+
+.resource-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.resource-detail-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0;
+}
+
+.resource-detail-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr;
+  gap: 0.35rem 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.resource-detail-row dt {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.resource-detail-row dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+  .resource-detail-row {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+}
+
+.resource-license-note,
+.resource-attribution {
+  margin: 0.6rem 0 0;
+  padding: 0.65rem 0.8rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 9px 9px 0;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  font-size: 0.87rem;
+}
+
+.resource-expired-notice {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, canvastext 6%, transparent);
+  font-size: 0.9rem;
+}
+
+.resource-versions {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.resource-versions li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  align-items: baseline;
+  font-size: 0.88rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---- video ------------------------------------------------------------ */
+
+.resource-video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: 13px;
+  overflow: hidden;
+  background: color-mix(in srgb, canvastext 8%, transparent);
+  border: 1px solid var(--line);
+}
+
+.resource-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.resource-video--poster {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+  color: var(--ink);
+  font: inherit;
+  text-align: center;
+}
+
+.resource-video--poster img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resource-video-play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  font-size: 1.2rem;
+  padding-left: 0.16rem;
+}
+
+.resource-video-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.resource-video--gone {
+  aspect-ratio: auto;
+  display: grid;
+  gap: 0.2rem;
+  place-items: center;
+  padding: 1.4rem 1rem;
+  text-align: center;
+}
+
+.resource-video--gone p {
+  margin: 0;
+}
+
+.resource-video-card h3 {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+/* ---- admin ----------------------------------------------------------- */
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.7rem;
+  margin: 0.6rem 0 0;
+}
+
+.admin-stat {
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.admin-stat--warn {
+  border-color: color-mix(in srgb, #b8860b 55%, var(--line));
+}
+
+.admin-stat--bad {
+  border-color: color-mix(in srgb, #b3261e 55%, var(--line));
+}
+
+.admin-stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.admin-stat-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.admin-notifications,
+.admin-review-list {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.admin-note {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.3rem 0.7rem;
+  align-items: baseline;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  font-size: 0.87rem;
+}
+
+.admin-note--action {
+  border-left: 3px solid #b3261e;
+}
+
+.admin-note--warning {
+  border-left: 3px solid #b8860b;
+}
+
+.admin-note-kind {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+@media (max-width: 620px) {
+  .admin-note {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-review-item {
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.admin-review-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.7rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.admin-review-flags {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+}
+
+.admin-review-flags code {
+  font-size: 0.8rem;
+}
+
+.admin-review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+  font-size: 0.87rem;
+}
+
+.resource-status--needs-review,
+.licence-badge--unknown {
+  background: color-mix(in srgb, #b8860b 16%, transparent);
+}
+
+.resource-status--source-unavailable,
+.licence-badge--no {
+  background: color-mix(in srgb, #b3261e 13%, transparent);
+}
+
+.resource-status--published,
+.licence-badge--yes {
+  background: color-mix(in srgb, #1b7f4b 15%, transparent);
+}
+
+.admin-badge--bad {
+  margin-left: 0.35rem;
+  background: color-mix(in srgb, #b3261e 16%, transparent);
+}
+
+/* A wide table on a phone scrolls inside its own box; the page never does. */
+.admin-table-scroll {
+  overflow-x: auto;
+  margin: 0.6rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 54rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-table th {
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.admin-table tr.is-failing td:first-child {
+  box-shadow: inset 3px 0 0 #b3261e;
+}
+
+.admin-source-note,
+.admin-source-licence {
+  margin: 0.3rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  max-width: 34rem;
+}
+
+.admin-review-id {
+  font-size: 0.76rem;
+  color: var(--muted);
+}

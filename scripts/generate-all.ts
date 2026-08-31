@@ -15,6 +15,43 @@ const live = albums.filter((a) => (a.media?.length ?? 0) > 0);
 const bucketsWithContent = BUCKETS.filter((b) =>
   live.some((a) => a.bucket === b.key),
 );
+/**
+ * Sitemap routes for the Learning Center, read straight from the catalog.
+ *
+ * Reads the JSON rather than importing lib/resources so this script stays
+ * usable before the first collector run, when the file does not exist.
+ */
+function learningCenterRoutes(): string[] {
+  const out = ["learn"];
+  const CATEGORIES = [
+    "school", "intermediate", "entrance", "competitive", "digital",
+    "english", "agriculture", "careers", "scholarships", "government",
+  ];
+  let resources: Array<Record<string, unknown>> = [];
+  try {
+    const raw = JSON.parse(
+      fs.readFileSync(path.join(root, "generated", "resources.json"), "utf8"),
+    ) as { resources?: Array<Record<string, unknown>> };
+    resources = Array.isArray(raw.resources) ? raw.resources : [];
+  } catch {
+    return out;
+  }
+  const published = resources.filter((r) => r.status === "published");
+  const present = new Set(published.map((r) => String(r.category)));
+  for (const key of CATEGORIES) if (present.has(key)) out.push(`learn/${key}`);
+  for (const r of published) {
+    const title = String(r.title ?? "");
+    const stem = title
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60);
+    const id = String(r.id ?? "");
+    out.push(`learn/resource/${stem || "resource"}-${id.split("-").pop() ?? ""}`);
+  }
+  return out;
+}
+
 const routes = [
   // Static pages come from the route registry, so a new live section is in
   // the sitemap the moment it is registered rather than when someone
@@ -25,6 +62,10 @@ const routes = [
     .filter((b) => b.key !== "fun-trips")
     .map((b) => b.key),
   ...years().map((year) => `years/${year}`),
+  // Learning Center category pages and every PUBLISHED resource page. Held
+  // and unreviewed resources have no page, so they get no sitemap entry —
+  // the sitemap must never advertise a URL the export did not build.
+  ...learningCenterRoutes(),
   ...bucketsWithContent
     .filter((b) => b.key !== "fun-trips")
     .flatMap((b) => {

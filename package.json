@@ -52,7 +52,9 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test:a11y": "playwright test tests/e2e/a11y.spec.ts",
-    "government:validate": "tsx scripts/validate-directory.ts"
+    "government:validate": "tsx scripts/validate-directory.ts",
+    "resources:collect": "tsx scripts/collect-resources.ts",
+    "resources:validate": "tsx scripts/validate-resources.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -95,6 +97,7 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.5",
     "typescript": "^5",
+    "unpdf": "^1.8.1",
     "vitest": "^2.1.8",
     "wrangler": "^4.118.0",
     "zod": "^3.24.1"

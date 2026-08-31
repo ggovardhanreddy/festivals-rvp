@@ -3,6 +3,21 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { withBase } from "@/lib/base";
+import { ResourceAdmin } from "@/components/resources/ResourceAdmin";
+import type {
+  CollectorNotification,
+  CollectorRun,
+  Resource,
+  Source,
+} from "@/lib/resources";
+
+/** Build-time collector state, handed to the Resources tab. */
+export type CollectorAdminData = {
+  resources: Resource[];
+  sources: Source[];
+  runs: CollectorRun[];
+  notifications: CollectorNotification[];
+};
 import {
   DIRECTORY_CATEGORIES,
   HERITAGE_CATEGORIES,
@@ -34,6 +49,7 @@ import { ROLE_CAPABILITIES } from "@/lib/roles";
 
 type Tab =
   | "overview"
+  | "resources"
   | "analytics"
   | "media"
   | "members"
@@ -735,12 +751,13 @@ function RolesPanel() {
   );
 }
 
-export function AdminHub() {
+export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
   const { isAdmin, ready, refresh } = useAdminSession();
   const [tab, setTab] = useState<Tab>("overview");
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "overview", label: "Overview" },
+    { id: "resources", label: "Resources" },
     { id: "analytics", label: "Analytics" },
     { id: "media", label: "Media / R2" },
     { id: "members", label: "Members" },
@@ -806,6 +823,19 @@ export function AdminHub() {
           </button>
         ))}
       </div>
+
+      {tab === "resources" ? (
+        collector ? (
+          <ResourceAdmin
+            resources={collector.resources}
+            sources={collector.sources}
+            runs={collector.runs}
+            notifications={collector.notifications}
+          />
+        ) : (
+          <p className="muted">Collector data is unavailable in this build.</p>
+        )
+      ) : null}
 
       {tab === "overview" ? (
         <div className="analytics-cards">

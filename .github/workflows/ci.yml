@@ -67,6 +67,7 @@ jobs:
           set -euo pipefail
           npm run validate
           npm test
+          npm run resources:validate
 
       - name: Report result
         if: always()

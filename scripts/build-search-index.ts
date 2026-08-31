@@ -15,6 +15,8 @@
  *     in the repository. Telugu keywords come only from the reviewed
  *     catalogue and the hand-checked transliteration table.
  */
+import fs from "node:fs";
+import path from "node:path";
 import { allMedia } from "../lib/content";
 import { albumHref } from "../lib/site";
 import { loadMembers } from "../lib/members";
@@ -41,6 +43,7 @@ import { isPublished } from "../lib/learning";
 import { LOCALES } from "../lib/i18n/config";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const root = process.cwd();
 
 /**
  * Relevance multipliers. A person outranks a photograph of that person, and a
@@ -452,11 +455,91 @@ function communityDocs(): SearchDoc[] {
   return docs;
 }
 
+/**
+ * §15: one global search across documents, videos, courses, question papers,
+ * scholarships, careers and agriculture.
+ *
+ * Published resources only — the same gate the pages use. An unreviewed
+ * document must not be findable, and the search index is the one place where
+ * that would otherwise leak: it is a public JSON file.
+ *
+ * `content` carries the extracted PDF text, because the brief asks for it to
+ * be searchable and it is the difference between finding "the paper about
+ * quadratic equations" and having to already know its title.
+ */
+function resourceDocs(): SearchDoc[] {
+  let resources: Array<Record<string, unknown>> = [];
+  let sources: Array<Record<string, unknown>> = [];
+  try {
+    const raw = JSON.parse(
+      fs.readFileSync(path.join(root, "generated", "resources.json"), "utf8"),
+    ) as { resources?: Array<Record<string, unknown>> };
+    resources = Array.isArray(raw.resources) ? raw.resources : [];
+  } catch {
+    return [];
+  }
+  try {
+    const raw = JSON.parse(
+      fs.readFileSync(path.join(root, "content", "resources", "sources.json"), "utf8"),
+    ) as { sources?: Array<Record<string, unknown>> };
+    sources = Array.isArray(raw.sources) ? raw.sources : [];
+  } catch {
+    sources = [];
+  }
+  const sourceName = new Map(sources.map((x) => [String(x.id), String(x.name ?? x.id)]));
+
+  const slugOf = (r: Record<string, unknown>) => {
+    const title = String(r.title ?? "");
+    const stem = title
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60);
+    const id = String(r.id ?? "");
+    return `${stem || "resource"}-${id.split("-").pop() ?? ""}`;
+  };
+
+  const docs: SearchDoc[] = [];
+  for (const r of resources) {
+    if (r.status !== "published") continue;
+    const title = String(r.title ?? "").trim();
+    if (!title) continue;
+    const keywords = [
+      ...(Array.isArray(r.tags) ? r.tags.map(String) : []),
+      String(r.exam ?? ""),
+      String(r.subject ?? ""),
+      String(r.classLevel ?? ""),
+      String(r.category ?? ""),
+      String(r.subcategory ?? ""),
+      String(r.resourceType ?? ""),
+      sourceName.get(String(r.sourceId)) ?? "",
+      String(r.titleTe ?? ""),
+    ].filter(Boolean);
+    docs.push({
+      id: `resource:${String(r.id)}`,
+      title,
+      description: String(r.description ?? "").slice(0, 300),
+      url: `${base}/learn/resource/${slugOf(r)}/`,
+      section: "learn",
+      language: r.language === "te" ? "te" : "en",
+      keywords,
+      content: [title, String(r.description ?? ""), String(r.textExcerpt ?? "")]
+        .filter(Boolean)
+        .join(" ")
+        .slice(0, 4000),
+      category: String(r.category ?? ""),
+      weight: r.resourceType === "notification" ? 3 : 2,
+    });
+  }
+  return docs;
+}
+
 export function buildSearchIndex(): SearchShard {
   const docs = [
     ...pageDocs(),
     ...directoryDocs(),
     ...libraryDocs(),
+    ...resourceDocs(),
     ...communityDocs(),
     ...mediaDocs(),
   ].filter((doc) =>

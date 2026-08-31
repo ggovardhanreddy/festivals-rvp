@@ -223,6 +223,7 @@ jobs:
           set -euo pipefail
           npm run validate
           npm test
+          npm run resources:validate
           size="$(du -sh out | cut -f1)"
           echo "Artifact size: $size"
           echo "size=$size" >> "$GITHUB_OUTPUT"
