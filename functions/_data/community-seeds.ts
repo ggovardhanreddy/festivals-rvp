@@ -606,7 +606,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "ugadi",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "ఉగాది"
     },
     {
       "id": "sri-rama-navami-2026",
@@ -617,7 +618,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "sri-rama-navami",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "శ్రీ రామ నవమి"
     },
     {
       "id": "mathamma-jathara-2026",
@@ -628,7 +630,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "mathamma-jathara",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "మాతమ్మ జాతర"
     },
     {
       "id": "devapatlamma-jathara-2026",
@@ -639,7 +642,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "devapatlamma-jathara",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "దేవపట్లమ్మ జాతర"
     },
     {
       "id": "varalakshmi-vratam-2026",
@@ -650,7 +654,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "varalakshmi-vratam",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "వరలక్ష్మీ వ్రతం"
     },
     {
       "id": "vinayaka-chavithi-2026",
@@ -661,7 +666,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "vinayaka-chavithi",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "వినాయక చవితి"
     },
     {
       "id": "dasara-2026",
@@ -672,7 +678,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "dasara",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "దసరా"
     },
     {
       "id": "deepavali-2026",
@@ -683,7 +690,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "deepavali",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "దీపావళి"
     },
     {
       "id": "sankranthi-2027",
@@ -695,7 +703,8 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "category": "festival",
       "slug": "sankranthi",
       "reminderDaysBefore": 7,
-      "recurring": true
+      "recurring": true,
+      "titleTe": "సంక్రాంతి"
     }
   ],
   "announcements": [
@@ -709,9 +718,14 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
     {
       "id": "contact-inbox-2026",
       "title": "Community inbox is open",
-      "body": "Reach RVP Youth at reddivaripalli.rvp@gmail.com via the Contact page, or visit Ramalayam using the map link.",
+      "body": "Have a suggestion or need to reach the community?",
       "date": "2026-08-04",
-      "important": true
+      "important": true,
+      "href": "/contact/",
+      "cta": "Contact Us",
+      "titleTe": "మీ సందేశాలకు స్వాగతం",
+      "bodyTe": "సూచన ఉందా? లేదా గ్రామ సమాజాన్ని సంప్రదించాలా?",
+      "ctaTe": "మమ్మల్ని సంప్రదించండి"
     },
     {
       "id": "ramalayam-dev-2026",

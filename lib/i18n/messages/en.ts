@@ -653,6 +653,27 @@ export const en = {
   "form.sending": "Sending...",
   "form.name": "Name",
   "form.message": "Message",
+
+  // ── Sanatana Dharma & Telugu Culture (2026 redesign) ──────────────
+  "dharma.title": "Sanatana Dharma",
+  "dharma.knowledge.title": "Dharma & Spiritual Knowledge",
+  "dharma.vedas.title": "Vedas",
+  "dharma.upanishads.title": "Upanishads",
+  "dharma.gita.title": "Bhagavad Gita",
+  "dharma.ramayanam.title": "Ramayanam",
+  "dharma.mahabharatam.title": "Mahabharatam",
+  "dharma.puranas.title": "Puranas",
+  "dharma.slokas.title": "Slokas & Mantras",
+  "dharma.music.title": "Devotional Music",
+  "culture.title": "Telugu Culture",
+  "culture.literature.title": "Telugu Literature",
+  "culture.poetry.title": "Telugu Poetry",
+  "culture.stories.title": "Telugu Stories",
+  "culture.spiritual.title": "Telugu Spiritual Literature",
+  "culture.sriSri.title": "Sri Sri",
+  "spiritual.title": "Temple Heritage",
+  "nav.dharma": "Sanatana Dharma",
+  "nav.culture": "Telugu Culture",
 } as const;
 
 export type MessageId = keyof typeof en;

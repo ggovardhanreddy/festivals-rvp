@@ -152,6 +152,9 @@ export const NAV = [
   { href: "/events/", label: "Events" },
   { href: "/developments/", label: "Developments" },
   { href: "/gallery/", label: "Gallery" },
+  { href: "/dharma/", label: "Sanatana Dharma" },
+  { href: "/telugu-culture/", label: "Telugu Culture" },
+  { href: "/government/", label: "Government" },
 ] as const;
 
 /**
@@ -159,17 +162,53 @@ export const NAV = [
  * Fun Fest stays here; SiteHeader applies member-auth gating for /fun-trips/.
  */
 export const MORE_NAV = [
-  { href: "/directory/", label: "Directory" },
+  { href: "/spiritual-heritage/", label: "Temple Heritage" },
   { href: "/heritage/", label: "Heritage Archive" },
   { href: "/timeline/", label: "Timeline" },
+  { href: "/directory/", label: "Directory" },
   { href: "/fun-trips/", label: "Fun Fest" },
   { href: "/suggestions/", label: "Suggestions" },
   { href: "/contact/", label: "Contact" },
   { href: "/services/", label: "Village Services" },
-  { href: "/learn/", label: "Learning & Education" },
-  { href: "/agriculture/", label: "Agriculture" },
-  { href: "/careers/", label: "Careers" },
   { href: "/emergency/", label: "Emergency Information" },
+] as const;
+
+/**
+ * The two knowledge sections' own sub-navigation, rendered on each hub.
+ *
+ * Kept here rather than inside the components so the hub page, the footer and
+ * the section landing pages cannot drift apart — the failure mode that leaves
+ * a menu item pointing at a page nobody built.
+ */
+export const DHARMA_NAV = [
+  { href: "/dharma/", label: "About Sanatana Dharma", labelTe: "సనాతన ధర్మం" },
+  { href: "/dharma/vedas/", label: "Vedas", labelTe: "వేదాలు" },
+  { href: "/dharma/upanishads/", label: "Upanishads", labelTe: "ఉపనిషత్తులు" },
+  { href: "/dharma/gita/", label: "Bhagavad Gita", labelTe: "భగవద్గీత" },
+  { href: "/dharma/ramayanam/", label: "Ramayanam", labelTe: "రామాయణం" },
+  { href: "/dharma/mahabharatam/", label: "Mahabharatam", labelTe: "మహాభారతం" },
+  { href: "/dharma/puranas/", label: "Puranas", labelTe: "పురాణాలు" },
+  { href: "/dharma/slokas/", label: "Slokas & Mantras", labelTe: "శ్లోకాలు & మంత్రాలు" },
+  { href: "/dharma/music/", label: "Devotional Music", labelTe: "భక్తి సంగీతం" },
+  { href: "/dharma/knowledge/", label: "Dharma & Spiritual Knowledge", labelTe: "ధర్మం & ఆధ్యాత్మిక జ్ఞానం" },
+  { href: "/events/", label: "Festivals & Traditions", labelTe: "పండుగలు & సంప్రదాయాలు" },
+] as const;
+
+export const CULTURE_NAV = [
+  { href: "/telugu-culture/", label: "Telugu Culture", labelTe: "తెలుగు సంస్కృతి" },
+  { href: "/telugu-culture/literature/", label: "Telugu Literature", labelTe: "తెలుగు సాహిత్యం" },
+  { href: "/telugu-culture/poetry/", label: "Telugu Poetry", labelTe: "తెలుగు కవిత్వం" },
+  { href: "/telugu-culture/stories/", label: "Telugu Stories", labelTe: "తెలుగు కథలు" },
+  { href: "/telugu-culture/spiritual/", label: "Telugu Spiritual Literature", labelTe: "తెలుగు ఆధ్యాత్మిక సాహిత్యం" },
+  { href: "/telugu-culture/sri-sri/", label: "Sri Sri", labelTe: "శ్రీశ్రీ" },
+] as const;
+
+export const HERITAGE_NAV = [
+  { href: "/about/", label: "Village History", labelTe: "గ్రామ చరిత్ర" },
+  { href: "/spiritual-heritage/", label: "Temple Heritage", labelTe: "ఆలయ వారసత్వం" },
+  { href: "/heritage/", label: "Heritage Archive", labelTe: "వారసత్వ సేకరణ" },
+  { href: "/gallery/", label: "Old Photos & Videos", labelTe: "పాత ఫోటోలు & వీడియోలు" },
+  { href: "/timeline/", label: "Timeline", labelTe: "కాలరేఖ" },
 ] as const;
 
 /**

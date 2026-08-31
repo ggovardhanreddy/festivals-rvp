@@ -4,10 +4,7 @@ import { extractExpiryDate, isExpired, parseIndianDate } from "@/lib/resources/e
 import {
   categorize,
   CONFIDENCE_FLOOR,
-  detectClassLevel,
-  detectExam,
   detectResourceType,
-  detectSubject,
 } from "@/lib/resources/categorize";
 import {
   canonicalizeUrl,
@@ -25,7 +22,7 @@ function res(over: Partial<Resource> = {}): Resource {
     id: "x-1",
     title: "Sample",
     description: "",
-    category: "school",
+    category: "gita",
     language: "en",
     resourceType: "pdf",
     sourceId: "s",
@@ -139,35 +136,58 @@ describe("expiry extraction", () => {
 });
 
 describe("categorisation", () => {
-  it("files an SSC model paper under school education", () => {
-    const g = categorize("SSC Public Examination March 2026 Mathematics Model Question Paper", "Class 10 model paper", "", ["school"]);
-    expect(g.category).toBe("school");
+  it("files a Gita chapter under the Gita", () => {
+    const g = categorize("Bhagavad Gita Chapter 2 Sankhya Yoga", "Sanskrit text with Telugu meaning", "", ["gita"]);
+    expect(g.category).toBe("gita");
     expect(g.confidence).toBeGreaterThanOrEqual(CONFIDENCE_FLOOR);
   });
 
-  it("files an EAPCET notification under entrance exams", () => {
-    const g = categorize("AP EAPCET 2026 Notification", "Engineering and Agriculture entrance test", "", ["entrance"]);
-    expect(g.category).toBe("entrance");
-    expect(g.subcategory).toBe("engineering");
+  it("files a Sundara Kanda text under the epics", () => {
+    const g = categorize("Sundara Kanda Parayanam", "Valmiki Ramayanam, Hanuman's journey to Lanka", "", ["epics"]);
+    expect(g.category).toBe("epics");
+    expect(g.subcategory).toBe("ramayanam");
   });
 
-  it("files a scholarship notice under scholarships", () => {
-    const g = categorize("PM-USP Post Matric Scholarship 2026-27", "Fee reimbursement renewal", "", ["scholarships"]);
-    expect(g.category).toBe("scholarships");
-    expect(g.subcategory).toBe("post-matric");
+  it("files an Annamayya keerthana under devotional music", () => {
+    const g = categorize("Annamacharya Sankirtana — Adivo Alladivo", "Keerthana with Telugu lyrics", "", ["music"]);
+    expect(g.category).toBe("music");
+    expect(g.subcategory).toBe("annamayya");
   });
 
-  it("files a crop advisory under agriculture", () => {
-    const g = categorize("Package of Practices for Groundnut", "Sowing time and pest management for rainfed groundnut", "", ["agriculture"]);
-    expect(g.category).toBe("agriculture");
+  it("files a Vishnu Sahasranama under slokas", () => {
+    const g = categorize("Vishnu Sahasranama Stotram", "A thousand names, with Telugu meaning", "", ["slokas"]);
+    expect(g.category).toBe("slokas");
+    expect(g.subcategory).toBe("vishnu");
+  });
+
+  it("files Potana's Bhagavatam under the Puranas", () => {
+    const g = categorize("Potana Telugu Bhagavatam — Gajendra Moksham", "Prathama Skandham", "", ["puranas"]);
+    expect(g.category).toBe("puranas");
+    expect(g.subcategory).toBe("bhagavata");
+  });
+
+  it("files an Upanishad under the Upanishads", () => {
+    const g = categorize("Katha Upanishad with Shankara Bhashya", "Nachiketa and Yama", "", ["upanishads"]);
+    expect(g.category).toBe("upanishads");
+  });
+
+  it("files Vedic chanting under the Vedas", () => {
+    const g = categorize("Rudram Ghanapatha — Yajur Veda chanting", "Traditional recitation", "", ["vedas"]);
+    expect(g.category).toBe("vedas");
+    expect(g.subcategory).toBe("yajur");
+  });
+
+  it("files a village jathara record under Reddivaripalli heritage", () => {
+    const g = categorize("Devapatlamma Jathara at Reddivaripalli", "Village temple festival", "", ["heritage"]);
+    expect(g.category).toBe("heritage");
   });
 
   it("weights the title above deep body text", () => {
-    // A scholarship notice on government letterhead must not become a
+    // A sloka collection on government letterhead must not become a
     // "government" document because of its boilerplate.
-    const body = "Government of Andhra Pradesh ".repeat(50) + "circular memo proceedings gazette";
-    const g = categorize("National Scholarship Portal — apply for scholarship", "scholarship deadline", body, []);
-    expect(g.category).toBe("scholarships");
+    const body = "Government of Andhra Pradesh circular memo ".repeat(40);
+    const g = categorize("Hanuman Chalisa with Telugu meaning", "stotram for daily recitation", body, []);
+    expect(g.category).toBe("slokas");
   });
 
   it("reports low confidence for an unclassifiable title", () => {
@@ -176,25 +196,23 @@ describe("categorisation", () => {
   });
 
   it("uses the source's own categories as a prior", () => {
-    const withPrior = categorize("Notice", "", "", ["agriculture"]);
+    const withPrior = categorize("Notice", "", "", ["music"]);
     const without = categorize("Notice", "", "", []);
     expect(withPrior.confidence).toBeGreaterThan(without.confidence);
   });
 
-  it("detects subject, class, exam and type", () => {
-    expect(detectSubject("Class 10 Mathematics Model Paper")).toBe("mathematics");
-    expect(detectSubject("సాంఘిక శాస్త్రం")).toBe("social-studies");
-    expect(detectClassLevel("SSC Class X Telugu")).toBe("class-10");
-    expect(detectClassLevel("Intermediate First Year Physics")).toBe("inter-1");
-    expect(detectExam("AP EAPCET 2026 hall ticket")).toBe("AP EAPCET");
-    expect(detectResourceType("Previous Year Question Paper 2025")).toBe("question-paper");
-    expect(detectResourceType("Recruitment Notification No. 12/2026")).toBe("notification");
-    expect(detectResourceType("Something neutral", "", "link")).toBe("link");
+  it("has no category for the subjects §17 forbids monitoring", () => {
+    // Agriculture, education, jobs and coaching were removed from the tree, so
+    // nothing can be filed under them even if a source served it.
+    const keys = CATEGORY_TREE.map((c) => c.key) as string[];
+    for (const banned of ["agriculture", "school", "entrance", "competitive", "careers", "scholarships", "digital", "english", "intermediate"]) {
+      expect(keys).not.toContain(banned);
+    }
   });
 
-  it("prefers the longer exam name when two match", () => {
-    // "SSC" is a substring of the competitive-exam list and of "SSC CGL".
-    expect(detectExam("SSC CGL 2026 notification")).toBe("SSC CGL");
+  it("still detects a resource type and a language", () => {
+    expect(detectResourceType("Bhagavad Gita Parayanam audio", "", "link")).toBe("link");
+    expect(detectResourceType("Vishnu Sahasranama — study material")).toBe("study-material");
   });
 });
 
@@ -271,34 +289,43 @@ describe("duplicate detection", () => {
 });
 
 describe("taxonomy", () => {
-  it("covers every category the brief lists", () => {
+  it("covers every section §28 names as core", () => {
     const keys = CATEGORY_TREE.map((c) => c.key);
     for (const expected of [
-      "school", "intermediate", "entrance", "competitive",
-      "digital", "english", "agriculture", "careers", "scholarships", "government",
+      "heritage", "dharma", "vedas", "upanishads", "epics", "puranas",
+      "gita", "slokas", "music", "literature", "sri-sri", "culture", "government",
     ]) {
       expect(keys).toContain(expected);
     }
   });
 
-  it("has every school subcategory the brief lists", () => {
-    const school = CATEGORY_TREE.find((c) => c.key === "school")!;
-    const subs = school.subcategories.map((s) => s.key);
-    expect(subs).toEqual(["primary", "class-6", "class-7", "class-8", "class-9", "class-10", "ssc"]);
+  it("has a subcategory for each Veda", () => {
+    const vedas = CATEGORY_TREE.find((c) => c.key === "vedas")!;
+    const subs = vedas.subcategories.map((s) => s.key);
+    for (const s of ["rig", "yajur", "sama", "atharva"]) expect(subs).toContain(s);
   });
 
-  it("has every intermediate stream the brief lists", () => {
-    const inter = CATEGORY_TREE.find((c) => c.key === "intermediate")!;
-    const subs = inter.subcategories.map((s) => s.key);
-    for (const s of ["first-year", "second-year", "mpc", "bipc", "cec", "mec"]) expect(subs).toContain(s);
-  });
-
-  it("has every competitive-exam subcategory the brief lists", () => {
-    const comp = CATEGORY_TREE.find((c) => c.key === "competitive")!;
-    const subs = comp.subcategories.map((s) => s.key);
-    for (const s of ["appsc", "ssc-exam", "banking", "railways", "police", "defence", "other-govt"]) {
+  it("has a subcategory for each deity §10 lists", () => {
+    const slokas = CATEGORY_TREE.find((c) => c.key === "slokas")!;
+    const subs = slokas.subcategories.map((s) => s.key);
+    for (const s of ["ganesha", "shiva", "vishnu", "lakshmi", "saraswati", "devi", "hanuman", "surya"]) {
       expect(subs).toContain(s);
     }
+  });
+
+  it("has a subcategory for each composer §11 lists", () => {
+    const music = CATEGORY_TREE.find((c) => c.key === "music")!;
+    const subs = music.subcategories.map((s) => s.key);
+    for (const s of ["annamayya", "thyagaraja", "ramadasu", "bhajans", "harikatha"]) {
+      expect(subs).toContain(s);
+    }
+  });
+
+  it("splits the epics into Ramayanam and Mahabharatam", () => {
+    const epics = CATEGORY_TREE.find((c) => c.key === "epics")!;
+    const subs = epics.subcategories.map((s) => s.key);
+    expect(subs).toContain("ramayanam");
+    expect(subs).toContain("mahabharatam");
   });
 
   it("uses unique subcategory keys within a category", () => {
@@ -309,13 +336,10 @@ describe("taxonomy", () => {
   });
 
   it("labels fall back to the key rather than rendering undefined", () => {
-    expect(categoryLabel("school")).toBe("School Education");
-    expect(categoryLabel("school", "te")).toBe("పాఠశాల విద్య");
+    expect(categoryLabel("gita")).toBe("Bhagavad Gita");
+    expect(categoryLabel("gita", "te")).toBe("భగవద్గీత");
     expect(categoryLabel("nonsense")).toBe("nonsense");
-    expect(subcategoryLabel("school", "class-10", "te")).toBe("10వ తరగతి");
-    expect(subcategoryLabel("school", "nonsense")).toBe("nonsense");
-    // An English-only subcategory falls back to English under a Telugu locale
-    // rather than showing a blank.
-    expect(subcategoryLabel("intermediate", "mpc", "te")).toBe("MPC");
+    expect(subcategoryLabel("vedas", "rig", "te")).toBe("ఋగ్వేదం");
+    expect(subcategoryLabel("vedas", "nonsense")).toBe("nonsense");
   });
 });

@@ -7,3 +7,42 @@ http://www.reddivaripalli.com/* https://www.reddivaripalli.com/:splat 301
 /blood-donors / 301
 /blood-donors/ / 301
 /blood-donors/* / 301
+
+# ── 2026 redesign: education/jobs/kids sections retired ────────────────────
+# The site's knowledge section is now Sanatana Dharma and Telugu Culture.
+# Every retired URL goes somewhere it can be understood, not to the homepage,
+# except where nothing on the new site corresponds.
+/learn /dharma/ 301
+/learn/ /dharma/ 301
+/learn/* /dharma/ 301
+/students /dharma/ 301
+/students/ /dharma/ 301
+/kids /dharma/ 301
+/kids/ /dharma/ 301
+/kids/* /dharma/ 301
+/play /dharma/ 301
+/play/ /dharma/ 301
+/play/* /dharma/ 301
+/digital-skills /government/ 301
+/digital-skills/ /government/ 301
+/careers /government/ 301
+/careers/ /government/ 301
+/careers/* /government/ 301
+/agriculture /government/ 301
+/agriculture/ /government/ 301
+/agriculture/* /government/ 301
+/farmers /government/ 301
+/farmers/ /government/ 301
+/english /telugu-culture/ 301
+/english/ /telugu-culture/ 301
+/it /government/ 301
+/it/ /government/ 301
+/engineering /government/ 301
+/engineering/ /government/ 301
+/explore /search/ 301
+/explore/ /search/ 301
+/community /members/ 301
+/community/ /members/ 301
+# /temples/ was reserved for a fuller temple treatment. That is now real.
+/temples /spiritual-heritage/ 301
+/temples/ /spiritual-heritage/ 301

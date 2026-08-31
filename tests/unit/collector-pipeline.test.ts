@@ -24,7 +24,7 @@ function source(over: Partial<Source> = {}): Source {
     feedUrl: "https://test.gov.in/list",
     method: "html-index",
     type: "state-education",
-    categories: ["school"],
+    categories: ["gita"],
     licenseStatus: "no",
     licenseNote: "test",
     active: true,
@@ -234,7 +234,7 @@ describe("RSS collection", () => {
 
     const { deps } = noopDeps();
     const { resources, result } = await collectSource(
-      source({ id: "icar", name: "ICAR", url: "https://icar.org.in/en", feedUrl: "https://icar.org.in/en/rss.xml", method: "rss", categories: ["agriculture"] }),
+      source({ id: "icar", name: "ICAR", url: "https://icar.org.in/en", feedUrl: "https://icar.org.in/en/rss.xml", method: "rss", categories: ["music"] }),
       [],
       deps,
       { force: true },
@@ -258,7 +258,7 @@ describe("expiry at collection time", () => {
 
     const { deps } = noopDeps();
     const { resources } = await collectSource(
-      source({ licenseStatus: "no", categories: ["scholarships"], autoPublish: true }),
+      source({ licenseStatus: "no", categories: ["slokas"], autoPublish: true }),
       [],
       deps,
       { force: true },
@@ -281,7 +281,7 @@ describe("duplicate handling", () => {
         id: "test-existing",
         title: "Class 9 Science Model Paper",
         description: "",
-        category: "school",
+        category: "gita",
         language: "en",
         resourceType: "question-paper",
         sourceId: "test",
@@ -324,7 +324,7 @@ describe("update detection and version archiving", () => {
         id: "test-old",
         title: "Intermediate Syllabus 2026",
         description: "",
-        category: "intermediate",
+        category: "epics",
         language: "en",
         resourceType: "syllabus",
         sourceId: "test",

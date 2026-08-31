@@ -59,58 +59,29 @@ import { FunFestAuthBar } from "@/components/auth/FunFestAuthBar";
 import { InstagramFollow } from "@/components/festivals/InstagramFollow";
 import { CULTURE_FESTIVALS } from "@/lib/festivals";
 import { Suspense, type ReactNode } from "react";
-import { PlayHub } from "@/components/platform/PlayHub";
-import { GameRoute } from "@/components/games/GameRoute";
-import { SectionComingSoon } from "@/components/platform/SectionComingSoon";
-import { GAMES, gameBySlug } from "@/lib/platform/games";
-import { PLANNED_ROUTES } from "@/lib/routes/registry";
-import { LearningCenter } from "@/components/resources/LearningCenter";
-import { ResourceCategoryPage } from "@/components/resources/ResourceCategoryPage";
-import { ResourceDetailPage } from "@/components/resources/ResourceDetailPage";
+import { WeatherPage } from "@/components/weather/WeatherPage";
+import { DirectoryHub } from "@/components/directory/DirectoryHub";
+import { EmergencyPage } from "@/components/safety/EmergencyPage";
+import { SafetyPage } from "@/components/safety/SafetyPage";
+import { HUBS, hubBySlug } from "@/lib/directory";
+import { DharmaHub } from "@/components/dharma/DharmaHub";
+import { KnowledgePage } from "@/components/dharma/KnowledgePage";
+import { ConceptsPage } from "@/components/dharma/ConceptsPage";
+import { GitaChapterPage } from "@/components/dharma/GitaChapterPage";
+import { CultureHub, type CultureView } from "@/components/dharma/CultureHub";
+import { SpiritualHeritagePage } from "@/components/dharma/SpiritualHeritagePage";
+import {
+  DHARMA_PAGE_SLUGS,
+  GITA_CHAPTER_SLUGS,
+  SRI_SRI_PAGE,
+  dharmaPage,
+} from "@/lib/dharma";
 import {
   loadCollectorNotifications,
   loadCollectorRuns,
   loadResourceCatalog,
   loadResourceSources,
 } from "@/lib/resources/server";
-import {
-  CATEGORY_KEYS,
-  findBySlug,
-  publicResources,
-  resourceSlug,
-  type CategoryKey,
-} from "@/lib/resources";
-import { KidsHub } from "@/components/kids/KidsHub";
-import { KidsRoute } from "@/components/kids/KidsRoute";
-import { KIDS_ROUTES, isKidsLibrary, isKidsRoute } from "@/lib/kids/catalog";
-import { AlphabetRoute } from "@/components/kids/AlphabetRoute";
-import {
-  RhymesPage,
-  SciencePage,
-  StoriesPage,
-  VideoLibrary,
-} from "@/components/learning/sections";
-import {
-  RhymeDetail,
-  ScienceDetail,
-  StoryDetail,
-  VideoDetail,
-} from "@/components/learning/DetailPages";
-import { DigitalSkillsPage } from "@/components/learning/DigitalSkillsPage";
-import {
-  loadRhymes,
-  loadScienceTopics,
-  loadStories,
-  loadVideos,
-} from "@/lib/learning/server";
-import { AgriculturePage } from "@/components/agriculture/AgriculturePage";
-import { CareersPage } from "@/components/careers/CareersPage";
-import { WeatherPage } from "@/components/weather/WeatherPage";
-import { loadTyped } from "@/lib/content/load";
-import { DirectoryHub } from "@/components/directory/DirectoryHub";
-import { EmergencyPage } from "@/components/safety/EmergencyPage";
-import { SafetyPage } from "@/components/safety/SafetyPage";
-import { HUBS, hubBySlug } from "@/lib/directory";
 import { VillageServicesPage } from "@/components/services/VillageServicesPage";
 import { CultureTraditions } from "@/components/home/CultureTraditions";
 import { FestivalCalendar } from "@/components/home/FestivalCalendar";
@@ -199,37 +170,28 @@ export function generateStaticParams() {
 
   // Games are real pages. Reserved sections get an honest landing page rather
   // than a 404 from the nav, and never a fabricated placeholder listing.
-  paths.push({ slug: ["play"] });
-  for (const game of GAMES) paths.push({ slug: ["play", game.slug] });
-  paths.push({ slug: ["play", "daily"] });
-  paths.push({ slug: ["kids"] });
-  for (const seg of ["learn", "agriculture", "careers", "weather", "emergency", "safety"]) {
+  for (const seg of ["weather", "emergency", "safety"]) {
     paths.push({ slug: [seg] });
   }
+
+  // Sanatana Dharma & Telugu Culture. Every one of these has written content,
+  // so none of them is an empty page — which was the failing of the sections
+  // this replaces.
+  paths.push({ slug: ["dharma"] });
+  paths.push({ slug: ["dharma", "knowledge"] });
+  for (const key of DHARMA_PAGE_SLUGS) paths.push({ slug: ["dharma", key] });
+  for (const n of GITA_CHAPTER_SLUGS) paths.push({ slug: ["dharma", "gita", n] });
+  paths.push({ slug: ["telugu-culture"] });
+  for (const view of ["literature", "poetry", "stories", "spiritual"]) {
+    paths.push({ slug: ["telugu-culture", view] });
+  }
+  paths.push({ slug: ["telugu-culture", "sri-sri"] });
+  paths.push({ slug: ["spiritual-heritage"] });
   // Official resource hubs: /government/, /students/, /farmers/, /banking/
   // and the documents hub, which lives under /government/ so it cannot
   // collide with the existing Panchayat /documents/ page.
   for (const hub of HUBS) {
     paths.push(hub.slug === "documents" ? { slug: ["government", "documents"] } : { slug: [hub.slug] });
-  }
-  for (const slug of KIDS_ROUTES) paths.push({ slug: ["kids", slug] });
-  // Detail pages exist only for content that exists. With an empty library
-  // this loop adds nothing, and the listing page carries the honest state.
-  for (const item of loadStories()) paths.push({ slug: ["kids", "stories", item.slug] });
-  for (const item of loadRhymes()) paths.push({ slug: ["kids", "rhymes", item.slug] });
-  for (const item of loadScienceTopics()) paths.push({ slug: ["kids", "science", item.slug] });
-  for (const item of loadVideos()) paths.push({ slug: ["kids", "videos", item.slug] });
-  paths.push({ slug: ["digital-skills"] });
-  // Learning Center: one page per category, plus a page per PUBLISHED
-  // resource. Nothing at "new" or "needs-review" gets a URL, so an
-  // unreviewed document cannot be reached even by guessing.
-  for (const key of CATEGORY_KEYS) paths.push({ slug: ["learn", key] });
-  for (const r of publicResources(loadResourceCatalog())) {
-    paths.push({ slug: ["learn", "resource", resourceSlug(r)] });
-  }
-  for (const route of PLANNED_ROUTES) {
-    const seg = route.path.replace(/^\/|\/$/g, "");
-    if (seg) paths.push({ slug: [seg] });
   }
 
   const published = publicAlbums().filter((a) => (a.media?.length ?? 0) > 0);
@@ -941,52 +903,6 @@ export default async function ArchiveRoute({
     );
   }
 
-  if (path === "play") {
-    return <PlayHub />;
-  }
-
-  if (path === "kids") {
-    return <KidsHub />;
-  }
-
-  if (path === "learn") {
-    return (
-      <LearningCenter
-        resources={loadResourceCatalog()}
-        sources={loadResourceSources()}
-        courses={loadTyped("course")}
-      />
-    );
-  }
-
-  // /learn/<category>/ and /learn/resource/<slug>/
-  if (slug[0] === "learn" && slug.length === 2 && CATEGORY_KEYS.includes(slug[1] as CategoryKey)) {
-    return (
-      <ResourceCategoryPage
-        category={slug[1] as CategoryKey}
-        resources={loadResourceCatalog()}
-        sources={loadResourceSources()}
-      />
-    );
-  }
-
-  if (slug[0] === "learn" && slug[1] === "resource" && slug.length === 3) {
-    const published = publicResources(loadResourceCatalog());
-    const resource = findBySlug(published, slug[2]!);
-    if (!resource) notFound();
-    const source = loadResourceSources().find((s) => s.id === resource.sourceId);
-    return <ResourceDetailPage resource={resource} source={source} />;
-  }
-
-  if (path === "agriculture") {
-    return (
-      <AgriculturePage
-        crops={loadTyped("crop")}
-        guides={loadTyped("agriculture-guide")}
-      />
-    );
-  }
-
   if (path === "government/documents") {
     return <DirectoryHub hub={hubBySlug("documents")!} />;
   }
@@ -998,6 +914,55 @@ export default async function ArchiveRoute({
     }
   }
 
+  // ── Sanatana Dharma ────────────────────────────────────────────────────
+  if (path === "dharma") {
+    return <DharmaHub />;
+  }
+
+  if (path === "dharma/knowledge") {
+    return <ConceptsPage />;
+  }
+
+  if (slug[0] === "dharma" && slug[1] === "gita" && slug.length === 3) {
+    if (!GITA_CHAPTER_SLUGS.includes(slug[2]!)) notFound();
+    return <GitaChapterPage chapter={slug[2]!} />;
+  }
+
+  if (slug[0] === "dharma" && slug.length === 2) {
+    const entry = dharmaPage(slug[1]!);
+    if (!entry) notFound();
+    return (
+      <KnowledgePage
+        entry={entry}
+        eyebrow="Sanatana Dharma"
+        eyebrowHref="/dharma/"
+        divisionHrefBase={entry.slug === "gita" ? "/dharma/gita/" : undefined}
+      />
+    );
+  }
+
+  // ── Telugu Culture ─────────────────────────────────────────────────────
+  if (path === "telugu-culture") {
+    return <CultureHub view="hub" />;
+  }
+
+  if (slug[0] === "telugu-culture" && slug[1] === "sri-sri" && slug.length === 2) {
+    return (
+      <KnowledgePage entry={SRI_SRI_PAGE} eyebrow="Telugu Culture" eyebrowHref="/telugu-culture/" />
+    );
+  }
+
+  if (slug[0] === "telugu-culture" && slug.length === 2) {
+    const views = ["literature", "poetry", "stories", "spiritual"] as const;
+    const view = views.find((v) => v === slug[1]);
+    if (!view) notFound();
+    return <CultureHub view={view as CultureView} />;
+  }
+
+  if (path === "spiritual-heritage") {
+    return <SpiritualHeritagePage albums={publicAlbums()} />;
+  }
+
   if (path === "emergency") {
     return <EmergencyPage />;
   }
@@ -1006,123 +971,9 @@ export default async function ArchiveRoute({
     return <SafetyPage />;
   }
 
-  if (path === "careers") {
-    return <CareersPage jobs={loadTyped("job")} />;
-  }
-
   if (path === "weather") {
     // Only a configured provider produces a forecast. No key, no numbers.
     return <WeatherPage provider={process.env.NEXT_PUBLIC_WEATHER_PROVIDER || null} />;
-  }
-
-  if (path === "digital-skills") {
-    return <DigitalSkillsPage courses={loadTyped("course")} videos={loadVideos()} />;
-  }
-
-  if (slug[0] === "kids" && slug.length === 2) {
-    const child = slug[1]!;
-    if (!isKidsRoute(child)) notFound();
-    if (child === "alphabet") return <AlphabetRoute />;
-    if (child === "stories") return <StoriesPage stories={loadStories()} />;
-    if (child === "rhymes") return <RhymesPage rhymes={loadRhymes()} />;
-    if (child === "science") return <SciencePage topics={loadScienceTopics()} />;
-    if (child === "videos") return <VideoLibrary videos={loadVideos()} />;
-    return <KidsRoute slug={child} />;
-  }
-
-  if (slug[0] === "kids" && slug.length === 3 && isKidsLibrary(slug[1]!)) {
-    const [, section, itemSlug] = slug as [string, string, string];
-    if (section === "stories") {
-      const story = loadStories().find((entry) => entry.slug === itemSlug);
-      if (!story) notFound();
-      return <StoryDetail story={story} />;
-    }
-    if (section === "rhymes") {
-      const rhyme = loadRhymes().find((r) => r.slug === itemSlug);
-      if (!rhyme) notFound();
-      return <RhymeDetail rhyme={rhyme} />;
-    }
-    if (section === "science") {
-      const topic = loadScienceTopics().find((x) => x.slug === itemSlug);
-      if (!topic) notFound();
-      return <ScienceDetail topic={topic} />;
-    }
-    const videos = loadVideos();
-    const video = videos.find((v) => v.slug === itemSlug);
-    if (!video) notFound();
-    const related = videos.filter(
-      (v) => v.id !== video.id && (video.relatedIds?.includes(v.id) || v.category === video.category),
-    );
-    return <VideoDetail video={video} related={related.slice(0, 4)} />;
-  }
-
-  if (slug[0] === "play" && slug.length === 2) {
-    const g = slug[1]!;
-    if (g !== "daily" && !gameBySlug(g)) notFound();
-    return <GameRoute slug={g} />;
-  }
-
-  {
-    const reserved = PLANNED_ROUTES.find((r) => r.path === `/${path}/`);
-    if (reserved) {
-      const ICONS: Record<string, string> = {
-        learn: "learn", kids: "kids", agriculture: "agriculture", english: "english",
-        engineering: "engineering", it: "it", careers: "careers", temples: "temples",
-        community: "community", weather: "weather", government: "government",
-      };
-      /**
-       * Where to send someone instead.
-       *
-       * Per section, not a generic three links. Most of these are reserved
-       * names for a fuller treatment of something the site already covers —
-       * /temples/ is planned, but the temple history is on /about/ today —
-       * so the honest page says "not yet" and then points at what does exist
-       * rather than leaving a visitor at a dead end.
-       */
-      const ALTERNATIVES: Record<string, { href: string; labelKey: string }[]> = {
-        "/explore/": [
-          { href: "/search/", labelKey: "search.title" },
-          { href: "/government/", labelKey: "gov.title" },
-          { href: "/gallery/", labelKey: "nav.gallery" },
-        ],
-        "/english/": [
-          { href: "/kids/english/", labelKey: "kids.english" },
-          { href: "/kids/alphabet/", labelKey: "kids.abc" },
-          { href: "/students/", labelKey: "students.title" },
-        ],
-        "/engineering/": [
-          { href: "/students/", labelKey: "students.title" },
-          { href: "/careers/", labelKey: "careers.title" },
-        ],
-        "/it/": [
-          { href: "/students/", labelKey: "students.title" },
-          { href: "/careers/", labelKey: "nav.careers" },
-        ],
-        "/temples/": [
-          { href: "/heritage/", labelKey: "nav.heritageArchive" },
-          { href: "/about/", labelKey: "nav.heritage" },
-          { href: "/events/", labelKey: "nav.events" },
-        ],
-        "/community/": [
-          { href: "/members/", labelKey: "nav.members" },
-          { href: "/directory/", labelKey: "nav.directory" },
-          { href: "/developments/", labelKey: "nav.developments" },
-        ],
-      };
-      return (
-        <SectionComingSoon
-          titleKey={reserved.labelKey}
-          icon={ICONS[reserved.section] ?? "explore"}
-          phase={reserved.plannedPhase ?? "later"}
-          alternatives={
-            ALTERNATIVES[reserved.path] ?? [
-              { href: "/search/", labelKey: "search.title" },
-              { href: "/gallery/", labelKey: "nav.gallery" },
-            ]
-          }
-        />
-      );
-    }
   }
 
   if (path === "offline") {

@@ -17,8 +17,7 @@ import type { Locale } from "@/lib/i18n/config";
 export type SectionId =
   | "village" | "media" | "community" | "heritage" | "temples"
   | "utility" | "gated" | "admin"
-  | "learn" | "games" | "kids" | "agriculture" | "english"
-  | "engineering" | "it" | "careers" | "government" | "weather" | "ai";
+  | "dharma" | "culture" | "government" | "weather" | "ai";
 
 export type RouteStatus =
   /** Live today, rendered by the existing catch-all. */
@@ -74,30 +73,33 @@ export const LIVE_ROUTES: RouteEntry[] = [
   { path: "/chat/",         section: "gated",     labelKey: "nav.community",       status: "live", hasTelugu: false, noindex: true, private: true },
   { path: "/login/",        section: "gated",     labelKey: "nav.funFest",         status: "live", hasTelugu: false, noindex: true, private: true },
   { path: "/admin/",        section: "admin",     labelKey: "nav.adminDashboard",  status: "live", hasTelugu: false, noindex: true, private: true },
-  { path: "/play/",         section: "games",     labelKey: "nav.play",            status: "live", hasTelugu: false },
-  { path: "/kids/",         section: "kids",      labelKey: "nav.kids",            status: "live", hasTelugu: false },
-  { path: "/kids/telugu/",  section: "kids",      labelKey: "kids.telugu",         status: "live", hasTelugu: false },
-  { path: "/kids/english/", section: "kids",      labelKey: "kids.english",        status: "live", hasTelugu: false },
-  { path: "/kids/numbers/", section: "kids",      labelKey: "kids.numbers",        status: "live", hasTelugu: false },
-  { path: "/kids/math/",    section: "kids",      labelKey: "kids.math",           status: "live", hasTelugu: false },
-  { path: "/kids/drawing/", section: "kids",      labelKey: "kids.drawing",        status: "live", hasTelugu: false },
-  { path: "/kids/gk/",      section: "kids",      labelKey: "kids.gk",             status: "live", hasTelugu: false },
-  { path: "/kids/alphabet/",section: "kids",      labelKey: "kids.abc",            status: "live", hasTelugu: false },
-  { path: "/kids/stories/", section: "kids",      labelKey: "kids.stories",        status: "live", hasTelugu: false },
-  { path: "/kids/rhymes/",  section: "kids",      labelKey: "kids.rhymes",         status: "live", hasTelugu: false },
-  { path: "/kids/science/", section: "kids",      labelKey: "kids.science",        status: "live", hasTelugu: false },
-  { path: "/kids/videos/",  section: "kids",      labelKey: "kids.videos",         status: "live", hasTelugu: false },
-  { path: "/learn/",        section: "learn",     labelKey: "nav.learn",           status: "live", hasTelugu: false },
-  { path: "/agriculture/",  section: "agriculture", labelKey: "nav.agriculture",   status: "live", hasTelugu: false },
   { path: "/government/",   section: "government", labelKey: "nav.government",     status: "live", hasTelugu: true  },
   { path: "/government/documents/", section: "government", labelKey: "docs.title", status: "live", hasTelugu: false },
   { path: "/banking/",      section: "government", labelKey: "banking.title",      status: "live", hasTelugu: true  },
-  { path: "/students/",     section: "learn",      labelKey: "students.title",     status: "live", hasTelugu: true  },
-  { path: "/farmers/",      section: "agriculture", labelKey: "farmers.title",     status: "live", hasTelugu: true  },
   { path: "/emergency/",    section: "utility",    labelKey: "emergency.title",    status: "live", hasTelugu: false },
   { path: "/safety/",       section: "utility",    labelKey: "safety.title",       status: "live", hasTelugu: false },
-  { path: "/careers/",      section: "careers",   labelKey: "nav.careers",         status: "live", hasTelugu: false },
   { path: "/weather/",      section: "weather",   labelKey: "nav.weather",         status: "live", hasTelugu: false },
+
+  // ── Sanatana Dharma & Telugu Culture ──────────────────────────────────
+  // Replaces the old /learn/ concept. Every page here is either original
+  // writing, a verified public-domain text, or a link to the official source.
+  { path: "/dharma/",                     section: "dharma",  labelKey: "dharma.title",          status: "live", hasTelugu: false },
+  { path: "/dharma/knowledge/",           section: "dharma",  labelKey: "dharma.knowledge.title", status: "live", hasTelugu: false },
+  { path: "/dharma/vedas/",               section: "dharma",  labelKey: "dharma.vedas.title",     status: "live", hasTelugu: false },
+  { path: "/dharma/upanishads/",          section: "dharma",  labelKey: "dharma.upanishads.title", status: "live", hasTelugu: false },
+  { path: "/dharma/gita/",                section: "dharma",  labelKey: "dharma.gita.title",      status: "live", hasTelugu: false },
+  { path: "/dharma/ramayanam/",           section: "dharma",  labelKey: "dharma.ramayanam.title", status: "live", hasTelugu: false },
+  { path: "/dharma/mahabharatam/",        section: "dharma",  labelKey: "dharma.mahabharatam.title", status: "live", hasTelugu: false },
+  { path: "/dharma/puranas/",             section: "dharma",  labelKey: "dharma.puranas.title",   status: "live", hasTelugu: false },
+  { path: "/dharma/slokas/",              section: "dharma",  labelKey: "dharma.slokas.title",    status: "live", hasTelugu: false },
+  { path: "/dharma/music/",               section: "dharma",  labelKey: "dharma.music.title",     status: "live", hasTelugu: false },
+  { path: "/telugu-culture/",             section: "culture", labelKey: "culture.title",          status: "live", hasTelugu: false },
+  { path: "/telugu-culture/literature/",  section: "culture", labelKey: "culture.literature.title", status: "live", hasTelugu: false },
+  { path: "/telugu-culture/poetry/",      section: "culture", labelKey: "culture.poetry.title",   status: "live", hasTelugu: false },
+  { path: "/telugu-culture/stories/",     section: "culture", labelKey: "culture.stories.title",  status: "live", hasTelugu: false },
+  { path: "/telugu-culture/spiritual/",   section: "culture", labelKey: "culture.spiritual.title", status: "live", hasTelugu: false },
+  { path: "/telugu-culture/sri-sri/",     section: "culture", labelKey: "culture.sriSri.title",   status: "live", hasTelugu: false },
+  { path: "/spiritual-heritage/",         section: "heritage", labelKey: "spiritual.title",       status: "live", hasTelugu: false },
 ];
 
 /**
@@ -114,18 +116,18 @@ export const FESTIVAL_SECTION: SectionId = "temples";
  * listed here so navigation, search and documentation can describe the target
  * shape without anyone fabricating a placeholder page.
  */
-export const PLANNED_ROUTES: RouteEntry[] = [
-  { path: "/explore/",       section: "village",     labelKey: "nav.explore",       status: "planned", hasTelugu: false, plannedPhase: "1B" },
-  { path: "/english/",       section: "english",     labelKey: "nav.english",       status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/engineering/",   section: "engineering", labelKey: "nav.engineering",   status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/it/",            section: "it",          labelKey: "nav.it",            status: "planned", hasTelugu: false, plannedPhase: "3" },
-  { path: "/temples/",       section: "temples",     labelKey: "nav.temples",       status: "planned", hasTelugu: false, plannedPhase: "5" },
-  { path: "/community/",     section: "community",   labelKey: "nav.community",     status: "planned", hasTelugu: false, plannedPhase: "5" },
-  // Renders "Digital Skills is being built … has not launched yet", so it is
-  // reserved like the others. The route still resolves; it is simply not
-  // offered in navigation or the sitemap until it holds something.
-  { path: "/digital-skills/", section: "government",  labelKey: "nav.digitalSkills", status: "planned", hasTelugu: false, plannedPhase: "5" },
-];
+/**
+ * Reserved names are no longer published.
+ *
+ * The site used to serve an honest "planned for phase N" page at /english/,
+ * /it/, /engineering/, /digital-skills/, /explore/, /community/ and
+ * /temples/. Section 1 of the redesign asks for empty Coming Soon and Planned
+ * sections to be removed rather than left as empty pages, so they are gone and
+ * public/_redirects sends each old URL to the section that replaced it.
+ *
+ * Kept as an empty array rather than deleted so nothing that reads it breaks.
+ */
+export const PLANNED_ROUTES: RouteEntry[] = [];
 
 export const ALL_ROUTES: RouteEntry[] = [...LIVE_ROUTES, ...PLANNED_ROUTES];
 

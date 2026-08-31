@@ -38,7 +38,7 @@ function src(over: Partial<Source> = {}): Source {
     active: true,
     frequency: "daily",
     autoPublish: false,
-    categories: ["school"],
+    categories: ["gita"],
     type: "state-education",
     ...over,
   });
@@ -49,7 +49,7 @@ function res(over: Partial<Resource> = {}): Resource {
     id: "x",
     title: "t",
     description: "",
-    category: "school",
+    category: "gita",
     language: "en",
     resourceType: "link",
     sourceId: "s",

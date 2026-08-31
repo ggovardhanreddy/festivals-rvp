@@ -16,17 +16,36 @@ const bucketsWithContent = BUCKETS.filter((b) =>
   live.some((a) => a.bucket === b.key),
 );
 /**
- * Sitemap routes for the Learning Center, read straight from the catalog.
+ * Sitemap routes for Sanatana Dharma, Telugu Culture and the collected
+ * resources.
  *
- * Reads the JSON rather than importing lib/resources so this script stays
- * usable before the first collector run, when the file does not exist.
+ * The curated pages are unconditional — they have written content and exist in
+ * every build. Collected resource pages are added only when PUBLISHED, so the
+ * sitemap never advertises a URL the export did not build. Read from JSON
+ * rather than importing lib/, so this works before the first collector run.
  */
-function learningCenterRoutes(): string[] {
-  const out = ["learn"];
-  const CATEGORIES = [
-    "school", "intermediate", "entrance", "competitive", "digital",
-    "english", "agriculture", "careers", "scholarships", "government",
+function knowledgeRoutes(): string[] {
+  const out = [
+    "dharma",
+    "dharma/knowledge",
+    "dharma/vedas",
+    "dharma/upanishads",
+    "dharma/gita",
+    "dharma/ramayanam",
+    "dharma/mahabharatam",
+    "dharma/puranas",
+    "dharma/slokas",
+    "dharma/music",
+    "telugu-culture",
+    "telugu-culture/literature",
+    "telugu-culture/poetry",
+    "telugu-culture/stories",
+    "telugu-culture/spiritual",
+    "telugu-culture/sri-sri",
+    "spiritual-heritage",
   ];
+  for (let n = 1; n <= 18; n += 1) out.push(`dharma/gita/${n}`);
+
   let resources: Array<Record<string, unknown>> = [];
   try {
     const raw = JSON.parse(
@@ -36,10 +55,7 @@ function learningCenterRoutes(): string[] {
   } catch {
     return out;
   }
-  const published = resources.filter((r) => r.status === "published");
-  const present = new Set(published.map((r) => String(r.category)));
-  for (const key of CATEGORIES) if (present.has(key)) out.push(`learn/${key}`);
-  for (const r of published) {
+  for (const r of resources.filter((x) => x.status === "published")) {
     const title = String(r.title ?? "");
     const stem = title
       .toLowerCase()
@@ -47,7 +63,7 @@ function learningCenterRoutes(): string[] {
       .replace(/^-+|-+$/g, "")
       .slice(0, 60);
     const id = String(r.id ?? "");
-    out.push(`learn/resource/${stem || "resource"}-${id.split("-").pop() ?? ""}`);
+    out.push(`dharma/resource/${stem || "resource"}-${id.split("-").pop() ?? ""}`);
   }
   return out;
 }
@@ -65,7 +81,7 @@ const routes = [
   // Learning Center category pages and every PUBLISHED resource page. Held
   // and unreviewed resources have no page, so they get no sitemap entry —
   // the sitemap must never advertise a URL the export did not build.
-  ...learningCenterRoutes(),
+  ...knowledgeRoutes(),
   ...bucketsWithContent
     .filter((b) => b.key !== "fun-trips")
     .flatMap((b) => {
