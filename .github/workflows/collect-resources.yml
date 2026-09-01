@@ -1,9 +1,14 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# Collect Learning Resources
+# Collect Knowledge Resources
 #
-# Checks the approved sources in content/resources/sources.json, collects new
-# and updated educational resources, and commits the catalog. The existing
-# Production Deploy then publishes it.
+# Checks the approved sources in content/resources/sources.json — Sanatana
+# Dharma, the Vedas, the Upanishads, the Gita, the epics, the Puranas, slokas,
+# devotional music, Telugu literature and official government links — and
+# commits the catalog. The existing Production Deploy then publishes it.
+#
+# It does NOT monitor agriculture, education, coaching, jobs, careers, kids
+# learning or competitive exams. Those categories do not exist in
+# lib/resources/taxonomy.ts, so nothing can be filed under one.
 #
 # Two safety properties this workflow is built around:
 #
@@ -22,7 +27,7 @@
 # Without it that source is skipped rather than crawled (its robots.txt
 # refuses automated fetching; the keyed API is the sanctioned route).
 # ─────────────────────────────────────────────────────────────────────────────
-name: Collect Learning Resources
+name: Collect Knowledge Resources
 
 on:
   schedule:

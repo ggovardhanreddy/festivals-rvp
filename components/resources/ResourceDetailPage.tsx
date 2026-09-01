@@ -55,9 +55,9 @@ export function ResourceDetailPage({
     <main className="page resource-detail">
       <div className="section">
         <p className="eyebrow">
-          <Link href={navHref("/learn/", lang)}>{te ? "లెర్నింగ్ సెంటర్" : "Learning Center"}</Link>
+          <Link href={navHref("/dharma/", lang)}>{te ? "సనాతన ధర్మం" : "Sanatana Dharma"}</Link>
           {" · "}
-          <Link href={navHref(`/learn/${resource.category}/`, lang)}>
+          <Link href={navHref(`/dharma/${resource.category}/`, lang)}>
             {categoryLabel(resource.category, te ? "te" : "en")}
           </Link>
         </p>

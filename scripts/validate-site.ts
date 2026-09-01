@@ -97,7 +97,7 @@ function checkContentLayout() {
     // content/ holds year folders of media plus a few named data folders that
     // are deliberately not years. Warning about those trains people to ignore
     // the warning, so the known ones are listed rather than reported.
-    const KNOWN_NON_YEAR = ["data", "learning", "resources", "typed", "_oversized"];
+    const KNOWN_NON_YEAR = ["data", "dharma", "resources", "typed", "_oversized"];
     if (!/^\d{4}$/.test(name) && name !== "Unknown" && !KNOWN_NON_YEAR.includes(name)) {
       warnings.push(`Non-year folder in content/: ${name}`);
     }

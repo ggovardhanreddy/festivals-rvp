@@ -83,7 +83,11 @@ export const CATEGORY_TREE: Category[] = [
       { key: "yajur", label: "Yajur Veda", labelTe: "యజుర్వేదం", match: ["yajur", "rudram", "యజుర్వేద"] },
       { key: "sama", label: "Sama Veda", labelTe: "సామవేదం", match: ["sama veda", "samaveda", "సామవేద"] },
       { key: "atharva", label: "Atharva Veda", labelTe: "అథర్వవేదం", match: ["atharva", "అథర్వ"] },
-      { key: "chanting", label: "Chanting & audio", labelTe: "వేద పఠనం", match: ["chanting", "recitation", "patha", "ghana", "audio"] },
+      // No "chanting" subcategory here on purpose. It is a format, not a Veda,
+      // and mixing it in made this axis mean two things at once — a Rudram
+      // recording filed under "chanting" instead of under Yajur, which is the
+      // answer a reader browsing the Vedas actually wants. Format is already
+      // carried by resourceType.
     ],
   },
   {

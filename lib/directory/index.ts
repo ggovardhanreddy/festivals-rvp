@@ -72,31 +72,10 @@ export const HUBS: HubDef[] = [
       { titleKey: "gov.group.legal", ids: ["cybercrime", "cpgrams", "consumer-helpline", "rti", "ecourts", "nalsa"] },
       { titleKey: "gov.group.business", ids: ["udyam", "gst"] },
       { titleKey: "gov.group.other", ids: ["indiapost", "sanchar-saathi", "ap-gov", "kadapa"] },
-    ],
-  },
-  {
-    slug: "students",
-    titleKey: "students.title",
-    ledeKey: "students.lede",
-    icon: "students",
-    groups: [
-      { titleKey: "students.group.money", ids: ["nsp", "jnanabhumi"] },
-      { titleKey: "students.group.documents", ids: ["digilocker", "apaar"] },
-      { titleKey: "students.group.learn", ids: ["swayam", "nptel", "ndl", "ncert", "epathshala"] },
-      { titleKey: "students.group.exams", ids: ["nta", "ugc", "aicte"] },
-      { titleKey: "students.group.work", ids: ["ncs", "skillindia", "appsc"] },
-    ],
-  },
-  {
-    slug: "farmers",
-    titleKey: "farmers.title",
-    ledeKey: "farmers.lede",
-    icon: "farmers",
-    groups: [
-      { titleKey: "farmers.group.money", ids: ["pmkisan", "pmfby", "nabard"] },
-      { titleKey: "farmers.group.land", ids: ["meebhoomi", "e-panta"] },
-      { titleKey: "farmers.group.crop", ids: ["soilhealth", "enam", "icar"] },
-      { titleKey: "farmers.group.state", ids: ["ap-agriculture", "apagrisnet", "gsws"] },
+      // Picked up when the /students/ and /farmers/ hubs were retired in the
+      // 2026 redesign. These are official citizen services, which §16 keeps —
+      // it is only the education and agriculture *sections* that went.
+      { titleKey: "gov.group.other", ids: ["nsp", "jnanabhumi", "apaar", "pmkisan", "pmfby", "soilhealth", "enam", "e-panta"] },
     ],
   },
   {

@@ -164,7 +164,7 @@ export function ResourceAdmin({
               <p className="muted">
                 {te
                   ? "సేకరణ ఇంకా అమలు కాలేదు."
-                  : "The collector has not run yet. Trigger it from Actions → Collect Learning Resources, or run npm run resources:collect -- --dry-run locally."}
+                  : "The collector has not run yet. Trigger it from Actions → Collect Knowledge Resources, or run npm run resources:collect -- --dry-run locally."}
               </p>
             )}
           </section>
@@ -347,7 +347,7 @@ export function ResourceAdmin({
           <p className="muted">
             {te
               ? "మూలాలను content/resources/sources.json లో సవరించండి. లైసెన్స్ నిర్ణయం మారితే అది కమిట్ ద్వారా సమీక్షకు వెళ్తుంది."
-              : "Sources are edited in content/resources/sources.json. A licence verdict changing is a commit, so it goes through review and leaves a record — read docs/LEARNING_RESOURCES.md before setting any source to \u201cyes\u201d."}
+              : "Sources are edited in content/resources/sources.json. A licence verdict changing is a commit, so it goes through review and leaves a record — read docs/KNOWLEDGE_SECTIONS.md before setting any source to \u201cyes\u201d."}
           </p>
         </section>
       ) : null}

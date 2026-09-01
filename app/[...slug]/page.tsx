@@ -70,6 +70,8 @@ import { ConceptsPage } from "@/components/dharma/ConceptsPage";
 import { GitaChapterPage } from "@/components/dharma/GitaChapterPage";
 import { CultureHub, type CultureView } from "@/components/dharma/CultureHub";
 import { SpiritualHeritagePage } from "@/components/dharma/SpiritualHeritagePage";
+import { ResourceDetailPage } from "@/components/resources/ResourceDetailPage";
+import { findBySlug, publicResources, resourceSlug } from "@/lib/resources";
 import {
   DHARMA_PAGE_SLUGS,
   GITA_CHAPTER_SLUGS,
@@ -181,6 +183,12 @@ export function generateStaticParams() {
   paths.push({ slug: ["dharma", "knowledge"] });
   for (const key of DHARMA_PAGE_SLUGS) paths.push({ slug: ["dharma", key] });
   for (const n of GITA_CHAPTER_SLUGS) paths.push({ slug: ["dharma", "gita", n] });
+  // A page per PUBLISHED collected resource. Anything at "new" or
+  // "needs-review" gets no URL, so unreviewed material cannot be reached even
+  // by guessing — which matters more for scripture than it did for a syllabus.
+  for (const r of publicResources(loadResourceCatalog())) {
+    paths.push({ slug: ["dharma", "resource", resourceSlug(r)] });
+  }
   paths.push({ slug: ["telugu-culture"] });
   for (const view of ["literature", "poetry", "stories", "spiritual"]) {
     paths.push({ slug: ["telugu-culture", view] });
@@ -921,6 +929,14 @@ export default async function ArchiveRoute({
 
   if (path === "dharma/knowledge") {
     return <ConceptsPage />;
+  }
+
+  if (slug[0] === "dharma" && slug[1] === "resource" && slug.length === 3) {
+    const published = publicResources(loadResourceCatalog());
+    const resource = findBySlug(published, slug[2]!);
+    if (!resource) notFound();
+    const source = loadResourceSources().find((x) => x.id === resource.sourceId);
+    return <ResourceDetailPage resource={resource} source={source} />;
   }
 
   if (slug[0] === "dharma" && slug[1] === "gita" && slug.length === 3) {

@@ -136,13 +136,11 @@ function directoryDocs(): SearchDoc[] {
   for (const item of DIRECTORY) {
     const hubPath =
       hubFor.get(item.id) ??
+      // /students/ and /farmers/ were retired in the 2026 redesign; their
+      // citizen-service links live under /government/ now.
       (item.category === "banking" || item.category === "payments"
         ? "/banking/"
-        : item.category === "students"
-          ? "/students/"
-          : item.category === "farmers"
-            ? "/farmers/"
-            : "/government/");
+        : "/government/");
 
     const shared = {
       section: "government" as SectionId,

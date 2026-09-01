@@ -233,13 +233,14 @@ export const FOOTER_COMMUNITY = [
   { href: "/contact/", label: "Contact" },
 ] as const;
 
-/** Footer column: everyday services. */
+/** Footer column: the knowledge section and everyday services. */
 export const FOOTER_SERVICES = [
+  { href: "/dharma/", label: "Sanatana Dharma" },
+  { href: "/telugu-culture/", label: "Telugu Culture" },
+  { href: "/spiritual-heritage/", label: "Temple Heritage" },
+  { href: "/government/", label: "Government Resources" },
   { href: "/services/", label: "Village Services" },
   { href: "/emergency/", label: "Emergency Information" },
-  { href: "/learn/", label: "Learning & Education" },
-  { href: "/agriculture/", label: "Agriculture" },
-  { href: "/careers/", label: "Careers" },
 ] as const;
 
 /** Footer column: legal. The disclaimer is a section of the Terms page. */

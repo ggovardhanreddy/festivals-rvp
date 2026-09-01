@@ -50,7 +50,7 @@ export function ResourceCard({
       </div>
 
       <h3 className="resource-card-title">
-        <Link href={navHref(`/learn/resource/${resourceSlug(resource)}/`, lang)}>{title}</Link>
+        <Link href={navHref(`/dharma/resource/${resourceSlug(resource)}/`, lang)}>{title}</Link>
       </h3>
 
       {description ? <p className="resource-card-desc">{description}</p> : null}

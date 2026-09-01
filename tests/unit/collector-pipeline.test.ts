@@ -116,13 +116,13 @@ const noopDeps = () => {
 
 describe("permission gate", () => {
   const listing = `<table>
-    <tr><td><a href="/papers/maths-2026.pdf">Class 10 Mathematics Model Paper 2026</a></td><td>10-01-2026</td></tr>
+    <tr><td><a href="/papers/gita-ch2.pdf">Bhagavad Gita Chapter 2 — Sankhya Yoga with Telugu meaning</a></td><td>10-01-2026</td></tr>
   </table>`;
 
   it("does NOT download when the licence is 'no' — link-only", async () => {
     routes.set("https://test.gov.in/robots.txt", { body: "User-agent: *\nDisallow:\n" });
     routes.set("https://test.gov.in/list", { body: listing, contentType: "text/html" });
-    routes.set("https://test.gov.in/papers/maths-2026.pdf", { body: pdfBytes("should never be fetched"), contentType: "application/pdf" });
+    routes.set("https://test.gov.in/papers/gita-ch2.pdf", { body: pdfBytes("should never be fetched"), contentType: "application/pdf" });
 
     const { deps } = noopDeps();
     const { resources, result } = await collectSource(source({ licenseStatus: "no" }), [], deps, { force: true });
@@ -131,9 +131,9 @@ describe("permission gate", () => {
     const r = resources[0]!;
     expect(r.localFileUrl).toBeUndefined();
     expect(r.fileHash).toBeUndefined();
-    expect(r.originalUrl).toBe("https://test.gov.in/papers/maths-2026.pdf");
+    expect(r.originalUrl).toBe("https://test.gov.in/papers/gita-ch2.pdf");
     // The PDF itself was never requested. This is the whole point of §17.
-    expect(requested.some((x) => x.includes("maths-2026.pdf"))).toBe(false);
+    expect(requested.some((x) => x.includes("gita-ch2.pdf"))).toBe(false);
   });
 
   it("does NOT download when the licence is 'unknown', and holds for review", async () => {
@@ -157,8 +157,8 @@ describe("permission gate", () => {
   it("DOES download and host when the licence is 'yes'", async () => {
     routes.set("https://test.gov.in/robots.txt", { body: "User-agent: *\nDisallow:\n" });
     routes.set("https://test.gov.in/list", { body: listing, contentType: "text/html" });
-    routes.set("https://test.gov.in/papers/maths-2026.pdf", {
-      body: pdfBytes("Class 10 Mathematics Model Question Paper"),
+    routes.set("https://test.gov.in/papers/gita-ch2.pdf", {
+      body: pdfBytes("Bhagavad Gita Chapter 2 Sankhya Yoga verses with Telugu meaning"),
       contentType: "application/pdf",
     });
 
@@ -170,14 +170,12 @@ describe("permission gate", () => {
       { force: true },
     );
     const r = resources[0]!;
-    expect(requested.some((x) => x.includes("maths-2026.pdf"))).toBe(true);
+    expect(requested.some((x) => x.includes("gita-ch2.pdf"))).toBe(true);
     expect(r.fileHash).toMatch(/^[0-9a-f]{64}$/);
     expect(r.localFileUrl).toMatch(/^\/resources\/test\/[0-9a-f]{2}\/[0-9a-f]{64}\.pdf$/);
     expect(r.attribution).toBe("Source: Test");
-    expect(r.resourceType).toBe("question-paper");
-    expect(r.category).toBe("school");
-    expect(r.classLevel).toBe("class-10");
-    expect(r.subject).toBe("mathematics");
+    expect(r.category).toBe("gita");
+    expect(r.subcategory).toBe("chapters");
   });
 });
 
@@ -226,8 +224,8 @@ describe("RSS collection", () => {
     routes.set("https://icar.org.in/en/rss.xml", {
       contentType: "application/xml",
       body: `<rss><channel>
-        <item><title>Package of Practices for Groundnut</title><link>https://icar.org.in/node/1</link>
-          <description>Sowing time, pest management and soil guidance for rainfed groundnut</description>
+        <item><title>Annamacharya Sankirtana — Adivo Alladivo</title><link>https://icar.org.in/node/1</link>
+          <description>Keerthana with Telugu lyrics, sung at Tirumala</description>
           <pubDate>Tue, 19 Aug 2026 10:00:00 +0530</pubDate></item>
       </channel></rss>`,
     });
@@ -241,7 +239,8 @@ describe("RSS collection", () => {
     );
     expect(result.added).toBe(1);
     const r = resources[0]!;
-    expect(r.category).toBe("agriculture");
+    expect(r.category).toBe("music");
+    expect(r.subcategory).toBe("annamayya");
     expect(r.publishedDate).toBe("2026-08-19");
     expect(r.localFileUrl).toBeUndefined();
     expect(r.status).toBe("new");
@@ -253,12 +252,12 @@ describe("expiry at collection time", () => {
     routes.set("https://test.gov.in/robots.txt", { body: "User-agent: *\nDisallow:\n" });
     routes.set("https://test.gov.in/list", {
       contentType: "text/html",
-      body: `<table><tr><td><a href="/n/old.pdf">Scholarship notification — last date 01-07-2026</a></td><td>01-06-2026</td></tr></table>`,
+      body: `<table><tr><td><a href="/n/old.pdf">Temple annadanam registration — last date 01-07-2026</a></td><td>01-06-2026</td></tr></table>`,
     });
 
     const { deps } = noopDeps();
     const { resources } = await collectSource(
-      source({ licenseStatus: "no", categories: ["slokas"], autoPublish: true }),
+      source({ licenseStatus: "no", categories: ["heritage"], autoPublish: true }),
       [],
       deps,
       { force: true },
@@ -274,12 +273,12 @@ describe("duplicate handling", () => {
     routes.set("https://test.gov.in/robots.txt", { body: "User-agent: *\nDisallow:\n" });
     routes.set("https://test.gov.in/list", {
       contentType: "text/html",
-      body: `<table><tr><td><a href="/papers/a.pdf">Class 9 Science Model Paper</a></td><td></td></tr></table>`,
+      body: `<table><tr><td><a href="/papers/a.pdf">Vishnu Sahasranama Stotram</a></td><td></td></tr></table>`,
     });
     const existing: Resource[] = [
       {
         id: "test-existing",
-        title: "Class 9 Science Model Paper",
+        title: "Vishnu Sahasranama Stotram",
         description: "",
         category: "gita",
         language: "en",
@@ -312,25 +311,25 @@ describe("update detection and version archiving", () => {
     routes.set("https://test.gov.in/robots.txt", { body: "User-agent: *\nDisallow:\n" });
     routes.set("https://test.gov.in/list", {
       contentType: "text/html",
-      body: `<table><tr><td><a href="/papers/syllabus.pdf">Intermediate Syllabus 2026</a></td><td>15-08-2026</td></tr></table>`,
+      body: `<table><tr><td><a href="/papers/parayanam.pdf">Sundara Kanda Parayanam 2026 edition</a></td><td>15-08-2026</td></tr></table>`,
     });
-    routes.set("https://test.gov.in/papers/syllabus.pdf", {
-      body: pdfBytes("Intermediate Syllabus 2026 revised edition with extra chapters"),
+    routes.set("https://test.gov.in/papers/parayanam.pdf", {
+      body: pdfBytes("Sundara Kanda Parayanam 2026 revised edition with extra commentary"),
       contentType: "application/pdf",
     });
 
     const existing: Resource[] = [
       {
         id: "test-old",
-        title: "Intermediate Syllabus 2026",
+        title: "Sundara Kanda Parayanam 2026 edition",
         description: "",
         category: "epics",
         language: "en",
         resourceType: "syllabus",
         sourceId: "test",
         sourceUrl: "https://test.gov.in/list",
-        originalUrl: "https://test.gov.in/papers/syllabus.pdf",
-        canonicalUrl: "https://test.gov.in/papers/syllabus.pdf",
+        originalUrl: "https://test.gov.in/papers/parayanam.pdf",
+        canonicalUrl: "https://test.gov.in/papers/parayanam.pdf",
         localFileUrl: "/resources/test/aa/aaaa.pdf",
         fileHash: "aaaa",
         fileSize: 111,
@@ -371,7 +370,7 @@ describe("quality checks in the live path", () => {
     routes.set("https://test.gov.in/robots.txt", { body: "User-agent: *\nDisallow:\n" });
     routes.set("https://test.gov.in/list", {
       contentType: "text/html",
-      body: `<table><tr><td><a href="/papers/broken.pdf">Class 8 Social Studies Paper</a></td><td></td></tr></table>`,
+      body: `<table><tr><td><a href="/papers/broken.pdf">Shiva Purana Telugu translation</a></td><td></td></tr></table>`,
     });
     routes.set("https://test.gov.in/papers/broken.pdf", {
       body: "<!DOCTYPE html><html><body>Runtime Error</body></html>",
@@ -395,7 +394,7 @@ describe("quality checks in the live path", () => {
     routes.set("https://test.gov.in/robots.txt", { body: "User-agent: *\nDisallow:\n" });
     routes.set("https://test.gov.in/list", {
       contentType: "text/html",
-      body: `<table><tr><td><a href="/papers/gone.pdf">Class 7 Telugu Model Paper</a></td><td></td></tr></table>`,
+      body: `<table><tr><td><a href="/papers/gone.pdf">Hanuman Chalisa Telugu</a></td><td></td></tr></table>`,
     });
     // /papers/gone.pdf is not in routes, so the stub answers 404.
 

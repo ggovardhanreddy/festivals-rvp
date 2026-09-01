@@ -56,31 +56,4 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
       { href: "/contact/", labelKey: "nav.contact", icon: "community" },
     ],
   },
-  {
-    id: "learning",
-    titleKey: "services.group.learning",
-    links: [
-      { href: "/students/", labelKey: "students.title", icon: "students" },
-      { href: "/learn/", labelKey: "nav.learn", icon: "learn" },
-      { href: "/kids/", labelKey: "nav.kids", icon: "kids" },
-      { href: "/kids/alphabet/", labelKey: "kids.abc", icon: "letter" },
-      { href: "/kids/stories/", labelKey: "kids.stories", icon: "book" },
-      { href: "/kids/rhymes/", labelKey: "kids.rhymes", icon: "music" },
-      { href: "/kids/videos/", labelKey: "kids.videos", icon: "video" },
-      { href: "/play/", labelKey: "nav.play", icon: "play" },
-    ],
-  },
-  {
-    id: "agriculture",
-    titleKey: "services.group.agriculture",
-    links: [
-      { href: "/agriculture/", labelKey: "nav.agriculture", icon: "agriculture" },
-      { href: "/farmers/", labelKey: "farmers.title", icon: "farmers" },
-    ],
-  },
-  {
-    id: "careers",
-    titleKey: "services.group.careers",
-    links: [{ href: "/careers/", labelKey: "nav.careers", icon: "careers" }],
-  },
 ];
