@@ -44,7 +44,8 @@ import { AdminLoginForm } from "@/components/auth/AdminLoginForm";
 import { AnalyticsPanel } from "@/components/admin/AnalyticsPanel";
 import { AdminClient } from "@/components/AdminClient";
 import { MembersManager } from "@/components/admin/MembersManager";
-import { FamiliesManager } from "@/components/admin/FamiliesManager";
+import { FamilyAdmin } from "@/components/families/admin/FamilyAdmin";
+import type { FamilyTreeDataset } from "@/lib/family-trees/entities";
 import { MediaProtectionPanel } from "@/components/admin/MediaProtectionPanel";
 import { AuditLogPanel } from "@/components/admin/AuditLogPanel";
 import { ROLE_CAPABILITIES } from "@/lib/roles";
@@ -787,7 +788,14 @@ function RolesPanel() {
   );
 }
 
-export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
+export function AdminHub({
+  collector,
+  familyTree,
+}: {
+  collector?: CollectorAdminData;
+  /** Read at build time; the editor works on a local copy of it. */
+  familyTree?: FamilyTreeDataset;
+}) {
   const { isAdmin, ready, refresh } = useAdminSession();
   const [tab, setTab] = useState<Tab>("overview");
 
@@ -797,7 +805,7 @@ export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
     { id: "analytics", label: "Analytics" },
     { id: "media", label: "Media / R2" },
     { id: "members", label: "Members" },
-    { id: "families", label: "Families" },
+    { id: "families", label: "Family Tree" },
     { id: "audit", label: "Audit" },
     { id: "directory", label: "Directory" },
     { id: "approvals", label: "Approvals" },
@@ -911,7 +919,15 @@ export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
         </>
       ) : null}
       {tab === "members" ? <MembersManager /> : null}
-      {tab === "families" ? <FamiliesManager /> : null}
+      {tab === "families" ? (
+        <RequireAdmin>
+          {familyTree ? (
+            <FamilyAdmin dataset={familyTree} actor="super-admin" />
+          ) : (
+            <p className="muted">Family tree data is unavailable in this build.</p>
+          )}
+        </RequireAdmin>
+      ) : null}
       {tab === "audit" ? (
         <RequireAdmin>
           <AuditLogPanel />

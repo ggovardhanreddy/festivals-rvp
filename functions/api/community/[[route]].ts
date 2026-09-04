@@ -41,10 +41,26 @@ const COLLECTIONS = new Set([
   "announcements",
   "families",
   "family-people",
+  // The family-tree entities (§16). Stored as ordinary collections so they
+  // inherit this route's admin auth, R2 persistence and audit trail rather
+  // than needing a second API that would drift from it.
+  "family-relationships",
+  "family-media",
+  "family-audit",
   "media-protection",
 ]);
 
 const APPROVAL_COLLECTIONS = new Set(["lost-found", "heritage"]);
+
+/**
+ * Collections that require Super Admin to READ.
+ *
+ * §17: "The public page must NOT expose ... Audit history". The family-tree
+ * audit log records who changed what about whom, including the previous value
+ * of a deleted person, so it is admin-only on GET as well as on write. Every
+ * other collection stays publicly readable — the tree itself is public.
+ */
+const ADMIN_READ_COLLECTIONS = new Set(["family-audit"]);
 
 /** Collections that require Super Admin for POST/PUT/DELETE. */
 const ADMIN_WRITE_COLLECTIONS = new Set([
@@ -55,6 +71,9 @@ const ADMIN_WRITE_COLLECTIONS = new Set([
   "announcements",
   "families",
   "family-people",
+  "family-relationships",
+  "family-media",
+  "family-audit",
   "media-protection",
 ]);
 
@@ -274,6 +293,9 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
     }
 
     if (request.method === "GET") {
+      if (ADMIN_READ_COLLECTIONS.has(collection) && !admin) {
+        return json({ error: "Admin required" }, 401, headers);
+      }
       const { items: seeded, source } = await readItemsWithSeed(env, collection);
       let items = seeded;
       let from = source;

@@ -6,6 +6,7 @@ import {
   VILLAGE_MAPS_URL,
   VILLAGE_NAME,
 } from "@/lib/site";
+import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { ContactLocationNote } from "@/components/location/ContactLocationNote";
 import { ContactForm } from "./ContactForm";
@@ -62,9 +63,9 @@ export function ContactPage() {
             >
               {SITE_CONTACT_EMAIL}
             </a>
-            <a className="btn ghost" href="/suggestions/" style={{ marginTop: "0.75rem" }}>
+            <Link className="btn ghost" href="/suggestions/" style={{ marginTop: "0.75rem" }}>
               Share a suggestion
-            </a>
+            </Link>
           </div>
 
           <div className="contact-card">
@@ -83,9 +84,9 @@ export function ContactPage() {
             >
               Email a correction request
             </a>
-            <a className="btn ghost" href="/privacy/" style={{ marginTop: "0.75rem" }}>
+            <Link className="btn ghost" href="/privacy/" style={{ marginTop: "0.75rem" }}>
               Privacy policy
-            </a>
+            </Link>
           </div>
 
           <div className="contact-card contact-card--map">

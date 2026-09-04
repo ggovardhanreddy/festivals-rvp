@@ -49,3 +49,13 @@ generated/*
 ios/**/xcuserdata/
 ios/**/DerivedData/
 *.xcuserstate
+
+# Family-tree admin editor (§17).
+# The audit log is admin-only and lives in R2, reached through the
+# admin-authenticated API. It is deliberately never committed and never
+# imported by lib/family-trees/store.ts: a static import would copy the whole
+# change history into a public _next/static chunk.
+content/data/family-audit.json
+# Migration backups.
+content/data/*.bak
+content/data/*.json.*.bak

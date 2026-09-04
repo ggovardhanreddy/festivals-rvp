@@ -76,6 +76,7 @@ import { WeatherPage } from "@/components/weather/WeatherPage";
 import { DirectoryHub } from "@/components/directory/DirectoryHub";
 import { SafetyPage } from "@/components/safety/SafetyPage";
 import { HUBS, hubBySlug } from "@/lib/directory";
+import { loadAdminFamilyTreeDataset } from "@/lib/family-trees/store";
 import {
   loadCollectorNotifications,
   loadCollectorRuns,
@@ -1020,6 +1021,7 @@ export default async function ArchiveRoute({
     return (
       <main className="page">
         <AdminHub
+          familyTree={loadAdminFamilyTreeDataset()}
           collector={{
             resources: loadResourceCatalog(),
             sources: loadResourceSources(),

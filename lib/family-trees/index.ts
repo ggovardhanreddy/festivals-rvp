@@ -1,6 +1,5 @@
-import { flattenFamilies } from "./flatten";
-import { FAMILY_SEEDS } from "./seed";
 import type { Family, Person, Relationship, VerificationStatus } from "./types";
+import { publicFamilyTreeDataset } from "./store";
 export { layoutFamilyTree, relationshipsAmong } from "./layout";
 export type { FamilyTreeLayout, LaidOutEdge, LaidOutPerson } from "./layout";
 import {
@@ -10,7 +9,35 @@ import {
   personFamilyHref,
 } from "@/lib/families/catalog";
 
-const DATA = flattenFamilies(FAMILY_SEEDS);
+/**
+ * The public tree's data.
+ *
+ * §16: "The visual tree must NEVER be hard-coded." It reads
+ * content/data/family-people.json and family-relationships.json now, written
+ * by the admin editor. The store falls back to flattening seed.ts only while
+ * those files are empty, so the migration could land without a blank moment.
+ *
+ * Relationships are adapted back to this module's older field names
+ * (personId/relatedPersonId) so every existing consumer — the layout engine,
+ * the person pages, search — keeps working unchanged. The stored shape is
+ * §16's fromPersonId/toPersonId.
+ */
+const STORE = publicFamilyTreeDataset();
+const DATA: { families: Family[]; people: Person[]; relationships: Relationship[] } = {
+  families: STORE.families.map((family) => ({
+    id: family.id,
+    name: family.name,
+    rootPersonIds: family.rootPersonIds ?? [],
+  })),
+  people: STORE.people as unknown as Person[],
+  relationships: STORE.relationships.map((rel) => ({
+    id: rel.id,
+    personId: rel.fromPersonId,
+    relatedPersonId: rel.toPersonId,
+    relationshipType: rel.relationshipType,
+    verificationStatus: rel.verificationStatus,
+  })),
+};
 const CATALOG = loadVillageFamilies();
 
 export function loadFamilyTrees() {

@@ -54,7 +54,8 @@
     "test:a11y": "playwright test tests/e2e/a11y.spec.ts",
     "government:validate": "tsx scripts/validate-directory.ts",
     "resources:collect": "tsx scripts/collect-resources.ts",
-    "resources:validate": "tsx scripts/validate-resources.ts"
+    "resources:validate": "tsx scripts/validate-resources.ts",
+    "families:migrate": "tsx scripts/migrate-family-trees.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
