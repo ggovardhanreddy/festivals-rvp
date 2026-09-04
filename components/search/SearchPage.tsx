@@ -12,6 +12,8 @@ import type { SearchDoc, SearchShard } from "@/lib/search/schema";
 import { POPULAR_SEARCHES } from "@/lib/platform/doors";
 import type { Album, MediaType, MediaWithAlbum } from "@/lib/types";
 import { Gallery } from "@/components/Gallery";
+import { isPublicMedia } from "@/lib/media-protection";
+import { useMediaProtection } from "@/lib/use-media-protection";
 import { SectionIcon } from "@/components/platform/SectionIcon";
 import { getSpeechRecognition, type SpeechRecognitionLike } from "@/lib/voice";
 import { LOCALE_TAG } from "@/lib/i18n/config";
@@ -102,6 +104,7 @@ export function SearchPage() {
   const [voiceAvailable, setVoiceAvailable] = useState(false);
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const { rules } = useMediaProtection();
 
   // Voice, feature-detected: no microphone button where the API is missing.
   useEffect(() => {
@@ -158,10 +161,19 @@ export function SearchPage() {
   );
   const counts = useMemo(() => facetCounts(allHits), [allHits]);
 
-  const hits = useMemo(
-    () => (section === "all" ? allHits : allHits.filter((h) => h.doc.section === section)),
-    [allHits, section],
-  );
+  const hits = useMemo(() => {
+    const sectioned =
+      section === "all"
+        ? allHits
+        : allHits.filter((h) => h.doc.section === section);
+    return sectioned.filter((h) => {
+      if (!h.doc.media) return true;
+      const id = h.doc.id.startsWith("media:")
+        ? h.doc.id.slice("media:".length)
+        : h.doc.id;
+      return isPublicMedia({ id, file: h.doc.media.file }, rules);
+    });
+  }, [allHits, section, rules]);
 
   const mediaHits = useMemo(
     () => hits.map((h) => mediaFromDoc(h.doc)).filter(Boolean) as MediaWithAlbum[],

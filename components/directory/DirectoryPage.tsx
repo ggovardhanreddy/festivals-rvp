@@ -232,16 +232,6 @@ export function DirectoryPage() {
                           Availability · {person.availability}
                         </p>
                       ) : null}
-                      {!settings.hideDirectoryContactsByDefault && person.phone ? (
-                        <p className="directory-meta">
-                          <a href={`tel:${person.phone}`}>{person.phone}</a>
-                        </p>
-                      ) : null}
-                      {!settings.hideDirectoryContactsByDefault && person.email ? (
-                        <p className="directory-meta">
-                          <a href={`mailto:${person.email}`}>{person.email}</a>
-                        </p>
-                      ) : null}
                     </div>
                   </article>
                 ))}

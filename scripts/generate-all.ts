@@ -16,56 +16,12 @@ const bucketsWithContent = BUCKETS.filter((b) =>
   live.some((a) => a.bucket === b.key),
 );
 /**
- * Sitemap routes for Sanatana Dharma, Telugu Culture and the collected
- * resources.
- *
- * The curated pages are unconditional — they have written content and exist in
- * every build. Collected resource pages are added only when PUBLISHED, so the
- * sitemap never advertises a URL the export did not build. Read from JSON
- * rather than importing lib/, so this works before the first collector run.
+ * Retired general-knowledge hubs are redirected, not advertised.
+ * They must not appear in the sitemap — the village site is
+ * Reddivaripalli, not a general knowledge library.
  */
 function knowledgeRoutes(): string[] {
-  const out = [
-    "dharma",
-    "dharma/knowledge",
-    "dharma/vedas",
-    "dharma/upanishads",
-    "dharma/gita",
-    "dharma/ramayanam",
-    "dharma/mahabharatam",
-    "dharma/puranas",
-    "dharma/slokas",
-    "dharma/music",
-    "telugu-culture",
-    "telugu-culture/literature",
-    "telugu-culture/poetry",
-    "telugu-culture/stories",
-    "telugu-culture/spiritual",
-    "telugu-culture/sri-sri",
-    "spiritual-heritage",
-  ];
-  for (let n = 1; n <= 18; n += 1) out.push(`dharma/gita/${n}`);
-
-  let resources: Array<Record<string, unknown>> = [];
-  try {
-    const raw = JSON.parse(
-      fs.readFileSync(path.join(root, "generated", "resources.json"), "utf8"),
-    ) as { resources?: Array<Record<string, unknown>> };
-    resources = Array.isArray(raw.resources) ? raw.resources : [];
-  } catch {
-    return out;
-  }
-  for (const r of resources.filter((x) => x.status === "published")) {
-    const title = String(r.title ?? "");
-    const stem = title
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N}]+/gu, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 60);
-    const id = String(r.id ?? "");
-    out.push(`dharma/resource/${stem || "resource"}-${id.split("-").pop() ?? ""}`);
-  }
-  return out;
+  return [];
 }
 
 const routes = [
@@ -238,8 +194,12 @@ fs.writeFileSync(
     "Disallow: /login/",
     "Disallow: /admin/",
     "Disallow: /settings/",
+    "Disallow: /dharma/",
+    "Disallow: /telugu-culture/",
     "Disallow: /api/",
     "Disallow: /api/media/",
+    "Disallow: /originals/",
+    "Disallow: /private/",
     `Sitemap: ${url}/sitemap.xml`,
     "",
   ].join("\n"),
@@ -256,7 +216,7 @@ fs.writeFileSync(
       // installed app said "RVP Youth", so the icon landed on a home screen
       // under a name the site never uses. RVP Youth are the stewards, not the
       // village.
-      name: "Reddivaripalli — Heritage · Community · Progress",
+      name: "Reddivaripalli — Our Village. Our Heritage. Our Home.",
       short_name: "Reddivaripalli",
       description:
         "Reddivaripalli village — heritage, people, events, memories and development. Faster access, offline support and reminders.",

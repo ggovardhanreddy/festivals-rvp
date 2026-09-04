@@ -1,6 +1,8 @@
 {
   "watermarkEnabled": true,
-  "watermarkText": "Reddivaripalli Village",
+  "watermarkText": "Reddivaripalli.com",
+  "watermarkPosition": "bottom-right",
+  "watermarkOpacity": 0.35,
   "allowPublicMediaDownload": false,
   "hideDirectoryContactsByDefault": true,
   "requireConsentForPersonalData": true,

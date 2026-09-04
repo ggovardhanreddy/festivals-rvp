@@ -55,10 +55,12 @@ describe("translate fallback chain", () => {
     // The header labels /members/ "People" and /about/ "Our Village"; the page
     // headings still read Members and Our Heritage. The aliases are what keeps
     // those two vocabularies from having to be the same word.
+    expect(translate("en", "/people/")).toBe("People");
+    expect(translate("te", "/people/")).toBe("మన వారు");
     expect(translate("en", "/members/")).toBe("People");
     expect(translate("te", "/members/")).toBe("మన వారు");
     expect(translate("en", "/about/")).toBe("Our Village");
-    expect(translate("en", "/services/")).toBe("Village Services");
+    expect(translate("en", "/government/")).toBe("Government");
     expect(translate("en", "nav.members")).toBe("Members");
   });
   it("interpolates and leaves unknown placeholders visible", () => {

@@ -80,12 +80,16 @@ export function DharmaHub() {
         <h2>{te ? "ఈ గ్రామం యొక్క ఆధ్యాత్మిక వారసత్వం" : "This village's own spiritual heritage"}</h2>
         <p className="muted">
           {te
-            ? "శ్రీ రామాలయం, ఆలయ చరిత్ర, జాతరలు, స్థానిక భజనలు మరియు పెద్దల జ్ఞాపకాలు — ఇవి రెడ్డివారిపల్లె సొంత సంపద."
-            : "The Sri Ramalayam, the jatharas, the local bhajans and the elders' memories are not general knowledge — they are Reddivaripalli's own, and they have their own section."}
+            ? "శ్రీ రామాలయం, ఆలయ చరిత్ర, జాతరలు, స్థానిక భజనలు మరియు పెద్దల జ్ఞాపకాలు — మన గ్రామం మరియు పండుగల పేజీలలో ఉన్నాయి."
+            : "The Sri Ramalayam, the jatharas, the local bhajans and the elders' memories live on Our Village, the festival calendar, and the gallery."}
         </p>
         <p>
-          <Link className="btn btn-primary" href={navHref("/spiritual-heritage/", lang)}>
-            {te ? "ఆలయ వారసత్వం చూడండి" : "Reddivaripalli Spiritual Heritage →"}
+          <Link className="btn btn-primary" href={navHref("/about/", lang)}>
+            {te ? "మన గ్రామం" : "Our Village →"}
+          </Link>
+          {" "}
+          <Link className="btn" href={navHref("/events/", lang)}>
+            {te ? "పండుగలు" : "Festivals →"}
           </Link>
         </p>
       </section>

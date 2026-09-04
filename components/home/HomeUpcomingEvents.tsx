@@ -16,7 +16,7 @@ const FALLBACK_IMAGE = "/logo/logo-mark.webp";
  * Anything whose last day has already passed in Asia/Kolkata is filtered out
  * here as well as in upcomingEvents(), so a festival that was celebrated last
  * week can never reappear with a positive countdown. The full festival
- * calendar, past events and the panchangam live on /events/.
+ * calendar lives on /temples/.
  */
 export function HomeUpcomingEvents({
   events,
@@ -56,7 +56,7 @@ export function HomeUpcomingEvents({
           {upcoming.map((event) => {
             const phase = eventPhase(event.date, event.endDate);
             const href =
-              event.slug && live.has(event.slug) ? `/${event.slug}/` : "/events/";
+              event.slug && live.has(event.slug) ? `/${event.slug}/` : "/temples/";
             return (
               <li key={event.id}>
                 <Link className="home-event" href={href}>
@@ -104,7 +104,7 @@ export function HomeUpcomingEvents({
       )}
 
       <div className="home-panel-actions">
-        <Link className="btn ghost" href="/events/">
+        <Link className="btn ghost" href="/temples/#upcoming-festivals">
           {t("home.viewCalendar")} <span aria-hidden>→</span>
         </Link>
       </div>

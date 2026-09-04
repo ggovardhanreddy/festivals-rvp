@@ -66,6 +66,28 @@ export type Member = {
   bloodGroup?: BloodGroup | string;
   /** Manual sort within category (lower first) */
   displayOrder?: number;
+  /** Explicit family branch. Never inferred from surname. */
+  familyId?: string;
+};
+
+/** Admin-editable village family branch (not a genealogy person). */
+export type VillageFamily = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  displayOrder: number;
+  coverPhoto: string | null;
+  history: string;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+/** Overlay that assigns a genealogy person to a Family by id. */
+export type FamilyPersonAssignment = {
+  id: string;
+  familyId: string;
 };
 
 export type MemberAuditEntry = {
@@ -145,12 +167,16 @@ export type Media = {
   phash?: string;
   /** Optional AVIF companion for images */
   fileAvif?: string;
-  /** Original CMS path served for download when useful */
+  /** Original CMS path — never sent to the public client */
   original?: string;
   /** Video poster image */
   poster?: string;
   mime?: string;
   duration?: number;
+  /** Public listing vs signed/private delivery. Default public. */
+  visibility?: "public" | "private";
+  /** Per-image watermark override. Absent means follow site settings. */
+  watermark?: boolean;
 };
 
 export type Album = {
@@ -341,11 +367,31 @@ export type HeritageItem = {
   submittedAt: string;
   submittedBy?: string;
   submittedName?: string;
+  /** Optional explicit family branch. Never matched by surname. */
+  familyId?: string;
+};
+
+export type WatermarkPosition =
+  | "bottom-right"
+  | "bottom-left"
+  | "top-right"
+  | "top-left"
+  | "center";
+
+/** Admin overlay for one gallery/media item. */
+export type MediaProtection = {
+  id: string;
+  visibility: "public" | "private";
+  watermark: boolean;
+  updatedAt?: string;
 };
 
 export type SiteSettings = {
   watermarkEnabled: boolean;
   watermarkText: string;
+  watermarkPosition: WatermarkPosition;
+  /** 0–1, applied to the overlay text */
+  watermarkOpacity: number;
   allowPublicMediaDownload: boolean;
   /** Hide phone/email on directory cards unless explicitly set public */
   hideDirectoryContactsByDefault?: boolean;

@@ -11,7 +11,9 @@ import { MediaImage } from "@/components/media/MediaImage";
 import { withBase } from "@/lib/base";
 import { CULTURE_FESTIVALS, festivalThumbPath } from "@/lib/festivals";
 import { albumHref, BUCKETS, FESTIVAL_HEROES } from "@/lib/site";
-import type { Album, MediaWithAlbum } from "@/lib/types";
+import type { Album, Development, MediaWithAlbum } from "@/lib/types";
+import { useMediaProtection } from "@/lib/use-media-protection";
+import { filterPublicMedia } from "@/lib/media-protection";
 
 type FestivalDef = {
   key: string;
@@ -72,13 +74,6 @@ const GALLERY_FESTIVALS: FestivalDef[] = [
     coverHint: festivalThumbPath(CULTURE_BY_KEY["devapatlamma-jathara"]!.folder),
   },
   {
-    key: "fun-trips",
-    title: "Fun Fest",
-    buckets: ["fun-trips"],
-    coverHint: FESTIVAL_HEROES["fun-trips"],
-    locked: true,
-  },
-  {
     key: "other-celebrations",
     title: "Other Celebrations",
     buckets: [
@@ -96,6 +91,63 @@ const GALLERY_FESTIVALS: FestivalDef[] = [
 const KNOWN_BUCKETS = new Set(
   GALLERY_FESTIVALS.flatMap((f) => f.buckets),
 );
+
+type GalleryCategory =
+  | "all"
+  | "people"
+  | "families"
+  | "temples"
+  | "festivals"
+  | "village"
+  | "development"
+  | "historical"
+  | "memories";
+
+const GALLERY_CATEGORIES: { id: GalleryCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "people", label: "People" },
+  { id: "families", label: "Families" },
+  { id: "temples", label: "Temples" },
+  { id: "festivals", label: "Festivals" },
+  { id: "village", label: "Village" },
+  { id: "development", label: "Development" },
+  { id: "historical", label: "Historical" },
+  { id: "memories", label: "Memories" },
+];
+
+const TEMPLE_BUCKETS = new Set([
+  "sri-rama-navami",
+  "mathamma-jathara",
+  "devapatlamma-jathara",
+]);
+const FESTIVAL_BUCKETS = new Set(CULTURE_FESTIVALS.map((f) => f.key));
+
+function albumMatchesCategory(album: Album, cat: GalleryCategory): boolean {
+  const bucket = album.bucket || "";
+  const year = Number(album.year) || 0;
+  const title = `${album.title} ${bucket}`.toLowerCase();
+  switch (cat) {
+    case "all":
+    case "village":
+      return true;
+    case "temples":
+      return TEMPLE_BUCKETS.has(bucket);
+    case "festivals":
+      return FESTIVAL_BUCKETS.has(bucket);
+    case "people":
+      return bucket === "rvp-birthdays";
+    case "families":
+      return /family|families|adapaduchu/.test(title);
+    case "historical":
+      return year > 0 && year <= 2016;
+    case "memories":
+      return /memor|heritage|old|story/.test(title) || (year > 0 && year <= 2016);
+    case "development":
+      return false;
+    default:
+      return true;
+  }
+}
 
 const FALLBACK = "/brand/village-aerial.webp";
 
@@ -146,8 +198,10 @@ function mediaFromAlbums(albums: Album[]): MediaWithAlbum[] {
 
 export function GalleryHub({
   albums,
+  developments = [],
 }: {
   albums: Album[];
+  developments?: Development[];
   /** @deprecated unused — media is derived from albums */
   media?: MediaWithAlbum[];
   years?: string[];
@@ -159,19 +213,44 @@ export function GalleryHub({
   const [typeFilter, setTypeFilter] = useState<"all" | "image" | "video">(
     "all",
   );
+  const [category, setCategory] = useState<GalleryCategory>("all");
   const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
 
+  const { rules } = useMediaProtection();
   const publicAlbums = useMemo(
     () =>
-      albums.filter(
-        (a) => a.bucket !== "fun-trips" && (a.media?.length ?? 0) > 0,
-      ),
-    [albums],
+      albums
+        .filter((a) => a.bucket !== "fun-trips" && (a.media?.length ?? 0) > 0)
+        .map((album) => ({
+          ...album,
+          media: filterPublicMedia(album.media || [], rules),
+        }))
+        .filter((album) => (album.media?.length ?? 0) > 0),
+    [albums, rules],
   );
 
   const publicMedia = useMemo(
     () => mediaFromAlbums(publicAlbums),
     [publicAlbums],
+  );
+
+  const categoryMedia = useMemo(() => {
+    if (category === "development") return [];
+    return publicMedia.filter((item) =>
+      albumMatchesCategory(item.album, category),
+    );
+  }, [publicMedia, category]);
+
+  const developmentPhotos = useMemo(
+    () =>
+      developments.flatMap((project) =>
+        (project.images || []).map((src, index) => ({
+          id: `${project.id}-${index}`,
+          src,
+          title: project.title,
+        })),
+      ),
+    [developments],
   );
 
   const festivalCards = useMemo(() => {
@@ -459,14 +538,57 @@ export function GalleryHub({
       <section className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Albums</p>
-            <h2>Browse by festival</h2>
+            <p className="eyebrow">Photographs</p>
+            <h2>Gallery</h2>
             <p className="lede">
-              Open a festival, pick a year, then explore photos and videos.
+              Filter by people, families, temples, festivals, village,
+              development, historical photographs, or memories.
             </p>
           </div>
         </div>
 
+        <div className="gallery-filters" role="tablist" aria-label="Gallery category">
+          {GALLERY_CATEGORIES.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={category === item.id}
+              className="filter-chip"
+              data-active={category === item.id || undefined}
+              onClick={() => {
+                setCategory(item.id);
+                setFestivalKey(null);
+                setYear(null);
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {category === "development" ? (
+          developmentPhotos.length ? (
+            <ul className="gallery-dev-grid">
+              {developmentPhotos.map((photo) => (
+                <li key={photo.id}>
+                  <Link href="/developments/" className="gallery-dev-card">
+                    <img src={withBase(photo.src)} alt="" loading="lazy" />
+                    <span>{photo.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="muted">Development photographs will appear here as projects are documented.</p>
+          )
+        ) : category !== "all" && category !== "festivals" ? (
+          categoryMedia.length ? (
+            <Gallery items={categoryMedia} />
+          ) : (
+            <p className="muted">No photographs in this view yet.</p>
+          )
+        ) : (
         <div className="gallery-album-grid gallery-festival-grid">
           {festivalCards.map((card) => {
             const locked = Boolean(card.fest.locked);
@@ -526,6 +648,7 @@ export function GalleryHub({
             );
           })}
         </div>
+        )}
       </section>
       <FunFestLoginDialog
         open={funFestLoginOpen}

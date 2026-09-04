@@ -114,6 +114,28 @@ export async function onRequest(context: MiddlewareContext) {
     });
   }
 
+  const path = url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`;
+  if (
+    path.startsWith("/originals/") ||
+    path.startsWith("/private/")
+  ) {
+    return new Response("Not found", { status: 404 });
+  }
+  const retired = path.startsWith("/dharma/")
+    ? "/temples/"
+    : path.startsWith("/telugu-culture/")
+      ? "/stories/"
+      : null;
+  if (retired) {
+    return new Response(null, {
+      status: 301,
+      headers: {
+        Location: new URL(retired, url.origin).toString(),
+        "Cache-Control": "no-store, must-revalidate",
+      },
+    });
+  }
+
   if (url.hostname === PAGES_HOST) {
     url.hostname = CANONICAL_HOST;
     url.protocol = "https:";

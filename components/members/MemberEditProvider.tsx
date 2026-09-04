@@ -26,6 +26,7 @@ type MemberEditContextValue = {
   clearToast: () => void;
   editingId: string | null;
   openEditor: (id: string) => void;
+  startNewMember: (group?: MemberGroup) => void;
   closeEditor: () => void;
   editingMember: Member | null;
   saveMember: (next: Member) => Promise<void>;
@@ -70,6 +71,7 @@ export function MemberEditProvider({
     mergeMemberRosters(seed, [], { includeArchived: true }),
   );
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingDraft, setEditingDraft] = useState<Member | null>(null);
   const [toast, setToast] = useState<Toast>(null);
   const [selectedIds, setSelected] = useState<Set<string>>(new Set());
 
@@ -89,67 +91,95 @@ export function MemberEditProvider({
       next: Member[],
       meta?: { action?: "reorder" | "import" | "archive"; note?: string },
     ) => {
-      if (!isAdmin) throw new Error("Admin session required");
-      await saveAll(next);
-      setAllMembers(next);
-      setToast({
-        kind: "ok",
-        text: meta?.note || "Members saved to Cloudflare R2.",
-      });
-      if (meta?.action === "reorder" || meta?.action === "import" || meta?.action === "archive") {
-        try {
-          await appendMemberAudit({
-            adminName: username || "Govardhan",
-            memberId: meta.action,
-            memberName: meta.note,
-            action: meta.action === "archive" ? "archive" : meta.action,
-            fields: ["roster"],
-            before: null,
-            after: { name: `${next.length} members` },
-          });
-        } catch {
-          /* audit is best-effort */
-        }
+      if (!isAdmin) {
+        const err = new Error("Admin session required");
+        setToast({ kind: "err", text: err.message });
+        throw err;
       }
-      await refresh();
+      try {
+        await saveAll(next);
+        setAllMembers(next);
+        setToast({
+          kind: "ok",
+          text: meta?.note || "Members saved to Cloudflare R2.",
+        });
+        if (meta?.action === "reorder" || meta?.action === "import" || meta?.action === "archive") {
+          try {
+            await appendMemberAudit({
+              adminName: username || "Govardhan",
+              memberId: meta.action,
+              memberName: meta.note,
+              action: meta.action === "archive" ? "archive" : meta.action,
+              fields: ["roster"],
+              before: null,
+              after: { name: `${next.length} members` },
+            });
+          } catch {
+            /* audit is best-effort */
+          }
+        }
+        // Skip refresh() here: a follow-up GET can return an empty/stale
+        // overlay and drop members who are not yet in the Git seed.
+      } catch (err) {
+        setToast({
+          kind: "err",
+          text: err instanceof Error ? err.message : "Save failed",
+        });
+        throw err;
+      }
     },
-    [isAdmin, saveAll, refresh, username],
+    [isAdmin, saveAll, username],
   );
 
   const saveMember = useCallback(
     async (next: Member) => {
-      if (!isAdmin) throw new Error("Admin session required");
-      const before = allMembers.find((m) => m.id === next.id) || null;
+      if (!isAdmin) {
+        const err = new Error("Admin session required");
+        setToast({ kind: "err", text: err.message });
+        throw err;
+      }
+      const before =
+        allMembers.find((m) => m.id === next.id) ||
+        (editingDraft?.id === next.id ? editingDraft : null);
       const { fields, beforeSnap, afterSnap } = diffMemberFields(before, next);
       if (!fields.length) {
         setToast({ kind: "ok", text: "No changes to save." });
         setEditingId(null);
+        setEditingDraft(null);
         return;
       }
       const exists = allMembers.some((m) => m.id === next.id);
       const roster = exists
         ? allMembers.map((m) => (m.id === next.id ? next : m))
         : [...allMembers, next];
-      await saveAll(roster);
-      setAllMembers(roster);
       try {
-        await appendMemberAudit({
-          adminName: username || "Govardhan",
-          memberId: next.id,
-          memberName: next.name,
-          action: exists ? (fields.includes("photo") ? "photo" : "update") : "create",
-          fields,
-          before: beforeSnap,
-          after: afterSnap,
+        await saveAll(roster);
+        setAllMembers(roster);
+        try {
+          await appendMemberAudit({
+            adminName: username || "Govardhan",
+            memberId: next.id,
+            memberName: next.name,
+            action: exists ? (fields.includes("photo") ? "photo" : "update") : "create",
+            fields,
+            before: beforeSnap,
+            after: afterSnap,
+          });
+        } catch {
+          /* best-effort */
+        }
+        setToast({ kind: "ok", text: `Saved ${next.name}.` });
+        setEditingId(null);
+        setEditingDraft(null);
+      } catch (err) {
+        setToast({
+          kind: "err",
+          text: err instanceof Error ? err.message : "Save failed",
         });
-      } catch {
-        /* best-effort */
+        throw err;
       }
-      setToast({ kind: "ok", text: `Saved ${next.name}.` });
-      setEditingId(null);
-      await refresh();
     },
-    [isAdmin, allMembers, saveAll, refresh, username],
+    [isAdmin, allMembers, editingDraft, saveAll, username],
   );
 
   const reorderInGroup = useCallback(
@@ -244,11 +274,25 @@ export function MemberEditProvider({
       toast,
       clearToast,
       editingId,
-      openEditor: (id) => setEditingId(id),
-      closeEditor: () => setEditingId(null),
-      editingMember: editingId
-        ? allMembers.find((m) => m.id === editingId) || null
-        : null,
+      openEditor: (id) => {
+        setEditingDraft(null);
+        setEditingId(id);
+      },
+      startNewMember: (group: MemberGroup = "core") => {
+        const blank = createBlankMember(group);
+        setEditingDraft(blank);
+        setEditingId(blank.id);
+      },
+      closeEditor: () => {
+        setEditingId(null);
+        setEditingDraft(null);
+      },
+      editingMember:
+        editingDraft && editingId === editingDraft.id
+          ? editingDraft
+          : editingId
+            ? allMembers.find((m) => m.id === editingId) || null
+            : null,
       saveMember,
       persistRoster,
       reorderInGroup,
@@ -274,6 +318,7 @@ export function MemberEditProvider({
       toast,
       clearToast,
       editingId,
+      editingDraft,
       saveMember,
       persistRoster,
       reorderInGroup,

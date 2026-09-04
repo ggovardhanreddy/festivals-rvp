@@ -6,7 +6,15 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = process.cwd();
-const COLLECTIONS = ["members", "directory", "events", "announcements"] as const;
+const COLLECTIONS = [
+  "members",
+  "directory",
+  "events",
+  "announcements",
+  "families",
+  "family-people",
+  "media-protection",
+] as const;
 
 const out: Record<string, unknown[]> = {};
 for (const name of COLLECTIONS) {

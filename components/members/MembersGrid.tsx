@@ -585,16 +585,11 @@ export function MembersGrid({
           <button
             type="button"
             className="btn ghost"
-            onClick={() => {
-              const blank = createBlankMember(
+            onClick={() =>
+              edit.startNewMember(
                 groupFilter === "all" ? "core" : groupFilter,
-              );
-              void edit
-                .persistRoster([...edit.allMembers, blank], {
-                  note: "Added new member draft.",
-                })
-                .then(() => edit.openEditor(blank.id));
-            }}
+              )
+            }
           >
             Add member
           </button>

@@ -9,9 +9,10 @@ import { test, expect } from "@playwright/test";
  */
 const PUBLIC_ROUTES = [
   "/", "/about/", "/heritage/", "/timeline/", "/years/", "/gallery/",
-  "/members/", "/events/", "/directory/", "/developments/", "/suggestions/",
+  "/members/", "/people/", "/families/", "/adapaduchulu/", "/events/", "/temples/", "/stories/", "/directory/", "/developments/", "/suggestions/",
   "/lost-found/", "/documents/", "/contact/", "/privacy/", "/terms/",
   "/rvp-birthdays/", "/search/", "/settings/",
+  "/families/gundluru-venkata-subba-reddy/",
 ];
 
 const FESTIVALS = [
@@ -50,15 +51,15 @@ test.describe("homepage integrity", () => {
   });
 
   test("gallery renders with its filter controls", async ({ page }) => {
-    // Asserts the homepage gallery still renders after the payload change that
-    // cut 869 KB to 239 KB, and that a filter is actually clickable. This used
-    // to be untestable because two consent dialogs stacked over the page on a
-    // first visit; there is now one, and it does not open for 1.8s.
-    await page.goto("/");
+    await page.goto("/gallery/");
     await expect(page.locator(".gallery-filters .filter-chip").first()).toBeVisible();
     expect(await page.locator(".gallery-filters .filter-chip").count()).toBeGreaterThan(3);
-    await expect(page.locator(".home-masonry").first()).toBeVisible();
-    expect(await page.locator(".home-masonry img").count()).toBeGreaterThan(0);
+  });
+
+  test("homepage hero names the village", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#village-hero-title")).toContainText(/REDDIVARIPALLI/i);
+    await expect(page.locator(".village-hero-cta .btn").first()).toBeVisible();
   });
 
   test("the page is fully usable once consent is dismissed", async ({ page }) => {
@@ -114,6 +115,27 @@ test.describe("homepage integrity", () => {
     await page.reload();
     await page.waitForTimeout(2600);
     await expect(page.locator(".consent-card")).toHaveCount(0);
+  });
+});
+
+test.describe("family tree is a genealogy diagram", () => {
+  test("renders connecting lines and nodes, not an accordion list", async ({
+    page,
+  }) => {
+    await page.goto("/families/gundluru-venkata-subba-reddy/");
+    await page.keyboard.press("Escape");
+    await expect(page.locator("h1")).toContainText(
+      "Gundluru Venkata Subba Reddy Family",
+    );
+    await expect(page.locator(".ft-genealogy")).toBeVisible();
+    await expect(page.locator(".ft-node").first()).toBeVisible();
+    expect(await page.locator(".ft-lines path").count()).toBeGreaterThan(0);
+    await expect(page.getByRole("button", { name: "Fit to screen" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Zoom in" })).toBeVisible();
+    expect(await page.locator(".ft-branch-actions").count()).toBe(0);
+    expect(await page.locator(".ft-generation-grid").count()).toBe(0);
+    await page.locator(".ft-node").first().click({ force: true });
+    await expect(page.locator(".ft-person-panel")).toBeVisible();
   });
 });
 

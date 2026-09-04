@@ -5,7 +5,8 @@ export const UI_LANG_KEY = "rvp-ui-lang";
 /** Chrome labels keyed by href or stable id. */
 export const CHROME_EN: Record<string, string> = {
   "/": "Home",
-  "/members/": "Members",
+  "/people/": "People",
+  "/members/": "People",
   "/about/": "Our Heritage",
   "/events/": "Events & Birthdays",
   "/developments/": "Developments",
@@ -49,6 +50,7 @@ export const CHROME_EN: Record<string, string> = {
 
 export const CHROME_TE: Record<string, string> = {
   "/": "\u0c39\u0c4b\u0c2e\u0c4d",
+  "/people/": "\u0c38\u0c2d\u0c4d\u0c2f\u0c41\u0c32\u0c41",
   "/members/": "\u0c38\u0c2d\u0c4d\u0c2f\u0c41\u0c32\u0c41",
   "/about/": "\u0c2e\u0c28\u0c20\u0c35\u0c3e\u0c30\u0c38\u0c24\u0c4d\u0c35\u0c02",
   "/events/": "\u0c15\u0c3e\u0c30\u0c4d\u0c2f\u0c15\u0c4d\u0c30\u0c2e\u0c3e\u0c32\u0c41 & \u0c2a\u0c41\u0c1f\u0c4d\u0c1f\u0c3f\u0c28\u0c30\u0c4b\u0c1c\u0c41\u0c32\u0c41",

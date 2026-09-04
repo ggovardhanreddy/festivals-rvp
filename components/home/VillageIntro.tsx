@@ -8,10 +8,8 @@ import { VILLAGE_NAME } from "@/lib/site";
  * Three or four lines about the village, and one door to the full story.
  *
  * Deliberately says nothing about heritage beyond the description itself. The
- * hero already carries "Heritage · Community · Progress" and "One Village ·
- * One Family · One Heritage"; a teaser paragraph and a second heritage button
- * here made the word appear four times above the fold and gave the panel two
- * competing calls to action.
+ * hero already carries the village tagline; a second heritage button here
+ * made two competing calls to action.
  *
  * A client component because /te/ renders this same tree and the copy has to
  * come from the catalogue, not from a hard-coded English string.
@@ -29,7 +27,7 @@ export function VillageIntro() {
 
       <div className="home-panel-actions">
         <Link className="btn" href="/about/">
-          {t("home.readOurStory")} <span aria-hidden>→</span>
+          {t("home.readMore", t("common.readMore"))} <span aria-hidden>→</span>
         </Link>
       </div>
     </section>

@@ -98,6 +98,22 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "designation": "Doctor (Orthopaedic)"
     },
     {
+      "id": "j-venkata-ramana-reddy",
+      "name": "J Venkata Ramana Reddy",
+      "photo": null,
+      "dob": null,
+      "group": "legacy",
+      "designation": "Retired DSP – Government Service"
+    },
+    {
+      "id": "d-manohar",
+      "name": "D Manohar",
+      "photo": null,
+      "dob": null,
+      "group": "legacy",
+      "designation": "Government Employee – Managing Director, State Skill Development Corporation"
+    },
+    {
       "id": "g-govardhan-reddy",
       "name": "G Govardhan Reddy",
       "photo": "/members/govardhan.webp",
@@ -734,5 +750,165 @@ export const COMMUNITY_SEEDS: Record<string, Record<string, unknown>[]> = {
       "date": "2026-08-01",
       "important": false
     }
-  ]
+  ],
+  "families": [
+    {
+      "id": "GUNDLURU_KONDA_REDDY",
+      "name": "Gundluru Konda Reddy Family",
+      "slug": "gundluru-konda-reddy",
+      "description": "A family branch of Reddivaripalli. This is a separate family from the Gundluru Venkata Subba Reddy Family.",
+      "displayOrder": 1,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "GUNDLURU_VENKATA_SUBBA_REDDY",
+      "name": "Gundluru Venkata Subba Reddy Family",
+      "slug": "gundluru-venkata-subba-reddy",
+      "description": "A family branch of Reddivaripalli. This is a separate family from the Gundluru Konda Reddy Family.",
+      "displayOrder": 2,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "KUNCHAPU",
+      "name": "Kunchapu Family",
+      "slug": "kunchapu",
+      "description": "The Kunchapu family of Reddivaripalli.",
+      "displayOrder": 3,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "MARIMENI",
+      "name": "Marimeni Family",
+      "slug": "marimeni",
+      "description": "The Marimeni family of Reddivaripalli. This is a separate family from the Marimeni Nadupanna Family.",
+      "displayOrder": 4,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "DEVAPATLA",
+      "name": "Devapatla Family",
+      "slug": "devapatla",
+      "description": "The Devapatla family of Reddivaripalli.",
+      "displayOrder": 5,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "MARIMENI_NADUPANNA",
+      "name": "Marimeni Nadupanna Family",
+      "slug": "marimeni-nadupanna",
+      "description": "The Marimeni Nadupanna family of Reddivaripalli. This is a separate family from the Marimeni Family.",
+      "displayOrder": 6,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "KOMMEPALLI",
+      "name": "Kommepalli Family",
+      "slug": "kommepalli",
+      "description": "The Kommepalli family of Reddivaripalli. People can be assigned to this branch by an administrator.",
+      "displayOrder": 7,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "KUDUM",
+      "name": "Kudum Family",
+      "slug": "kudum",
+      "description": "The Kudum family of Reddivaripalli. People can be assigned to this branch by an administrator.",
+      "displayOrder": 8,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "JAGADAM",
+      "name": "Jagadam Family",
+      "slug": "jagadam",
+      "description": "The Jagadam family of Reddivaripalli. This is a separate family from the Jagili Family.",
+      "displayOrder": 9,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "JAGILI",
+      "name": "Jagili Family",
+      "slug": "jagili",
+      "description": "The Jagili family of Reddivaripalli. This is a separate family from the Jagadam Family. People can be assigned to this branch by an administrator.",
+      "displayOrder": 10,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "USIRIKAYALA",
+      "name": "Usirikayala Family",
+      "slug": "usirikayala",
+      "description": "The Usirikayala family of Reddivaripalli.",
+      "displayOrder": 11,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "CHINTHAMANI",
+      "name": "Chinthamani Family",
+      "slug": "chinthamani",
+      "description": "The Chinthamani family of Reddivaripalli.",
+      "displayOrder": 12,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    },
+    {
+      "id": "YERRAGOLLA",
+      "name": "Yerragolla Family",
+      "slug": "yerragolla",
+      "description": "The Yerragolla family of Reddivaripalli.",
+      "displayOrder": 13,
+      "coverPhoto": null,
+      "history": "Information not yet provided.",
+      "isPublished": true,
+      "createdAt": "2026-09-04T00:00:00.000Z",
+      "updatedAt": "2026-09-04T00:00:00.000Z"
+    }
+  ],
+  "family-people": [],
+  "media-protection": []
 } as Record<string, Record<string, unknown>[]>;

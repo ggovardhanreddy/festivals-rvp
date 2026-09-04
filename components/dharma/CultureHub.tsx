@@ -20,20 +20,19 @@ import { SourceList } from "./SourceList";
 import { AUTHORS, type Author } from "@/lib/dharma";
 import { CULTURE_NAV } from "@/lib/site";
 
-export type CultureView = "hub" | "literature" | "poetry" | "stories" | "spiritual";
+export type CultureView = "hub" | "literature" | "poetry" | "stories";
 
 /**
  * Which authors belong on which view.
  *
  * A judgement, not a taxonomy: Potana wrote devotional narrative in verse, so
- * he appears under poetry, stories and spiritual literature alike. Repeating
- * an author is more honest than forcing each into one box.
+ * he appears under poetry and stories alike. Repeating an author is more
+ * honest than forcing each into one box.
  */
 const VIEW_AUTHORS: Record<Exclude<CultureView, "hub">, string[]> = {
   literature: AUTHORS.map((a) => a.slug),
   poetry: ["annamayya", "potana", "kavitrayam", "molla", "vemana", "thyagaraja", "ramadasu", "jashuva", "krishnasastri"],
   stories: ["kavitrayam", "molla", "potana", "gurajada", "veeresalingam", "viswanatha"],
-  spiritual: ["annamayya", "potana", "ramadasu", "thyagaraja", "molla", "kavitrayam"],
 };
 
 const VIEW_COPY: Record<CultureView, { title: string; titleTe: string; lede: string; ledeTe: string }> = {
@@ -60,12 +59,6 @@ const VIEW_COPY: Record<CultureView, { title: string; titleTe: string; lede: str
     titleTe: "తెలుగు కథలు",
     lede: "The epics retold in Telugu, the first Telugu novels, and the plays that changed what could be said.",
     ledeTe: "తెలుగులో ఇతిహాసాలు, మొదటి నవలలు, మరియు నాటకాలు.",
-  },
-  spiritual: {
-    title: "Telugu Spiritual Literature",
-    titleTe: "తెలుగు ఆధ్యాత్మిక సాహిత్యం",
-    lede: "The devotional writing that carried this tradition to people who had no Sanskrit.",
-    ledeTe: "సంస్కృతం తెలియని వారికి ఈ సంప్రదాయాన్ని అందించిన భక్తి సాహిత్యం.",
   },
 };
 

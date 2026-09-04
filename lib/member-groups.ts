@@ -66,17 +66,17 @@ export function resolveMemberGroup(member: Member): MemberGroup {
 }
 
 export const MEMBER_GROUP_LABELS: Record<MemberGroup, string> = {
-  legacy: "Legacy Circle",
-  core: "Core Members",
-  nextgen: "Next Generation",
+  legacy: "Our Elders",
+  core: "Our Village Contributors",
+  nextgen: "Our Families",
 };
 
 export const MEMBER_GROUP_DESCRIPTIONS: Record<MemberGroup, string> = {
   legacy:
-    "The Legacy Circle honors the senior members who have significantly contributed to the growth, unity, traditions, and development of Reddivaripalli Village. Their experience and lifelong service continue to inspire future generations.",
-  core: "The Core Members are the active contributors leading community initiatives, organizing festivals, supporting village development, and preserving the traditions of Reddivaripalli.",
+    "Our Elders are the senior members whose experience, service and care have shaped Reddivaripalli. Their lives continue to guide the village.",
+  core: "Our Village Contributors lead festivals, support development, and keep the everyday traditions of Reddivaripalli alive.",
   nextgen:
-    "The Next Generation represents the future of Reddivaripalli—young professionals, entrepreneurs, public servants, and innovators who will carry forward the village's legacy with dedication and fresh ideas.",
+    "Our Families — the younger generation carrying Reddivaripalli forward with the same care their parents and grandparents showed.",
 };
 
 export const MEMBER_GROUP_ORDER: MemberGroup[] = [

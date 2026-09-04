@@ -7,6 +7,7 @@ import type { Media } from "@/lib/types";
 import { isDisplayableImageUrl } from "@/lib/media-formats";
 import { mediaDisplayTitle } from "@/lib/media-label";
 import { useMediaUrl } from "@/lib/use-media-url";
+import { ProtectedMedia } from "./media/ProtectedMedia";
 
 const VideoPlayer = dynamic(
   () => import("./media/VideoPlayer").then((m) => m.VideoPlayer),
@@ -130,7 +131,7 @@ function ImageLightbox({
 
   return (
     <div
-      className="lightbox-image-stage protected-media"
+      className="lightbox-image-stage"
       onPointerDown={(e) => {
         if (zoom <= 1) return;
         (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
@@ -154,20 +155,19 @@ function ImageLightbox({
       onContextMenu={(e) => e.preventDefault()}
       onDragStart={(e) => e.preventDefault()}
     >
-      <img
-        src={src}
-        alt={media.title || "Memory photograph"}
-        style={{
-          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-          transition: reduce ? undefined : "transform 0.2s ease",
-          cursor: zoom > 1 ? "grab" : "default",
-        }}
-        draggable={false}
-        onContextMenu={(e) => e.preventDefault()}
-      />
-      <span className="protected-media-mark" aria-hidden>
-        Reddivaripalli Village
-      </span>
+      <ProtectedMedia className="lightbox-protected" watermark>
+        <img
+          src={src}
+          alt={media.title || "Memory photograph"}
+          style={{
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+            transition: reduce ? undefined : "transform 0.2s ease",
+            cursor: zoom > 1 ? "grab" : "default",
+          }}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+        />
+      </ProtectedMedia>
     </div>
   );
 }

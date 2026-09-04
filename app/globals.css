@@ -405,6 +405,10 @@ html.dark body:has(.village-hero) .logo-watermark {
   padding: 1.5rem 0 5rem;
 }
 
+.page--family-tree {
+  width: min(1320px, calc(100% - 1.25rem));
+}
+
 .hero {
   position: relative;
   min-height: min(88vh, 860px);
@@ -8460,6 +8464,30 @@ a.kids-card:focus-visible {
   object-fit: cover;
 }
 
+.dev-card-photos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+  background: var(--bg-2);
+}
+
+.dev-card-photos figure,
+.dev-card-hero figure {
+  margin: 0;
+}
+
+.dev-card-photos img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.dev-card-photos figcaption,
+.dev-card-hero figcaption {
+  padding: 0.35rem 0.7rem 0.6rem;
+  font-size: 0.8rem;
+}
+
 .dev-card-body {
   padding: 1.15rem 1.2rem 1.35rem;
 }
@@ -9427,12 +9455,11 @@ body {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  -webkit-user-drag: none;
 }
 
 .protected-media-mark {
   position: absolute;
-  right: 0.65rem;
-  bottom: 0.65rem;
   z-index: 2;
   padding: 0.25rem 0.5rem;
   border-radius: 0.35rem;
@@ -9440,9 +9467,64 @@ body {
   font-weight: 650;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
   background: rgba(0, 0, 0, 0.38);
   pointer-events: none;
+  right: 0.65rem;
+  bottom: 0.65rem;
+}
+
+.protected-media-mark[data-position="bottom-left"] {
+  left: 0.65rem;
+  right: auto;
+  bottom: 0.65rem;
+  top: auto;
+}
+
+.protected-media-mark[data-position="top-right"] {
+  top: 0.65rem;
+  right: 0.65rem;
+  bottom: auto;
+}
+
+.protected-media-mark[data-position="top-left"] {
+  top: 0.65rem;
+  left: 0.65rem;
+  right: auto;
+  bottom: auto;
+}
+
+.protected-media-mark[data-position="center"] {
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+}
+
+.protected-media-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: color-mix(in srgb, var(--color-bg) 72%, #000);
+  pointer-events: none;
+}
+
+.lightbox-protected {
+  width: 100%;
+  height: 100%;
+}
+
+.temple-card-photo--empty,
+.home-temple-photo-empty {
+  display: grid;
+  place-items: center;
+  min-height: 10rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
 }
 
 .heritage-media {
@@ -12907,4 +12989,861 @@ a.dharma-division-link:focus-visible {
 
 .dharma-album-list .muted {
   font-size: 0.8rem;
+}
+
+/* ---- Village-first redesign -------------------------------------------- */
+
+.village-hero[data-photo] {
+  min-height: min(88vh, 46rem);
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(5rem, 14vw, 9rem) var(--page-gutter) clamp(2.5rem, 7vw, 4.5rem);
+}
+
+.village-hero[data-photo] .village-hero-inner {
+  grid-template-columns: 1fr;
+  max-width: 40rem;
+  margin-inline: 0;
+}
+
+.village-hero[data-photo] .village-hero-support {
+  max-width: 42rem;
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 1.55;
+  color: rgba(246, 242, 231, 0.92);
+}
+
+.village-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.home-village {
+  max-width: 100%;
+}
+
+.home-temple-grid,
+.home-people-grid,
+.home-stories-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.home-temple-card,
+.home-person-card,
+.home-story-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  height: 100%;
+  padding: 0;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  overflow: hidden;
+}
+
+.home-temple-card .home-temple-body,
+.home-person-card,
+.home-story-card {
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.home-temple-media,
+.home-person-photo {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-forest, #16301f);
+}
+
+.home-temple-media img,
+.home-person-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-person-photo[data-placeholder] {
+  display: grid;
+  place-items: center;
+  color: #f6f2e7;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+
+.home-temple-body strong,
+.home-person-card strong,
+.home-story-card h3 {
+  display: block;
+  font-family: var(--font-display);
+}
+
+.home-temple-body .muted,
+.home-person-card .muted {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-people-grid {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.home-person-photo {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  margin: 1rem auto 0;
+  width: 7.5rem;
+}
+
+.home-person-card {
+  align-items: center;
+  text-align: center;
+  border: 0;
+  background: transparent;
+}
+
+.home-contact-map {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  min-height: 16rem;
+}
+
+.home-contact-map iframe,
+.village-map-embed iframe {
+  width: 100%;
+  height: 18rem;
+  border: 0;
+}
+
+.village-map-embed {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+}
+
+.temple-card-grid,
+.festival-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.temple-card,
+.festival-card,
+.story-card {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  overflow: hidden;
+}
+
+.temple-card-photo img,
+.festival-card img,
+.story-photo-card img {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+  display: block;
+}
+
+.temple-card-body,
+.festival-card-link > div,
+.story-card {
+  padding: 1.15rem 1.2rem 1.35rem;
+}
+
+.festival-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.festival-card-cta {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: var(--text-sm);
+}
+
+.temple-traditions {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.temple-upcoming-list,
+.people-birthday-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.temple-upcoming-card,
+.people-birthday-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  align-items: baseline;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: inherit;
+  text-decoration: none;
+}
+
+.people-tabs,
+.story-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.5rem;
+}
+
+.story-chip-list {
+  list-style: none;
+  padding: 0;
+}
+
+.story-chip-list li,
+.people-tabs .filter-chip {
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: var(--card-bg);
+}
+
+.people-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.85rem;
+}
+
+.people-chip {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+}
+
+.people-chip-photo {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--color-forest, #16301f);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.people-chip-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.people-family-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.stories-prose {
+  max-width: 68ch;
+}
+
+.stories-prose p {
+  line-height: 1.7;
+}
+
+.story-names ul,
+.story-photo-list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.story-names li {
+  display: inline-block;
+  margin: 0.25rem 0.4rem 0.25rem 0;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--card-bg);
+  border: 1px solid var(--color-line);
+}
+
+.story-photo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.story-photo-card {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--card-bg);
+}
+
+.story-photo-card div {
+  padding: 1rem 1.1rem 1.2rem;
+}
+
+.gallery-dev-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.gallery-dev-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+}
+
+.gallery-dev-card img {
+  width: 100%;
+  height: 10rem;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-dev-card span {
+  display: block;
+  padding: 0.65rem 0.8rem;
+}
+
+.footer-inner--village {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.footer-legal-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  justify-content: center;
+  margin: 0.5rem 0 0;
+  font-size: var(--text-sm);
+}
+
+.footer-legal-inline a {
+  color: inherit;
+}
+
+@media (max-width: 800px) {
+  .footer-inner--village,
+  .home-temple-grid,
+  .temple-card-grid,
+  .festival-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .village-hero[data-photo] .village-hero-inner {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .village-hero[data-photo] .village-hero-cta {
+    justify-content: center;
+  }
+}
+
+.people-tabs a.filter-chip {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ft-toolbar {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ft-search input {
+  width: 100%;
+  max-width: 32rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: inherit;
+  font: inherit;
+}
+
+.ft-family-grid,
+.ft-generation-grid,
+.ft-search-results,
+.ft-adapaduchu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.family-group {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.family-group-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.family-card {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: inherit;
+}
+
+.family-card-photo {
+  aspect-ratio: 16 / 10;
+  background: color-mix(in srgb, var(--color-gold, #c4a35a) 18%, var(--card-bg));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  font-size: 2rem;
+  color: var(--muted, #5c685f);
+}
+
+.family-card-photo img,
+.family-hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.family-card-body {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.95rem 1rem 1.1rem;
+}
+
+.family-card-body h3 {
+  margin: 0;
+}
+
+.family-card-body p {
+  margin: 0;
+}
+
+.family-hero-photo {
+  aspect-ratio: 21 / 9;
+  max-height: 280px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+  background: var(--card-bg);
+}
+
+.family-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.admin-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-assign-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-assign-row select {
+  min-width: min(100%, 16rem);
+}
+
+@media (max-width: 640px) {
+  .family-hero-photo {
+    aspect-ratio: 16 / 9;
+    max-height: 200px;
+  }
+
+  .ft-family-grid,
+  .ft-generation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ft-search-results li {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ft-card {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: inherit;
+  text-decoration: none;
+  min-width: 12rem;
+}
+
+.ft-card[data-adapaduchu] {
+  border-color: var(--color-gold, #c4a35a);
+}
+
+.ft-card[data-deceased] {
+  opacity: 0.92;
+}
+
+.ft-card span,
+.ft-card-verify {
+  font-size: 0.85rem;
+  color: var(--muted, #5c685f);
+}
+
+.ft-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.25rem;
+  font-size: 0.9rem;
+}
+
+.ft-page-head {
+  margin: 0 0 1rem;
+}
+
+.ft-page-head h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.15rem);
+}
+
+.ft-tree-empty {
+  margin: 0.5rem 0 0;
+}
+
+.ft-genealogy-wrap {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ft-genealogy-wrap .ft-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.ft-viewport {
+  height: min(78vh, 840px);
+  min-height: 22rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  cursor: grab;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--color-line) 70%, transparent) 1px, transparent 0)
+    0 0 / 22px 22px,
+    var(--card-bg);
+}
+
+.ft-viewport:active {
+  cursor: grabbing;
+}
+
+.ft-canvas {
+  position: relative;
+}
+
+.ft-genealogy {
+  position: relative;
+  transform-origin: 0 0;
+}
+
+.ft-lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ft-line-spouse,
+.ft-line-descent {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-gold, #c4a35a) 75%, var(--color-line));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ft-line-spouse {
+  stroke-width: 2.4;
+}
+
+.ft-line-descent {
+  stroke-width: 2;
+}
+
+.ft-node {
+  position: absolute;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0.55rem;
+  align-items: center;
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 6px 18px color-mix(in srgb, #1a130c 10%, transparent);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ft-node:hover,
+.ft-node:focus-visible {
+  border-color: var(--color-gold, #c4a35a);
+  outline: none;
+}
+
+.ft-node[data-selected] {
+  border-color: var(--color-gold, #c4a35a);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-gold, #c4a35a) 45%, transparent);
+}
+
+.ft-node[data-adapaduchu] {
+  border-color: var(--color-gold, #c4a35a);
+}
+
+.ft-node[data-deceased] {
+  opacity: 0.92;
+}
+
+.ft-node-photo {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-gold, #c4a35a) 18%, var(--card-bg));
+  color: var(--muted, #5c685f);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ft-node-photo .protected-media {
+  width: 48px;
+  height: 48px;
+}
+
+.ft-node-photo .protected-media-mark {
+  font-size: 0.35rem;
+}
+
+.ft-node-photo img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+
+.ft-node-body {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.ft-node-body strong {
+  font-size: 0.86rem;
+  line-height: 1.25;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ft-node-body span {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: var(--muted, #5c685f);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ft-person-panel {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem 1.15rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+}
+
+.ft-person-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ft-person-panel-head h3 {
+  margin: 0;
+}
+
+.ft-forest {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.ft-branch {
+  display: grid;
+  justify-items: start;
+  gap: 0.65rem;
+  padding-left: 0;
+}
+
+.ft-couple {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ft-children {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 1.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-line);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.ft-branch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ft-profile {
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+}
+
+.ft-profile-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ft-profile-flags li {
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.ft-profile-dl {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ft-profile-dl div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.ft-profile-dl dt {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted, #5c685f);
+}
+
+.ft-profile-people {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (max-width: 719px) {
+  .ft-children {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .ft-card {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .page--family-tree {
+    width: calc(100% - 0.75rem);
+  }
+
+  .ft-viewport {
+    height: min(70vh, 640px);
+    min-height: 18rem;
+  }
 }

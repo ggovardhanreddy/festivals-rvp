@@ -124,6 +124,10 @@ export function isPrivateMediaPath(path: string): boolean {
     path.startsWith("funfest/") ||
     path.startsWith("/docs/") ||
     path.includes("documents/") ||
+    path.startsWith("/originals/") ||
+    path.includes("/originals/") ||
+    path.startsWith("/private/") ||
+    path.includes("/private/") ||
     isPrivateR2Key(path)
   );
 }

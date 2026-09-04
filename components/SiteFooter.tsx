@@ -1,91 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type MouseEvent } from "react";
-import { useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import {
-  FOOTER_COMMUNITY,
   FOOTER_LEGAL,
-  FOOTER_SERVICES,
+  FOOTER_PRESERVE,
   NAV,
-  OFFICIAL_TITLE,
   SITE_CONTACT_EMAIL,
-  SITE_NAME,
-  SITE_TAGLINE_PILLARS,
+  SITE_TAGLINE,
   VILLAGE_ADDRESS_LINE,
-  VILLAGE_ALSO_KNOWN_AS,
   VILLAGE_MAPS_URL,
-  VILLAGE_NAME,
-  VILLAGE_SHORT_DESCRIPTION,
 } from "@/lib/site";
 import { BUILD_ID } from "@/lib/build-id";
-import { useMemberAuth } from "./auth/MemberAuthProvider";
-import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
 import { useUiLang } from "./i18n/LanguageProvider";
 
 /**
- * Five columns: who we are, Explore, Community, Services, Legal.
- * Deliberately not a second copy of every route — the header, the More menu
- * and the section pages carry the rest.
+ * Simple village footer: identity, the seven primary links, then a quiet
+ * legal row. Secondary destinations stay in More — not here.
  */
 export function SiteFooter() {
   const year = new Date().getFullYear();
-  const router = useRouter();
-  const { session, ready } = useMemberAuth();
   const { t } = useUiLang();
-  const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
   const inbox = SITE_CONTACT_EMAIL || "reddivaripalli.rvp@gmail.com";
 
-  const onFunFest = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (!ready) {
-      event.preventDefault();
-      return;
-    }
-    if (!session) {
-      event.preventDefault();
-      setFunFestLoginOpen(true);
-      return;
-    }
-    event.preventDefault();
-    router.push("/fun-trips/");
-  };
-
-  const column = (
-    heading: string,
-    items: readonly { href: string; label: string }[],
-    id?: string,
-  ) => (
-    <div className="footer-col" id={id}>
-      <p className="footer-heading">{heading}</p>
-      <div className="footer-links">
-        {items.map((item) =>
-          item.href === "/fun-trips/" ? (
-            <Link key={item.href} href={item.href} onClick={onFunFest}>
-              {t(item.href, item.label)}
-            </Link>
-          ) : (
-            <Link key={item.href} href={item.href}>
-              {t(item.href, item.label)}
-            </Link>
-          ),
-        )}
-      </div>
-    </div>
-  );
-
   return (
-    // The build id stays reachable for support — document.querySelector(
-    // ".site-footer").dataset.build, and public/version.json — but a 40-character
-    // commit hash printed under the copyright line tells a villager nothing and
-    // reads as something broken.
     <footer className="site-footer" id="contact" data-build={BUILD_ID}>
-      <div className="footer-inner footer-inner--minimal">
+      <div className="footer-inner footer-inner--village">
         <div className="footer-brand">
           <Logo />
           <p className="footer-village">REDDIVARIPALLI</p>
-          <p className="muted footer-tagline">{SITE_TAGLINE_PILLARS}</p>
-          <p className="muted footer-about">{VILLAGE_SHORT_DESCRIPTION}</p>
+          <p className="muted footer-tagline">{t("home.hero.pillars", SITE_TAGLINE)}</p>
           <p className="muted footer-address">{VILLAGE_ADDRESS_LINE}</p>
           <a className="footer-map-link" href={`mailto:${inbox}`}>
             {t("email-us")}: {inbox}
@@ -100,23 +44,30 @@ export function SiteFooter() {
           </a>
         </div>
 
-        {column("Explore", NAV)}
-        {column("Community", FOOTER_COMMUNITY)}
-        {column("Services", FOOTER_SERVICES)}
-        {column("Legal", FOOTER_LEGAL, "legal")}
+        <div className="footer-col">
+          <p className="footer-heading">Reddivaripalli</p>
+          <div className="footer-links">
+            {NAV.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {t(item.href, item.label)}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="footer-copy">
         <p>
-          © {year} {OFFICIAL_TITLE}. Stewards: {SITE_NAME}.{" "}
-          {VILLAGE_ALSO_KNOWN_AS} · {VILLAGE_NAME}.
+          © {year} Reddivaripalli — {t("footer.preserve", FOOTER_PRESERVE)}
+        </p>
+        <p className="footer-legal-inline">
+          {FOOTER_LEGAL.map((item) => (
+            <Link key={item.href} href={item.href}>
+              {t(item.href, item.label)}
+            </Link>
+          ))}
         </p>
       </div>
-      <FunFestLoginDialog
-        open={funFestLoginOpen}
-        onClose={() => setFunFestLoginOpen(false)}
-        next="/fun-trips/"
-      />
     </footer>
   );
 }

@@ -177,3 +177,43 @@ export async function uploadMemberPhotoFile(file: File): Promise<string> {
     (data.key ? `/api/media/object?key=${encodeURIComponent(data.key)}` : "")
   );
 }
+
+export async function uploadFamilyPhotoFile(file: File): Promise<string> {
+  const { prepareFileForUpload } = await import(
+    "@/lib/media-pipeline/client-optimize"
+  );
+  const prepared = await prepareFileForUpload(file, undefined, {
+    category: "families",
+  });
+  if (prepared.kind !== "image") {
+    throw new Error("Family photo must be an image (JPEG/PNG/WebP).");
+  }
+  const form = new FormData();
+  form.append("file", prepared.full);
+  form.append("thumb", prepared.thumb);
+  form.append("category", "families");
+  form.append("originalName", prepared.full.name);
+  form.append("clientOptimized", "1");
+  form.append("originalBytes", String(prepared.originalBytes));
+  form.append("width", String(prepared.width));
+  form.append("height", String(prepared.height));
+  const { withBase } = await import("@/lib/base");
+  const res = await fetch(withBase("/api/media/upload"), {
+    method: "POST",
+    credentials: "include",
+    body: form,
+  });
+  const data = (await res.json()) as {
+    error?: string;
+    key?: string;
+    publicUrl?: string;
+    url?: string;
+  };
+  URL.revokeObjectURL(prepared.previewUrl);
+  if (!res.ok) throw new Error(data.error || "Photo upload failed");
+  return (
+    data.publicUrl ||
+    data.url ||
+    (data.key ? `/api/media/object?key=${encodeURIComponent(data.key)}` : "")
+  );
+}

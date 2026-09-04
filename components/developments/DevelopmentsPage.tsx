@@ -4,24 +4,24 @@ import { useMemo, useState } from "react";
 import { withBase } from "@/lib/base";
 import { parseIsoDate } from "@/lib/dates";
 import {
-  DEVELOPMENT_STATUSES,
   STATUS_META,
   WORKFLOW_STAGES,
+  publicDevelopmentLabel,
+  publicDevelopmentStatus,
   stageLabel,
+  type PublicDevelopmentStatus,
 } from "@/lib/development-status";
 import type {
   Development,
-  DevelopmentStatus,
   DevelopmentWorkflowStage,
 } from "@/lib/types";
 import { Reveal } from "@/components/Reveal";
 
-const STATUS_FILTERS: { key: DevelopmentStatus | "all"; label: string }[] = [
+const PUBLIC_FILTERS: { key: "all" | PublicDevelopmentStatus; label: string }[] = [
   { key: "all", label: "All" },
-  ...DEVELOPMENT_STATUSES.map((s) => ({
-    key: s.key,
-    label: `${s.icon} ${s.shortLabel}`,
-  })),
+  { key: "completed", label: "Completed" },
+  { key: "in-progress", label: "In Progress" },
+  { key: "planned", label: "Planned" },
 ];
 
 function formatDate(iso: string) {
@@ -77,7 +77,7 @@ function StageWorkflow({
 }
 
 function DevelopmentCard({ item }: { item: Development }) {
-  const hero = item.images?.[0];
+  const photos = item.images ?? [];
   const meta = STATUS_META[item.status];
   const milestones = [...(item.milestones ?? [])].sort((a, b) =>
     a.date.localeCompare(b.date),
@@ -89,9 +89,28 @@ function DevelopmentCard({ item }: { item: Development }) {
 
   return (
     <article className="dev-card" data-status={item.status}>
-      {hero ? (
-        <div className="dev-card-hero">
-          <img src={withBase(hero)} alt="" loading="lazy" />
+      {photos.length ? (
+        <div className={photos.length > 1 ? "dev-card-photos" : "dev-card-hero"}>
+          {photos.map((src, index) => {
+            const caption =
+              photos.length === 1
+                ? "Current view"
+                : index === 0
+                  ? "Before"
+                  : index === photos.length - 1
+                    ? "After"
+                    : `Update ${index}`;
+            return (
+              <figure key={src}>
+                <img
+                  src={withBase(src)}
+                  alt={`${item.title} — ${caption.toLowerCase()}`}
+                  loading="lazy"
+                />
+                <figcaption className="muted">{caption}</figcaption>
+              </figure>
+            );
+          })}
         </div>
       ) : null}
       <div className="dev-card-body">
@@ -102,7 +121,7 @@ function DevelopmentCard({ item }: { item: Development }) {
             data-status={item.status}
             data-tone={meta.tone}
           >
-            <span aria-hidden>{meta.icon}</span> {meta.label}
+            {publicDevelopmentLabel(item.status)}
           </span>
         </div>
         <p className="muted">{item.description}</p>
@@ -110,13 +129,8 @@ function DevelopmentCard({ item }: { item: Development }) {
         <StageWorkflow stages={stages} currentStage={currentStage} />
 
         <p className="dev-dates muted">
-          Project opened {formatDate(item.startDate)}
+          Started {formatDate(item.startDate)}
           {item.endDate ? ` · Target ${formatDate(item.endDate)}` : ""}
-          {item.status === "under-construction" ||
-          item.status === "ongoing" ||
-          item.status === "completed"
-            ? ""
-            : " · Construction has not started"}
         </p>
         {milestones.length ? (
           <div className="dev-timeline">
@@ -142,36 +156,29 @@ function DevelopmentCard({ item }: { item: Development }) {
 }
 
 export function DevelopmentsPage({ developments }: { developments: Development[] }) {
-  const [filter, setFilter] = useState<DevelopmentStatus | "all">("all");
+  const [filter, setFilter] = useState<"all" | PublicDevelopmentStatus>("all");
 
   const filtered = useMemo(() => {
     if (filter === "all") return developments;
-    return developments.filter((d) => d.status === filter);
+    return developments.filter((d) => publicDevelopmentStatus(d.status) === filter);
   }, [developments, filter]);
-
-  const activeStatuses = useMemo(() => {
-    const present = new Set(developments.map((d) => d.status));
-    return STATUS_FILTERS.filter(
-      (f) => f.key === "all" || present.has(f.key as DevelopmentStatus),
-    );
-  }, [developments]);
 
   return (
     <div className="developments-page">
       <Reveal className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Village progress</p>
-            <h1>Developments</h1>
+            <p className="eyebrow">Village works</p>
+            <h1>Development</h1>
             <p className="lede">
-              Community projects for Kondreddigaripalli — from early planning and
-              decisions through construction and completion.
+              Roads, water, schools, temples and community facilities in
+              Reddivaripalli — recorded as they stand, without promotion.
             </p>
           </div>
         </div>
 
         <div className="dev-filters" role="tablist" aria-label="Filter by status">
-          {activeStatuses.map(({ key, label }) => (
+          {PUBLIC_FILTERS.map(({ key, label }) => (
             <button
               key={key}
               type="button"

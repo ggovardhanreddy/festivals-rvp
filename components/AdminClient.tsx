@@ -88,6 +88,8 @@ export function AdminClient() {
   const [sizeSummary, setSizeSummary] = useState<string | null>(null);
   const [reindexBusy, setReindexBusy] = useState(false);
   const [autoReindex, setAutoReindex] = useState(true);
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
+  const [watermarkOn, setWatermarkOn] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function importFolder() {
@@ -222,6 +224,7 @@ export function AdminClient() {
         const form = new FormData();
         form.append("file", uploadFile);
         form.append("category", category);
+        form.append("visibility", visibility);
         form.append("originalName", uploadFile.name);
         form.append("clientOptimized", clientOptimized ? "1" : "0");
         form.append("originalBytes", String(originalBytes));
@@ -254,6 +257,21 @@ export function AdminClient() {
           );
         }
         uploaded.push(String(data.key || uploadFile.name));
+        if (data.key) {
+          await fetch(withBase("/api/community/media-protection"), {
+            method: "POST",
+            credentials: "include",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              item: {
+                id: String(data.key),
+                visibility,
+                watermark: watermarkOn,
+                updatedAt: new Date().toISOString(),
+              },
+            }),
+          }).catch(() => undefined);
+        }
         window.dispatchEvent(
           new CustomEvent("rvp:media-uploaded", { detail: data }),
         );
@@ -430,6 +448,49 @@ export function AdminClient() {
             </label>
           </div>
         ) : null}
+        <fieldset className="admin-path-label" style={{ border: 0, padding: 0 }}>
+          <legend>Visibility</legend>
+          <label className="notif-pref-row">
+            <input
+              type="radio"
+              name="media-visibility"
+              checked={visibility === "public"}
+              onChange={() => setVisibility("public")}
+            />
+            Public
+          </label>
+          <label className="notif-pref-row">
+            <input
+              type="radio"
+              name="media-visibility"
+              checked={visibility === "private"}
+              onChange={() => setVisibility("private")}
+            />
+            Private — signed URL, not listed on the public gallery
+          </label>
+        </fieldset>
+        <fieldset className="admin-path-label" style={{ border: 0, padding: 0 }}>
+          <legend>Watermark</legend>
+          <label className="notif-pref-row">
+            <input
+              type="radio"
+              name="media-watermark"
+              checked={watermarkOn}
+              onChange={() => setWatermarkOn(true)}
+            />
+            Enabled
+          </label>
+          <label className="notif-pref-row">
+            <input
+              type="radio"
+              name="media-watermark"
+              checked={!watermarkOn}
+              onChange={() => setWatermarkOn(false)}
+            />
+            Disabled
+          </label>
+        </fieldset>
+        <p className="muted">Download: Disabled on public protected photographs.</p>
         <label className="admin-path-label">
           Files
           <input

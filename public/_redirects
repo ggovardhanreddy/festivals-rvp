@@ -8,41 +8,126 @@ http://www.reddivaripalli.com/* https://www.reddivaripalli.com/:splat 301
 /blood-donors/ / 301
 /blood-donors/* / 301
 
-# ── 2026 redesign: education/jobs/kids sections retired ────────────────────
-# The site's knowledge section is now Sanatana Dharma and Telugu Culture.
-# Every retired URL goes somewhere it can be understood, not to the homepage,
-# except where nothing on the new site corresponds.
-/learn /dharma/ 301
-/learn/ /dharma/ 301
-/learn/* /dharma/ 301
-/students /dharma/ 301
-/students/ /dharma/ 301
-/kids /dharma/ 301
-/kids/ /dharma/ 301
-/kids/* /dharma/ 301
-/play /dharma/ 301
-/play/ /dharma/ 301
-/play/* /dharma/ 301
+# ── Village-first redesign ─────────────────────────────────────────────────
+# General knowledge hubs no longer define the site. Old URLs still resolve
+# as pages; these redirects send retired education/jobs/kids URLs into the
+# village sections that replaced them.
+/learn /temples/ 301
+/learn/ /temples/ 301
+/learn/* /temples/ 301
+/students /government/ 301
+/students/ /government/ 301
+/kids /about/ 301
+/kids/ /about/ 301
+/kids/* /about/ 301
+/play /gallery/ 301
+/play/ /gallery/ 301
+/play/* /gallery/ 301
 /digital-skills /government/ 301
 /digital-skills/ /government/ 301
 /careers /government/ 301
 /careers/ /government/ 301
 /careers/* /government/ 301
-/agriculture /government/ 301
-/agriculture/ /government/ 301
-/agriculture/* /government/ 301
-/farmers /government/ 301
-/farmers/ /government/ 301
-/english /telugu-culture/ 301
-/english/ /telugu-culture/ 301
+/agriculture /about/ 301
+/agriculture/ /about/ 301
+/agriculture/* /about/ 301
+/farmers /about/ 301
+/farmers/ /about/ 301
+/te/students /te/government/ 301
+/te/students/ /te/government/ 301
+/te/farmers /te/about/ 301
+/te/farmers/ /te/about/ 301
+/english /about/ 301
+/english/ /about/ 301
 /it /government/ 301
 /it/ /government/ 301
 /engineering /government/ 301
 /engineering/ /government/ 301
 /explore /search/ 301
 /explore/ /search/ 301
-/community /members/ 301
-/community/ /members/ 301
-# /temples/ was reserved for a fuller temple treatment. That is now real.
-/temples /spiritual-heritage/ 301
-/temples/ /spiritual-heritage/ 301
+/community /people/ 301
+/community/ /people/ 301
+/services /government/ 301
+/services/ /government/ 301
+/emergency /government/ 301
+/emergency/ /government/ 301
+/spiritual-heritage /temples/ 301
+/spiritual-heritage/ /temples/ 301
+/telugu-culture/spiritual /stories/ 301
+/telugu-culture/spiritual/ /stories/ 301
+/coaching /government/ 301
+/coaching/ /government/ 301
+/education /about/ 301
+/education/ /about/ 301
+
+/members /people/ 301
+/members/ /people/ 301
+/members/* /people/:splat 301
+
+# Previous family-tree ids — keep bookmarks working
+/families/g-koda-reddy /families/gundluru-konda-reddy/ 301
+/families/g-koda-reddy/ /families/gundluru-konda-reddy/ 301
+/families/g-koda-reddy/* /families/gundluru-konda-reddy/:splat 301
+/families/gundluru-koda-reddy /families/gundluru-konda-reddy/ 301
+/families/gundluru-koda-reddy/ /families/gundluru-konda-reddy/ 301
+/families/gundluru-koda-reddy/* /families/gundluru-konda-reddy/:splat 301
+/families/g-subbareddy /families/gundluru-venkata-subba-reddy/ 301
+/families/g-subbareddy/ /families/gundluru-venkata-subba-reddy/ 301
+/families/g-subbareddy/* /families/gundluru-venkata-subba-reddy/:splat 301
+/families/gundluru-subba-reddy /families/gundluru-venkata-subba-reddy/ 301
+/families/gundluru-subba-reddy/ /families/gundluru-venkata-subba-reddy/ 301
+/families/gundluru-subba-reddy/* /families/gundluru-venkata-subba-reddy/:splat 301
+/families/k-family /families/kunchapu/ 301
+/families/k-family/ /families/kunchapu/ 301
+/families/k-family/* /families/kunchapu/:splat 301
+/families/m-family /families/marimeni/ 301
+/families/m-family/ /families/marimeni/ 301
+/families/m-family/* /families/marimeni/:splat 301
+/families/d-family /families/devapatla/ 301
+/families/d-family/ /families/devapatla/ 301
+/families/d-family/* /families/devapatla/:splat 301
+/families/d-raja-reddy /families/devapatla/ 301
+/families/d-raja-reddy/ /families/devapatla/ 301
+/families/d-raja-reddy/* /families/devapatla/:splat 301
+/families/d-venkataswami-reddy /families/devapatla/ 301
+/families/d-venkataswami-reddy/ /families/devapatla/ 301
+/families/d-venkataswami-reddy/* /families/devapatla/:splat 301
+/families/d-chenna-reddy /families/devapatla/ 301
+/families/d-chenna-reddy/ /families/devapatla/ 301
+/families/d-chenna-reddy/* /families/devapatla/:splat 301
+/families/d-rammohan-reddy /families/devapatla/ 301
+/families/d-rammohan-reddy/ /families/devapatla/ 301
+/families/d-rammohan-reddy/* /families/devapatla/:splat 301
+/families/m-nadupanna /families/marimeni-nadupanna/ 301
+/families/m-nadupanna/ /families/marimeni-nadupanna/ 301
+/families/m-nadupanna/* /families/marimeni-nadupanna/:splat 301
+/families/j-family /families/jagadam/ 301
+/families/j-family/ /families/jagadam/ 301
+/families/j-family/* /families/jagadam/:splat 301
+/families/u-family /families/usirikayala/ 301
+/families/u-family/ /families/usirikayala/ 301
+/families/u-family/* /families/usirikayala/:splat 301
+/families/c-family /families/chinthamani/ 301
+/families/c-family/ /families/chinthamani/ 301
+/families/c-family/* /families/chinthamani/:splat 301
+/families/y-family /families/yerragolla/ 301
+/families/y-family/ /families/yerragolla/ 301
+/families/y-family/* /families/yerragolla/:splat 301
+
+# Merged village pages — old URLs keep working as 301s
+/timeline /about/ 301
+/timeline/ /about/ 301
+/directory /people/ 301
+/directory/ /people/ 301
+/heritage /gallery/ 301
+/heritage/ /gallery/ 301
+/events /temples/ 301
+/events/ /temples/ 301
+/years /gallery/ 301
+/years/ /gallery/ 301
+/dharma /temples/ 301
+/dharma/ /temples/ 301
+/dharma/* /temples/ 301
+/telugu-culture /stories/ 301
+/telugu-culture/ /stories/ 301
+/telugu-culture/* /stories/ 301

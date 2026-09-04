@@ -29,6 +29,27 @@ describe("route registry", () => {
       expect(idx, p).not.toContain(p);
     }
   });
+  it("merged and retired public pages stay out of the sitemap", () => {
+    const idx = indexableRoutes().map((r) => r.path);
+    for (const p of [
+      "/heritage/",
+      "/timeline/",
+      "/years/",
+      "/events/",
+      "/directory/",
+      "/dharma/",
+      "/telugu-culture/",
+    ]) {
+      expect(idx, p).not.toContain(p);
+    }
+  });
+  it("search index does not advertise retired knowledge hubs", () => {
+    const searchPath = path.join(process.cwd(), "public", "search-index.json");
+    if (!fs.existsSync(searchPath)) return;
+    const json = fs.readFileSync(searchPath, "utf8");
+    expect(json).not.toContain("/dharma/");
+    expect(json).not.toContain("/telugu-culture/");
+  });
 });
 
 describe("language alternates are honest", () => {

@@ -39,6 +39,9 @@ const COLLECTIONS = new Set([
   "audit",
   "events",
   "announcements",
+  "families",
+  "family-people",
+  "media-protection",
 ]);
 
 const APPROVAL_COLLECTIONS = new Set(["lost-found", "heritage"]);
@@ -50,6 +53,9 @@ const ADMIN_WRITE_COLLECTIONS = new Set([
   "members",
   "events",
   "announcements",
+  "families",
+  "family-people",
+  "media-protection",
 ]);
 
 function json(data: unknown, status = 200, headers: Record<string, string> = {}) {
@@ -122,6 +128,32 @@ function asItems(data: unknown): Record<string, unknown>[] {
   return [];
 }
 
+function isLegacyFamilyCatalog(items: Record<string, unknown>[]): boolean {
+  return items.some((item) => {
+    if ("category" in item) return true;
+    const blob = `${item.id ?? ""} ${item.slug ?? ""} ${item.name ?? ""}`;
+    return /koda|g family|k family|m family|d family|reddy families|other families|gundluru-koda|gundluru-subba|GUNDLURU_KODA|GUNDLURU_SUBBA/i.test(
+      blob,
+    );
+  });
+}
+
+async function refreshStaleFamilyCatalog(
+  env: Env,
+  items: Record<string, unknown>[],
+): Promise<{ items: Record<string, unknown>[]; rewritten: boolean }> {
+  const seed = COMMUNITY_SEEDS.families;
+  if (!seed?.length || !isLegacyFamilyCatalog(items)) {
+    return { items, rewritten: false };
+  }
+  try {
+    await writeStore(env, "families", { items: seed });
+  } catch {
+    /* still serve the current seed even if R2 write fails */
+  }
+  return { items: seed, rewritten: true };
+}
+
 async function audit(
   env: Env,
   session: AdminSession | null,
@@ -161,7 +193,9 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
           {
             settings: stored || {
               watermarkEnabled: true,
-              watermarkText: "Reddivaripalli Village",
+              watermarkText: "Reddivaripalli.com",
+              watermarkPosition: "bottom-right",
+              watermarkOpacity: 0.35,
               allowPublicMediaDownload: false,
             },
           },
@@ -242,13 +276,19 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
     if (request.method === "GET") {
       const { items: seeded, source } = await readItemsWithSeed(env, collection);
       let items = seeded;
+      let from = source;
+      if (collection === "families") {
+        const refreshed = await refreshStaleFamilyCatalog(env, items);
+        items = refreshed.items;
+        if (refreshed.rewritten) from = "seed";
+      }
       if (!items.length) {
         return json({ items: [], source: "empty" }, 200, headers);
       }
       if (APPROVAL_COLLECTIONS.has(collection) && !(admin && adminQuery)) {
         items = items.filter((i) => i.status === "approved");
       }
-      return json({ items, source }, 200, headers);
+      return json({ items, source: from }, 200, headers);
     }
 
     if (request.method === "POST") {

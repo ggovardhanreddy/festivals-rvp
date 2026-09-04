@@ -95,7 +95,7 @@ export function buildNotifications(input: {
         kind: "birthday",
         title: `🎉 Happy Birthday, ${member.name}!`,
         body: `Wishing you a wonderful year filled with happiness, health, and success. Have a fantastic celebration!${ageLine}`,
-        href: "/members/",
+        href: "/people/",
         image: member.photo || undefined,
         dayKey,
         popup: true,

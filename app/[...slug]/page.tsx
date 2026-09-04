@@ -24,17 +24,15 @@ import { loadSuggestionsSeed } from "@/lib/suggestions";
 import { MembersPage } from "@/components/members/MembersPage";
 import { EventsBirthdaysHub } from "@/components/events/EventsBirthdaysHub";
 import { GalleryHub } from "@/components/gallery/GalleryHub";
-import { VillageDepthMap } from "@/components/VillageDepthMap";
-import { FestivalIdolBanner } from "@/components/FestivalIdolBanner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { AdminHub } from "@/components/admin/AdminHub";
 import { AlbumCard } from "@/components/AlbumCard";
 import { AlbumView } from "@/components/AlbumView";
 import { Gallery } from "@/components/Gallery";
+import { FestivalIdolBanner } from "@/components/FestivalIdolBanner";
 import { InteractiveVillageMap } from "@/components/experience/InteractiveVillageMap";
 import { MemoryHero } from "@/components/MemoryHero";
 import { PageVanta } from "@/components/vanta/PageVanta";
-import { PrivateNotice } from "@/components/PrivateNotice";
 import { Reveal } from "@/components/Reveal";
 import { SearchPage } from "@/components/search/SearchPage";
 import { YearGrid } from "@/components/YearGrid";
@@ -52,6 +50,21 @@ import { LostFoundPage } from "@/components/lost-found/LostFoundPage";
 import { PanchayatDocsPage } from "@/components/documents/PanchayatDocsPage";
 import { HeritagePage } from "@/components/heritage/HeritagePage";
 import { VillageHeritageStory } from "@/components/heritage/VillageHeritageStory";
+import { TemplesFestivalsPage } from "@/components/temples/TemplesFestivalsPage";
+import { StoriesPage } from "@/components/stories/StoriesPage";
+import { FamiliesHub } from "@/components/families/FamiliesHub";
+import { FamilyTreePage } from "@/components/families/FamilyTreePage";
+import { PersonProfile } from "@/components/families/PersonProfile";
+import { AdapaduchuluPage } from "@/components/families/AdapaduchuluPage";
+import {
+  allPeople,
+  findPerson,
+} from "@/lib/family-trees";
+import {
+  findVillageFamily,
+  loadVillageFamilies,
+} from "@/lib/families/catalog";
+import { loadDirectorySeed } from "@/lib/community";
 import { MembersChat } from "@/components/chat/MembersChat";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { LoginForm } from "@/components/auth/LoginForm";
@@ -61,31 +74,14 @@ import { CULTURE_FESTIVALS } from "@/lib/festivals";
 import { Suspense, type ReactNode } from "react";
 import { WeatherPage } from "@/components/weather/WeatherPage";
 import { DirectoryHub } from "@/components/directory/DirectoryHub";
-import { EmergencyPage } from "@/components/safety/EmergencyPage";
 import { SafetyPage } from "@/components/safety/SafetyPage";
 import { HUBS, hubBySlug } from "@/lib/directory";
-import { DharmaHub } from "@/components/dharma/DharmaHub";
-import { KnowledgePage } from "@/components/dharma/KnowledgePage";
-import { ConceptsPage } from "@/components/dharma/ConceptsPage";
-import { GitaChapterPage } from "@/components/dharma/GitaChapterPage";
-import { CultureHub, type CultureView } from "@/components/dharma/CultureHub";
-import { SpiritualHeritagePage } from "@/components/dharma/SpiritualHeritagePage";
-import { ResourceDetailPage } from "@/components/resources/ResourceDetailPage";
-import { findBySlug, publicResources, resourceSlug } from "@/lib/resources";
-import {
-  DHARMA_PAGE_SLUGS,
-  GITA_CHAPTER_SLUGS,
-  SRI_SRI_PAGE,
-  dharmaPage,
-} from "@/lib/dharma";
 import {
   loadCollectorNotifications,
   loadCollectorRuns,
   loadResourceCatalog,
   loadResourceSources,
 } from "@/lib/resources/server";
-import { VillageServicesPage } from "@/components/services/VillageServicesPage";
-import { CultureTraditions } from "@/components/home/CultureTraditions";
 import { FestivalCalendar } from "@/components/home/FestivalCalendar";
 import { VillageUpdatesList } from "@/components/events/VillageUpdatesList";
 import { loadAnnouncements, loadEvents } from "@/lib/events";
@@ -137,6 +133,8 @@ function slimAlbumForClient(album: Album): Album {
         height: m.height,
         blurDataURL: m.blurDataURL,
         fileAvif: m.fileAvif,
+        visibility: m.visibility,
+        watermark: m.watermark,
       }),
     ),
   };
@@ -150,7 +148,12 @@ export function generateStaticParams() {
     { slug: ["admin"] },
     { slug: ["offline"] },
     { slug: ["members"] },
+    { slug: ["people"] },
+    { slug: ["families"] },
+    { slug: ["adapaduchulu"] },
     { slug: ["events"] },
+    { slug: ["temples"] },
+    { slug: ["stories"] },
     { slug: ["gallery"] },
     { slug: ["timeline"] },
     { slug: ["contact"] },
@@ -167,35 +170,24 @@ export function generateStaticParams() {
     { slug: ["fun-trips"] },
     { slug: ["privacy"] },
     { slug: ["terms"] },
-    { slug: ["services"] },
   ];
 
-  // Games are real pages. Reserved sections get an honest landing page rather
-  // than a 404 from the nav, and never a fabricated placeholder listing.
-  for (const seg of ["weather", "emergency", "safety"]) {
+  for (const family of loadVillageFamilies()) {
+    paths.push({ slug: ["families", family.slug] });
+  }
+  for (const person of allPeople()) {
+    const family = findVillageFamily(person.familyId);
+    if (family) {
+      paths.push({ slug: ["families", family.slug, person.id] });
+    }
+  }
+
+  // Weather and cyber-safety remain live utility pages.
+  for (const seg of ["weather", "safety"]) {
     paths.push({ slug: [seg] });
   }
 
-  // Sanatana Dharma & Telugu Culture. Every one of these has written content,
-  // so none of them is an empty page — which was the failing of the sections
-  // this replaces.
-  paths.push({ slug: ["dharma"] });
-  paths.push({ slug: ["dharma", "knowledge"] });
-  for (const key of DHARMA_PAGE_SLUGS) paths.push({ slug: ["dharma", key] });
-  for (const n of GITA_CHAPTER_SLUGS) paths.push({ slug: ["dharma", "gita", n] });
-  // A page per PUBLISHED collected resource. Anything at "new" or
-  // "needs-review" gets no URL, so unreviewed material cannot be reached even
-  // by guessing — which matters more for scripture than it did for a syllabus.
-  for (const r of publicResources(loadResourceCatalog())) {
-    paths.push({ slug: ["dharma", "resource", resourceSlug(r)] });
-  }
-  paths.push({ slug: ["telugu-culture"] });
-  for (const view of ["literature", "poetry", "stories", "spiritual"]) {
-    paths.push({ slug: ["telugu-culture", view] });
-  }
-  paths.push({ slug: ["telugu-culture", "sri-sri"] });
-  paths.push({ slug: ["spiritual-heritage"] });
-  // Official resource hubs: /government/, /students/, /farmers/, /banking/
+  // Official resource hubs: /government/, /banking/
   // and the documents hub, which lives under /government/ so it cannot
   // collide with the existing Panchayat /documents/ page.
   for (const hub of HUBS) {
@@ -293,23 +285,39 @@ export async function generateMetadata({
   > = {
     gallery: {
       title: "Gallery",
-      description: `Festival and village photo gallery from ${VILLAGE_ALSO_KNOWN_AS} — Vinayaka Chavithi, Sankranthi, temples, and community memories.`,
-    },
-    services: {
-      title: "Village Services",
-      description: `Emergency numbers, government services, learning, agriculture and careers for ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat, Sambepalle.`,
+      description: `Photographs of ${VILLAGE_ALSO_KNOWN_AS} — village life, temples, festivals, people, old photos and development.`,
     },
     about: {
       title: `Our Village — ${VILLAGE_ALSO_KNOWN_AS}`,
-      description: `${VILLAGE_ALSO_KNOWN_AS} — One Village • One Family • One Heritage. Village history, culture and traditions, agriculture, festivals, temples, and memorials.`,
+      description: `${VILLAGE_ALSO_KNOWN_AS} — Our Village. Our Heritage. Our Home. History, origin, map, agriculture and important places.`,
+    },
+    temples: {
+      title: "Temples & Festivals",
+      description: `Temples, jatharas and village festivals of ${VILLAGE_ALSO_KNOWN_AS} — Sri Ramalayam, Mathamma, Devapatlamma, Sankranti, Ugadi and more.`,
+    },
+    stories: {
+      title: "Village Stories & Memories",
+      description: `Stories from elders, old village memories and traditional practices of ${VILLAGE_ALSO_KNOWN_AS}.`,
     },
     events: {
       title: "Events & Birthdays",
       description: `Upcoming festivals, birthdays, and gatherings in ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat, Sambepalle.`,
     },
     members: {
-      title: "Members",
-      description: `Meet RVP Youth Legacy, Core, and NextGen members of ${VILLAGE_ALSO_KNOWN_AS} Gram Panchayat.`,
+      title: "Our People",
+      description: `Our Elders, families, professionals and village contributors of ${VILLAGE_ALSO_KNOWN_AS}.`,
+    },
+    people: {
+      title: "Our People",
+      description: `Our Elders, families, professionals and village contributors of ${VILLAGE_ALSO_KNOWN_AS}.`,
+    },
+    families: {
+      title: "Village Families",
+      description: `Village families of ${VILLAGE_ALSO_KNOWN_AS} — parents, children, spouses and Adapaduchulu across generations.`,
+    },
+    adapaduchulu: {
+      title: "Adapaduchulu",
+      description: `Married daughters of ${VILLAGE_ALSO_KNOWN_AS} families, remaining connected to their parental family.`,
     },
     years: {
       title: "Annual Archive",
@@ -317,7 +325,7 @@ export async function generateMetadata({
     },
     search: {
       title: "Search",
-      description: `Search members, festivals, media, documents, and village services in ${VILLAGE_ALSO_KNOWN_AS}.`,
+      description: `Search members, festivals, media, documents, and government services in ${VILLAGE_ALSO_KNOWN_AS}.`,
       noindex: true,
     },
     contact: {
@@ -341,7 +349,7 @@ export async function generateMetadata({
       description: `Historical photographs, temple history, and cultural memory of ${VILLAGE_ALSO_KNOWN_AS}.`,
     },
     developments: {
-      title: "Developments",
+      title: "Development",
       description: `Village development projects, infrastructure updates, and community works in ${VILLAGE_ALSO_KNOWN_AS}.`,
     },
     suggestions: {
@@ -380,6 +388,29 @@ export async function generateMetadata({
       description: `Terms for using the ${VILLAGE_ALSO_KNOWN_AS} community website stewarded by ${SITE_NAME}.`,
     },
   };
+
+  if (slug[0] === "families" && slug[1]) {
+    const family = findVillageFamily(slug[1]);
+    if (family) {
+      const person = slug[2] ? findPerson(slug[2]) : undefined;
+      const title = person?.fullName ?? family.name;
+      const description = person
+        ? `${person.fullName} of ${family.name}, ${VILLAGE_ALSO_KNOWN_AS}.`
+        : `Family tree of ${family.name} in ${VILLAGE_ALSO_KNOWN_AS}.`;
+      const nestedPath = `/${slug.join("/")}/`;
+      return {
+        title,
+        description,
+        alternates: { canonical: nestedPath },
+        openGraph: {
+          title: `${title} | ${VILLAGE_ALSO_KNOWN_AS}`,
+          description,
+          url: nestedPath,
+        },
+      };
+    }
+  }
+
   const page = slug[0] ? pageTitles[slug[0]] : undefined;
   if (page) {
     const path = `/${slug[0]}/`;
@@ -607,21 +638,75 @@ export default async function ArchiveRoute({
     );
   }
 
-  if (path === "members") {
+  if (path === "members" || path === "people") {
     const members = loadMembers();
     return (
       <main className="page page--members">
         <MemoryHero
-          eyebrow="RVP Youth"
-          title="Members"
-          lede="Legacy Circle, Core Members, and Next Generation — the people of Reddivaripalli who keep our traditions and community spirit alive."
-          primaryHref="/events/"
-          primaryLabel="Events"
+          eyebrow="Our People"
+          title="Our People"
+          lede="Our Elders, our families, and the neighbours who keep Reddivaripalli’s traditions and community spirit alive. Private contact details are not shown."
+          primaryHref="/stories/"
+          primaryLabel="Village stories"
           secondaryHref="/gallery/"
           secondaryLabel="Gallery"
           fullBleed={false}
         />
-        <MembersPage seed={members} />
+        <MembersPage seed={members} directory={loadDirectorySeed()} />
+      </main>
+    );
+  }
+
+  if (slug[0] === "families") {
+    if (slug.length === 1) {
+      return (
+        <main className="page">
+          <MemoryHero
+            eyebrow="Our People"
+            title="Village Families"
+            lede="Families of Reddivaripalli — parents, children, spouses and Adapaduchulu. Missing names are not invented. Family order is maintained by the village administrator."
+            primaryHref="/adapaduchulu/"
+            primaryLabel="Adapaduchulu"
+            secondaryHref="/people/"
+            secondaryLabel="Our People"
+            fullBleed={false}
+          />
+          <FamiliesHub />
+        </main>
+      );
+    }
+    const family = findVillageFamily(slug[1]!);
+    if (!family) notFound();
+    if (slug.length === 2) {
+      return (
+        <main className="page page--family-tree">
+          <FamilyTreePage familyId={family.id} />
+        </main>
+      );
+    }
+    const person = findPerson(slug[2]!);
+    if (!person || person.familyId !== family.id) notFound();
+    return (
+      <main className="page">
+        <PersonProfile personId={person.id} />
+      </main>
+    );
+  }
+
+  if (path === "adapaduchulu") {
+    return (
+      <main className="page">
+        <MemoryHero
+          eyebrow="Our People"
+          title="Adapaduchulu"
+          lede="Married daughters of Reddivaripalli families. Each remains a member of her original parental family."
+          primaryHref="/families/"
+          primaryLabel="Village Families"
+          secondaryHref="/people/"
+          secondaryLabel="Our People"
+          fullBleed={false}
+        />
+        <AdapaduchuluPage />
       </main>
     );
   }
@@ -701,10 +786,6 @@ export default async function ArchiveRoute({
     );
   }
 
-  if (path === "services") {
-    return <VillageServicesPage />;
-  }
-
   if (path === "settings") {
     return (
       <main className="page">
@@ -774,16 +855,16 @@ export default async function ArchiveRoute({
     return (
       <main className="page">
         <MemoryHero
-          eyebrow="Archive"
+          eyebrow="One archive"
           title="Gallery"
-          lede="Festivals first — then year, then photos and videos from every celebration."
-          primaryHref="/events/"
-          primaryLabel="Events"
-          secondaryHref="/years/"
-          secondaryLabel="Years"
+          lede="Village, temples, festivals, people, old photographs, village life, development and nature — one gallery for Reddivaripalli."
+          primaryHref="/temples/"
+          primaryLabel="Temples & Festivals"
+          secondaryHref="/stories/"
+          secondaryLabel="Stories"
           vantaEffect="fog"
         />
-        <GalleryHub albums={albums} />
+        <GalleryHub albums={albums} developments={loadDevelopments()} />
       </main>
     );
   }
@@ -823,23 +904,62 @@ export default async function ArchiveRoute({
           showLogo
           atmosphere
           eyebrow="Reddivaripalli"
-          title="Our Heritage"
-          lede={`${VILLAGE_ALSO_KNOWN_AS} — founded around 1850 as Kondareddigaripalli by Sri G. Konda Reddy. A living record of history, agriculture, festivals, temples, and the people who shaped our home.`}
-          primaryHref="/heritage/"
-          primaryLabel="Heritage Archive"
+          title="Our Village"
+          lede={`${VILLAGE_ALSO_KNOWN_AS} — founded around 1850 as Kondareddigaripalli by Sri G. Konda Reddy. History, origin, map, agriculture and the places that make this home.`}
+          primaryHref="/about/#history"
+          primaryLabel="Read the history"
           secondaryHref="/gallery/"
           secondaryLabel="Gallery"
         />
         <VillageHeritageStory />
-        {/* Moved off the homepage: the culture and traditions chapters belong
-            with the rest of Our Village. */}
-        <CultureTraditions />
-        <Reveal className="section">
-          <VillageDepthMap />
-        </Reveal>
-        <Reveal className="section">
-          <PrivateNotice />
-        </Reveal>
+      </main>
+    );
+  }
+
+  if (path === "temples") {
+    const liveSlugs = [
+      ...new Set(
+        publicAlbums()
+          .filter((a) => (a.media?.length ?? 0) > 0)
+          .map((a) => a.bucket)
+          .filter(Boolean),
+      ),
+    ] as string[];
+    return (
+      <main className="page">
+        <MemoryHero
+          atmosphere
+          eyebrow="Faith of the village"
+          title="Temples & Festivals"
+          lede={`The temples, jatharas and festivals of ${VILLAGE_ALSO_KNOWN_AS} — celebrated together, remembered in photographs, and kept for the next generation.`}
+          primaryHref="/gallery/"
+          primaryLabel="Gallery"
+          secondaryHref="/about/"
+          secondaryLabel="Our Village"
+        />
+        <TemplesFestivalsPage
+          upcoming={upcomingEvents(8)}
+          liveSlugs={liveSlugs}
+          festivals={loadEvents().filter((e) => e.category === "festival")}
+        />
+      </main>
+    );
+  }
+
+  if (path === "stories") {
+    return (
+      <main className="page">
+        <MemoryHero
+          atmosphere
+          eyebrow="Remembered together"
+          title="Village Stories & Memories"
+          lede="Stories from elders, old village memories, traditional practices, and the people who grew up in Reddivaripalli."
+          primaryHref="/gallery/"
+          primaryLabel="Gallery"
+          secondaryHref="/people/"
+          secondaryLabel="Our People"
+        />
+        <StoriesPage />
       </main>
     );
   }
@@ -920,67 +1040,6 @@ export default async function ArchiveRoute({
     if (hub && hub.slug !== "documents") {
       return <DirectoryHub hub={hub} />;
     }
-  }
-
-  // ── Sanatana Dharma ────────────────────────────────────────────────────
-  if (path === "dharma") {
-    return <DharmaHub />;
-  }
-
-  if (path === "dharma/knowledge") {
-    return <ConceptsPage />;
-  }
-
-  if (slug[0] === "dharma" && slug[1] === "resource" && slug.length === 3) {
-    const published = publicResources(loadResourceCatalog());
-    const resource = findBySlug(published, slug[2]!);
-    if (!resource) notFound();
-    const source = loadResourceSources().find((x) => x.id === resource.sourceId);
-    return <ResourceDetailPage resource={resource} source={source} />;
-  }
-
-  if (slug[0] === "dharma" && slug[1] === "gita" && slug.length === 3) {
-    if (!GITA_CHAPTER_SLUGS.includes(slug[2]!)) notFound();
-    return <GitaChapterPage chapter={slug[2]!} />;
-  }
-
-  if (slug[0] === "dharma" && slug.length === 2) {
-    const entry = dharmaPage(slug[1]!);
-    if (!entry) notFound();
-    return (
-      <KnowledgePage
-        entry={entry}
-        eyebrow="Sanatana Dharma"
-        eyebrowHref="/dharma/"
-        divisionHrefBase={entry.slug === "gita" ? "/dharma/gita/" : undefined}
-      />
-    );
-  }
-
-  // ── Telugu Culture ─────────────────────────────────────────────────────
-  if (path === "telugu-culture") {
-    return <CultureHub view="hub" />;
-  }
-
-  if (slug[0] === "telugu-culture" && slug[1] === "sri-sri" && slug.length === 2) {
-    return (
-      <KnowledgePage entry={SRI_SRI_PAGE} eyebrow="Telugu Culture" eyebrowHref="/telugu-culture/" />
-    );
-  }
-
-  if (slug[0] === "telugu-culture" && slug.length === 2) {
-    const views = ["literature", "poetry", "stories", "spiritual"] as const;
-    const view = views.find((v) => v === slug[1]);
-    if (!view) notFound();
-    return <CultureHub view={view as CultureView} />;
-  }
-
-  if (path === "spiritual-heritage") {
-    return <SpiritualHeritagePage albums={publicAlbums()} />;
-  }
-
-  if (path === "emergency") {
-    return <EmergencyPage />;
   }
 
   if (path === "safety") {

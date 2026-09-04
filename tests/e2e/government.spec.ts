@@ -8,7 +8,7 @@ import { expect, test } from "@playwright/test";
  * for your OTP" banner, an external link without rel="noopener", a Telugu
  * page that is really an English page.
  */
-const HUBS = ["/government/", "/students/", "/farmers/", "/banking/", "/government/documents/"];
+const HUBS = ["/government/", "/banking/", "/government/documents/"];
 
 test.describe("official resource hubs", () => {
   for (const path of HUBS) {
@@ -86,18 +86,6 @@ test.describe("official resource hubs", () => {
     await filter.fill("zzzzqqqq");
     await expect(page.locator(".careers-empty")).toBeVisible();
     await expect(page.locator(".oflink")).toHaveCount(0);
-  });
-
-  test("emergency numbers are callable and cited", async ({ page }) => {
-    await page.goto("/emergency/");
-    const cards = page.locator(".emergency-card");
-    expect(await cards.count()).toBeGreaterThan(3);
-    const hrefs = await cards.evaluateAll((els) =>
-      els.map((e) => (e as HTMLAnchorElement).getAttribute("href")),
-    );
-    for (const h of hrefs) expect(h).toMatch(/^tel:\d{3,12}$/);
-    await expect(page.locator("body")).toContainText("112");
-    expect(await page.locator(".oflink-source").count()).toBe(await cards.count());
   });
 
   test("Telugu hubs render Telugu, not English", async ({ page }) => {

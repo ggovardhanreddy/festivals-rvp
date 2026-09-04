@@ -1,23 +1,23 @@
 "use client";
 
-import type { Member } from "@/lib/types";
-import { SITE_NAME } from "@/lib/site";
-import { MemberEditProvider } from "./MemberEditProvider";
-import { MembersGrid } from "./MembersGrid";
+import type { DirectoryEntry, Member } from "@/lib/types";
+import { MemberEditProvider } from "@/components/members/MemberEditProvider";
+import { PeopleHub } from "@/components/people/PeopleHub";
 
 /**
- * Members page — seed roster + admin R2 updates (photos, designations, memorials).
- * Super Admin Edit Mode enables inline editing without visiting /admin/.
+ * Unified People section — elders, families, professionals, notable people,
+ * contributors and birthdays. Private contact details stay off the public page.
  */
-export function MembersPage({ seed }: { seed: Member[] }) {
+export function MembersPage({
+  seed,
+  directory = [],
+}: {
+  seed: Member[];
+  directory?: DirectoryEntry[];
+}) {
   return (
     <MemberEditProvider seed={seed}>
-      <MembersGrid
-        members={seed}
-        eyebrow="Community"
-        title="Our circles"
-        lede={`Legacy Circle, Core Members, and Next Generation — the people who keep ${SITE_NAME} and Reddivaripalli celebrations alive.`}
-      />
+      <PeopleHub members={seed} directory={directory} />
     </MemberEditProvider>
   );
 }

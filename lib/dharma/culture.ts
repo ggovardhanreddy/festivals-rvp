@@ -85,7 +85,7 @@ export const DEVOTIONAL_MUSIC: KnowledgeEntry = {
     { label: "Annamacharya keerthana texts", url: "https://annamacharya-lyrics.blogspot.com/", access: "link", language: "te", licence: "No licence stated — use as a finding aid, verify against a public-domain edition", note: "Useful index. The lyrics themselves are Annamayya's and free; this transcription is not licensed." },
     ARCHIVE_ORG,
   ],
-  related: [{ href: "/spiritual-heritage/", label: "The village's own bhajans and festival recordings" }],
+  related: [{ href: "/gallery/", label: "The village's own bhajans and festival recordings" }],
 };
 
 /**

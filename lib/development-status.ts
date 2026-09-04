@@ -83,6 +83,32 @@ export function stageLabel(stage: DevelopmentWorkflowStage): string {
   return WORKFLOW_STAGES.find((s) => s.key === stage)?.label ?? stage;
 }
 
+/** Three public statuses used on village development cards. */
+export type PublicDevelopmentStatus = "completed" | "in-progress" | "planned";
+
+export function publicDevelopmentStatus(
+  status: DevelopmentStatus,
+): PublicDevelopmentStatus {
+  if (status === "completed") return "completed";
+  if (
+    status === "under-construction" ||
+    status === "ongoing" ||
+    status === "fundraising"
+  ) {
+    return "in-progress";
+  }
+  return "planned";
+}
+
+export function publicDevelopmentLabel(
+  status: DevelopmentStatus,
+): "Completed" | "In Progress" | "Planned" {
+  const bucket = publicDevelopmentStatus(status);
+  if (bucket === "completed") return "Completed";
+  if (bucket === "in-progress") return "In Progress";
+  return "Planned";
+}
+
 /** Map legacy statuses from older data files. */
 export function normalizeDevelopmentStatus(
   status: string | undefined,

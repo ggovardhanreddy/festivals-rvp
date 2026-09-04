@@ -60,7 +60,7 @@ export function SafetyPage() {
         <p className="muted">{t("safety.report.body")}</p>
         <OfficialLinkList items={report} />
         <p className="muted">
-          <Link href={navHref("/emergency/", lang)}>{t("emergency.title")}</Link>
+          <Link href={navHref("/government/", lang)}>{t("nav.government")}</Link>
         </p>
       </section>
     </main>

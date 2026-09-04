@@ -96,6 +96,22 @@
     "designation": "Doctor (Orthopaedic)"
   },
   {
+    "id": "j-venkata-ramana-reddy",
+    "name": "J Venkata Ramana Reddy",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Retired DSP – Government Service"
+  },
+  {
+    "id": "d-manohar",
+    "name": "D Manohar",
+    "photo": null,
+    "dob": null,
+    "group": "legacy",
+    "designation": "Government Employee – Managing Director, State Skill Development Corporation"
+  },
+  {
     "id": "g-govardhan-reddy",
     "name": "G Govardhan Reddy",
     "photo": "/members/govardhan.webp",

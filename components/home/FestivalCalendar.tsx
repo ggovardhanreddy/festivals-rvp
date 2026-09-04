@@ -12,9 +12,12 @@ const FALLBACK_IMAGE = "/brand/village-aerial.webp";
 export function FestivalCalendar({
   festivals,
   liveSlugs = [],
+  embedded = false,
 }: {
   festivals: SiteEvent[];
   liveSlugs?: string[];
+  /** When true, render only the grid — parent supplies the heading. */
+  embedded?: boolean;
 }) {
   if (!festivals.length) return null;
 
@@ -47,6 +50,49 @@ export function FestivalCalendar({
   const nextId =
     withDays.find((item) => item.days >= 0)?.event.id || withDays[0]?.event.id;
 
+  const grid = (
+    <div className="festival-calendar-grid">
+      {withDays.map(({ event, days }) => {
+        const href = event.slug ? `/${event.slug}/` : "/temples/";
+        const isNext = event.id === nextId;
+        return (
+          <Link
+            key={event.id}
+            href={href}
+            className="festival-card"
+            data-next={isNext || undefined}
+          >
+            <div className="festival-card-media">
+              <img
+                src={withBase(festivalCardImage(event.image) || FALLBACK_IMAGE)}
+                alt={`${event.title} — Reddivaripalli`}
+                width={640}
+                height={360}
+                loading="lazy"
+                decoding="async"
+                onError={(e) => {
+                  e.currentTarget.src = withBase(FALLBACK_IMAGE);
+                }}
+              />
+            </div>
+            <div className="festival-card-body">
+              {isNext ? <p className="festival-card-badge">Next up</p> : null}
+              <p className="eyebrow">{formatCountdown(days)}</p>
+              <h3>{event.title}</h3>
+              <p className="muted">{event.date}</p>
+              <p className="lede">{event.description}</p>
+              {event.slug && live.has(event.slug) ? (
+                <span className="festival-card-link">View chapter</span>
+              ) : null}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
+
+  if (embedded) return grid;
+
   return (
     <Reveal className="section home-festivals" id="festivals">
       <div className="section-head">
@@ -57,51 +103,11 @@ export function FestivalCalendar({
             Recurring celebrations that return to Kondreddigaripalli each year.
           </p>
         </div>
-        <Link className="btn ghost" href="/events/">
-          Full calendar
+        <Link className="btn ghost" href="/temples/#upcoming-festivals">
+          Temples & Festivals
         </Link>
       </div>
-
-      <div className="festival-calendar-grid">
-        {withDays.map(({ event, days }) => {
-          const href = event.slug ? `/${event.slug}/` : "/events/";
-          const isNext = event.id === nextId;
-          return (
-            <Link
-              key={event.id}
-              href={href}
-              className="festival-card"
-              data-next={isNext || undefined}
-            >
-              <div className="festival-card-media">
-                <img
-                  src={withBase(
-                    festivalCardImage(event.image) || FALLBACK_IMAGE,
-                  )}
-                  alt={`${event.title} — Reddivaripalli`}
-                  width={640}
-                  height={360}
-                  loading="lazy"
-                  decoding="async"
-                  onError={(e) => {
-                    e.currentTarget.src = withBase(FALLBACK_IMAGE);
-                  }}
-                />
-              </div>
-              <div className="festival-card-body">
-                {isNext ? <p className="festival-card-badge">Next up</p> : null}
-                <p className="eyebrow">{formatCountdown(days)}</p>
-                <h3>{event.title}</h3>
-                <p className="muted">{event.date}</p>
-                <p className="lede">{event.description}</p>
-                {event.slug && live.has(event.slug) ? (
-                  <span className="festival-card-link">View chapter</span>
-                ) : null}
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+      {grid}
     </Reveal>
   );
 }

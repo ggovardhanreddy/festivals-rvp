@@ -5,6 +5,10 @@ Disallow: /chat/
 Disallow: /login/
 Disallow: /admin/
 Disallow: /settings/
+Disallow: /dharma/
+Disallow: /telugu-culture/
 Disallow: /api/
 Disallow: /api/media/
+Disallow: /originals/
+Disallow: /private/
 Sitemap: https://www.reddivaripalli.com/sitemap.xml

@@ -11,54 +11,28 @@ import { SectionIcon } from "./SectionIcon";
 import { EasyModeToggle } from "@/components/easy/EasyModeToggle";
 
 /**
- * Ordered by what people come here for, not alphabetically. The village
- * sections come first, then the service directories that answer a real errand,
- * then the browsing sections.
- *
- * Sections that have not launched (English, IT, Engineering, Explore, Temples,
- * Community) are deliberately absent: their routes still resolve, but a menu
- * entry that leads to "not launched yet" costs a tap and returns nothing.
+ * Ordered by village life first. General knowledge sections are intentionally
+ * absent — they remain at their old URLs but are no longer part of the public
+ * village identity.
  */
 const SECTIONS = [
-  { href: "/about/",                labelKey: "nav.ourVillage",      icon: "temples" },
-  { href: "/members/",              labelKey: "nav.people",          icon: "community" },
-  { href: "/events/",               labelKey: "nav.events",          icon: "calendar" },
-  { href: "/developments/",         labelKey: "nav.developments",    icon: "engineering" },
-  { href: "/gallery/",              labelKey: "nav.gallery",         icon: "gallery" },
-  // The knowledge section, in the order it reads on /dharma/.
-  { href: "/dharma/",               labelKey: "dharma.title",        icon: "temples" },
-  { href: "/dharma/vedas/",         labelKey: "dharma.vedas.title",  icon: "book" },
-  { href: "/dharma/upanishads/",    labelKey: "dharma.upanishads.title", icon: "book" },
-  { href: "/dharma/gita/",          labelKey: "dharma.gita.title",   icon: "book" },
-  { href: "/dharma/ramayanam/",     labelKey: "dharma.ramayanam.title", icon: "book" },
-  { href: "/dharma/mahabharatam/",  labelKey: "dharma.mahabharatam.title", icon: "book" },
-  { href: "/dharma/puranas/",       labelKey: "dharma.puranas.title", icon: "book" },
-  { href: "/dharma/slokas/",        labelKey: "dharma.slokas.title", icon: "temples" },
-  { href: "/dharma/music/",         labelKey: "dharma.music.title",  icon: "music" },
-  { href: "/telugu-culture/",       labelKey: "culture.title",       icon: "book" },
-  { href: "/telugu-culture/literature/", labelKey: "culture.literature.title", icon: "book" },
-  { href: "/telugu-culture/sri-sri/", labelKey: "culture.sriSri.title", icon: "book" },
-  { href: "/spiritual-heritage/",   labelKey: "spiritual.title",     icon: "temples" },
-  // Village and utility.
-  { href: "/heritage/",             labelKey: "nav.heritageArchive", icon: "temples" },
-  { href: "/timeline/",             labelKey: "nav.timeline",        icon: "book" },
-  { href: "/directory/",            labelKey: "nav.directory",       icon: "community" },
-  { href: "/government/",           labelKey: "nav.government",      icon: "government" },
-  { href: "/government/documents/", labelKey: "docs.title",          icon: "book" },
-  { href: "/banking/",              labelKey: "banking.title",       icon: "banking" },
-  { href: "/services/",             labelKey: "nav.villageServices", icon: "government" },
-  { href: "/fun-trips/",            labelKey: "nav.funFest",         icon: "play" },
-  { href: "/suggestions/",          labelKey: "nav.suggestions",     icon: "book" },
-  { href: "/weather/",              labelKey: "nav.weather",         icon: "weather" },
-  { href: "/safety/",               labelKey: "safety.title",        icon: "shield" },
-  { href: "/emergency/",            labelKey: "nav.emergencyInfo",   icon: "siren" },
+  { href: "/about/",        labelKey: "nav.ourVillage",       icon: "temples" },
+  { href: "/people/",      labelKey: "nav.people",           icon: "community" },
+  { href: "/temples/",      labelKey: "nav.templesFestivals", icon: "temples" },
+  { href: "/developments/", labelKey: "nav.developments",     icon: "engineering" },
+  { href: "/gallery/",      labelKey: "nav.gallery",          icon: "gallery" },
+  { href: "/stories/",      labelKey: "nav.stories",          icon: "book" },
+  { href: "/contact/",      labelKey: "nav.contact",          icon: "community" },
+  { href: "/government/",   labelKey: "nav.government",       icon: "government" },
+  { href: "/suggestions/",  labelKey: "nav.suggestions",      icon: "book" },
+  { href: "/weather/",      labelKey: "nav.weather",          icon: "weather" },
+  { href: "/safety/",       labelKey: "safety.title",         icon: "shield" },
 ];
 
 const UTILITY = [
   { href: "/settings/", labelKey: "nav.settings" },
-  { href: "/about/",    labelKey: "nav.about" },
-  { href: "/contact/",  labelKey: "nav.contact" },
   { href: "/privacy/",  labelKey: "nav.privacy" },
+  { href: "/terms/",    labelKey: "nav.terms" },
 ];
 
 export function MoreSheet({ open, onClose }: { open: boolean; onClose: () => void }) {

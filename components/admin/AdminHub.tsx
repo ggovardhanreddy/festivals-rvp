@@ -44,6 +44,8 @@ import { AdminLoginForm } from "@/components/auth/AdminLoginForm";
 import { AnalyticsPanel } from "@/components/admin/AnalyticsPanel";
 import { AdminClient } from "@/components/AdminClient";
 import { MembersManager } from "@/components/admin/MembersManager";
+import { FamiliesManager } from "@/components/admin/FamiliesManager";
+import { MediaProtectionPanel } from "@/components/admin/MediaProtectionPanel";
 import { AuditLogPanel } from "@/components/admin/AuditLogPanel";
 import { ROLE_CAPABILITIES } from "@/lib/roles";
 
@@ -53,6 +55,7 @@ type Tab =
   | "analytics"
   | "media"
   | "members"
+  | "families"
   | "audit"
   | "directory"
   | "approvals"
@@ -474,6 +477,39 @@ function SettingsManager() {
           }
         />
       </label>
+      <label>
+        Watermark position
+        <select
+          value={settings.watermarkPosition || "bottom-right"}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              watermarkPosition: e.target.value as SiteSettings["watermarkPosition"],
+            }))
+          }
+        >
+          <option value="bottom-right">Bottom right</option>
+          <option value="bottom-left">Bottom left</option>
+          <option value="top-right">Top right</option>
+          <option value="top-left">Top left</option>
+          <option value="center">Center</option>
+        </select>
+      </label>
+      <label>
+        Watermark opacity ({Math.round((settings.watermarkOpacity ?? 0.35) * 100)}%)
+        <input
+          type="range"
+          min="8"
+          max="70"
+          value={Math.round((settings.watermarkOpacity ?? 0.35) * 100)}
+          onChange={(e) =>
+            setSettings((s) => ({
+              ...s,
+              watermarkOpacity: Number(e.target.value) / 100,
+            }))
+          }
+        />
+      </label>
       <label className="notif-pref-row">
         <input
           type="checkbox"
@@ -761,6 +797,7 @@ export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
     { id: "analytics", label: "Analytics" },
     { id: "media", label: "Media / R2" },
     { id: "members", label: "Members" },
+    { id: "families", label: "Families" },
     { id: "audit", label: "Audit" },
     { id: "directory", label: "Directory" },
     { id: "approvals", label: "Approvals" },
@@ -792,7 +829,7 @@ export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
           <p className="eyebrow">Administrator</p>
           <h1>Dashboard</h1>
           <p className="lede">
-            Manage media, directory, approvals, documents, heritage, analytics,
+            Manage media, directory, families, approvals, documents, heritage, analytics,
             and site settings.
           </p>
         </div>
@@ -851,6 +888,9 @@ export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
               <Link className="btn ghost" href="/documents/">
                 Documents
               </Link>
+              <Link className="btn ghost" href="/families/">
+                Families
+              </Link>
               <Link className="btn ghost" href="/heritage/">
                 Heritage
               </Link>
@@ -864,8 +904,14 @@ export function AdminHub({ collector }: { collector?: CollectorAdminData }) {
           <AnalyticsPanel />
         </RequireAdmin>
       ) : null}
-      {tab === "media" ? <AdminClient /> : null}
+      {tab === "media" ? (
+        <>
+          <AdminClient />
+          <MediaProtectionPanel />
+        </>
+      ) : null}
       {tab === "members" ? <MembersManager /> : null}
+      {tab === "families" ? <FamiliesManager /> : null}
       {tab === "audit" ? (
         <RequireAdmin>
           <AuditLogPanel />

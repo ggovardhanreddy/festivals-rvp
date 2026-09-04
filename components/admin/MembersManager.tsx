@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BLOOD_GROUPS, newCommunityId } from "@/lib/community";
 import { useCommunityList } from "@/lib/use-community";
-import type { Member, MemberGroup, MemberStatus } from "@/lib/types";
+import type { Member, MemberGroup, MemberStatus, VillageFamily } from "@/lib/types";
 import { MEMBER_GROUP_LABELS } from "@/lib/member-groups";
 import { mergeMemberRosters } from "@/lib/member-stats";
 import {
@@ -18,6 +18,7 @@ import {
 import { appendMemberAudit } from "@/lib/member-audit";
 import { useEditMode } from "@/lib/use-super-admin";
 import membersSeed from "@/content/data/members.json";
+import { loadVillageFamilies, sortFamilies } from "@/lib/families/catalog";
 
 const SEED = membersSeed as Member[];
 
@@ -51,6 +52,12 @@ export function MembersManager() {
     seed,
     { admin: true },
   );
+  const { items: familyRows } = useCommunityList<VillageFamily>(
+    "families",
+    loadVillageFamilies(),
+    { admin: true, replaceSeedWhenRemote: true },
+  );
+  const familyOptions = useMemo(() => sortFamilies(familyRows), [familyRows]);
   const [items, setItems] = useState<Member[]>(seed);
   const [msg, setMsg] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -144,11 +151,10 @@ export function MembersManager() {
   return (
     <div>
       <p className="muted">
-        Add or edit members: photo, name, nickname, category, designation,
+        Add or edit members: photo, name, nickname, family branch, category, designation,
         profession, company, bio, birthday, contacts, blood group, social,
-        achievements, memorial/archive status, and display order. Photos upload
-        to R2 (<code>members/</code>). Save publishes the roster site-wide.
-        Prefer JPEG/PNG/WebP — HEIC may need conversion in Photos first.
+        achievements, memorial/archive status, and display order. Family branch
+        is chosen from the Families list — do not type a family name.
       </p>
       {loading ? <p className="muted">Loading members…</p> : null}
       <div className="btn-row" style={{ marginBottom: "1rem", flexWrap: "wrap" }}>
@@ -180,6 +186,7 @@ export function MembersManager() {
                 achievements: [],
                 social: [],
                 displayOrder: prev.length,
+                familyId: "",
               },
             ])
           }
@@ -318,6 +325,22 @@ export function MembersManager() {
                 {(Object.keys(MEMBER_GROUP_LABELS) as MemberGroup[]).map((g) => (
                   <option key={g} value={g}>
                     {MEMBER_GROUP_LABELS[g]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Family Branch
+              <select
+                value={member.familyId || ""}
+                onChange={(e) =>
+                  update(member.id, { familyId: e.target.value || undefined })
+                }
+              >
+                <option value="">— Select family branch —</option>
+                {familyOptions.map((family) => (
+                  <option key={family.id} value={family.id}>
+                    {family.name}
                   </option>
                 ))}
               </select>

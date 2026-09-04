@@ -87,6 +87,20 @@
       "updatedAt": "2026-08-03T04:50:14.698Z"
     },
     {
+      "memberId": "j-venkata-ramana-reddy",
+      "username": "Venkata",
+      "name": "J Venkata Ramana Reddy",
+      "passwordHash": "pbkdf2:aaaa884814cd4f56531e12bbe7833781:oletzo5DkLBK9bmZi5H6BL6Nlh_E6AT5cR5iFNcukRs",
+      "updatedAt": "2026-09-01T02:38:06.331Z"
+    },
+    {
+      "memberId": "d-manohar",
+      "username": "Manohar",
+      "name": "D Manohar",
+      "passwordHash": "pbkdf2:57d52c827de440672f8307d490c23284:qcwh54szn6YDj1bvjCBNj_WHYSv7G-6gfN-YXfi3ci0",
+      "updatedAt": "2026-09-01T02:38:06.348Z"
+    },
+    {
       "memberId": "g-govardhan-reddy",
       "username": "Govardhan",
       "name": "G Govardhan Reddy",
@@ -262,5 +276,5 @@
       "updatedAt": "2026-08-02T16:03:46.778Z"
     }
   ],
-  "generatedAt": "2026-08-31T11:53:17.597Z"
+  "generatedAt": "2026-09-04T13:23:14.842Z"
 }

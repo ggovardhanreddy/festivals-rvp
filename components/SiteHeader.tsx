@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   useCallback,
   useEffect,
@@ -12,22 +12,36 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Menu, Pencil, Search, X } from "lucide-react";
-import { MORE_NAV, NAV } from "@/lib/site";
+import { FESTIVAL_NAV_PREFIXES, MORE_NAV, NAV } from "@/lib/site";
 import { withBase } from "@/lib/base";
 import { ThemeToggle } from "./Theme";
 import { Logo } from "./Logo";
 import { NotificationBell } from "./notifications/NotificationBell";
 import { useEditMode } from "@/lib/use-super-admin";
-import { useMemberAuth } from "./auth/MemberAuthProvider";
-import { FunFestLoginDialog } from "./auth/FunFestLoginDialog";
 import { useUiLang } from "./i18n/LanguageProvider";
 import { LanguageSwitcher } from "./i18n/LanguageSwitcher";
 
 function isActive(href: string, normalized: string) {
   if (href === "/") return normalized === "/";
   if (href.startsWith("/#")) return normalized === "/";
-  // Birthday albums live under /rvp-birthdays/ but belong to Events.
-  if (href === "/events/" && normalized.startsWith("/rvp-birthdays/")) {
+  if (href === "/people/" && (
+    normalized.startsWith("/directory/") ||
+    normalized.startsWith("/families/") ||
+    normalized.startsWith("/adapaduchulu/") ||
+    normalized.startsWith("/members/")
+  )) {
+    return true;
+  }
+  if (href === "/temples/") {
+    if (normalized.startsWith("/temples/") || normalized.startsWith("/events/")) {
+      return true;
+    }
+    return FESTIVAL_NAV_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+  }
+  if (href === "/gallery/" && normalized.startsWith("/heritage/")) {
+    return true;
+  }
+  if (href === "/about/" && normalized.startsWith("/timeline/")) {
     return true;
   }
   return normalized.startsWith(href);
@@ -50,9 +64,8 @@ function isMobileShell() {
 /**
  * Site header.
  *
- * Six destinations plus More. Search is an icon, Settings lives in More, and
- * every secondary page the header used to carry is still one click away —
- * nothing was removed from the site, only from the top row.
+ * Seven destinations plus More. Search is an icon. Fun Fest is a private
+ * member gallery and is not listed in public navigation.
  */
 export function SiteHeader() {
   const pathname = usePathname() || "/";
@@ -67,40 +80,11 @@ export function SiteHeader() {
   const moreRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const { ready, isAdmin, editMode, toggleEditMode } = useEditMode();
-  const { session: memberSession, ready: memberReady } = useMemberAuth();
   const { t } = useUiLang();
-  const router = useRouter();
-  const [funFestLoginOpen, setFunFestLoginOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const onFunFestNav = useCallback(
-    (event: MouseEvent<HTMLAnchorElement>) => {
-      unlockBodyScroll();
-      setOpen(false);
-      setMoreOpen(false);
-      if (!memberReady) {
-        event.preventDefault();
-        return;
-      }
-      if (!memberSession) {
-        event.preventDefault();
-        setFunFestLoginOpen(true);
-        return;
-      }
-      event.preventDefault();
-      if (isMobileShell()) {
-        window.setTimeout(() => {
-          window.location.assign(withBase("/fun-trips/"));
-        }, 0);
-        return;
-      }
-      router.push("/fun-trips/");
-    },
-    [memberReady, memberSession, router],
-  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -190,7 +174,7 @@ export function SiteHeader() {
     unlockBodyScroll();
     setOpen(false);
     const mustHard =
-      isMobileShell() || href === "/members/" || href.startsWith("/members/");
+      isMobileShell() || href === "/people/" || href.startsWith("/people/") || href === "/members/" || href.startsWith("/members/");
     if (!mustHard) return;
     event.preventDefault();
     const target = withBase(href);
@@ -243,17 +227,7 @@ export function SiteHeader() {
             More
           </p>
           <div role="group" aria-labelledby={`${menuId}-more`} className="nav-drawer-band">
-          {MORE_NAV.map((item) =>
-            item.href === "/fun-trips/" ? (
-              <Link
-                key={item.href}
-                href={item.href}
-                data-active={isActive(item.href, normalized)}
-                onClick={onFunFestNav}
-              >
-                {t(item.href, item.label)}
-              </Link>
-            ) : (
+          {MORE_NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -262,8 +236,7 @@ export function SiteHeader() {
               >
                 {t(item.href, item.label)}
               </Link>
-            ),
-          )}
+          ))}
           </div>
 
           <p className="nav-drawer-group" id={`${menuId}-tools`}>
@@ -356,19 +329,13 @@ export function SiteHeader() {
               <ul>
                 {MORE_NAV.map((item) => (
                   <li key={item.href}>
-                    {item.href === "/fun-trips/" ? (
-                      <Link href={item.href} onClick={onFunFestNav}>
-                        {t(item.href, item.label)}
-                      </Link>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        data-active={isActive(item.href, normalized)}
-                        onClick={() => setMoreOpen(false)}
-                      >
-                        {t(item.href, item.label)}
-                      </Link>
-                    )}
+                    <Link
+                      href={item.href}
+                      data-active={isActive(item.href, normalized)}
+                      onClick={() => setMoreOpen(false)}
+                    >
+                      {t(item.href, item.label)}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -428,11 +395,6 @@ export function SiteHeader() {
 
       {/* Portal escapes page stacking contexts so the drawer stays tappable */}
       {mounted ? createPortal(drawer, document.body) : drawer}
-      <FunFestLoginDialog
-        open={funFestLoginOpen}
-        onClose={() => setFunFestLoginOpen(false)}
-        next="/fun-trips/"
-      />
     </>
   );
 }

@@ -2,15 +2,8 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const ROUTES = [
-  "/", "/about/", "/members/", "/events/", "/gallery/", "/contact/", "/te/",
-  // Added with the official-resource directory. These are the pages a senior
-  // citizen or a screen-reader user is most likely to arrive at from search.
-  "/government/", "/banking/", "/students/", "/farmers/", "/emergency/",
-  "/safety/", "/kids/", "/search/", "/te/government/",
-  // The children's sections. A child using a screen reader or a switch is
-  // exactly the visitor most likely to be let down by a decorative layout.
-  "/kids/alphabet/", "/kids/stories/", "/kids/rhymes/", "/kids/science/",
-  "/kids/videos/", "/digital-skills/",
+  "/", "/about/", "/people/", "/temples/", "/gallery/", "/contact/", "/te/",
+  "/government/", "/banking/", "/safety/", "/search/", "/te/government/",
 ];
 
 test.describe("accessibility", () => {

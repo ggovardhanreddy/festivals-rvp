@@ -91,7 +91,7 @@ export const RAMAYANAM: KnowledgeEntry = {
     ARCHIVE_ORG,
   ],
   related: [
-    { href: "/spiritual-heritage/", label: "Sri Ramalayam, Reddivaripalli" },
+    { href: "/about/", label: "Sri Ramalayam, Reddivaripalli" },
     { href: "/events/", label: "Sri Rama Navami and the village festival calendar" },
   ],
 };
@@ -153,7 +153,7 @@ export const PURANAS: KnowledgeEntry = {
     ANDHRA_BHARATI,
     TTD_EBOOKS,
   ],
-  related: [{ href: "/telugu-culture/spiritual/", label: "Telugu spiritual literature" }],
+  related: [{ href: "/telugu-culture/literature/", label: "Telugu literature" }],
 };
 
 export const SCRIPTURES: KnowledgeEntry[] = [GITA, RAMAYANAM, MAHABHARATAM, PURANAS];

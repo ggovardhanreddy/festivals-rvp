@@ -68,7 +68,7 @@ export function CommunityStats({
       )}
 
       <div className="home-panel-actions">
-        <Link className="btn" href="/members/">
+        <Link className="btn" href="/people/">
           {t("home.meetOurPeople")} <span aria-hidden>→</span>
         </Link>
       </div>

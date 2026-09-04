@@ -2,15 +2,19 @@
 
 import { useState, type ImgHTMLAttributes } from "react";
 import { useMediaUrl } from "@/lib/use-media-url";
+import { ProtectedMedia } from "./ProtectedMedia";
 
 type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src?: string | null;
   fallback?: string | null;
+  /** Wrap with drag/context-menu/watermark protection. Default true. */
+  protect?: boolean;
+  watermark?: boolean;
 };
 
 /**
  * Resolves public R2 URLs and signed private Fun Fest / document URLs.
- * Prefer this over raw `withBase(src)` for any album/cover/media image.
+ * Public photographs go through protected delivery (no drag, no save-as menu).
  */
 export function MediaImage({
   src,
@@ -18,6 +22,8 @@ export function MediaImage({
   alt = "",
   onError,
   className,
+  protect = true,
+  watermark,
   ...rest
 }: Props) {
   const [useFallback, setUseFallback] = useState(false);
@@ -59,12 +65,16 @@ export function MediaImage({
     );
   }
 
-  return (
+  const img = (
     <img
-      src={url}
       alt={alt}
-      className={className}
+      className={protect ? undefined : className}
       decoding="async"
+      {...rest}
+      src={url}
+      draggable={false}
+      onContextMenu={(event) => event.preventDefault()}
+      onDragStart={(event) => event.preventDefault()}
       onError={(event) => {
         if (!useFallback && fallback && fallback !== src) {
           setUseFallback(true);
@@ -73,7 +83,14 @@ export function MediaImage({
         setBroken(true);
         onError?.(event);
       }}
-      {...rest}
     />
+  );
+
+  if (!protect) return img;
+
+  return (
+    <ProtectedMedia className={className} watermark={watermark}>
+      {img}
+    </ProtectedMedia>
   );
 }

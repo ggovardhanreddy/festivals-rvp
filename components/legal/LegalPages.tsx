@@ -20,7 +20,7 @@ export function PrivacyPage() {
           How {SITE_NAME} handles personal information on the{" "}
           {VILLAGE_ALSO_KNOWN_AS} ({VILLAGE_NAME}) digital home.
         </p>
-        <p className="muted">Last updated: August 2026</p>
+        <p className="muted">Last updated: September 2026</p>
 
         <div className="legal-body">
           <h2>Who we are</h2>
@@ -91,10 +91,36 @@ export function PrivacyPage() {
             details from children through this site.
           </p>
 
+          <h2>Request a correction or removal</h2>
+          <p>
+            If your name, photograph, birthday, profession or any other personal
+            detail appears on this website and you want it corrected or removed:
+          </p>
+          <ol>
+            <li>
+              Email{" "}
+              <a
+                href={`mailto:${inbox}?subject=${encodeURIComponent("Request to correct or remove personal information")}`}
+              >
+                {inbox}
+              </a>{" "}
+              with the name as it is shown on the site and what should change.
+            </li>
+            <li>
+              Village stewards will confirm the request with you.
+            </li>
+            <li>
+              The listing is updated or removed in the next site update.
+            </li>
+          </ol>
+          <p>
+            Private phone numbers, home addresses and other sensitive details
+            are not published without explicit permission.
+          </p>
+
           <h2>Your choices</h2>
           <p>
-            Request correction or removal of your directory/member data by
-            emailing <a href={`mailto:${inbox}`}>{inbox}</a>. See also our{" "}
+            The same email also covers directory and member data. See also our{" "}
             <Link href="/terms/">Terms of Use</Link>.
           </p>
         </div>

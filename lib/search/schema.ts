@@ -64,5 +64,6 @@ export const EXCLUDED_SECTIONS: SectionId[] = ["gated", "admin"];
 
 export function isIndexable(doc: { section: SectionId; url: string }): boolean {
   if (EXCLUDED_SECTIONS.includes(doc.section)) return false;
+  if (/\/(dharma|telugu-culture)(\/|$)/.test(doc.url)) return false;
   return !/^\/(admin|login|chat|fun-trips)\//.test(doc.url);
 }

@@ -43,7 +43,7 @@ export function matchProfession(
       );
     case "government":
       // Bank staff and temple priests stay in Other Professionals
-      return /government|vro|vigilance|post office|headmaster|indian army/.test(
+      return /government|vro|vigilance|post office|headmaster|indian army|\bdsp\b|skill development|managing director/.test(
         d,
       );
     case "teachers":
@@ -90,10 +90,10 @@ export type CommunityStat = {
 export function communityStats(members: Member[]): CommunityStat[] {
   const { total, byGroup } = computeMemberStats(members);
   return [
-    { key: "total", label: "Total Members", value: total },
-    { key: "legacy", label: "Legacy Circle", value: byGroup.legacy },
-    { key: "core", label: "Core Members", value: byGroup.core },
-    { key: "nextgen", label: "Next Generation", value: byGroup.nextgen },
+    { key: "total", label: "Total People", value: total },
+    { key: "legacy", label: "Our Elders", value: byGroup.legacy },
+    { key: "core", label: "Our Village Contributors", value: byGroup.core },
+    { key: "nextgen", label: "Our Families", value: byGroup.nextgen },
   ];
 }
 
@@ -177,6 +177,7 @@ function mergeOne(prev: Member | undefined, item: Member): Member {
     joinYear: item.joinYear ?? prev.joinYear,
     group: item.group || prev.group,
     displayOrder: item.displayOrder ?? prev.displayOrder,
+    familyId: item.familyId || prev.familyId,
   };
 }
 
@@ -276,6 +277,7 @@ export function diffMemberFields(
     "birthYear",
     "joinYear",
     "displayOrder",
+    "familyId",
   ];
   const fields: string[] = [];
   const beforeSnap: Partial<Member> = {};

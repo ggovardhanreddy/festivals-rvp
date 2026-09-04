@@ -29,6 +29,9 @@ export const COMMUNITY_COLLECTIONS = [
   "audit",
   "events",
   "announcements",
+  "families",
+  "family-people",
+  "media-protection",
 ] as const;
 
 export type CommunityCollection = (typeof COMMUNITY_COLLECTIONS)[number];
@@ -85,7 +88,9 @@ export const HERITAGE_CATEGORIES: HeritageCategory[] = [
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   watermarkEnabled: true,
-  watermarkText: "Reddivaripalli Village",
+  watermarkText: "Reddivaripalli.com",
+  watermarkPosition: "bottom-right",
+  watermarkOpacity: 0.35,
   allowPublicMediaDownload: false,
   hideDirectoryContactsByDefault: true,
   requireConsentForPersonalData: true,

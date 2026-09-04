@@ -28,15 +28,9 @@ import {
   loadPanchayatDocsSeed,
 } from "../lib/community";
 import { loadVillageHeritage } from "../lib/village-heritage";
+import { allPeople, displayStatus, personHref } from "../lib/family-trees";
+import { familyHref, loadVillageFamilies } from "../lib/families/catalog";
 import { LIVE_ROUTES, type SectionId } from "../lib/routes/registry";
-import {
-  AUTHORS,
-  DHARMA_ABOUT,
-  DHARMA_CONCEPTS,
-  DHARMA_PAGES,
-  GITA,
-  SRI_SRI_PAGE,
-} from "../lib/dharma";
 import { isIndexable, type SearchDoc, type SearchShard } from "../lib/search/schema";
 import { TRANSLITERATIONS } from "../lib/search/normalize";
 import { translate } from "../lib/i18n";
@@ -83,7 +77,7 @@ function clean(text: string | undefined | null, max = 300): string {
 function pageDocs(): SearchDoc[] {
   const docs: SearchDoc[] = [];
   for (const route of LIVE_ROUTES) {
-    if (route.private) continue;
+    if (route.private || route.noindex) continue;
     for (const locale of LOCALES) {
       // A Telugu page document is only emitted when a Telugu page genuinely
       // exists. `hasTelugu` is the registry's honest switch; emitting /te/x/
@@ -184,7 +178,7 @@ function directoryDocs(): SearchDoc[] {
       id: `helpline:${h.id}`,
       title: `${h.number} — ${h.name}`,
       description: h.description,
-      url: `${base}/emergency/`,
+      url: `${base}/government/`,
       section: "utility",
       language: "en",
       keywords: [h.number, h.name, h.nameTe ?? "", "emergency", "helpline", "అత్యవసరం"].filter(Boolean),
@@ -266,11 +260,49 @@ function communityDocs(): SearchDoc[] {
       id: `member:${m.id ?? m.name}`,
       title: m.name,
       description: clean(m.designation) || "Village member",
-      url: `${base}/members/`,
+      url: `${base}/people/`,
       section: "community",
       language: "en",
       keywords: [m.designation, m.group, "member", "members"].filter(Boolean) as string[],
       content: clean(`${m.name} ${m.designation ?? ""} ${m.group ?? ""}`),
+      weight: WEIGHT.member,
+    });
+  }
+
+  for (const family of loadVillageFamilies()) {
+    if (!family.isPublished) continue;
+    docs.push({
+      id: `village-family:${family.id}`,
+      title: family.name,
+      description: clean(family.description) || family.name,
+      url: `${base}${familyHref(family.slug)}`,
+      section: "community",
+      language: "en",
+      keywords: [family.name, family.slug, "family", "village families"],
+      content: clean(`${family.name} ${family.description} ${family.history}`),
+      weight: WEIGHT.member,
+    });
+  }
+
+  for (const person of allPeople()) {
+    const labels = displayStatus(person).join(" ");
+    docs.push({
+      id: `family:${person.id}`,
+      title: person.fullName,
+      description: clean(`${labels} · ${person.familyBranch}`) || person.familyBranch,
+      url: `${base}${personHref(person)}`,
+      section: "community",
+      language: "en",
+      keywords: [
+        person.familyBranch,
+        ...displayStatus(person),
+        "family",
+        "family tree",
+        person.adapaduchu ? "Adapaduchu" : "",
+      ].filter(Boolean),
+      content: clean(
+        `${person.fullName} ${person.familyBranch} ${labels} ${person.notes ?? ""}`,
+      ),
       weight: WEIGHT.member,
     });
   }
@@ -412,199 +444,11 @@ function communityDocs(): SearchDoc[] {
   return docs;
 }
 
-/**
- * §15: one global search across documents, videos, courses, question papers,
- * scholarships, careers and agriculture.
- *
- * Published resources only — the same gate the pages use. An unreviewed
- * document must not be findable, and the search index is the one place where
- * that would otherwise leak: it is a public JSON file.
- *
- * `content` carries the extracted PDF text, because the brief asks for it to
- * be searchable and it is the difference between finding "the paper about
- * quadratic equations" and having to already know its title.
- */
-function resourceDocs(): SearchDoc[] {
-  let resources: Array<Record<string, unknown>> = [];
-  let sources: Array<Record<string, unknown>> = [];
-  try {
-    const raw = JSON.parse(
-      fs.readFileSync(path.join(root, "generated", "resources.json"), "utf8"),
-    ) as { resources?: Array<Record<string, unknown>> };
-    resources = Array.isArray(raw.resources) ? raw.resources : [];
-  } catch {
-    return [];
-  }
-  try {
-    const raw = JSON.parse(
-      fs.readFileSync(path.join(root, "content", "resources", "sources.json"), "utf8"),
-    ) as { sources?: Array<Record<string, unknown>> };
-    sources = Array.isArray(raw.sources) ? raw.sources : [];
-  } catch {
-    sources = [];
-  }
-  const sourceName = new Map(sources.map((x) => [String(x.id), String(x.name ?? x.id)]));
-
-  const slugOf = (r: Record<string, unknown>) => {
-    const title = String(r.title ?? "");
-    const stem = title
-      .toLowerCase()
-      .replace(/[^\p{L}\p{N}]+/gu, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 60);
-    const id = String(r.id ?? "");
-    return `${stem || "resource"}-${id.split("-").pop() ?? ""}`;
-  };
-
-  const docs: SearchDoc[] = [];
-  for (const r of resources) {
-    if (r.status !== "published") continue;
-    const title = String(r.title ?? "").trim();
-    if (!title) continue;
-    const keywords = [
-      ...(Array.isArray(r.tags) ? r.tags.map(String) : []),
-      String(r.exam ?? ""),
-      String(r.subject ?? ""),
-      String(r.classLevel ?? ""),
-      String(r.category ?? ""),
-      String(r.subcategory ?? ""),
-      String(r.resourceType ?? ""),
-      sourceName.get(String(r.sourceId)) ?? "",
-      String(r.titleTe ?? ""),
-    ].filter(Boolean);
-    docs.push({
-      id: `resource:${String(r.id)}`,
-      title,
-      description: String(r.description ?? "").slice(0, 300),
-      url: `${base}/learn/resource/${slugOf(r)}/`,
-      section: "dharma",
-      language: r.language === "te" ? "te" : "en",
-      keywords,
-      content: [title, String(r.description ?? ""), String(r.textExcerpt ?? "")]
-        .filter(Boolean)
-        .join(" ")
-        .slice(0, 4000),
-      category: String(r.category ?? ""),
-      weight: r.resourceType === "notification" ? 3 : 2,
-    });
-  }
-  return docs;
-}
-
-/**
- * §24: one search across the curated knowledge library.
- *
- * These documents come from lib/dharma, which is written content compiled into
- * the bundle, so they are indexed whether or not the collector has ever run —
- * unlike resourceDocs below, which indexes what the collector found.
- *
- * Telugu names are indexed as keywords so a search in Telugu script finds the
- * page. That matters more here than anywhere else on the site: someone looking
- * for భగవద్గీత should not have to know to type "Bhagavad Gita".
- */
-function dharmaDocs(): SearchDoc[] {
-  const docs: SearchDoc[] = [];
-
-  const push = (
-    url: string,
-    title: string,
-    description: string,
-    keywords: string[],
-    content: string,
-    weight = 2,
-  ) => {
-    docs.push({
-      id: `dharma:${url}`,
-      title,
-      description: description.slice(0, 300),
-      url: `${base}${url}`,
-      section: "dharma",
-      language: "en",
-      keywords: keywords.filter(Boolean),
-      content: content.slice(0, 4000),
-      weight,
-    });
-  };
-
-  for (const entry of [DHARMA_ABOUT, ...Object.values(DHARMA_PAGES), SRI_SRI_PAGE]) {
-    const url =
-      entry.slug === "sri-sri"
-        ? "/telugu-culture/sri-sri/"
-        : entry.slug === "about"
-          ? "/dharma/"
-          : `/dharma/${entry.slug}/`;
-    push(
-      url,
-      entry.title,
-      entry.summary,
-      [entry.titleTe ?? "", ...(entry.divisions ?? []).flatMap((d) => [d.name, d.nameRoman, d.nameEnglish])],
-      [entry.summary, ...entry.body, ...(entry.divisions ?? []).map((d) => `${d.nameRoman} ${d.intro}`)].join(" "),
-      entry.slug === "gita" ? 3 : 2,
-    );
-  }
-
-  // A page per Gita chapter, so a search for "Vishwarupa" lands on chapter 11
-  // rather than on the chapter list.
-  for (const d of GITA.divisions ?? []) {
-    push(
-      `/dharma/gita/${d.slug}/`,
-      `Bhagavad Gita, Chapter ${d.slug} — ${d.nameRoman}`,
-      d.intro,
-      [d.name, d.nameRoman, d.nameEnglish, "Bhagavad Gita", "భగవద్గీత"],
-      `${d.intro} ${(d.teachings ?? []).join(" ")}`,
-    );
-  }
-
-  push(
-    "/dharma/knowledge/",
-    "Dharma & Spiritual Knowledge",
-    "Dharma, karma, moksha, bhakti, jnana, seva, yoga, meditation, the guru lineage and the samskaras.",
-    DHARMA_CONCEPTS.flatMap((c) => [c.name, c.nameRoman, c.nameEnglish]),
-    DHARMA_CONCEPTS.map((c) => `${c.nameRoman} ${c.intro}`).join(" "),
-  );
-
-  push(
-    "/telugu-culture/",
-    "Telugu Culture",
-    "The traditions, festivals, songs, sayings and literature of this language.",
-    ["తెలుగు సంస్కృతి", "Telugu culture", "folk", "proverbs", "festivals"],
-    "Telugu traditions festivals folk songs proverbs literature cultural history temple traditions customs",
-  );
-
-  for (const [view, title, te] of [
-    ["literature", "Telugu Literature", "తెలుగు సాహిత్యం"],
-    ["poetry", "Telugu Poetry", "తెలుగు కవిత్వం"],
-    ["stories", "Telugu Stories", "తెలుగు కథలు"],
-    ["spiritual", "Telugu Spiritual Literature", "తెలుగు ఆధ్యాత్మిక సాహిత్యం"],
-  ] as const) {
-    push(
-      `/telugu-culture/${view}/`,
-      title,
-      `${title} — writers, works, and which of them are in the public domain.`,
-      [te, ...AUTHORS.map((a) => a.name), ...AUTHORS.map((a) => a.nameTe)],
-      AUTHORS.map((a) => `${a.name} ${a.nameTe} ${a.lived} ${a.known} ${a.works.join(" ")}`).join(" "),
-    );
-  }
-
-  push(
-    "/spiritual-heritage/",
-    "Reddivaripalli Spiritual Heritage",
-    "The Sri Ramalayam, the jatharas, the local bhajans and the elders' memories.",
-    ["Sri Ramalayam", "శ్రీ రామాలయం", "jathara", "temple", "bhajan", "oral history"],
-    "Sri Ramalayam temple history jatharas local devotional traditions bhajans festival videos photographs elders memories community contributions",
-    3,
-  );
-
-  return docs;
-}
-
 export function buildSearchIndex(): SearchShard {
   const docs = [
     ...pageDocs(),
     ...directoryDocs(),
     ...libraryDocs(),
-    ...dharmaDocs(),
-    ...resourceDocs(),
     ...communityDocs(),
     ...mediaDocs(),
   ].filter((doc) =>

@@ -51,7 +51,12 @@ function mergeById<T>(seed: T[], remote: T[]): T[] {
 export function useCommunityList<T>(
   collection: CommunityCollection,
   seed: T[],
-  opts?: { admin?: boolean; approvedOnly?: boolean },
+  opts?: {
+    admin?: boolean;
+    approvedOnly?: boolean;
+    /** When R2 returns items, use them as the full list (do not re-merge deleted seed rows). */
+    replaceSeedWhenRemote?: boolean;
+  },
 ) {
   const seedRef = useRef(seed);
   seedRef.current = seed;
@@ -59,6 +64,7 @@ export function useCommunityList<T>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const admin = Boolean(opts?.admin);
+  const replaceSeedWhenRemote = Boolean(opts?.replaceSeedWhenRemote);
 
   const refresh = useCallback(async (opts?: { silent?: boolean }) => {
     const silent = Boolean(opts?.silent);
@@ -74,18 +80,26 @@ export function useCommunityList<T>(
         admin,
         controller.signal,
       );
-      // Never wipe a seed roster if the API returns empty / times out.
-      setRaw(mergeById(seedRef.current, remote));
+      // Never wipe a seed roster (or members just saved locally) if the
+      // API returns empty / times out. An empty GET used to drop people
+      // added on the page who were not yet in the Git seed.
+      setRaw((prev) => {
+        if (!remote.length) return prev.length ? prev : seedRef.current;
+        if (replaceSeedWhenRemote) return remote;
+        return mergeById(seedRef.current, remote);
+      });
     } catch (err) {
       if ((err as Error)?.name !== "AbortError") {
         setError(err instanceof Error ? err.message : "Failed to load");
       }
-      if (!silent) setRaw(seedRef.current);
+      if (!silent) {
+        setRaw((prev) => (prev.length ? prev : seedRef.current));
+      }
     } finally {
       window.clearTimeout(timer);
       if (!silent) setLoading(false);
     }
-  }, [collection, admin]);
+  }, [collection, admin, replaceSeedWhenRemote]);
 
   useEffect(() => {
     void refresh();

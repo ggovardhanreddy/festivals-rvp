@@ -83,6 +83,7 @@ const R2_CATEGORIES = [
   "videos",
   "audio",
   "documents",
+  "families",
 ] as const;
 
 const ALLOWED_EXT = new Set([
@@ -201,6 +202,9 @@ function isPrivateKey(key: string) {
     key.includes("/funfest/") ||
     key.includes("fun-trips/") ||
     key.startsWith("documents/") ||
+    key.startsWith("originals/") ||
+    key.includes("/originals/") ||
+    key.startsWith("private/") ||
     key.includes("/private/")
   );
 }
@@ -493,6 +497,11 @@ async function handleMedia({
       );
     }
 
+    const visibility = String(form.get("visibility") || "public")
+      .trim()
+      .toLowerCase();
+    const privateObjectRequested = visibility === "private";
+
     // Structured gallery path when year + album provided → discoverable by reindex.
     let keyPrefix = category;
     if (
@@ -519,6 +528,10 @@ async function handleMedia({
       } else {
         keyPrefix = `funfest/${year}/${album}/${personSeg}`.replace(/\/+$/, "");
       }
+    }
+
+    if (privateObjectRequested && !keyPrefix.startsWith("private/") && !keyPrefix.startsWith("funfest/")) {
+      keyPrefix = `private/${keyPrefix}`;
     }
 
     const key = `${keyPrefix}/${Date.now()}-${originalName}`;

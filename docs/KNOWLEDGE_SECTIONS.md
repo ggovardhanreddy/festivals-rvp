@@ -5,9 +5,7 @@ The site's knowledge section. Replaces the education/learning concept entirely.
 - **/dharma/** — Sanatana Dharma, the Vedas, the Upanishads, the Gita (18
   chapter pages), Ramayanam, Mahabharatam, the Puranas, slokas and devotional
   music
-- **/telugu-culture/** — literature, poetry, stories, spiritual literature, Sri Sri
-- **/spiritual-heritage/** — Reddivaripalli's own: Sri Ramalayam, the jatharas,
-  local bhajans, elders' memories
+- **/telugu-culture/** — literature, poetry, stories, Sri Sri
 - **/government/** — the existing official citizen-services directory, unchanged
 
 Two kinds of content live here, and they have opposite trust properties:

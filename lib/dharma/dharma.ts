@@ -36,7 +36,7 @@ export const SANATANA_DHARMA: KnowledgeEntry = {
   sources: [TTD_EBOOKS, ANDHRA_BHARATI],
   related: [
     { href: "/dharma/knowledge/", label: "Dharma & Spiritual Knowledge" },
-    { href: "/spiritual-heritage/", label: "Reddivaripalli's own temple heritage" },
+    { href: "/about/", label: "Our Village" },
   ],
 };
 

@@ -244,7 +244,7 @@
     ]
   },
   "landmarks": {
-    "title": "Village Landmarks",
+    "title": "Important Places",
     "lede": "Reddivaripalli is blessed with several important landmarks that represent its history, development, and community spirit.",
     "items": [
       {
@@ -278,6 +278,28 @@
       {
         "name": "Village Playground",
         "note": "A place where children and youth participate in sports, games, and recreational activities — especially during village festivals and annual events."
+      }
+    ]
+  },
+  "nearby": {
+    "title": "Location & Nearby Places",
+    "lede": "Reddivaripalli stands in Sambepalle Mandal, with Devapatla as its post village, in Annamayya / YSR Kadapa District of Andhra Pradesh.",
+    "items": [
+      {
+        "name": "Devapatla",
+        "note": "The post village (P) for Reddivaripalli, and home of Sri Devapatlamma — closely tied to the village through faith and family."
+      },
+      {
+        "name": "Sambepalle (Sambepalli)",
+        "note": "Mandal headquarters for administration, schools and local government offices."
+      },
+      {
+        "name": "Annamayya / YSR Kadapa District",
+        "note": "The district that holds Reddivaripalli — PIN 516215, Andhra Pradesh."
+      },
+      {
+        "name": "Sri Ramalayam",
+        "note": "The village temple at the heart of Reddivaripalli, where families gather for Sri Rama Navami and daily prayers."
       }
     ]
   },

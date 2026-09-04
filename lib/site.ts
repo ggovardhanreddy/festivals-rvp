@@ -17,17 +17,16 @@ export const ADMIN_NAME = "Govardhan Reddy";
 export const OFFICIAL_TITLE = "Reddivaripalli Gram Panchayat";
 export const OFFICIAL_SUBTITLE = "Official Digital Identity";
 export const OFFICIAL_MISSION =
-  "The living digital home of Reddivaripalli — preserving festivals, people, projects, and history for generations.";
+  "A digital home preserving the history, people, traditions, festivals, memories and development of Reddivaripalli for present and future generations.";
 /** Brand pillars from the village lockup */
-export const SITE_TAGLINE_PILLARS = "Heritage · Community · Progress";
+export const SITE_TAGLINE_PILLARS = "Our Village. Our Heritage. Our Home.";
 /** Primary brand line */
-export const SITE_TAGLINE = "Where Every Celebration Becomes a Legacy.";
-export const SITE_TAGLINE_HERITAGE = "Our Village. Our Heritage. Our Memories.";
+export const SITE_TAGLINE = "Our Village. Our Heritage. Our Home.";
+export const SITE_TAGLINE_HERITAGE = "Our Village. Our Heritage. Our Home.";
 export const SITE_TAGLINE_TOGETHER = "Together We Celebrate. Together We Remember.";
 export const SITE_TAGLINE_TOMORROW = "From Traditions to Tomorrow.";
 /** Landing hero line */
-export const SITE_TAGLINE_LANDING =
-  "Celebrating Every Moment. Preserving Every Memory.";
+export const SITE_TAGLINE_LANDING = "Our Village. Our Heritage. Our Home.";
 /** Brand lines shown on the cinematic landing before Explore */
 export const LANDING_BRAND_TAGLINES = [
   SITE_TAGLINE,
@@ -76,14 +75,14 @@ export const VILLAGE_ADDRESS_LINE = [
   VILLAGE_ADDRESS.state,
 ].join(", ");
 
-export const SEO_TITLE = "Reddivaripalli | Heritage \u00b7 Community \u00b7 Progress";
+export const SEO_TITLE = "Reddivaripalli \u2014 Our Village. Our Heritage. Our Home.";
 
 /**
  * Homepage description. The first sentence is the promise; the locality tail
  * stays because it is what local search actually matches on.
  */
 export const SEO_DESCRIPTION =
-  "Discover Reddivaripalli \u2014 its heritage, people, traditions, events, memories and village development. Reddivaripalli (Kondreddigaripalli) Gram Panchayat, Sambepalle Mandal, Annamayya / YSR Kadapa, Andhra Pradesh 516215.";
+  "A digital home preserving the history, people, traditions, festivals, memories and development of Reddivaripalli for present and future generations. Reddivaripalli (Kondreddigaripalli) Gram Panchayat, Sambepalle Mandal, Annamayya / YSR Kadapa, Andhra Pradesh 516215.";
 
 /** Public contact inbox — override with NEXT_PUBLIC_CONTACT_EMAIL at build time. */
 export const SITE_CONTACT_EMAIL =
@@ -118,10 +117,12 @@ export const SEO_KEYWORDS = [
   "Ugadi",
   "Deepavali",
   "Dasara",
-  "Heritage Archive",
-  "Our Heritage",
   "Vana Pandaga",
-  "Village Directory",
+  "Reddivaripalli village",
+  "Reddivaripalli history",
+  "Reddivaripalli temples",
+  "Reddivaripalli festivals",
+  "Reddivaripalli photos",
 ] as const;
 
 /** Google Maps — Ramalayam, Kondreddigaripalli */
@@ -148,29 +149,24 @@ export const VILLAGE_COORDS = {
 export const NAV = [
   { href: "/", label: "Home" },
   { href: "/about/", label: "Our Village" },
-  { href: "/members/", label: "People" },
-  { href: "/events/", label: "Events" },
-  { href: "/developments/", label: "Developments" },
+  { href: "/people/", label: "People" },
+  { href: "/temples/", label: "Temples & Festivals" },
+  { href: "/developments/", label: "Development" },
   { href: "/gallery/", label: "Gallery" },
-  { href: "/dharma/", label: "Sanatana Dharma" },
-  { href: "/telugu-culture/", label: "Telugu Culture" },
-  { href: "/government/", label: "Government" },
+  { href: "/contact/", label: "Contact" },
 ] as const;
 
 /**
  * Secondary destinations, shown under "More" in the header and drawer.
- * Fun Fest stays here; SiteHeader applies member-auth gating for /fun-trips/.
+ * Fun Fest is a private member gallery — it is not part of the public village
+ * identity and is reachable only by direct URL after sign-in.
  */
 export const MORE_NAV = [
-  { href: "/spiritual-heritage/", label: "Temple Heritage" },
-  { href: "/heritage/", label: "Heritage Archive" },
-  { href: "/timeline/", label: "Timeline" },
-  { href: "/directory/", label: "Directory" },
-  { href: "/fun-trips/", label: "Fun Fest" },
+  { href: "/stories/", label: "Village Stories" },
+  { href: "/government/", label: "Government" },
   { href: "/suggestions/", label: "Suggestions" },
-  { href: "/contact/", label: "Contact" },
-  { href: "/services/", label: "Village Services" },
-  { href: "/emergency/", label: "Emergency Information" },
+  { href: "/weather/", label: "Weather" },
+  { href: "/safety/", label: "Safety" },
 ] as const;
 
 /**
@@ -191,7 +187,7 @@ export const DHARMA_NAV = [
   { href: "/dharma/slokas/", label: "Slokas & Mantras", labelTe: "శ్లోకాలు & మంత్రాలు" },
   { href: "/dharma/music/", label: "Devotional Music", labelTe: "భక్తి సంగీతం" },
   { href: "/dharma/knowledge/", label: "Dharma & Spiritual Knowledge", labelTe: "ధర్మం & ఆధ్యాత్మిక జ్ఞానం" },
-  { href: "/events/", label: "Festivals & Traditions", labelTe: "పండుగలు & సంప్రదాయాలు" },
+  { href: "/temples/", label: "Festivals & Traditions", labelTe: "పండుగలు & సంప్రదాయాలు" },
 ] as const;
 
 export const CULTURE_NAV = [
@@ -199,13 +195,11 @@ export const CULTURE_NAV = [
   { href: "/telugu-culture/literature/", label: "Telugu Literature", labelTe: "తెలుగు సాహిత్యం" },
   { href: "/telugu-culture/poetry/", label: "Telugu Poetry", labelTe: "తెలుగు కవిత్వం" },
   { href: "/telugu-culture/stories/", label: "Telugu Stories", labelTe: "తెలుగు కథలు" },
-  { href: "/telugu-culture/spiritual/", label: "Telugu Spiritual Literature", labelTe: "తెలుగు ఆధ్యాత్మిక సాహిత్యం" },
   { href: "/telugu-culture/sri-sri/", label: "Sri Sri", labelTe: "శ్రీశ్రీ" },
 ] as const;
 
 export const HERITAGE_NAV = [
   { href: "/about/", label: "Village History", labelTe: "గ్రామ చరిత్ర" },
-  { href: "/spiritual-heritage/", label: "Temple Heritage", labelTe: "ఆలయ వారసత్వం" },
   { href: "/heritage/", label: "Heritage Archive", labelTe: "వారసత్వ సేకరణ" },
   { href: "/gallery/", label: "Old Photos & Videos", labelTe: "పాత ఫోటోలు & వీడియోలు" },
   { href: "/timeline/", label: "Timeline", labelTe: "కాలరేఖ" },
@@ -217,30 +211,21 @@ export const HERITAGE_NAV = [
  */
 export const COMMUNITY_NAV = MORE_NAV;
 
+/** Festival chapter paths — treated as Temples & Festivals in the header. */
+export const FESTIVAL_NAV_PREFIXES = CULTURE_FESTIVALS.map((f) => `/${f.slug}/`);
+
 /**
- * Footer column: community pages.
- *
- * Fun Fest is deliberately absent. It is member-gated and noindex — a visitor
- * who follows it from the footer gets a login dialog, and a search engine that
- * follows it gets a page we asked it not to index. It stays in the More menu,
- * where the people who have an account will look for it.
+ * Footer column: community pages kept off the primary row.
  */
 export const FOOTER_COMMUNITY = [
-  { href: "/directory/", label: "Directory" },
-  { href: "/heritage/", label: "Heritage Archive" },
-  { href: "/timeline/", label: "Timeline" },
+  { href: "/stories/", label: "Village Stories" },
   { href: "/suggestions/", label: "Suggestions" },
-  { href: "/contact/", label: "Contact" },
 ] as const;
 
-/** Footer column: the knowledge section and everyday services. */
+/** Footer column: everyday services, not the village identity. */
 export const FOOTER_SERVICES = [
-  { href: "/dharma/", label: "Sanatana Dharma" },
-  { href: "/telugu-culture/", label: "Telugu Culture" },
-  { href: "/spiritual-heritage/", label: "Temple Heritage" },
-  { href: "/government/", label: "Government Resources" },
-  { href: "/services/", label: "Village Services" },
-  { href: "/emergency/", label: "Emergency Information" },
+  { href: "/government/", label: "Government" },
+  { href: "/weather/", label: "Weather" },
 ] as const;
 
 /** Footer column: legal. The disclaimer is a section of the Terms page. */
@@ -255,32 +240,26 @@ export const HOME_QUICK_LINKS = NAV.slice(1);
 
 /** Short village description used on the homepage and in the footer. */
 export const VILLAGE_SHORT_DESCRIPTION =
-  "Reddivaripalli is a historic village in Andhra Pradesh, known for its temples, agriculture, festivals and the community traditions that have held families together across generations.";
+  "A digital home preserving the history, people, traditions, festivals, memories and development of Reddivaripalli for present and future generations.";
+
+/** Footer dedication line. */
+export const FOOTER_PRESERVE =
+  "Preserving Our Village for Future Generations";
 
 /**
- * Optional photographic backdrop for the homepage hero.
- *
- * `null` today, deliberately: the only wide image in the project is a
- * watermarked satellite screenshot, and inventing a village photograph is not
- * an option. The hero renders its approved badge treatment while this is null.
- *
- * To switch it on, drop a genuine photograph into public/brand/ and set this
- * to its path — for example "/brand/village-photo.webp". Everything else is
- * already in place: the image is full-bleed and object-fit: cover at every
- * breakpoint, a scrim keeps the heading above 4.5:1 over whatever the
- * photograph does, and it loads as the LCP candidate with fetchpriority high.
- * Supply roughly 2000px wide, landscape, with the subject slightly right of
- * centre so the badge on the left does not cover it.
+ * Photographic backdrop for the homepage hero — the village aerial already
+ * in public/brand/. A scrim keeps the heading readable over the photograph.
  */
-export const HOME_HERO_PHOTO: string | null = null;
+export const HOME_HERO_PHOTO: string | null = "/brand/village-aerial.webp";
 
 /** Alt text for HOME_HERO_PHOTO. Describe the actual photograph when set. */
-export const HOME_HERO_PHOTO_ALT = "";
+export const HOME_HERO_PHOTO_ALT =
+  "Aerial view of Reddivaripalli village — fields, houses and the temple at the heart of the settlement";
 
 /** Homepage identity lines. */
 export const HOME_HERO_TITLE = "REDDIVARIPALLI";
-export const HOME_HERO_PILLARS = SITE_TAGLINE_PILLARS;
-export const HOME_HERO_SUPPORT = "One Village · One Family · One Heritage";
+export const HOME_HERO_PILLARS = SITE_TAGLINE;
+export const HOME_HERO_SUPPORT = OFFICIAL_MISSION;
 
 export const BUCKETS = [
   ...CULTURE_FESTIVALS.map((f) => ({

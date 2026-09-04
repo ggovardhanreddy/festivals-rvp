@@ -149,7 +149,8 @@ export function validateUpload(
     category === "events" ||
     category === "birthdays" ||
     category === "members" ||
-    category === "developments";
+    category === "developments" ||
+    category === "families";
 
   if (!ext && !mime) {
     return {

@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
+import { HistoryTimeline } from "@/components/home/HistoryTimeline";
+import { VillageDepthMap } from "@/components/VillageDepthMap";
+import { buildHistoryTimeline } from "@/lib/timeline";
+import {
+  VILLAGE_MAPS_EMBED,
+  VILLAGE_MAPS_URL,
+} from "@/lib/site";
 import {
   loadVillageHeritage,
   villageHeritageAddressLine,
@@ -9,16 +16,10 @@ const heritage = loadVillageHeritage();
 
 const TOC = [
   { id: "about", label: "About Reddivaripalli" },
-  { id: "origins", label: "Origins" },
-  { id: "history", label: "Village History" },
-  { id: "temples", label: "Temples & Spiritual Heritage" },
-  { id: "culture", label: "Culture & Traditions" },
+  { id: "history", label: "History" },
+  { id: "map", label: "Village Map" },
   { id: "agriculture", label: "Agriculture" },
-  { id: "notable", label: "Notable People" },
-  { id: "development", label: "Development Journey" },
-  { id: "heritage-gallery", label: "Image Gallery" },
-  { id: "memorial", label: "In Loving Memory" },
-  { id: "vision", label: "Vision" },
+  { id: "places", label: "Important Places" },
 ] as const;
 
 export function VillageHeritageStory() {
@@ -30,35 +31,26 @@ export function VillageHeritageStory() {
         <div className="section-head">
           <div>
             <p className="eyebrow">{heritage.eyebrow}</p>
-            <h2 className="village-heritage-story-title">{heritage.title}</h2>
-            <p className="lede">{heritage.lede}</p>
-            <p className="village-heritage-tagline">{heritage.tagline}</p>
+            <h2 className="village-heritage-story-title">About Reddivaripalli</h2>
+            <p className="lede">{heritage.about.paragraphs[0]}</p>
             <p className="muted">{addressLine}</p>
             <div className="btn-row village-heritage-maps">
+              <a className="btn" href="#history">
+                Read the full history
+              </a>
               <a
-                className="btn"
+                className="btn ghost"
                 href={heritage.maps.heritage}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Open village map
               </a>
-              <a
-                className="btn ghost"
-                href={heritage.maps.ramalayam}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Open Ramalayam map
-              </a>
-              <Link className="btn ghost" href="/heritage/">
-                Heritage Archive
-              </Link>
             </div>
           </div>
         </div>
 
-        <nav className="village-heritage-toc" aria-label="Heritage sections">
+        <nav className="village-heritage-toc" aria-label="Our Village">
           {TOC.map((item) => (
             <a key={item.id} href={`#${item.id}`}>
               {item.label}
@@ -86,14 +78,20 @@ export function VillageHeritageStory() {
         </div>
       </Reveal>
 
-      <Reveal className="section" id="origins">
+      <Reveal className="section" id="history">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Beginnings</p>
-            <h2>{heritage.origins.title}</h2>
+            <p className="eyebrow">Village record</p>
+            <h2>{heritage.history.title}</h2>
             <p className="lede">{heritage.origins.lede}</p>
+            <p className="muted">
+              This chronology is the written village record. Family memories
+              and oral stories are kept separately in{" "}
+              <Link href="/stories/">Village Stories</Link>.
+            </p>
           </div>
         </div>
+
         <ol className="village-heritage-timeline">
           {heritage.origins.timeline.map((item) => (
             <li key={item.year + item.title}>
@@ -105,95 +103,66 @@ export function VillageHeritageStory() {
             </li>
           ))}
         </ol>
-      </Reveal>
 
-      <Reveal className="section" id="history">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Story of the land</p>
-            <h2>{heritage.history.title}</h2>
-          </div>
-        </div>
         <div className="village-heritage-prose">
           {heritage.history.paragraphs.map((paragraph) => (
             <p key={paragraph.slice(0, 48)}>{paragraph}</p>
           ))}
         </div>
-        <div className="village-heritage-chips" aria-label="Traditions introduced">
+
+        <h3 className="village-heritage-subhead">Traditions of the village</h3>
+        <ul className="story-chip-list">
           {heritage.history.traditionsIntroduced.map((item) => (
-            <span key={item}>{item}</span>
+            <li key={item}>{item}</li>
           ))}
-        </div>
+        </ul>
+
+        <h3 className="village-heritage-subhead">Years that shaped us</h3>
+        <HistoryTimeline entries={buildHistoryTimeline(16)} />
       </Reveal>
 
-      <Reveal className="section" id="temples">
+      <Reveal className="section" id="map">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Faith</p>
-            <h2>Temples & Spiritual Heritage</h2>
-            <p className="lede">{heritage.temples.lede}</p>
+            <p className="eyebrow">Find us</p>
+            <h2>Village Map</h2>
+            <p className="lede">{heritage.nearby.lede}</p>
           </div>
         </div>
-        <p className="muted village-heritage-closing">
-          {heritage.temples.preservationIntro}
-        </p>
-        <div className="village-heritage-list-grid">
-          {heritage.temples.items.map((item) => (
+        <div className="village-map-embed">
+          <iframe
+            title="Map of Reddivaripalli"
+            src={VILLAGE_MAPS_EMBED}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+        <div className="btn-row" style={{ marginTop: "1rem" }}>
+          <a
+            className="btn"
+            href={VILLAGE_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open in Google Maps
+          </a>
+        </div>
+        <div className="village-heritage-list-grid" style={{ marginTop: "1.5rem" }}>
+          {heritage.nearby.items.map((item) => (
             <article key={item.name} className="village-heritage-panel">
               <h3>{item.name}</h3>
               <p className="muted">{item.note}</p>
             </article>
           ))}
         </div>
-      </Reveal>
-
-      <Reveal className="section" id="culture">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Living culture</p>
-            <h2>Culture & Traditions</h2>
-            <p className="lede">
-              Festivals, family values, gatherings, and the seasonal rhythm that
-              binds Reddivaripalli as one family.
-            </p>
-          </div>
-        </div>
-        <h3 className="village-heritage-subhead">{heritage.festivals.title}</h3>
-        <p className="lede muted">{heritage.festivals.lede}</p>
-        <div className="village-heritage-list-grid">
-          {heritage.festivals.items.map((item) => (
-            <article key={item.name} className="village-heritage-panel">
-              <h3>{item.name}</h3>
-              <p className="muted">{item.note}</p>
-            </article>
-          ))}
-        </div>
-        <h3 className="village-heritage-subhead">
-          {heritage.culturalEvents.title}
-        </h3>
-        <p className="lede muted">{heritage.culturalEvents.lede}</p>
-        <div className="village-heritage-list-grid">
-          {heritage.culturalEvents.items.map((item) => (
-            <article key={item.name} className="village-heritage-panel">
-              <h3>{item.name}</h3>
-              <p className="muted">{item.note}</p>
-            </article>
-          ))}
-        </div>
-        <div className="village-heritage-list-grid">
-          {heritage.landmarks.items.map((item) => (
-            <article key={item.name} className="village-heritage-panel">
-              <h3>{item.name}</h3>
-              <p className="muted">{item.note}</p>
-            </article>
-          ))}
-        </div>
+        <VillageDepthMap />
       </Reveal>
 
       <Reveal className="section" id="agriculture">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Livelihood</p>
+            <p className="eyebrow">The land</p>
             <h2>{heritage.agriculture.title}</h2>
             <p className="lede">{heritage.agriculture.lede}</p>
           </div>
@@ -215,159 +184,28 @@ export function VillageHeritageStory() {
         </p>
       </Reveal>
 
-      <Reveal className="section" id="notable">
+      <Reveal className="section" id="places">
         <div className="section-head">
           <div>
-            <p className="eyebrow">People of the village</p>
-            <h2>Notable People</h2>
-            <p className="lede">{heritage.professionals.lede}</p>
-          </div>
-        </div>
-        <div className="village-heritage-professionals">
-          {heritage.professionals.groups.map((group) => (
-            <article key={group.name} className="village-heritage-panel">
-              <h3>{group.name}</h3>
-              <ul>
-                {group.people.map((person) => (
-                  <li key={`${group.name}-${person.name}-${person.role}`}>
-                    <strong>{person.name}</strong>
-                    {person.role ? (
-                      <span className="muted"> — {person.role}</span>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-        <h3 className="village-heritage-subhead" id="farmers">
-          {heritage.farmers.title}
-        </h3>
-        <p className="lede muted">{heritage.farmers.lede}</p>
-        <ul className="village-heritage-name-cloud">
-          {heritage.farmers.names.map((name) => (
-            <li key={name}>{name}</li>
-          ))}
-        </ul>
-      </Reveal>
-
-      <Reveal className="section" id="development">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Progress</p>
-            <h2>{heritage.developmentJourney.title}</h2>
-            <p className="lede">{heritage.developmentJourney.lede}</p>
+            <p className="eyebrow">In and around the village</p>
+            <h2>{heritage.landmarks.title}</h2>
+            <p className="lede">{heritage.landmarks.lede}</p>
           </div>
         </div>
         <div className="village-heritage-list-grid">
-          {heritage.developmentJourney.milestones.map((item) => (
-            <article key={item.title} className="village-heritage-panel">
-              <h3>{item.title}</h3>
+          {heritage.landmarks.items.map((item) => (
+            <article key={item.name} className="village-heritage-panel">
+              <h3>{item.name}</h3>
               <p className="muted">{item.note}</p>
             </article>
           ))}
         </div>
         <div className="btn-row">
-          <Link className="btn" href="/developments/">
-            View developments
+          <Link className="btn ghost" href="/temples/">
+            Temples & Festivals
           </Link>
-        </div>
-      </Reveal>
-
-      <Reveal className="section" id="heritage-gallery">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Visual memory</p>
-            <h2>{heritage.gallery.title}</h2>
-            <p className="lede">{heritage.gallery.lede}</p>
-          </div>
-        </div>
-        <div className="village-heritage-list-grid">
-          {heritage.gallery.links.map((link) => (
-            <article key={link.href} className="village-heritage-panel">
-              <h3>{link.label}</h3>
-              <p className="muted">{link.note}</p>
-              <Link className="btn ghost" href={link.href}>
-                Open
-              </Link>
-            </article>
-          ))}
-        </div>
-      </Reveal>
-
-      <Reveal className="section village-heritage-memorial" id="memorial">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Remembrance</p>
-            <h2>{heritage.memorial.title}</h2>
-            <p className="lede">{heritage.memorial.lede}</p>
-          </div>
-        </div>
-        <div className="village-heritage-memorial-bios">
-          <article className="village-heritage-panel">
-            <h3>{heritage.memorial.founder.name}</h3>
-            <p className="eyebrow">{heritage.memorial.founder.role}</p>
-            <p className="muted">{heritage.memorial.founder.bio}</p>
-          </article>
-          <article className="village-heritage-panel">
-            <h3>{heritage.memorial.successor.name}</h3>
-            <p className="eyebrow">{heritage.memorial.successor.role}</p>
-            <p className="muted">{heritage.memorial.successor.bio}</p>
-          </article>
-        </div>
-        {heritage.memorial.legends?.length ? (
-          <>
-            <h3 className="village-heritage-forever-title">
-              {heritage.memorial.legendsTitle || "Legends"}
-            </h3>
-            {heritage.memorial.legendsLede ? (
-              <p className="village-heritage-memorial-list-lede">
-                {heritage.memorial.legendsLede}
-              </p>
-            ) : null}
-            <ul className="village-heritage-memorial-list village-heritage-memorial-list--legends">
-              {heritage.memorial.legends.map((name) => (
-                <li key={name}>{name}</li>
-              ))}
-            </ul>
-          </>
-        ) : null}
-        <div className="village-heritage-forever-block">
-          <h3 className="village-heritage-forever-title">
-            {heritage.memorial.foreverRememberedTitle}
-          </h3>
-          <ul className="village-heritage-memorial-list village-heritage-memorial-list--forever">
-            {heritage.memorial.foreverRemembered.map((name) => (
-              <li key={name}>{name}</li>
-            ))}
-          </ul>
-        </div>
-        <p className="village-heritage-memorial-closing">
-          {heritage.memorial.closing}
-        </p>
-      </Reveal>
-
-      <Reveal className="section" id="vision">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Dedication</p>
-            <h2>{heritage.vision.title}</h2>
-          </div>
-        </div>
-        <div className="village-heritage-prose">
-          {heritage.vision.paragraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-          ))}
-        </div>
-        <p className="village-heritage-tagline village-heritage-tagline--end">
-          {heritage.tagline}
-        </p>
-        <div className="btn-row">
-          <Link className="btn" href="/heritage/">
-            Explore Heritage Archive
-          </Link>
-          <Link className="btn ghost" href="/contact/">
-            Contact
+          <Link className="btn ghost" href="/stories/">
+            Village stories
           </Link>
         </div>
       </Reveal>

@@ -15,6 +15,7 @@ export const R2_CATEGORIES = [
   "videos",
   "audio",
   "documents",
+  "families",
 ] as const;
 
 export type R2Category = (typeof R2_CATEGORIES)[number];
@@ -196,6 +197,9 @@ export function isPrivateR2Key(key: string): boolean {
     key.includes("/funfest/") ||
     key.includes("fun-trips/") ||
     key.startsWith("documents/") ||
+    key.startsWith("originals/") ||
+    key.includes("/originals/") ||
+    key.startsWith("private/") ||
     key.includes("/private/")
   );
 }
