@@ -4,6 +4,11 @@ import { publicAlbums, years } from "../lib/content";
 import { BUCKETS, albumHref, OFFICIAL_TITLE } from "../lib/site";
 import { buildSearchIndex } from "./build-search-index";
 import { indexableRoutes } from "../lib/routes/registry";
+import {
+  loadVillageFamilies,
+  publishedFamilies,
+} from "../lib/families/catalog";
+import { familyPersonParams } from "../lib/family-trees";
 
 const root = process.cwd();
 const url =
@@ -49,7 +54,29 @@ const routes = [
   ...live
     .filter((album) => album.bucket !== "fun-trips")
     .map((album) => albumHref(album).replace(/^\/|\/$/g, "")),
+  // Family trees and the people in them. These are the pages someone
+  // searching for a relative's name is trying to reach, and they were the
+  // largest omission from the sitemap: 14 family pages and every person page
+  // were built and linked but never listed. Only published families are
+  // included -- the sitemap must never advertise a page the export withheld.
+  ...familySitemapRoutes(),
 ];
+
+/**
+ * Family and person routes, derived from the same catalogue the pages are
+ * generated from so the two cannot drift.
+ */
+function familySitemapRoutes(): string[] {
+  const families = publishedFamilies(loadVillageFamilies());
+  const bySlug = new Map(families.map((family) => [family.id, family.slug]));
+  const routes: string[] = families.map((family) => `families/${family.slug}`);
+  for (const { familyId, personId } of familyPersonParams()) {
+    const slug = bySlug.get(familyId);
+    if (!slug) continue; // unpublished family: no page was built
+    routes.push(`families/${slug}/${personId}`);
+  }
+  return routes;
+}
 
 const shard = buildSearchIndex();
 fs.writeFileSync(

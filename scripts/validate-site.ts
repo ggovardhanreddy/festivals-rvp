@@ -50,6 +50,43 @@ function checkMembers() {
   }
 }
 
+/**
+ * The sitemap must never advertise a page the export did not build.
+ *
+ * A 404 in a sitemap is worse than an omission: it is a URL submitted to
+ * search engines that resolves to nothing. Checked against out/ rather than
+ * against the route list, so a page that failed to generate is caught even
+ * when its route is still registered.
+ */
+function checkSitemap() {
+  if (!exists("out")) return; // pre-build run; nothing to compare against yet
+  const rel = "public/sitemap.xml";
+  if (!exists(rel)) {
+    errors.push(`Missing ${rel} — run npm run sync`);
+    return;
+  }
+  const xml = fs.readFileSync(path.join(root, rel), "utf8");
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]!);
+  if (!locs.length) {
+    errors.push("sitemap.xml contains no <loc> entries");
+    return;
+  }
+  let missing = 0;
+  for (const loc of locs) {
+    const route = loc.replace(/^https?:\/\/[^/]+/, "").replace(/^\/|\/$/g, "");
+    const file = route
+      ? path.join(root, "out", route, "index.html")
+      : path.join(root, "out", "index.html");
+    if (!fs.existsSync(file)) {
+      missing += 1;
+      if (missing <= 5) errors.push(`sitemap advertises a page that was not built: /${route}/`);
+    }
+  }
+  if (missing > 5) {
+    errors.push(`…and ${missing - 5} more sitemap entries with no built page.`);
+  }
+}
+
 function checkGenerated() {
   if (!exists("generated/albums.json")) {
     errors.push("Missing generated/albums.json — run npm run sync");
@@ -142,6 +179,7 @@ function main() {
   console.log("Running site validation…");
   checkGenerated();
   checkMembers();
+  checkSitemap();
   checkPublicAssets();
   checkContentLayout();
   if (!errors.some((e) => e.includes("generated/albums.json"))) {
