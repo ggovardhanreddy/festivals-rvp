@@ -261,7 +261,16 @@ export type SuggestionCategory =
   | "Agriculture"
   | "Other";
 
-export type SuggestionStatus = "draft" | "approved" | "archived";
+/**
+ * "pending" is what the API assigns to a suggestion sent by anyone who is not
+ * an admin. Only "approved" rows are served publicly, so a submission waits for
+ * a person to read it rather than appearing the instant it is posted.
+ */
+export type SuggestionStatus =
+  | "pending"
+  | "draft"
+  | "approved"
+  | "archived";
 
 export type Suggestion = {
   id: string;

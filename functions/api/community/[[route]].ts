@@ -56,7 +56,16 @@ const COLLECTIONS = new Set([
   "media-protection",
 ]);
 
-const APPROVAL_COLLECTIONS = new Set(["lost-found", "heritage"]);
+/**
+ * Collections anyone may write to, where a submission is held until an admin
+ * approves it. A POST from a non-admin lands as "pending" and only approved
+ * rows are served publicly.
+ *
+ * Suggestions belong here. They were public-writable AND public-readable with
+ * no status filter, so an unmoderated submission -- with whatever the sender
+ * typed into it -- was served to every visitor the moment it was posted.
+ */
+const APPROVAL_COLLECTIONS = new Set(["lost-found", "heritage", "suggestions"]);
 
 /**
  * Collections that require Super Admin to READ.
@@ -100,6 +109,11 @@ const PUBLIC_REDACTED_FIELDS: Record<string, string[]> = {
   // none of them today; this makes sure that stays true the first time one is
   // entered, rather than depending on nobody filling the field in.
   members: ["phone", "email", "bloodGroup", "address"],
+  // A suggestion carries the sender's name and mobile number so the admin can
+  // follow it up. Neither is anyone else's business: the public list shows the
+  // suggestion, not a way to phone whoever sent it.
+  suggestions: ["mobile", "email", "submittedBy"],
+  "lost-found": ["phone", "email"],
 };
 
 function redactForPublic(

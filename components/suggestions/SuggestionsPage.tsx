@@ -52,6 +52,9 @@ export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
     );
   }, [items, session]);
 
+  // The API now serves only approved rows to a non-admin, so this is a second
+  // line rather than the only one. Keeping it means an admin viewing the page
+  // still sees the public list as a visitor would.
   const publicApproved = useMemo(
     () => items.filter((s) => s.status === "approved"),
     [items],
@@ -68,7 +71,9 @@ export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
       subject: subject.trim(),
       suggestion: suggestion.trim(),
       category,
-      status: "draft",
+      // The API assigns "pending" for a non-admin sender; this is the value
+      // only an admin's own submission keeps.
+      status: "pending",
       submittedAt: new Date().toISOString(),
       submittedBy: session?.memberId,
     };
@@ -105,7 +110,10 @@ export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
 
         {submitted ? (
           <div className="suggestions-success" role="status">
-            Thank you — your suggestion has been saved.
+            Thank you — your suggestion has been sent. It appears on this page
+            once someone from the village has read it. Your name and mobile
+            number are shown only to the administrators, never on the public
+            list.
           </div>
         ) : null}
 

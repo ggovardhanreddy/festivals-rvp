@@ -38,6 +38,8 @@ import type {
   LostFoundItem,
   PanchayatDocument,
   SiteSettings,
+  Suggestion,
+  SuggestionStatus,
 } from "@/lib/types";
 import { RequireAdmin, useAdminSession } from "@/components/auth/RequireAdmin";
 import { AdminLoginForm } from "@/components/auth/AdminLoginForm";
@@ -250,6 +252,11 @@ function ApprovalsManager() {
   const heritage = useCommunityList<HeritageItem>("heritage", hSeed, {
     admin: true,
   });
+  // admin: true so the queue sees pending rows -- the public GET only returns
+  // approved ones now.
+  const suggestions = useCommunityList<Suggestion>("suggestions", [], {
+    admin: true,
+  });
 
   return (
     <div className="admin-approvals">
@@ -294,6 +301,37 @@ function ApprovalsManager() {
             />
           </article>
         ))}
+      </section>
+      <section>
+        <h3>Suggestions</h3>
+        <p className="muted">
+          A suggestion from a visitor waits here until it is approved. The
+          sender&rsquo;s name and mobile number are visible to you and are never
+          served to the public site.
+        </p>
+        {suggestions.raw.map((item) => (
+          <article key={item.id} className="glass-card admin-manage-card">
+            <strong>{item.subject}</strong>
+            <p className="muted">
+              {item.category}
+              {item.name ? ` · ${item.name}` : ""}
+              {item.mobile ? ` · ${item.mobile}` : ""}
+            </p>
+            <p>{item.suggestion}</p>
+            <StatusButtons
+              status={(item.status === "approved" ? "approved" : "pending") as ApprovalStatus}
+              onChange={(status) => {
+                const next = suggestions.raw.map((i) =>
+                  i.id === item.id
+                    ? { ...i, status: (status === "approved" ? "approved" : status === "rejected" ? "archived" : "pending") as SuggestionStatus }
+                    : i,
+                );
+                void suggestions.saveAll(next);
+              }}
+            />
+          </article>
+        ))}
+        {!suggestions.raw.length ? <p className="muted">No submissions.</p> : null}
       </section>
       <p className="muted">
         Categories reference: Lost/Found ({LOST_FOUND_CATEGORIES.length}),
