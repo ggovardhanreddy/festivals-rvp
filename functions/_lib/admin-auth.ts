@@ -58,7 +58,16 @@ function decodePayload(value: string): {
   }
 }
 
-function extractToken(request: Request): string | null {
+/**
+ * The admin token from the cookie or an Authorization header, if one arrived.
+ *
+ * Exported so /api/admin/session can distinguish "no session cookie reached
+ * the server" from "a cookie arrived but did not verify". Those two look
+ * identical to the user -- both say Sign in required -- but have completely
+ * different causes: the first is the cookie not being stored or sent, the
+ * second is an expired token or a rotated signing key.
+ */
+export function extractToken(request: Request): string | null {
   const auth = request.headers.get("authorization") || "";
   const bearer = auth.match(/^Bearer\s+(.+)$/i);
   if (bearer?.[1]) return bearer[1].trim();

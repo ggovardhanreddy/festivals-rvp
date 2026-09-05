@@ -2,6 +2,7 @@ import {
   adminCorsHeaders,
   base64url,
   expectedAdminUsername,
+  extractToken,
   mintAdminToken,
   resolveAdminSession,
 } from "../../_lib/admin-auth";
@@ -69,12 +70,29 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
 
   if ((route === "session" || url.pathname.endsWith("/session")) && request.method === "GET") {
     const session = await resolveAdminSession(request, env);
+    // Why the session was refused. "Sign in required" is the same screen for
+    // three unrelated faults -- the server having no signing key, the cookie
+    // never reaching us, and a token that no longer verifies -- and telling
+    // them apart from the outside is otherwise guesswork. No secret value is
+    // exposed here, only whether one is configured.
+    const configured = Boolean(env.ADMIN_SESSION_SECRET && env.ADMIN_PASSWORD_HASH);
+    const cookiePresent = Boolean(extractToken(request));
+    const reason = session
+      ? null
+      : !configured
+        ? "server-not-configured"
+        : !cookiePresent
+          ? "no-session-cookie"
+          : "session-invalid-or-expired";
     return new Response(
       JSON.stringify({
         ok: Boolean(session),
         role: session ? "super-admin" : "guest",
         username: session ? session.username || expectedAdminUsername(env) : null,
         expiresAt: session?.exp ?? null,
+        configured,
+        cookiePresent,
+        reason,
       }),
       {
         headers: { ...headers, "content-type": "application/json" },
