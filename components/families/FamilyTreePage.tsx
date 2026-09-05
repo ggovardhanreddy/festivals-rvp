@@ -4,8 +4,9 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { PeopleNav } from "@/components/people/PeopleNav";
 import { FamilyTreeView } from "./FamilyTreeView";
-import { applyPersonPhotos, findFamily } from "@/lib/family-trees";
+import { applyPersonPhotos } from "@/lib/family-trees";
 import { useFamilyTreeOverlay } from "@/lib/family-trees/overlay";
+import { splitIntoBranches } from "@/lib/family-trees/branches";
 import {
   applyFamilyAssignments,
   findVillageFamily,
@@ -56,12 +57,11 @@ export function FamilyTreePage({
 
   if (!family || !family.isPublished) return null;
 
-  const treeFamily = findFamily(family.id) ?? {
-    id: family.id,
-    name: family.name,
-    rootPersonIds: [],
-  };
   const treePeople = peopleForFamily(people, family.id);
+  // One page can hold several unrelated families that merely share a surname.
+  // Drawing them on a single canvas is what made "Devapatla" look like one
+  // family, so each independent branch gets its own tree and its own heading.
+  const branches = splitIntoBranches(treePeople, tree.relationships);
 
   return (
     <div className="family-tree-page">
@@ -78,13 +78,40 @@ export function FamilyTreePage({
         <h1>{family.name}</h1>
       </header>
 
-      <FamilyTreeView
-        family={treeFamily}
-        people={treePeople}
-        relationships={tree.relationships}
-        focusId={focusId}
-        unpublishedIds={tree.unpublishedIds}
-      />
+      {branches.length > 1 ? (
+        <p className="ft-branch-note">
+          This page holds {branches.length} separate families that share a
+          surname. They are shown as {branches.length} independent trees and are
+          never joined &mdash; two people appear in the same tree only where a
+          recorded parent, child or marriage connects them.
+        </p>
+      ) : null}
+
+      {branches.map((branch) => (
+        <section className="ft-branch" key={branch.id}>
+          <header className="ft-branch-head">
+            <h2>{branch.title}</h2>
+            <p className="muted">
+              {branch.people.length}
+              {branch.people.length === 1 ? " person" : " people"}
+              {" \u00b7 "}
+              {branch.generations}
+              {branch.generations === 1 ? " generation" : " generations"}
+            </p>
+          </header>
+          <FamilyTreeView
+            family={{
+              id: branch.id,
+              name: branch.title,
+              rootPersonIds: branch.rootPersonIds,
+            }}
+            people={branch.people}
+            relationships={branch.relationships}
+            focusId={focusId}
+            unpublishedIds={tree.unpublishedIds}
+          />
+        </section>
+      ))}
     </div>
   );
 }

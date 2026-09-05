@@ -18,8 +18,11 @@ import {
   treeNodeStatus,
 } from "@/lib/family-trees";
 import type { Family, Person, Relationship } from "@/lib/family-trees/types";
+import { isPlaceholderName, personDisplayName } from "@/lib/family-trees/branches";
 
 const MIN_SCALE = 0.22;
+/** Fit-to-screen will not go below this: smaller and the names are unreadable. */
+const READABLE_MIN_SCALE = 0.45;
 const MAX_SCALE = 1.6;
 
 function clamp(value: number, min: number, max: number) {
@@ -108,12 +111,15 @@ export function FamilyTreeView({
       setScale(1);
       return;
     }
+    // Fit the whole tree, but never below the point where names stop being
+    // readable (§17). A large family is meant to be panned, not squinted at,
+    // so past this floor the viewport scrolls instead of shrinking further.
     const next = clamp(
       Math.min(
         (viewport.clientWidth - 24) / layout.width,
         (viewport.clientHeight - 24) / layout.height,
       ),
-      MIN_SCALE,
+      READABLE_MIN_SCALE,
       1,
     );
     pendingScroll.current = { left: 0, top: 0 };
@@ -346,7 +352,9 @@ export function FamilyTreeView({
                     )}
                   </span>
                   <span className="ft-node-body">
-                    <strong>{person.fullName}</strong>
+                    <strong data-unnamed={isPlaceholderName(person.fullName) || undefined}>
+                      {personDisplayName(person)}
+                    </strong>
                     {labels.length ? (
                       labels.map((label) => <span key={label}>{label}</span>)
                     ) : null}
@@ -365,7 +373,7 @@ export function FamilyTreeView({
           aria-labelledby="ft-person-panel-title"
         >
           <div className="ft-person-panel-head">
-            <h3 id="ft-person-panel-title">{selected.fullName}</h3>
+            <h3 id="ft-person-panel-title">{personDisplayName(selected)}</h3>
             <button
               type="button"
               className="filter-chip"

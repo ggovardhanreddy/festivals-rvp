@@ -136,16 +136,24 @@ export function displayStatus(person: Person): string[] {
   return labels;
 }
 
-/** Compact labels for genealogy nodes: name already shown; status only. */
+/**
+ * Card labels for a genealogy node: status first, then occupation.
+ *
+ * The name is rendered separately, so this is everything under it. Occupation
+ * belongs on the card because a person is easier to recognise as "Married /
+ * Employee" than by name alone, and a tree of similar names is exactly where
+ * that matters.
+ */
 export function treeNodeStatus(person: Person, ambiguous = false): string[] {
   const labels: string[] = [];
   const adapaduchu = adapaduchuLabel(person);
   if (adapaduchu) labels.push(adapaduchu);
   else if (person.deceased) labels.push("Deceased");
   else if (person.married) labels.push("Married");
+  if (person.occupation) labels.push(person.occupation);
   if (ambiguous || person.verificationStatus === "needs-verification") {
     labels.push("Needs Verification");
-  } else if (person.verificationStatus === "incomplete") {
+  } else if (person.verificationStatus === "incomplete" && !labels.length) {
     labels.push("Information not yet provided");
   }
   return labels;

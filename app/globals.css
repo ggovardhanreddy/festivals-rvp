@@ -14416,3 +14416,64 @@ a.dharma-division-link:focus-visible {
 .ft-admin-bulk {
   margin-top: 0.8rem;
 }
+
+/* ── Family tree: one page, several independent families ──────────────────
+   A surname page can hold branches that are not related to one another. They
+   are drawn as separate trees rather than one canvas, so the separation is
+   visible rather than merely true in the data. */
+
+.ft-branch-note {
+  margin: 0.75rem 0 1.5rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-line);
+  border-left: 3px solid var(--color-gold, #c4a35a);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-gold, #c4a35a) 7%, transparent);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.ft-branch {
+  margin: 0 0 2.75rem;
+}
+
+.ft-branch + .ft-branch {
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.ft-branch-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.ft-branch-head h2 {
+  margin: 0;
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  line-height: 1.25;
+}
+
+.ft-branch-head p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* A name the source never supplied. Shown as "Name Not Available" rather than
+   invented, and set apart so it reads as a gap in the record, not a person. */
+.ft-node-body strong[data-unnamed] {
+  font-style: italic;
+  opacity: 0.72;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .ft-branch {
+    margin-bottom: 2rem;
+  }
+  .ft-branch + .ft-branch {
+    padding-top: 1.5rem;
+  }
+}
