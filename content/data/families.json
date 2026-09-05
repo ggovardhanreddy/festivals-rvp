@@ -75,7 +75,7 @@
     "id": "KOMMEPALLI",
     "name": "Kommepalli Family",
     "slug": "kommepalli",
-    "description": "The Kommepalli family of Reddivaripalli. People can be assigned to this branch by an administrator.",
+    "description": "The Kommepalli family of Reddivaripalli. This is a separate family from the Kunchapu Family.",
     "displayOrder": 7,
     "coverPhoto": null,
     "history": "Information not yet provided.",
@@ -87,7 +87,7 @@
     "id": "KUDUM",
     "name": "Kudum Family",
     "slug": "kudum",
-    "description": "The Kudum family of Reddivaripalli. People can be assigned to this branch by an administrator.",
+    "description": "The Kudum family of Reddivaripalli. This is a separate family from the Kunchapu Family.",
     "displayOrder": 8,
     "coverPhoto": null,
     "history": "Information not yet provided.",
@@ -111,7 +111,7 @@
     "id": "JAGILI",
     "name": "Jagili Family",
     "slug": "jagili",
-    "description": "The Jagili family of Reddivaripalli. This is a separate family from the Jagadam Family. People can be assigned to this branch by an administrator.",
+    "description": "The Jagili family of Reddivaripalli. This is a separate family from the Jagadam Family.",
     "displayOrder": 10,
     "coverPhoto": null,
     "history": "Information not yet provided.",
@@ -154,5 +154,17 @@
     "isPublished": true,
     "createdAt": "2026-09-04T00:00:00.000Z",
     "updatedAt": "2026-09-04T00:00:00.000Z"
+  },
+  {
+    "id": "GOUNIPALLI",
+    "name": "Gounipalli Family",
+    "slug": "gounipalli",
+    "description": "The Gounipalli family of Reddivaripalli.",
+    "displayOrder": 14,
+    "coverPhoto": null,
+    "history": "Information not yet provided.",
+    "isPublished": true,
+    "createdAt": "2026-09-05T00:00:00.000Z",
+    "updatedAt": "2026-09-05T00:00:00.000Z"
   }
 ]

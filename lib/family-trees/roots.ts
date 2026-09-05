@@ -11,14 +11,27 @@ export function deriveRoots(dataset: FamilyTreeDataset, familyId: string): strin
   const inFamily = dataset.people.filter((p) => p.familyId === familyId);
   const ids = new Set(inFamily.map((p) => p.id));
   const hasLocalParent = new Set<string>();
+  const spouses = new Map<string, string[]>();
   for (const rel of dataset.relationships) {
-    if (rel.relationshipType !== "parent") continue;
-    if (ids.has(rel.fromPersonId) && ids.has(rel.toPersonId)) {
+    if (!ids.has(rel.fromPersonId) || !ids.has(rel.toPersonId)) continue;
+    if (rel.relationshipType === "parent") {
       hasLocalParent.add(rel.fromPersonId);
+    }
+    if (rel.relationshipType === "spouse") {
+      const list = spouses.get(rel.fromPersonId) ?? [];
+      if (!list.includes(rel.toPersonId)) list.push(rel.toPersonId);
+      spouses.set(rel.fromPersonId, list);
     }
   }
   return inFamily
-    .filter((p) => !hasLocalParent.has(p.id))
+    .filter((p) => {
+      if (hasLocalParent.has(p.id)) return false;
+      const partners = spouses.get(p.id) ?? [];
+      // A spouse of someone who already has parents in this family is not a
+      // second root — they belong beside that person in the descent line.
+      if (partners.some((id) => hasLocalParent.has(id))) return false;
+      return true;
+    })
     .sort(
       (a, b) =>
         (a.displayOrder ?? 0) - (b.displayOrder ?? 0) ||

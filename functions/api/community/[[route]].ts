@@ -162,15 +162,30 @@ async function refreshStaleFamilyCatalog(
   items: Record<string, unknown>[],
 ): Promise<{ items: Record<string, unknown>[]; rewritten: boolean }> {
   const seed = COMMUNITY_SEEDS.families;
-  if (!seed?.length || !isLegacyFamilyCatalog(items)) {
-    return { items, rewritten: false };
+  if (!seed?.length) return { items, rewritten: false };
+
+  if (isLegacyFamilyCatalog(items)) {
+    try {
+      await writeStore(env, "families", { items: seed });
+    } catch {
+      /* still serve the current seed even if R2 write fails */
+    }
+    return { items: seed, rewritten: true };
   }
+
+  const have = new Set(items.map((item) => String(item.id ?? "")));
+  const missing = seed.filter((family) => family.id && !have.has(String(family.id)));
+  if (!missing.length) return { items, rewritten: false };
+
+  const next = [...items, ...missing].sort(
+    (a, b) => Number(a.displayOrder ?? 0) - Number(b.displayOrder ?? 0),
+  );
   try {
-    await writeStore(env, "families", { items: seed });
+    await writeStore(env, "families", { items: next });
   } catch {
-    /* still serve the current seed even if R2 write fails */
+    /* still serve the merged catalog even if R2 write fails */
   }
-  return { items: seed, rewritten: true };
+  return { items: next, rewritten: true };
 }
 
 async function audit(

@@ -280,6 +280,16 @@ describe("roots", () => {
     expect(deriveRoots(d, "ALPHA")).toContain(rootId);
     expect(byId(d, rootId).generation).toBe(1);
   });
+
+  it("does not promote a child's unnamed spouse into a second root", () => {
+    const { dataset, ids } = seeded();
+    const spouse = addPerson(dataset, ACTOR, { fullName: "Child Spouse", familyId: "ALPHA" });
+    const linked = addRelationship(spouse.dataset, ACTOR, ids.child, spouse.personId, "spouse");
+    const roots = deriveRoots(linked.dataset, "ALPHA");
+    expect(roots).toContain(ids.root);
+    expect(roots).not.toContain(spouse.personId);
+    expect(roots).not.toContain(ids.child);
+  });
 });
 
 describe("editing a person", () => {

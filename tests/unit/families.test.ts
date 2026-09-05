@@ -4,7 +4,6 @@ import {
   findVillageFamily,
   generationCount,
   loadVillageFamilies,
-  peopleForFamily,
   publishedFamilies,
   sortFamilies,
 } from "@/lib/families/catalog";
@@ -18,7 +17,7 @@ import {
 } from "@/lib/family-trees";
 
 describe("village families catalog", () => {
-  it("lists the 13 family branches in displayOrder", () => {
+  it("lists the 14 family branches in displayOrder", () => {
     const families = loadVillageFamilies();
     expect(families.map((family) => family.name)).toEqual([
       "Gundluru Konda Reddy Family",
@@ -34,6 +33,7 @@ describe("village families catalog", () => {
       "Usirikayala Family",
       "Chinthamani Family",
       "Yerragolla Family",
+      "Gounipalli Family",
     ]);
     expect(families.every((family, index) => family.displayOrder === index + 1)).toBe(
       true,
@@ -100,11 +100,20 @@ describe("family membership is explicit", () => {
     expect(familyStats("GUNDLURU_VENKATA_SUBBA_REDDY").people).toBe(subba.length);
   });
 
-  it("keeps empty family branches until an admin assigns people", () => {
-    expect(peopleInFamily("KOMMEPALLI")).toHaveLength(0);
-    expect(peopleInFamily("KUDUM")).toHaveLength(0);
-    expect(peopleInFamily("JAGILI")).toHaveLength(0);
-    expect(peopleForFamily(allPeople(), "JAGILI")).toHaveLength(0);
+  it("keeps assigned family branches until an admin reassigns people", () => {
+    expect(peopleInFamily("KOMMEPALLI").some((person) => person.id === "k-pedda-bal-reddy")).toBe(
+      true,
+    );
+    expect(peopleInFamily("KUDUM").some((person) => person.id === "k-ramanjulu")).toBe(true);
+    expect(peopleInFamily("JAGILI").some((person) => person.id === "j-chinnareddenna")).toBe(
+      true,
+    );
+    expect(peopleInFamily("JAGADAM").some((person) => person.id === "j-chinnareddenna")).toBe(
+      false,
+    );
+    expect(peopleInFamily("KUNCHAPU").some((person) => person.id === "k-pedda-bal-reddy")).toBe(
+      false,
+    );
     expect(generationCount([])).toBe(0);
   });
 
@@ -124,6 +133,7 @@ describe("family membership is explicit", () => {
     expect(ids.has("GUNDLURU_VENKATA_SUBBA_REDDY")).toBe(true);
     expect(ids.has("DEVAPATLA")).toBe(true);
     expect(ids.has("JAGADAM")).toBe(true);
+    expect(ids.has("GOUNIPALLI")).toBe(true);
     expect(ids.has("g-koda-reddy")).toBe(false);
   });
 });

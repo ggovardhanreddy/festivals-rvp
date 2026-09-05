@@ -16,10 +16,14 @@ const COLLECTIONS = [
   "media-protection",
 ] as const;
 
+function asSeedArray(parsed: unknown): unknown[] {
+  return Array.isArray(parsed) ? parsed : [];
+}
+
 const out: Record<string, unknown[]> = {};
 for (const name of COLLECTIONS) {
   const raw = readFileSync(join(ROOT, `content/data/${name}.json`), "utf8");
-  out[name] = JSON.parse(raw) as unknown[];
+  out[name] = asSeedArray(JSON.parse(raw) as unknown);
 }
 
 const body =

@@ -60,6 +60,28 @@ describe("family trees", () => {
     expect(narendras).toHaveLength(2);
     const shanthammas = allPeople().filter((p) => p.fullName === "Shanthamma");
     expect(shanthammas.length).toBeGreaterThanOrEqual(2);
+    expect(findPerson("c-chennakrishnamma")?.fullName).toBe("C Chennakrishnamma");
+    expect(findPerson("gounipalli-chenna-krishnamma")?.fullName).toBe(
+      "Chenna Krishnamma",
+    );
+    expect(findPerson("c-chennakrishnamma")?.id).not.toBe(
+      findPerson("gounipalli-chenna-krishnamma")?.id,
+    );
+  });
+
+  it("keeps Gounipalli Ravanamma on her parental tree, married into Chinthamani", () => {
+    const ravanamma = findPerson("ravanamma")!;
+    expect(ravanamma.fullName).toBe("Gounipalli Ravanamma");
+    expect(ravanamma.familyId).toBe("GOUNIPALLI");
+    expect(displayStatus(ravanamma)).toContain("Adapaduchu (Married)");
+    expect(spousesOf(ravanamma.id).map((p) => p.id)).toContain("c-ramanjulu");
+    expect(findPerson("c-ramanjulu")!.familyId).toBe("CHINTHAMANI");
+    expect(findPerson("gnanu")!.familyId).toBe("CHINTHAMANI");
+    expect(parentsOf("gnanu").map((p) => p.id).sort()).toEqual(
+      ["c-ramanjulu", "ravanamma"].sort(),
+    );
+    expect(findPerson("locksmith-krishna")!.fullName).toBe("Locksmith Krishna");
+    expect(findPerson("locksmith-krishna")!.familyId).toBe("GOUNIPALLI");
   });
 
   it("finds Govardhan by partial search", () => {
@@ -106,6 +128,34 @@ describe("family trees", () => {
     const venkat = findPerson("j-venkatramana-reddy")!;
     expect(venkat.familyId).toBe("JAGADAM");
     expect(venkat.familyId).not.toBe("JAGILI");
+    const chinna = findPerson("j-chinnareddenna")!;
+    expect(chinna.familyId).toBe("JAGILI");
+    expect(chinna.familyId).not.toBe("JAGADAM");
+  });
+
+  it("keeps similar Venkatramana names as separate people", () => {
+    const g = findPerson("g-venkata-ramana-reddy")!;
+    const j = findPerson("j-venkatramana-reddy")!;
+    const d = findPerson("d-venkataramana-reddy")!;
+    expect(g.familyId).toBe("GUNDLURU_KONDA_REDDY");
+    expect(j.familyId).toBe("JAGADAM");
+    expect(d.familyId).toBe("DEVAPATLA");
+    expect(new Set([g.id, j.id, d.id]).size).toBe(3);
+  });
+
+  it("records an unnamed spouse for G Santhabushan Reddy without inventing a name", () => {
+    const spouses = spousesOf("g-santhabushan-reddy");
+    expect(spouses).toHaveLength(1);
+    expect(spouses[0]!.fullName).toBe("G [Name]");
+    expect(findPerson("g-padma")!.married).toBe(true);
+  });
+
+  it("does not merge Jagili Balaji with Kunchapu Balaji", () => {
+    const k = findPerson("k-balaji")!;
+    const j = findPerson("j-balaji")!;
+    expect(k.familyId).toBe("KUNCHAPU");
+    expect(j.familyId).toBe("JAGILI");
+    expect(k.id).not.toBe(j.id);
   });
 });
 

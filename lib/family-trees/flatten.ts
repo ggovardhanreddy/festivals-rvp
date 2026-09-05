@@ -81,6 +81,8 @@ function walk(
   for (const spouse of node.spouses ?? []) {
     const partner = addPerson(people, family, spouse);
     spouseIds.push(partner.id);
+    person.married = true;
+    partner.married = true;
     const v =
       spouse.verificationStatus === "needs-verification" ||
       person.verificationStatus === "needs-verification"

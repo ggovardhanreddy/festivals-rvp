@@ -21,6 +21,12 @@ export const FAMILY_SEEDS: SeedFamily[] = [
             spouses: [p("g-padma", "G Padma")],
             children: [
               p("g-santhabushan-reddy", "G Santhabushan Reddy", {
+                spouses: [
+                  p("g-santhabushan-spouse", "G [Name]", {
+                    verificationStatus: "incomplete",
+                    notes: "Spouse name was not supplied.",
+                  }),
+                ],
                 children: [
                   p("g-santhabushan-child-1", "G [Name]", { occupation: "Employee" }),
                   p("g-mishritha", "G Mishritha", { adapaduchu: A }),
@@ -186,6 +192,13 @@ export const FAMILY_SEEDS: SeedFamily[] = [
         informationNotYetProvided: true,
         notes: "Spouse/children: Information not yet provided",
       }),
+    ],
+  },
+
+  {
+    id: "KOMMEPALLI",
+    name: "Kommepalli Family",
+    roots: [
       p("k-pedda-bal-reddy", "K Pedda Bal Reddy", {
         spouses: [p("chinniammi", "Chinniammi")],
         informationNotYetProvided: true,
@@ -202,6 +215,13 @@ export const FAMILY_SEEDS: SeedFamily[] = [
           p("k-venugopal-reddy", "K Venugopal Reddy", { location: "Kuwait" }),
         ],
       }),
+    ],
+  },
+
+  {
+    id: "KUDUM",
+    name: "Kudum Family",
+    roots: [
       p("k-ramanjulu", "K Ramanjulu", {
         spouses: [p("k-chandrakala", "K Chandrakala")],
         children: [
@@ -409,6 +429,26 @@ export const FAMILY_SEEDS: SeedFamily[] = [
   },
 
   {
+    id: "DEVAPATLA",
+    name: "Devapatla Family",
+    roots: [
+      p("d-venkatanarayana", "D Venkatanarayana", {
+        informationNotYetProvided: true,
+        notes: "Branch listed; spouse/children: Information not yet provided",
+      }),
+      p("d-lakshanarayana", "D Lakshanarayana", {
+        informationNotYetProvided: true,
+        notes: "Branch listed; spouse/children: Information not yet provided",
+      }),
+      p("d-venkataramana-reddy", "D Venkataramana Reddy", {
+        informationNotYetProvided: true,
+        notes:
+          "Distinct from J Venkatramana Reddy and G Venkata Ramana Reddy. The source also listed a 'D Venkataramana / Subbu' heading; that was not merged with M Subbu. Spouse/children: Information not yet provided",
+      }),
+    ],
+  },
+
+  {
     id: "JAGADAM",
     name: "Jagadam Family",
     roots: [
@@ -443,12 +483,25 @@ export const FAMILY_SEEDS: SeedFamily[] = [
           p("j-anil-kumar-reddy", "J Anil Kumar Reddy", { occupation: "Unemployed" }),
         ],
       }),
+      p("j-gopi-reddy", "J Gopi Reddy", {
+        informationNotYetProvided: true,
+        notes: "Branch listed; spouse/children: Information not yet provided",
+      }),
+    ],
+  },
+
+  {
+    id: "JAGILI",
+    name: "Jagili Family",
+    roots: [
       p("j-chinnareddenna", "J Chinnareddenna", {
         children: [
           p("j-ramesh-kumar", "J Ramesh Kumar", {
             occupation: "Doctor",
             spouses: [
-              p("j-ramesh-kumar-spouse", "J [Name]", { occupation: "House Wife" }),
+              p("j-ramesh-kumar-spouse", "J [Name]", {
+                occupation: "Homemaker/Housewife",
+              }),
             ],
             children: [
               p("j-ramesh-kumar-child-1", "J [Name]"),
@@ -466,6 +519,11 @@ export const FAMILY_SEEDS: SeedFamily[] = [
             ],
           }),
         ],
+      }),
+      p("j-balaji", "J Balaji", {
+        informationNotYetProvided: true,
+        notes:
+          "Listed as the Jagili Balaji branch. Not the same person as K Balaji. Spouse/children: Information not yet provided",
       }),
     ],
   },
@@ -561,7 +619,6 @@ export const FAMILY_SEEDS: SeedFamily[] = [
         ],
       }),
       p("c-ramanjulu", "C Ramanjulu", {
-        spouses: [p("ravanamma", "Ravanamma")],
         children: [
           p("gnanu", "Gnanu", { occupation: "Employee" }),
           p("narasimha", "Narasimha", { occupation: "Employee" }),
@@ -636,6 +693,44 @@ export const FAMILY_SEEDS: SeedFamily[] = [
             married: true,
             informationNotYetProvided: true,
             notes: "Spouse/children: Information not yet provided",
+          }),
+        ],
+      }),
+    ],
+  },
+
+  {
+    id: "GOUNIPALLI",
+    name: "Gounipalli Family",
+    roots: [
+      p("gounipalli-chandra", "Gounipalli Chandra", {
+        spouses: [p("gounipalli-chinnakka", "Chinnakka")],
+        children: [
+          p("ravanamma", "Gounipalli Ravanamma", {
+            adapaduchu: A,
+            spouses: [p("c-ramanjulu", "C Ramanjulu")],
+            children: [
+              p("gnanu", "Gnanu"),
+              p("narasimha", "Narasimha"),
+            ],
+          }),
+          p("gounipalli-ramesh", "Gounipalli Ramesh", {
+            spouses: [p("gounipalli-chenna-krishnamma", "Chenna Krishnamma")],
+            children: [
+              p("hansika", "Hansika", { occupation: "Student" }),
+              p("jaswanth", "Jaswanth", { occupation: "Student" }),
+            ],
+          }),
+          p("gounipalli-raja", "Gounipalli Raja", {
+            spouses: [
+              p("gounipalli-meenakshi", "Meenakshi", { deceased: true }),
+              p("gounipalli-vijaya", "Vijaya"),
+            ],
+            children: [
+              p("harshitha", "Harshitha", { occupation: "Student" }),
+              p("jaswytha", "Jaswytha", { occupation: "Student" }),
+              p("locksmith-krishna", "Locksmith Krishna", { occupation: "Student" }),
+            ],
           }),
         ],
       }),
