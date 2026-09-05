@@ -94,6 +94,12 @@ const ADMIN_WRITE_COLLECTIONS = new Set([
  */
 const PUBLIC_REDACTED_FIELDS: Record<string, string[]> = {
   "family-tree-people": ["privateNotes"],
+  // The member roster is public -- names, photographs and professions are the
+  // point of it -- but the admin form can also capture a phone number, an
+  // email and a blood group. Those are for the admin, and the seed carries
+  // none of them today; this makes sure that stays true the first time one is
+  // entered, rather than depending on nobody filling the field in.
+  members: ["phone", "email", "bloodGroup", "address"],
 };
 
 function redactForPublic(

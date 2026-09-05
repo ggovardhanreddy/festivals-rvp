@@ -4,11 +4,16 @@ import Link from "next/link";
 import type { Member } from "@/lib/types";
 import { memberPhotoSrc } from "@/lib/member-image";
 import { memberInitials, resolveMemberGroup } from "@/lib/member-groups";
+import { publishedMembers, rosterStats } from "@/lib/people-stats";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 export function HomePeople({ members }: { members: Member[] }) {
   const { t } = useUiLang();
-  const living = members.filter((m) => !m.archived);
+  // publishedMembers, not a bare !archived filter: retired ids in
+  // members-removed.json must drop out here too, or the homepage advertises a
+  // total the People page does not list.
+  const living = publishedMembers(members);
+  const stats = rosterStats(members);
   const shown = living
     .sort((a, b) => {
       const order = { legacy: 0, core: 1, nextgen: 2 } as const;
@@ -25,8 +30,9 @@ export function HomePeople({ members }: { members: Member[] }) {
           <p className="eyebrow">{t("home.eyebrow.people")}</p>
           <h2 id="home-people-heading">{t("home.ourPeople")}</h2>
           <p className="muted">
-            {living.length} {living.length === 1 ? "person" : "people"} in the
-            village directory
+            {stats.total === 1
+              ? t("people.rosterCountOne")
+              : t("people.rosterCount", undefined, { count: stats.total })}
           </p>
         </div>
         <Link className="btn ghost" href="/people/">

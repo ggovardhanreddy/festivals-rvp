@@ -8,8 +8,9 @@ import { memberPhotoSrc } from "@/lib/member-image";
 import { loadVillageHeritage } from "@/lib/village-heritage";
 import { SITE_CONTACT_EMAIL } from "@/lib/site";
 import { PeopleNav } from "./PeopleNav";
-import { allPeople, adapaduchulu } from "@/lib/family-trees";
-import { publishedMembers } from "@/lib/member-stats";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { allPeople } from "@/lib/family-trees";
+import { publishedMembers, villagePeopleStats } from "@/lib/people-stats";
 
 function PersonChip({
   name,
@@ -44,10 +45,14 @@ export function PeopleHub({
   members: Member[];
   directory: DirectoryEntry[];
 }) {
+  const { t } = useUiLang();
   const heritage = loadVillageHeritage();
   const living = publishedMembers(members);
   const directoryPeople = allPeople();
-  const adapaduchuCount = adapaduchulu(directoryPeople).length;
+  // Two populations, counted once, named apart. The member roster and the
+  // family-tree records are different sets of people and were previously both
+  // described as "the directory".
+  const stats = villagePeopleStats(members, directoryPeople);
   const elders = living.filter((m) => resolveMemberGroup(m) === "legacy");
   const contributors = living.filter((m) => resolveMemberGroup(m) === "core");
   const withBirthday = living
@@ -68,9 +73,17 @@ export function PeopleHub({
       </p>
       <PeopleNav />
       <p className="muted" style={{ marginBottom: "1.5rem" }}>
-        {living.length} {living.length === 1 ? "person" : "people"} in the
-        directory · {directoryPeople.length} family members · {adapaduchuCount}{" "}
-        Adapaduchulu. Counts come from the current records, not a fixed number.
+        {stats.roster.total === 1
+          ? t("people.rosterCountOne")
+          : t("people.rosterCount", undefined, { count: stats.roster.total })}
+        {" · "}
+        {t("people.treeCount", undefined, { count: stats.tree.people })}
+        {" · "}
+        {t("people.adapaduchuCount", undefined, {
+          count: stats.tree.adapaduchulu,
+        })}
+        {". "}
+        {t("people.countsNote")}
       </p>
 
       <section className="section" id="elders">

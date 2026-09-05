@@ -7,6 +7,8 @@ import path from "node:path";
 import { publicAlbums, years } from "../lib/content";
 import { albumHref, BUCKETS } from "../lib/site";
 import { CMS_ALBUMS } from "../lib/cms";
+import { validateMembers } from "../lib/member-validation";
+import type { Member } from "../lib/types";
 
 const root = process.cwd();
 const errors: string[] = [];
@@ -14,6 +16,38 @@ const warnings: string[] = [];
 
 function exists(rel: string) {
   return fs.existsSync(path.join(root, rel));
+}
+
+/**
+ * The member roster.
+ *
+ * A duplicate or missing id is an error because it silently changes who is
+ * listed and therefore every count derived from the roster. Everything else --
+ * an odd date, a private field left in -- is a warning the admin should see
+ * but that need not block a deploy.
+ */
+function checkMembers() {
+  const rel = "content/data/members.json";
+  if (!exists(rel)) {
+    errors.push(`Missing ${rel}`);
+    return;
+  }
+  let members: Member[];
+  try {
+    members = JSON.parse(fs.readFileSync(path.join(root, rel), "utf8")) as Member[];
+  } catch (err) {
+    errors.push(`${rel} is not valid JSON: ${(err as Error).message}`);
+    return;
+  }
+  if (!Array.isArray(members)) {
+    errors.push(`${rel} must be an array`);
+    return;
+  }
+  for (const issue of validateMembers(members)) {
+    const line = `members.json [${issue.memberId}] ${issue.field}: ${issue.message}`;
+    if (issue.level === "error") errors.push(line);
+    else warnings.push(line);
+  }
 }
 
 function checkGenerated() {
@@ -107,6 +141,7 @@ function checkContentLayout() {
 function main() {
   console.log("Running site validation…");
   checkGenerated();
+  checkMembers();
   checkPublicAssets();
   checkContentLayout();
   if (!errors.some((e) => e.includes("generated/albums.json"))) {

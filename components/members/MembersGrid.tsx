@@ -34,6 +34,7 @@ import {
   PROFESSION_LABELS,
   PROFESSION_ORDER,
   computeMemberStats,
+  publishedMembers,
   matchProfession,
   type ProfessionKey,
 } from "@/lib/member-stats";
@@ -441,10 +442,10 @@ export function MembersGrid({
     setLocalToast(null);
   };
 
-  const activeMembers = useMemo(
-    () => members.filter((m) => !m.archived),
-    [members],
-  );
+  // The list and the total above it must come from the same call. A bare
+  // !archived filter here left the grid printing cards for members the stat
+  // had already excluded, so the page disagreed with itself.
+  const activeMembers = useMemo(() => publishedMembers(members), [members]);
   const stats = useMemo(
     () => computeMemberStats(activeMembers),
     [activeMembers],
@@ -505,8 +506,8 @@ export function MembersGrid({
 
   async function onDropCard(targetId: string, group: MemberGroup) {
     if (!edit || !dragId || dragId === targetId) return;
-    const people = (edit.members || []).filter(
-      (m) => resolveMemberGroup(m) === group && !m.archived,
+    const people = publishedMembers(edit.members || []).filter(
+      (m) => resolveMemberGroup(m) === group,
     );
     const ids = people.map((m) => m.id);
     const from = ids.indexOf(dragId);

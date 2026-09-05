@@ -39,7 +39,17 @@ export type BloodGroup =
 
 export type Member = {
   id: string;
+  /** Display name in English. */
   name: string;
+  /**
+   * Display name in Telugu, when someone has supplied one.
+   *
+   * Optional on purpose: one roster serves both languages, and a member
+   * without a Telugu name falls back to `name` rather than being hidden from
+   * the Telugu site. Adding a translated name must never change who is listed
+   * or how many people are counted.
+   */
+  nameTe?: string;
   photo: string | null;
   /** Month-day as MM-DD, full ISO YYYY-MM-DD, or null when unknown */
   dob: string | null;
