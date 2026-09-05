@@ -111,7 +111,11 @@ export function useTreeEditor(initial: FamilyTreeDataset, actor: string) {
         const stored = await fetchStoredAudit();
         await post("family-audit", mergeAudit(pendingAudit, [...dataset.audit, ...stored]));
       }
-      await post("family-people", dataset.people);
+      // "family-tree-people", not "family-people": the older key holds the
+      // bulk-assign list ({id, familyId}) and both features replace their
+      // whole collection on save, so sharing the key made each save wipe the
+      // other's data.
+      await post("family-tree-people", dataset.people);
       await post("family-relationships", dataset.relationships);
       await post("families", dataset.families);
       if (dataset.media.length > 0) await post("family-media", dataset.media);

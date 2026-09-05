@@ -30,7 +30,16 @@ export const COMMUNITY_COLLECTIONS = [
   "events",
   "announcements",
   "families",
+  // Legacy: person -> family assignments, {id, familyId}. Written by the bulk
+  // assign tool in FamiliesManager.
   "family-people",
+  // The family tree proper (§16): full person records and explicit
+  // relationship rows, written by the admin tree editor. Deliberately NOT
+  // "family-people" — that name already means assignments, and both features
+  // replace their whole collection on save, so sharing one key made each
+  // save wipe the other's data.
+  "family-tree-people",
+  "family-relationships",
   "media-protection",
 ] as const;
 

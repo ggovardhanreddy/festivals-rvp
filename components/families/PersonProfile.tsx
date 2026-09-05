@@ -1,24 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import { PeopleNav } from "@/components/people/PeopleNav";
 import { PersonCard } from "./PersonCard";
 import {
-  childrenOf,
   displayStatus,
   familyHref,
-  findPerson,
-  parentsOf,
   personHref,
   reddivaripalliConnection,
-  spousesOf,
   verificationLabel,
 } from "@/lib/family-trees";
+import { useFamilyTreePerson } from "@/lib/family-trees/overlay";
 
 function PeopleList({
   label,
   people,
 }: {
   label: string;
-  people: ReturnType<typeof parentsOf>;
+  people: ReturnType<typeof useFamilyTreePerson>["parents"];
 }) {
   return (
     <div className="ft-profile-block">
@@ -39,11 +38,10 @@ function PeopleList({
 }
 
 export function PersonProfile({ personId }: { personId: string }) {
-  const person = findPerson(personId);
+  // Seeded from the build-time tree, so the server still renders this page in
+  // full for crawlers, then replaced by the stored records once they load.
+  const { person, parents, spouses, children } = useFamilyTreePerson(personId);
   if (!person) return null;
-  const parents = parentsOf(person.id);
-  const spouses = spousesOf(person.id);
-  const children = childrenOf(person.id);
   const labels = displayStatus(person);
 
   return (

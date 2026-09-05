@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { PeopleNav } from "@/components/people/PeopleNav";
 import { PersonCard } from "./PersonCard";
-import { allPeople, searchPeople } from "@/lib/family-trees";
+import { searchPeople } from "@/lib/family-trees";
+import { useFamilyTreeOverlay } from "@/lib/family-trees/overlay";
 import {
   applyFamilyAssignments,
   familyHref,
@@ -43,7 +44,7 @@ function FamilyCard({
     <article className="family-card">
       <div className="family-card-photo">
         {src ? (
-          // eslint-disable-next-line @next/next/no-img-element
+           
           <img src={src} alt={family.name} />
         ) : (
           <span aria-hidden>{family.name.charAt(0)}</span>
@@ -73,14 +74,20 @@ export function FamiliesHub() {
     [],
   );
   const { items: members } = useCommunityList<Member>("members", MEMBER_SEED);
+  const tree = useFamilyTreeOverlay();
 
   const families = useMemo(
     () => publishedFamilies(remoteFamilies),
     [remoteFamilies],
   );
+  // Stored records already carry the admin's chosen familyId; the legacy
+  // assignment list applies only while the tree is still the build-time seed.
   const people = useMemo(
-    () => applyFamilyAssignments(allPeople(), assignments, families),
-    [assignments, families],
+    () =>
+      tree.stored
+        ? tree.people
+        : applyFamilyAssignments(tree.people, assignments, families),
+    [assignments, families, tree.people, tree.stored],
   );
   const results = useMemo(() => searchPeople(query, people), [query, people]);
   const searching = query.trim().length > 0;

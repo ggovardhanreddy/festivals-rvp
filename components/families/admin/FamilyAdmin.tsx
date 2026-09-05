@@ -22,14 +22,19 @@ import {
 } from "@/lib/family-trees/mutate";
 import { FamilyTreeEditor } from "./FamilyTreeEditor";
 import { FamiliesManager } from "@/components/admin/FamiliesManager";
+import { useStoredFamilyTreeDataset } from "@/lib/family-trees/overlay";
 
 export function FamilyAdmin({
-  dataset,
+  dataset: seed,
   actor,
 }: {
   dataset: FamilyTreeDataset;
   actor: string;
 }) {
+  // The prop is the build-time copy. What the admin must see and edit is what
+  // is actually stored, so the editor waits for it rather than opening on a
+  // snapshot that may be several corrections out of date.
+  const { dataset, ready } = useStoredFamilyTreeDataset(seed);
   const ordered = useMemo(
     () => [...dataset.families].sort((a, b) => a.displayOrder - b.displayOrder),
     [dataset.families],
@@ -118,7 +123,11 @@ export function FamilyAdmin({
           </button>
         </nav>
 
-        {tab === "tree" && family ? (
+        {tab === "tree" && family && !ready ? (
+          <p className="muted">Loading the stored tree…</p>
+        ) : null}
+
+        {tab === "tree" && family && ready ? (
           <FamilyTreeEditor
             key={family.id}
             initialDataset={dataset}

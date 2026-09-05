@@ -9,7 +9,6 @@ import {
 } from "@/lib/families/catalog";
 import {
   allFamilies,
-  allPeople,
   familyHref as treeFamilyHref,
   familyStats,
   findPerson,

@@ -63,6 +63,15 @@ export function useCommunityList<T>(
   const [raw, setRaw] = useState<T[]>(seed);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  /**
+   * True once the API has returned rows for this collection.
+   *
+   * Callers need to tell "these are stored records" from "this is still the
+   * build-time seed" — the family tree applies its legacy assignment list only
+   * to the seed, because a stored person record already carries the familyId
+   * the admin chose.
+   */
+  const [hasRemote, setHasRemote] = useState(false);
   const admin = Boolean(opts?.admin);
   const replaceSeedWhenRemote = Boolean(opts?.replaceSeedWhenRemote);
 
@@ -83,6 +92,7 @@ export function useCommunityList<T>(
       // Never wipe a seed roster (or members just saved locally) if the
       // API returns empty / times out. An empty GET used to drop people
       // added on the page who were not yet in the Git seed.
+      if (remote.length) setHasRemote(true);
       setRaw((prev) => {
         if (!remote.length) return prev.length ? prev : seedRef.current;
         if (replaceSeedWhenRemote) return remote;
@@ -177,7 +187,17 @@ export function useCommunityList<T>(
     [collection],
   );
 
-  return { items, raw, setItems: setRaw, loading, error, refresh, saveAll, submitItem };
+  return {
+    items,
+    raw,
+    setItems: setRaw,
+    loading,
+    error,
+    remote: hasRemote,
+    refresh,
+    saveAll,
+    submitItem,
+  };
 }
 
 export async function trackAnalyticsHit(input: {

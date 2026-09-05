@@ -585,3 +585,62 @@ describe("§17 nothing admin-only reaches the client bundle", () => {
     expect(existsSync(join(root, "public/content/data/family-people.json"))).toBe(false);
   });
 });
+
+/**
+ * The live overlay — the reason an admin edit now reaches the site.
+ *
+ * The site is a static export: the tree in the HTML is whatever was in
+ * content/data at build time. The editor wrote corrections to R2 and nothing
+ * ever read them back, so a saved change appeared to vanish on reload. These
+ * lock the wiring that closes that loop.
+ */
+describe("live overlay wiring", () => {
+  const root = process.cwd();
+  const read = (rel: string) => readFileSync(join(root, rel), "utf8");
+
+  it("the tree editor writes people to its own collection, not the assignment list", () => {
+    const source = read("components/families/admin/useTreeEditor.ts");
+    // "family-people" is the older person -> family assignment list. Both
+    // features replace their whole collection on save, so sharing the key
+    // meant each save silently erased the other's data.
+    expect(source).toMatch(/post\("family-tree-people", dataset\.people\)/);
+    expect(source).not.toMatch(/post\("family-people",/);
+  });
+
+  it("registers the new collection everywhere it has to be allowed", () => {
+    expect(read("lib/community.ts")).toContain('"family-tree-people"');
+    const api = read("functions/api/community/[[route]].ts");
+    // Present in the allow-list AND in the admin-write set — one without the
+    // other is either a 404 on save or an unauthenticated write.
+    expect(api.match(/"family-tree-people"/g)?.length ?? 0).toBeGreaterThanOrEqual(2);
+  });
+
+  it("redacts private notes for non-admin readers of the person collection", () => {
+    const api = read("functions/api/community/[[route]].ts");
+    // The public tree now fetches person records directly, so §17 has to be
+    // enforced at the API boundary — not merely by declining to render it.
+    expect(api).toMatch(/PUBLIC_REDACTED_FIELDS[\s\S]*"family-tree-people":\s*\["privateNotes"\]/);
+    expect(api).toMatch(/if \(!admin\) items = redactForPublic\(collection, items\)/);
+  });
+
+  it("replaces rather than merges stored people, so a deletion stays deleted", () => {
+    const overlay = read("lib/family-trees/overlay.ts");
+    // mergeById would resurrect anyone the admin removed, because the seed
+    // still contains them.
+    const uses = overlay.match(/replaceSeedWhenRemote: true/g) ?? [];
+    expect(uses.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("keeps seed.ts and the committed JSON in agreement", async () => {
+    // seed.ts is now only a fallback, but it is still hand-edited. If the two
+    // drift, whichever one a reader happens to hit decides what the village
+    // sees. Catch it here rather than in production.
+    const { FAMILY_SEEDS } = await import("@/lib/family-trees/seed");
+    const { flattenFamilies } = await import("@/lib/family-trees/flatten");
+    const flat = flattenFamilies(FAMILY_SEEDS);
+    const people = (
+      JSON.parse(read("content/data/family-people.json")) as { people: unknown[] }
+    ).people;
+    expect(flat.people.length).toBe(people.length);
+  });
+});

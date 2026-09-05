@@ -56,6 +56,8 @@ ios/**/DerivedData/
 # imported by lib/family-trees/store.ts: a static import would copy the whole
 # change history into a public _next/static chunk.
 content/data/family-audit.json
-# Migration backups.
+# Migration backups (both the flat files and the backups/ folder the
+# migration script writes).
 content/data/*.bak
 content/data/*.json.*.bak
+content/data/backups/

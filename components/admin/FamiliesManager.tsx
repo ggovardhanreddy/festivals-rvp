@@ -308,7 +308,7 @@ export function FamiliesManager() {
             <label>
               Family photo
               {family.coverPhoto ? (
-                // eslint-disable-next-line @next/next/no-img-element
+                 
                 <img
                   src={memberPhotoSrc(family.coverPhoto)}
                   alt=""

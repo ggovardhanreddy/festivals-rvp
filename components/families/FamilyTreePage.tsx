@@ -4,12 +4,8 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { PeopleNav } from "@/components/people/PeopleNav";
 import { FamilyTreeView } from "./FamilyTreeView";
-import {
-  allPeople,
-  applyPersonPhotos,
-  findFamily,
-  relationshipRecords,
-} from "@/lib/family-trees";
+import { applyPersonPhotos, findFamily } from "@/lib/family-trees";
+import { useFamilyTreeOverlay } from "@/lib/family-trees/overlay";
 import {
   applyFamilyAssignments,
   findVillageFamily,
@@ -40,20 +36,23 @@ export function FamilyTreePage({
     [],
   );
   const { items: members } = useCommunityList<Member>("members", MEMBER_SEED);
+  const tree = useFamilyTreeOverlay();
 
   const family = findVillageFamily(familyId, remoteFamilies);
   const people = useMemo(() => {
-    const assigned = applyFamilyAssignments(
-      allPeople(),
-      assignments,
-      remoteFamilies,
-    );
+    // The legacy assignment list is applied only to the build-time seed. Once
+    // the editor has stored person records, each one already carries the
+    // familyId the admin chose, and re-applying an older assignment on top
+    // would drag the person back to where they used to be.
+    const base = tree.stored
+      ? tree.people
+      : applyFamilyAssignments(tree.people, assignments, remoteFamilies);
     const photosById: Record<string, string | null | undefined> = {};
     for (const member of members) {
       if (member.photo) photosById[member.id] = member.photo;
     }
-    return applyPersonPhotos(assigned, photosById);
-  }, [assignments, members, remoteFamilies]);
+    return applyPersonPhotos(base, photosById);
+  }, [assignments, members, remoteFamilies, tree.people, tree.stored]);
 
   if (!family || !family.isPublished) return null;
 
@@ -82,8 +81,9 @@ export function FamilyTreePage({
       <FamilyTreeView
         family={treeFamily}
         people={treePeople}
-        relationships={relationshipRecords()}
+        relationships={tree.relationships}
         focusId={focusId}
+        unpublishedIds={tree.unpublishedIds}
       />
     </div>
   );

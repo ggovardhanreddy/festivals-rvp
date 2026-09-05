@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { PeopleNav } from "@/components/people/PeopleNav";
-import { adapaduchulu, displayStatus, familyHref } from "@/lib/family-trees";
+import { displayStatus, familyHref } from "@/lib/family-trees";
+import { useAdapaduchulu } from "@/lib/family-trees/overlay";
 
 export function AdapaduchuluPage() {
-  const people = adapaduchulu();
+  const people = useAdapaduchulu();
 
   return (
     <div className="adapaduchulu-page">

@@ -42,11 +42,18 @@ export function FamilyTreeView({
   people,
   relationships,
   focusId,
+  unpublishedIds,
 }: {
   family: Family;
   people: Person[];
   relationships: Relationship[];
   focusId?: string;
+  /**
+   * People who exist only in stored data. Their profile page is generated at
+   * build time, so until the next deploy there is nothing at that URL — link
+   * to it and the visitor gets a 404 instead of the person they clicked.
+   */
+  unpublishedIds?: Set<string>;
 }) {
   const peopleById = useMemo(
     () => new Map(people.map((person) => [person.id, person])),
@@ -385,9 +392,16 @@ export function FamilyTreeView({
               <dd>{selected.location || "Information not yet provided"}</dd>
             </div>
           </dl>
-          <Link className="btn" href={personHref(selected)}>
-            Open profile
-          </Link>
+          {unpublishedIds?.has(selected.id) ? (
+            <p className="muted">
+              This person was added recently. Their full profile page appears
+              after the site&rsquo;s next update.
+            </p>
+          ) : (
+            <Link className="btn" href={personHref(selected)}>
+              Open profile
+            </Link>
+          )}
         </aside>
       ) : null}
     </div>

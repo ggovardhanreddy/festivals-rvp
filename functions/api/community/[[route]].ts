@@ -44,6 +44,12 @@ const COLLECTIONS = new Set([
   // The family-tree entities (§16). Stored as ordinary collections so they
   // inherit this route's admin auth, R2 persistence and audit trail rather
   // than needing a second API that would drift from it.
+  //
+  // "family-tree-people" holds the full person records the tree editor
+  // writes. "family-people" is the older person -> family assignment list and
+  // keeps that meaning: both features replace their whole collection on save,
+  // so one shared key meant each save silently erased the other.
+  "family-tree-people",
   "family-relationships",
   "family-media",
   "family-audit",
@@ -71,11 +77,38 @@ const ADMIN_WRITE_COLLECTIONS = new Set([
   "announcements",
   "families",
   "family-people",
+  "family-tree-people",
   "family-relationships",
   "family-media",
   "family-audit",
   "media-protection",
 ]);
+
+/**
+ * Fields stripped from a collection before a non-admin sees it.
+ *
+ * §17: "The public page must NOT expose ... Private notes." The public tree
+ * now reads person records straight from this API, so the redaction has to
+ * happen here, at the boundary — a field that is merely not displayed is
+ * still in the JSON the browser downloads.
+ */
+const PUBLIC_REDACTED_FIELDS: Record<string, string[]> = {
+  "family-tree-people": ["privateNotes"],
+};
+
+function redactForPublic(
+  collection: string,
+  items: Record<string, unknown>[],
+): Record<string, unknown>[] {
+  const fields = PUBLIC_REDACTED_FIELDS[collection];
+  if (!fields?.length) return items;
+  return items.map((item) => {
+    if (!fields.some((field) => field in item)) return item;
+    const copy = { ...item };
+    for (const field of fields) delete copy[field];
+    return copy;
+  });
+}
 
 function json(data: unknown, status = 200, headers: Record<string, string> = {}) {
   return new Response(JSON.stringify(data), {
@@ -325,6 +358,7 @@ export const onRequest = async ({ request, env, params }: FunctionContext) => {
       if (APPROVAL_COLLECTIONS.has(collection) && !(admin && adminQuery)) {
         items = items.filter((i) => i.status === "approved");
       }
+      if (!admin) items = redactForPublic(collection, items);
       return json({ items, source: from }, 200, headers);
     }
 
