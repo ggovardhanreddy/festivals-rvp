@@ -108,30 +108,45 @@ export function familyHref(familyId: string): string {
   return catalogFamilyHref(familyId, CATALOG);
 }
 
-function adapaduchuLabel(person: Person): string | null {
+/**
+ * How a card label is rendered in the reader's language.
+ *
+ * Every label function below takes one of these, and defaults to returning the
+ * English fallback. That keeps the existing call sites working untouched while
+ * a component that has a translator can pass one -- which matters because these
+ * few functions produce most of the visible text on a family page: a status
+ * word repeated across 266 person cards.
+ */
+export type LabelTranslator = (key: string, fallback: string) => string;
+
+const EN: LabelTranslator = (_key, fallback) => fallback;
+
+function adapaduchuLabel(person: Person, t: LabelTranslator = EN): string | null {
   if (person.adapaduchu && person.deceased) {
-    return "Adapaduchu (Married, Deceased)";
+    return t("person.adapaduchuDeceased", "Adapaduchu (Married, Deceased)");
   }
-  if (person.adapaduchu) return "Adapaduchu (Married)";
+  if (person.adapaduchu) return t("person.adapaduchu", "Adapaduchu (Married)");
   return null;
 }
 
-export function displayStatus(person: Person): string[] {
+export function displayStatus(person: Person, t: LabelTranslator = EN): string[] {
   const labels: string[] = [];
-  const adapaduchu = adapaduchuLabel(person);
+  const adapaduchu = adapaduchuLabel(person, t);
   if (adapaduchu) labels.push(adapaduchu);
   else {
-    if (person.deceased) labels.push("Deceased");
-    else if (person.married) labels.push("Married");
+    if (person.deceased) labels.push(t("person.deceased", "Deceased"));
+    else if (person.married) labels.push(t("person.married", "Married"));
   }
+  // Occupation and location are the person's own words; they are not
+  // translated, only shown.
   if (person.occupation) labels.push(person.occupation);
   if (person.location) labels.push(person.location);
   if (person.verificationStatus === "needs-verification") {
-    labels.push("Needs Verification");
+    labels.push(t("person.needsVerification", "Needs Verification"));
   } else if (person.verificationStatus === "incomplete") {
-    labels.push("Information not yet provided");
+    labels.push(t("person.infoNotProvided", "Information not yet provided"));
   } else if (!labels.length) {
-    labels.push("Information not yet provided");
+    labels.push(t("person.infoNotProvided", "Information not yet provided"));
   }
   return labels;
 }
@@ -144,17 +159,21 @@ export function displayStatus(person: Person): string[] {
  * Employee" than by name alone, and a tree of similar names is exactly where
  * that matters.
  */
-export function treeNodeStatus(person: Person, ambiguous = false): string[] {
+export function treeNodeStatus(
+  person: Person,
+  ambiguous = false,
+  t: LabelTranslator = EN,
+): string[] {
   const labels: string[] = [];
-  const adapaduchu = adapaduchuLabel(person);
+  const adapaduchu = adapaduchuLabel(person, t);
   if (adapaduchu) labels.push(adapaduchu);
-  else if (person.deceased) labels.push("Deceased");
-  else if (person.married) labels.push("Married");
+  else if (person.deceased) labels.push(t("person.deceased", "Deceased"));
+  else if (person.married) labels.push(t("person.married", "Married"));
   if (person.occupation) labels.push(person.occupation);
   if (ambiguous || person.verificationStatus === "needs-verification") {
-    labels.push("Needs Verification");
+    labels.push(t("person.needsVerification", "Needs Verification"));
   } else if (person.verificationStatus === "incomplete" && !labels.length) {
-    labels.push("Information not yet provided");
+    labels.push(t("person.infoNotProvided", "Information not yet provided"));
   }
   return labels;
 }
@@ -170,10 +189,17 @@ export function applyPersonPhotos(
   });
 }
 
-export function verificationLabel(status: VerificationStatus): string {
-  if (status === "needs-verification") return "Needs Verification";
-  if (status === "incomplete") return "Information not yet provided";
-  return "Verified";
+export function verificationLabel(
+  status: VerificationStatus,
+  t: LabelTranslator = EN,
+): string {
+  if (status === "needs-verification") {
+    return t("person.needsVerification", "Needs Verification");
+  }
+  if (status === "incomplete") {
+    return t("person.infoNotProvided", "Information not yet provided");
+  }
+  return t("person.verified", "Verified");
 }
 
 export function adapaduchulu(people: Person[] = DATA.people): Person[] {
@@ -230,9 +256,15 @@ export function familyStats(familyId: string, people: Person[] = DATA.people) {
   };
 }
 
-export function reddivaripalliConnection(person: Person): string {
+export function reddivaripalliConnection(
+  person: Person,
+  t: LabelTranslator = EN,
+): string {
   if (person.adapaduchu) {
-    return "Member of the original parental family";
+    return t("person.memberOfParental", "Member of the original parental family");
   }
-  return `Member of ${person.familyBranch}`;
+  return t("person.memberOf", `Member of ${person.familyBranch}`).replace(
+    "{branch}",
+    person.familyBranch,
+  );
 }

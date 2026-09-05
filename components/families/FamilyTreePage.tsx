@@ -7,6 +7,7 @@ import { FamilyTreeView } from "./FamilyTreeView";
 import { applyPersonPhotos } from "@/lib/family-trees";
 import { useFamilyTreeOverlay } from "@/lib/family-trees/overlay";
 import { splitIntoBranches } from "@/lib/family-trees/branches";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 import {
   applyFamilyAssignments,
   findVillageFamily,
@@ -37,6 +38,7 @@ export function FamilyTreePage({
     [],
   );
   const { items: members } = useCommunityList<Member>("members", MEMBER_SEED);
+  const { t } = useUiLang();
   const tree = useFamilyTreeOverlay();
 
   const family = findVillageFamily(familyId, remoteFamilies);
@@ -69,7 +71,7 @@ export function FamilyTreePage({
       <nav className="ft-breadcrumb" aria-label="Breadcrumb">
         <Link href="/people/">People</Link>
         <span aria-hidden>/</span>
-        <Link href="/families/">Village Families</Link>
+        <Link href="/families/">{t("tree.villageFamilies")}</Link>
         <span aria-hidden>/</span>
         <span>{family.name}</span>
       </nav>
@@ -79,12 +81,7 @@ export function FamilyTreePage({
       </header>
 
       {branches.length > 1 ? (
-        <p className="ft-branch-note">
-          This page holds {branches.length} separate families that share a
-          surname. They are shown as {branches.length} independent trees and are
-          never joined &mdash; two people appear in the same tree only where a
-          recorded parent, child or marriage connects them.
-        </p>
+        <p className="ft-branch-note">{t("tree.separateNote", undefined, { count: branches.length })}</p>
       ) : null}
 
       {branches.map((branch) => (
@@ -92,11 +89,12 @@ export function FamilyTreePage({
           <header className="ft-branch-head">
             <h2>{branch.title}</h2>
             <p className="muted">
-              {branch.people.length}
-              {branch.people.length === 1 ? " person" : " people"}
-              {" \u00b7 "}
-              {branch.generations}
-              {branch.generations === 1 ? " generation" : " generations"}
+              {branch.generations === 1
+                ? t("tree.branchSizeOne", undefined, { people: branch.people.length })
+                : t("tree.branchSize", undefined, {
+                    people: branch.people.length,
+                    generations: branch.generations,
+                  })}
             </p>
           </header>
           <FamilyTreeView

@@ -19,6 +19,7 @@ import {
 } from "@/lib/family-trees";
 import type { Family, Person, Relationship } from "@/lib/family-trees/types";
 import { isPlaceholderName, personDisplayName } from "@/lib/family-trees/branches";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const MIN_SCALE = 0.22;
 /** Fit-to-screen will not go below this: smaller and the names are unreadable. */
@@ -58,6 +59,7 @@ export function FamilyTreeView({
    */
   unpublishedIds?: Set<string>;
 }) {
+  const { t } = useUiLang();
   const peopleById = useMemo(
     () => new Map(people.map((person) => [person.id, person])),
     [people],
@@ -254,7 +256,7 @@ export function FamilyTreeView({
 
   if (!people.length || !layout.nodes.length) {
     return (
-      <p className="muted ft-tree-empty">Information not yet provided</p>
+      <p className="muted ft-tree-empty">{t("tree.empty")}</p>
     );
   }
 
@@ -262,13 +264,13 @@ export function FamilyTreeView({
     <div className="ft-genealogy-wrap">
       <div className="ft-toolbar" role="toolbar" aria-label="Family tree view">
         <button type="button" className="filter-chip" onClick={() => zoomBy(1 / 1.2)}>
-          Zoom out
+          {t("tree.zoomOut")}
         </button>
         <button type="button" className="filter-chip" onClick={() => zoomBy(1.2)}>
-          Zoom in
+          {t("tree.zoomIn")}
         </button>
         <button type="button" className="filter-chip" onClick={fitToScreen}>
-          Fit to screen
+          {t("tree.fit")}
         </button>
       </div>
 
@@ -316,7 +318,7 @@ export function FamilyTreeView({
             {layout.nodes.map((node) => {
               const person = peopleById.get(node.id);
               if (!person) return null;
-              const labels = treeNodeStatus(person, node.ambiguous);
+              const labels = treeNodeStatus(person, node.ambiguous, t);
               const photo = memberPhotoSrc(person.photo);
               const open = selectedId === person.id;
               return (
@@ -383,8 +385,8 @@ export function FamilyTreeView({
             </button>
           </div>
           <ul className="ft-profile-flags">
-            {(treeNodeStatus(selected).length
-              ? treeNodeStatus(selected)
+            {(treeNodeStatus(selected, false, t).length
+              ? treeNodeStatus(selected, false, t)
               : ["Information not yet provided"]
             ).map((label) => (
               <li key={label}>{label}</li>
@@ -401,13 +403,10 @@ export function FamilyTreeView({
             </div>
           </dl>
           {unpublishedIds?.has(selected.id) ? (
-            <p className="muted">
-              This person was added recently. Their full profile page appears
-              after the site&rsquo;s next update.
-            </p>
+            <p className="muted">{t("tree.notYetPublished")}</p>
           ) : (
             <Link className="btn" href={personHref(selected)}>
-              Open profile
+              {t("person.openProfile")}
             </Link>
           )}
         </aside>

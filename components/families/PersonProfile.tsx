@@ -11,6 +11,7 @@ import {
   verificationLabel,
 } from "@/lib/family-trees";
 import { useFamilyTreePerson } from "@/lib/family-trees/overlay";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 function PeopleList({
   label,
@@ -40,9 +41,10 @@ function PeopleList({
 export function PersonProfile({ personId }: { personId: string }) {
   // Seeded from the build-time tree, so the server still renders this page in
   // full for crawlers, then replaced by the stored records once they load.
+  const { t } = useUiLang();
   const { person, parents, spouses, children } = useFamilyTreePerson(personId);
   if (!person) return null;
-  const labels = displayStatus(person);
+  const labels = displayStatus(person, t);
 
   return (
     <div className="person-profile">
@@ -50,7 +52,7 @@ export function PersonProfile({ personId }: { personId: string }) {
       <nav className="ft-breadcrumb" aria-label="Breadcrumb">
         <Link href="/people/">People</Link>
         <span aria-hidden>/</span>
-        <Link href="/families/">Village Families</Link>
+        <Link href="/families/">{t("tree.villageFamilies")}</Link>
         <span aria-hidden>/</span>
         <Link href={familyHref(person.familyId)}>{person.familyBranch}</Link>
         <span aria-hidden>/</span>
@@ -68,55 +70,47 @@ export function PersonProfile({ personId }: { personId: string }) {
 
         <dl className="ft-profile-dl">
           <div>
-            <dt>Family</dt>
+            <dt>{t("person.family")}</dt>
             <dd>
               <Link href={familyHref(person.familyId)}>{person.familyBranch}</Link>
             </dd>
           </div>
           <div>
-            <dt>Generation</dt>
+            <dt>{t("person.generation")}</dt>
             <dd>{person.generation}</dd>
           </div>
           <div>
-            <dt>Status</dt>
+            <dt>{t("person.status")}</dt>
             <dd>
-              {person.adapaduchu && person.deceased
-                ? "Adapaduchu (Married, Deceased)"
-                : person.adapaduchu
-                  ? "Adapaduchu (Married)"
-                  : person.deceased
-                    ? "Deceased"
-                    : person.married
-                      ? "Married"
-                      : "Information not yet provided"}
+              {labels[0] ?? t("person.infoNotProvided")}
             </dd>
           </div>
           <div>
-            <dt>Occupation</dt>
+            <dt>{t("person.occupation")}</dt>
             <dd>{person.occupation || "Information not yet provided"}</dd>
           </div>
           <div>
-            <dt>Location</dt>
+            <dt>{t("person.location")}</dt>
             <dd>{person.location || "Information not yet provided"}</dd>
           </div>
           <div>
-            <dt>Reddivaripalli Connection</dt>
-            <dd>{reddivaripalliConnection(person)}</dd>
+            <dt>{t("person.connection")}</dt>
+            <dd>{reddivaripalliConnection(person, t)}</dd>
           </div>
           <div>
-            <dt>Verification Status</dt>
-            <dd>{verificationLabel(person.verificationStatus)}</dd>
+            <dt>{t("person.verification")}</dt>
+            <dd>{verificationLabel(person.verificationStatus, t)}</dd>
           </div>
         </dl>
 
         {person.notes ? <p className="muted">{person.notes}</p> : null}
 
-        <PeopleList label="Parents" people={parents} />
-        <PeopleList label="Spouse" people={spouses} />
-        <PeopleList label="Children" people={children} />
+        <PeopleList label={t("person.parents")} people={parents} />
+        <PeopleList label={t("person.spouse")} people={spouses} />
+        <PeopleList label={t("person.children")} people={children} />
 
         <Link className="btn" href={`${familyHref(person.familyId)}?focus=${encodeURIComponent(person.id)}`}>
-          View family tree
+          {t("person.viewTree")}
         </Link>
       </article>
     </div>

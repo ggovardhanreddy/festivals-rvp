@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { displayStatus, personHref, verificationLabel } from "@/lib/family-trees";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 import type { Person } from "@/lib/family-trees/types";
 
 export function PersonCard({
@@ -13,7 +14,8 @@ export function PersonCard({
   href?: string;
   compact?: boolean;
 }) {
-  const labels = displayStatus(person);
+  const { t } = useUiLang();
+  const labels = displayStatus(person, t);
   const to = href ?? personHref(person);
   return (
     <Link
@@ -28,7 +30,7 @@ export function PersonCard({
         <span key={label}>{label}</span>
       ))}
       {person.verificationStatus !== "verified" ? (
-        <span className="ft-card-verify">{verificationLabel(person.verificationStatus)}</span>
+        <span className="ft-card-verify">{verificationLabel(person.verificationStatus, t)}</span>
       ) : null}
     </Link>
   );
