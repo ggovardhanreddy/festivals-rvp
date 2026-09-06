@@ -19,6 +19,7 @@ import type {
 import { Reveal } from "@/components/Reveal";
 import { MediaImage } from "@/components/media/MediaImage";
 import membersSeed from "@/content/data/members.json";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const SEED = loadDirectorySeed();
 const MEMBER_SEED = membersSeed as Member[];
@@ -92,6 +93,7 @@ function mergeDirectory(
 }
 
 export function DirectoryPage() {
+  const { t } = useUiLang();
   const { raw, loading } = useCommunityList<DirectoryEntry>("directory", SEED);
   const { raw: memberRaw } = useCommunityList<Member>("members", MEMBER_SEED);
   const members = useMemo(
@@ -140,8 +142,8 @@ export function DirectoryPage() {
       <Reveal className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Village services</p>
-            <h1>Village Directory</h1>
+            <p className="eyebrow">{t("directory.eyebrow")}</p>
+            <h1>{t("directory.title")}</h1>
             <p className="lede">
               Doctors, teachers, government staff, and other professionals who
               serve Reddivaripalli — updated from the community roster.
@@ -151,10 +153,10 @@ export function DirectoryPage() {
 
         <div className="community-toolbar">
           <label className="community-search">
-            <span className="sr-only">Search directory</span>
+            <span className="sr-only">{t("directory.searchLabel")}</span>
             <input
               type="search"
-              placeholder="Search by name, designation, profession…"
+              placeholder={t("directory.searchPlaceholder")}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -182,7 +184,7 @@ export function DirectoryPage() {
           </div>
         </div>
 
-        {loading ? <p className="muted">Loading directory…</p> : null}
+        {loading ? <p className="muted">{t("directory.loading")}</p> : null}
 
         {groups.length ? (
           groups.map(({ cat, people }) => (
@@ -225,7 +227,7 @@ export function DirectoryPage() {
                         {person.profession ? ` · ${person.profession}` : ""}
                       </p>
                       {!person.photo ? (
-                        <p className="directory-meta">Photo Coming Soon</p>
+                        <p className="directory-meta">{t("directory.photoSoon")}</p>
                       ) : null}
                       {person.availability ? (
                         <p className="directory-meta">
@@ -239,7 +241,7 @@ export function DirectoryPage() {
             </section>
           ))
         ) : (
-          <p className="muted">No directory matches for this search.</p>
+          <p className="muted">{t("directory.noMatches")}</p>
         )}
       </Reveal>
     </div>

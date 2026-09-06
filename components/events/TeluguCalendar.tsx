@@ -9,6 +9,7 @@ import {
 } from "@/lib/telugu-panchangam";
 import { VARA_TE_SHORT, WEEKDAYS_EN } from "@/lib/telugu-calendar-labels";
 import { DayPanchangPanel } from "@/components/events/DayPanchangPanel";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 export function TeluguCalendar({
   upcoming = [],
@@ -33,6 +34,7 @@ export function TeluguCalendar({
   title?: string;
   lede?: string;
 }) {
+  const { t } = useUiLang();
   const now = new Date();
   const [cursor, setCursor] = useState(
     () => new Date(now.getFullYear(), now.getMonth(), 1),
@@ -142,10 +144,10 @@ export function TeluguCalendar({
             className="btn ghost"
             onClick={() => goMonth(-1)}
           >
-            Previous
+            {t("events.previous")}
           </button>
           <button type="button" className="btn ghost" onClick={() => goMonth(1)}>
-            Next
+            {t("events.next")}
           </button>
         </div>
       </div>
@@ -232,7 +234,7 @@ export function TeluguCalendar({
           emphasizeBirthdays={emphasizeBirthdays}
         />
       ) : (
-        <p className="muted">Panchangam unavailable for this date.</p>
+        <p className="muted">{t("events.panchangUnavailable")}</p>
       )}
     </section>
   );

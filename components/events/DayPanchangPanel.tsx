@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import type { Member, SiteEvent } from "@/lib/types";
 import type { DayPanchangam } from "@/lib/telugu-panchangam";
 import { withBase } from "@/lib/base";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 export function DayPanchangPanel({
   panchang,
@@ -16,6 +19,7 @@ export function DayPanchangPanel({
   liveSlugs?: string[];
   emphasizeBirthdays?: boolean;
 }) {
+  const { t } = useUiLang();
   const live = new Set(liveSlugs);
   const dateLabel = new Date(
     panchang.year,
@@ -99,7 +103,7 @@ export function DayPanchangPanel({
         data-emphasize-birthdays={emphasizeBirthdays || undefined}
       >
         <section>
-          <h4>Birthdays</h4>
+          <h4>{t("events.birthdays")}</h4>
           {birthdays.length ? (
             <ul className="day-panchang-people">
               {birthdays.map((m) => (
@@ -128,28 +132,28 @@ export function DayPanchangPanel({
               ))}
             </ul>
           ) : (
-            <p className="muted">No birthdays on file for this day.</p>
+            <p className="muted">{t("events.noBirthdaysToday")}</p>
           )}
           <Link className="btn ghost" href="/events/?tab=birthdays">
-            Birthday wishes
+            {t("events.birthdayWishes")}
           </Link>
         </section>
 
         <section>
-          <h4>Village events</h4>
+          <h4>{t("events.villageEvents")}</h4>
           {events.length ? (
             <ul className="day-panchang-events">
               {events.map((e) => (
                 <li key={e.id}>
                   <strong>{e.title}</strong>
                   {e.slug && live.has(e.slug) ? (
-                    <Link href={`/${e.slug}/`}>Gallery</Link>
+                    <Link href={`/${e.slug}/`}>{t("events.gallery")}</Link>
                   ) : null}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="muted">No village events listed for this day.</p>
+            <p className="muted">{t("events.noneToday")}</p>
           )}
         </section>
       </div>

@@ -5,8 +5,10 @@ import { m, useReducedMotion } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
 import { withBase } from "@/lib/base";
 import type { TimelineEntry } from "@/lib/timeline";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 export function HistoryTimeline({ entries }: { entries: TimelineEntry[] }) {
+  const { t } = useUiLang();
   const reduce = useReducedMotion();
 
   if (!entries.length) return null;
@@ -15,19 +17,19 @@ export function HistoryTimeline({ entries }: { entries: TimelineEntry[] }) {
     <Reveal className="section home-timeline" id="timeline">
       <div className="section-head">
         <div>
-          <p className="eyebrow">Our story</p>
-          <h2>History timeline</h2>
+          <p className="eyebrow">{t("home.ourStory")}</p>
+          <h2>{t("home.historyTimeline")}</h2>
           <p className="lede">
             Walk through the years that shaped Kondreddigaripalli — one memory at
             a time.
           </p>
         </div>
         <Link className="btn ghost" href="/timeline/">
-          Full timeline
+          {t("home.fullTimeline")}
         </Link>
       </div>
 
-      <ol className="history-timeline" aria-label="Village history timeline">
+      <ol className="history-timeline" aria-label={t("home.villageHistoryTimeline")}>
         {entries.map((entry, index) => {
           const side = index % 2 === 0 ? "left" : "right";
           return (
@@ -62,7 +64,7 @@ export function HistoryTimeline({ entries }: { entries: TimelineEntry[] }) {
                 <h3>{entry.title}</h3>
                 <p className="muted">{entry.description}</p>
                 <Link className="btn ghost" href={entry.href}>
-                  View more
+                  {t("home.viewMore")}
                 </Link>
               </m.article>
             </li>

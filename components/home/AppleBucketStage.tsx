@@ -9,6 +9,7 @@ import { albumHref, type BucketKey } from "@/lib/site";
 import { MediaImage } from "@/components/media/MediaImage";
 import { AutoMemorySlideshow } from "./AutoMemorySlideshow";
 import { HoverSlideshowTile } from "./HoverSlideshowTile";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 function relatedFrames(item: MediaWithAlbum, pool: MediaWithAlbum[]): Media[] {
   const sameAlbum = pool.filter(
@@ -38,6 +39,7 @@ export function AppleBucketStage({
   albums: Album[];
   heroImage?: string;
 }) {
+  const { t } = useUiLang();
   const router = useRouter();
   const reduce = useReducedMotion();
   const [tileHovered, setTileHovered] = useState(false);
@@ -107,10 +109,10 @@ export function AppleBucketStage({
         )}
       </section>
 
-      <section className="apple-chapter apple-chapter--gather" aria-label="Story">
+      <section className="apple-chapter apple-chapter--gather" aria-label={t("home.story")}>
         <div className="apple-chapter-head">
-          <p className="eyebrow">Festival Story</p>
-          <h2>Why this chapter matters</h2>
+          <p className="eyebrow">{t("home.festivalStory")}</p>
+          <h2>{t("home.whyChapter")}</h2>
           <p className="lede apple-chapter-lede">{story}</p>
         </div>
 
@@ -151,14 +153,14 @@ export function AppleBucketStage({
       </section>
 
       {!!years.length && (
-        <section className="apple-chapter apple-chapter--years" aria-label="Years">
+        <section className="apple-chapter apple-chapter--years" aria-label={t("home.years")}>
           <div className="apple-chapter-head apple-chapter-head--row">
             <div>
-              <p className="eyebrow">Seasons</p>
-              <h2>Browse the years</h2>
+              <p className="eyebrow">{t("home.seasons")}</p>
+              <h2>{t("home.browseYears")}</h2>
             </div>
             <Link className="btn ghost" href="/years/">
-              Years
+              {t("home.years")}
             </Link>
           </div>
           <div className="apple-year-tiles">
@@ -181,13 +183,13 @@ export function AppleBucketStage({
         <section
           className="apple-chapter apple-chapter--frames"
           id="gallery"
-          aria-label="Frames"
+          aria-label={t("home.frames")}
         >
           <div className="apple-chapter-head">
-            <p className="eyebrow">Frames</p>
-            <h2>Move over a memory</h2>
+            <p className="eyebrow">{t("home.frames")}</p>
+            <h2>{t("home.moveOverMemory")}</h2>
             <p className="lede apple-chapter-lede">
-              Hover an image to start its slideshow. Click to open the album.
+              {t("home.hoverHint")}
             </p>
           </div>
           <div className="apple-frames-bento">

@@ -8,6 +8,7 @@ import { memberAge } from "@/lib/member-groups";
 import { memberPhotoSrc } from "@/lib/member-image";
 import { daysUntilNextBirthday } from "@/lib/member-birthdays";
 import { panchangHintForDob } from "@/lib/telugu-panchangam";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 export function UpcomingBirthdays({
   members,
@@ -16,6 +17,7 @@ export function UpcomingBirthdays({
   members: Member[];
   limit?: number;
 }) {
+  const { t } = useUiLang();
   const upcoming = members
     .filter((m) => m.dob)
     .map((member) => ({
@@ -46,10 +48,10 @@ export function UpcomingBirthdays({
       <section className="section home-birthdays-upcoming" id="upcoming-birthdays">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Birthdays</p>
-            <h2>Upcoming birthdays</h2>
+            <p className="eyebrow">{t("home.birthdaysHeading")}</p>
+            <h2>{t("home.upcomingBirthdays")}</h2>
             <p className="lede muted">
-              Birthday dates will appear here as they are added for each member.
+              {t("home.birthdaysEmpty")}
             </p>
           </div>
         </div>
@@ -61,12 +63,12 @@ export function UpcomingBirthdays({
     <section className="section home-birthdays-upcoming" id="upcoming-birthdays">
       <div className="section-head">
         <div>
-          <p className="eyebrow">Birthdays</p>
-          <h2>Upcoming birthdays</h2>
-          <p className="lede">Next celebrations in our community.</p>
+          <p className="eyebrow">{t("home.birthdaysHeading")}</p>
+          <h2>{t("home.upcomingBirthdays")}</h2>
+          <p className="lede">{t("home.nextCelebrations")}</p>
         </div>
         <Link className="btn ghost" href="/events/?tab=birthdays">
-          All birthdays
+          {t("home.allBirthdays")}
         </Link>
       </div>
       <div className="birthday-strip">
@@ -109,7 +111,7 @@ export function UpcomingBirthdays({
                   {hints[member.id] ? ` · ${hints[member.id]}` : ""}
                 </p>
                 {!hasPhoto ? (
-                  <p className="member-photo-soon">Photo Coming Soon</p>
+                  <p className="member-photo-soon">{t("home.photoSoon")}</p>
                 ) : null}
               </div>
             </article>

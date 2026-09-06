@@ -9,6 +9,7 @@ import { useLowPowerDevice } from "@/lib/client";
 import { AutoMemorySlideshow } from "./AutoMemorySlideshow";
 import { FloatingTileField } from "./FloatingTileField";
 import { HoverSlideshowTile } from "./HoverSlideshowTile";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 function relatedFrames(item: MediaWithAlbum, pool: MediaWithAlbum[]): Media[] {
   const sameAlbum = pool.filter(
@@ -30,6 +31,7 @@ export function AppleHomeStage({
   media: MediaWithAlbum[];
   galleryTeaser: MediaWithAlbum[];
 }) {
+  const { t } = useUiLang();
   const router = useRouter();
   const lowPower = useLowPowerDevice();
   const [tileHovered, setTileHovered] = useState(false);
@@ -56,11 +58,11 @@ export function AppleHomeStage({
     <div className="apple-stage">
       <section
         className="apple-chapter apple-chapter--memories"
-        aria-label="Memories slideshow"
+        aria-label={t("home.memoriesSlideshow")}
       >
         <div className="apple-chapter-head">
-          <p className="eyebrow">Fullscreen</p>
-          <h2>Every moment, kept alive</h2>
+          <p className="eyebrow">{t("home.fullscreen")}</p>
+          <h2>{t("home.everyMoment")}</h2>
           <p className="lede apple-chapter-lede">
             {lowPower
               ? "A living reel from Kondreddigaripalli — frames advance as you scroll."
@@ -73,13 +75,13 @@ export function AppleHomeStage({
       <section
         className="apple-chapter apple-chapter--gather"
         id="festivals"
-        aria-label="Where we gather"
+        aria-label={t("home.whereWeGather")}
       >
         <div className="apple-chapter-head">
-          <p className="eyebrow">Gather</p>
-          <h2>Where we gather</h2>
+          <p className="eyebrow">{t("home.gather")}</p>
+          <h2>{t("home.whereWeGather")}</h2>
           <p className="lede apple-chapter-lede">
-            Festivals and journeys — doorways into the archive.
+            {t("home.festivalsJourneys")}
           </p>
         </div>
         <FloatingTileField
@@ -90,11 +92,11 @@ export function AppleHomeStage({
 
       <section
         className="apple-chapter apple-chapter--frames"
-        aria-label="Frames from home"
+        aria-label={t("home.framesFromHome")}
       >
         <div className="apple-chapter-head apple-chapter-head--row">
           <div>
-            <p className="eyebrow">Frames</p>
+            <p className="eyebrow">{t("home.frames")}</p>
             <h2>{lowPower ? "Tap a memory" : "Move over a memory"}</h2>
             <p className="lede apple-chapter-lede">
               {lowPower
@@ -103,7 +105,7 @@ export function AppleHomeStage({
             </p>
           </div>
           <Link className="btn ghost" href="/search/">
-            Search memories
+            {t("home.searchMemories")}
           </Link>
         </div>
 

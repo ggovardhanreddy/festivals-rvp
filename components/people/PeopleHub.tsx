@@ -89,8 +89,8 @@ export function PeopleHub({
       <section className="section" id="elders">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Respected across generations</p>
-            <h2>Elders & Notable People</h2>
+            <p className="eyebrow">{t("people.eldersEyebrow")}</p>
+            <h2>{t("people.eldersHeading")}</h2>
             <p className="lede">
               Senior members of Reddivaripalli, remembered with the legends who
               shaped the village.
@@ -156,8 +156,8 @@ export function PeopleHub({
       <section className="section" id="contributors">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Service to the village</p>
-            <h2>Village Contributors</h2>
+            <p className="eyebrow">{t("people.contributorsEyebrow")}</p>
+            <h2>{t("people.contributorsHeading")}</h2>
             <p className="lede">
               Neighbours who organise festivals, support development, and keep
               Reddivaripalli’s daily life going.
@@ -179,8 +179,8 @@ export function PeopleHub({
       <section className="section" id="professionals">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Work of the village</p>
-            <h2>Professionals</h2>
+            <p className="eyebrow">{t("people.workOfVillage")}</p>
+            <h2>{t("people.professionals")}</h2>
             <p className="lede">{heritage.professionals.lede}</p>
           </div>
         </div>
@@ -203,7 +203,7 @@ export function PeopleHub({
         </div>
         {directory.length ? (
           <>
-            <h3 className="village-heritage-subhead">Village directory</h3>
+            <h3 className="village-heritage-subhead">{t("people.directory")}</h3>
             <p className="muted">
               Public roles only — phone numbers and private addresses are not
               shown.
@@ -225,8 +225,8 @@ export function PeopleHub({
       <section className="section" id="birthdays">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Celebrated among us</p>
-            <h2>Birthdays</h2>
+            <p className="eyebrow">{t("people.birthdaysEyebrow")}</p>
+            <h2>{t("people.birthdays")}</h2>
           </div>
         </div>
         {withBirthday.length ? (
@@ -239,10 +239,10 @@ export function PeopleHub({
             ))}
           </ul>
         ) : (
-          <p className="muted">No public birthdays have been shared yet.</p>
+          <p className="muted">{t("people.noBirthdays")}</p>
         )}
         <Link className="btn ghost" href="/rvp-birthdays/">
-          Birthday photographs
+          {t("people.birthdayPhotos")}
         </Link>
       </section>
     </div>

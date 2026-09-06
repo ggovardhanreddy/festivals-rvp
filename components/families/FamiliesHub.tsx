@@ -18,6 +18,7 @@ import { useCommunityList } from "@/lib/use-community";
 import { memberPhotoSrc } from "@/lib/member-image";
 import type { FamilyPersonAssignment, Member, VillageFamily } from "@/lib/types";
 import membersSeed from "@/content/data/members.json";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const FAMILY_SEED = loadVillageFamilies();
 const MEMBER_SEED = membersSeed as Member[];
@@ -39,6 +40,7 @@ function FamilyCard({
   peopleCount: number;
   generations: number;
 }) {
+  const { t } = useUiLang();
   const src = memberPhotoSrc(family.coverPhoto);
   return (
     <article className="family-card">
@@ -55,7 +57,7 @@ function FamilyCard({
         {family.description ? <p>{family.description}</p> : null}
         <p className="muted">{familyCountLabel(peopleCount, generations)}</p>
         <Link className="btn" href={familyHref(family.slug)}>
-          View Family
+          {t("fam.viewFamily")}
         </Link>
       </div>
     </article>
@@ -63,6 +65,7 @@ function FamilyCard({
 }
 
 export function FamiliesHub() {
+  const { t } = useUiLang();
   const [query, setQuery] = useState("");
   const { items: remoteFamilies } = useCommunityList<VillageFamily>(
     "families",
@@ -108,12 +111,12 @@ export function FamiliesHub() {
 
       <div className="ft-toolbar">
         <label className="ft-search">
-          <span className="sr-only">Search family members</span>
+          <span className="sr-only">{t("fam.searchMembers")}</span>
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search family members..."
+            placeholder={t("fam.searchPlaceholder")}
           />
         </label>
       </div>
@@ -122,7 +125,7 @@ export function FamiliesHub() {
         <section className="section" aria-live="polite">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Search</p>
+              <p className="eyebrow">{t("fam.search")}</p>
               <h2>
                 {results.length
                   ? `${results.length} ${results.length === 1 ? "person" : "people"}`
@@ -143,8 +146,8 @@ export function FamiliesHub() {
         <section className="section" id="list">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Our People</p>
-              <h2>Village Families</h2>
+              <p className="eyebrow">{t("fam.ourPeople")}</p>
+              <h2>{t("fam.villageFamilies")}</h2>
               <p className="lede">
                 Family branches of Reddivaripalli. Order is set by the
                 administrator. Married daughters remain in their parental family

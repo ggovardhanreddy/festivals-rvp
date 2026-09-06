@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const ITEMS = [
   { href: "/people/", prefix: "/people/", label: "People" },
@@ -14,11 +15,12 @@ const ITEMS = [
 ] as const;
 
 export function PeopleNav() {
+  const { t } = useUiLang();
   const pathname = usePathname() || "/";
   const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
 
   return (
-    <nav className="people-tabs" aria-label="People sections">
+    <nav className="people-tabs" aria-label={t("people.sections")}>
       {ITEMS.map((item) => {
         const active =
           item.label === "People"

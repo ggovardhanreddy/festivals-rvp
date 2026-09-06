@@ -8,8 +8,10 @@ import { memberAge } from "@/lib/member-groups";
 import { memberPhotoSrc } from "@/lib/member-image";
 import { formatBirthdayLabel } from "@/lib/dates";
 import { panchangHintForDob } from "@/lib/telugu-panchangam";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 export function TodayBirthdays({ members }: { members: Member[] }) {
+  const { t } = useUiLang();
   const reduce = useReducedMotion();
   const [celebrate, setCelebrate] = useState(!reduce);
   const [panchangHint, setPanchangHint] = useState<string | null>(null);
@@ -51,12 +53,12 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
       ) : null}
       <div className="section-head">
         <div>
-          <p className="eyebrow">Today</p>
+          <p className="eyebrow">{t("home.today")}</p>
           <h2>Today&apos;s Birthday</h2>
-          <p className="lede">Celebrating our own — with love from the village.</p>
+          <p className="lede">{t("home.celebratingOurOwn")}</p>
         </div>
         <Link className="btn ghost" href="/events/?tab=birthdays">
-          All birthdays
+          {t("home.allBirthdays")}
         </Link>
       </div>
 
@@ -85,7 +87,7 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
           )}
         </div>
         <div>
-          <p className="birthday-greeting">Happy Birthday!</p>
+          <p className="birthday-greeting">{t("home.happyBirthday")}</p>
           <h3>{featured.name}</h3>
           <p className="muted">
             {formatBirthdayLabel(featured.dob) || "Birthday celebration"}
@@ -133,7 +135,7 @@ export function TodayBirthdays({ members }: { members: Member[] }) {
                 </div>
                 <div>
                   <h3>{member.name}</h3>
-                  <p className="birthday-greeting">Happy Birthday!</p>
+                  <p className="birthday-greeting">{t("home.happyBirthday")}</p>
                   <p className="muted">
                     {label || "Birthday celebration"}
                     {age != null ? ` · age ${age}` : ""}

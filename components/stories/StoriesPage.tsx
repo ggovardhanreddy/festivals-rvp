@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { withBase } from "@/lib/base";
 import { loadHeritageSeed } from "@/lib/community";
 import { loadVillageHeritage } from "@/lib/village-heritage";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 /**
  * Village stories and memories — the emotional heart of the site.
@@ -12,6 +15,7 @@ import { loadVillageHeritage } from "@/lib/village-heritage";
  * here is general religion or literature.
  */
 export function StoriesPage() {
+  const { t } = useUiLang();
   const heritage = loadVillageHeritage();
   const archive = loadHeritageSeed().filter(
     (item) => item.status === "approved",
@@ -22,8 +26,8 @@ export function StoriesPage() {
       <Reveal className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Remembered together</p>
-            <h2>Village Stories & Memories</h2>
+            <p className="eyebrow">{t("stories.remembered")}</p>
+            <h2>{t("stories.title")}</h2>
             <p className="lede">
               Stories from elders, old village memories, traditional practices,
               and the people who grew up in Reddivaripalli. This is community
@@ -38,7 +42,7 @@ export function StoriesPage() {
       <Reveal className="section" id="elders">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Stories from elders</p>
+            <p className="eyebrow">{t("stories.fromElders")}</p>
             <h2>{heritage.memorial.title}</h2>
             <p className="lede">{heritage.memorial.lede}</p>
           </div>
@@ -73,8 +77,8 @@ export function StoriesPage() {
       <Reveal className="section" id="history-memories">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Community memory</p>
-            <h2>Stories, not the official record</h2>
+            <p className="eyebrow">{t("stories.eyebrow")}</p>
+            <h2>{t("stories.notOfficial")}</h2>
             <p className="lede">
               What follows is remembered by families and elders. Dates and
               details may differ from the written village history.
@@ -82,15 +86,15 @@ export function StoriesPage() {
           </div>
         </div>
         <Link className="btn ghost" href="/about/#history">
-          Read the village record
+          {t("stories.readRecord")}
         </Link>
       </Reveal>
 
       <Reveal className="section" id="practices">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Traditional practices</p>
-            <h2>Ways of the village</h2>
+            <p className="eyebrow">{t("stories.traditional")}</p>
+            <h2>{t("stories.waysOfVillage")}</h2>
             <p className="lede">
               Practices introduced in Reddivaripalli and still spoken of with
               pride.
@@ -116,10 +120,10 @@ export function StoriesPage() {
         <Reveal className="section" id="old-photographs">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Old photographs</p>
-              <h2>Pictures with a story</h2>
+              <p className="eyebrow">{t("stories.oldPhotos")}</p>
+              <h2>{t("stories.picturesWithStory")}</h2>
               <p className="lede">
-                Heritage photographs kept with the words that belong to them.
+                {t("stories.heritageLede")}
               </p>
             </div>
           </div>
@@ -146,7 +150,7 @@ export function StoriesPage() {
             ))}
           </ul>
           <Link className="btn" href="/gallery/">
-            Open the gallery
+            {t("stories.openGallery")}
           </Link>
         </Reveal>
       ) : null}
@@ -154,7 +158,7 @@ export function StoriesPage() {
       <Reveal className="section" id="vision">
         <div className="section-head">
           <div>
-            <p className="eyebrow">For the next generation</p>
+            <p className="eyebrow">{t("stories.forNext")}</p>
             <h2>{heritage.vision.title}</h2>
           </div>
         </div>

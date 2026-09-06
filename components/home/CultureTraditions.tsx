@@ -8,6 +8,7 @@ import {
   festivalThumbPath,
 } from "@/lib/festivals";
 import { Reveal } from "@/components/Reveal";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 /**
  * Visual index of the festival chapters.
@@ -18,12 +19,13 @@ import { Reveal } from "@/components/Reveal";
  * blocks on one page, both anchored at #culture, is what this used to be.
  */
 export function CultureTraditions() {
+  const { t } = useUiLang();
   return (
     <Reveal className="section culture-traditions" id="festival-chapters">
       <div className="section-head">
         <div>
-          <p className="eyebrow">Village life</p>
-          <h2>Festival Chapters</h2>
+          <p className="eyebrow">{t("home.villageLife")}</p>
+          <h2>{t("home.festivalChapters")}</h2>
           <p className="lede">{CULTURE_DESCRIPTION}</p>
         </div>
       </div>

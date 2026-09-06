@@ -7,6 +7,7 @@ import { useCommunityList } from "@/lib/use-community";
 import { useSuperAdmin } from "@/lib/use-super-admin";
 import type { Suggestion, SuggestionCategory, SuggestionStatus } from "@/lib/types";
 import suggestionsSeed from "@/content/data/suggestions.json";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const CATEGORIES: SuggestionCategory[] = [
   "General",
@@ -28,6 +29,7 @@ function newId() {
 }
 
 export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
+  const { t } = useUiLang();
   const { session } = useMemberAuth();
   const { isAdmin } = useSuperAdmin();
   const { items, loading, submitItem, saveAll } = useCommunityList<Suggestion>(
@@ -98,8 +100,8 @@ export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
       <Reveal className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Community voice</p>
-            <h1>Suggestions</h1>
+            <p className="eyebrow">{t("sugg.eyebrow")}</p>
+            <h1>{t("sugg.title")}</h1>
             <p className="lede">
               Share ideas for the village — development, events, temple, and more.
               Submissions sync to the community store when online (with a local
@@ -118,7 +120,7 @@ export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
         ) : null}
 
         <form className="suggestions-form card-interactive" onSubmit={handleSubmit}>
-          <h2>Submit a suggestion</h2>
+          <h2>{t("sugg.submit")}</h2>
           <div className="suggestions-form-grid">
             <label>
               Name <span className="muted">(optional)</span>
@@ -171,16 +173,16 @@ export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
             />
           </label>
           <button type="submit" className="btn">
-            Submit suggestion
+            {t("sugg.submitBtn")}
           </button>
         </form>
       </Reveal>
 
-      {loading ? <p className="muted section">Loading suggestions…</p> : null}
+      {loading ? <p className="muted section">{t("sugg.loading")}</p> : null}
 
       {publicApproved.length ? (
         <Reveal className="section">
-          <h2>Shared suggestions</h2>
+          <h2>{t("sugg.shared")}</h2>
           <ul className="suggestions-list">
             {publicApproved.map((s) => (
               <li key={s.id} className="suggestions-item" data-status={s.status}>
@@ -219,12 +221,12 @@ export function SuggestionsPage({ seed = SEED }: { seed?: Suggestion[] }) {
 
       {isAdmin ? (
         <Reveal className="section suggestions-admin">
-          <h2>Admin review</h2>
+          <h2>{t("sugg.adminReview")}</h2>
           <p className="muted lede">
-            Review and update status for community suggestions.
+            {t("sugg.adminLede")}
           </p>
           {!items.length ? (
-            <p className="muted">No suggestions yet.</p>
+            <p className="muted">{t("sugg.none")}</p>
           ) : (
             <ul className="suggestions-list">
               {items.map((s) => (

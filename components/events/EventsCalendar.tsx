@@ -5,6 +5,7 @@ import { withBase } from "@/lib/base";
 import { daysUntil, formatCountdown } from "@/lib/dates";
 import type { Member, SiteEvent } from "@/lib/types";
 import { TeluguCalendar } from "@/components/events/TeluguCalendar";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 export function EventsCalendar({
   upcoming,
@@ -31,6 +32,7 @@ export function EventsCalendar({
   calendarTitle?: string;
   calendarLede?: string;
 }) {
+  const { t } = useUiLang();
   const live = new Set(liveSlugs);
 
   return (
@@ -39,8 +41,8 @@ export function EventsCalendar({
         <section className="section">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Next up</p>
-              <h2>Upcoming events</h2>
+              <p className="eyebrow">{t("events.nextUp")}</p>
+              <h2>{t("events.upcoming")}</h2>
             </div>
           </div>
           <div className="event-cards">
@@ -75,7 +77,7 @@ export function EventsCalendar({
                       <p className="lede">{event.description}</p>
                       {event.slug && live.has(event.slug) ? (
                         <Link className="btn" href={`/${event.slug}/`}>
-                          View gallery
+                          {t("events.viewGallery")}
                         </Link>
                       ) : null}
                     </div>
@@ -83,7 +85,7 @@ export function EventsCalendar({
                 );
               })
             ) : (
-              <p className="muted">No upcoming events on the calendar yet.</p>
+              <p className="muted">{t("events.none")}</p>
             )}
           </div>
         </section>
@@ -106,8 +108,8 @@ export function EventsCalendar({
         <section className="section">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Archive</p>
-              <h2>Past events</h2>
+              <p className="eyebrow">{t("events.archive")}</p>
+              <h2>{t("events.past")}</h2>
             </div>
           </div>
           <ul className="event-archive">
@@ -116,7 +118,7 @@ export function EventsCalendar({
                 <span className="muted">{event.date}</span>
                 <strong>{event.title}</strong>
                 {event.slug && live.has(event.slug) ? (
-                  <Link href={`/${event.slug}/`}>Gallery</Link>
+                  <Link href={`/${event.slug}/`}>{t("events.gallery")}</Link>
                 ) : null}
               </li>
             ))}

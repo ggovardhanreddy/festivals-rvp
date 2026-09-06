@@ -8,6 +8,7 @@ import { TodayBirthdays } from "@/components/home/TodayBirthdays";
 import { UpcomingBirthdays } from "@/components/home/UpcomingBirthdays";
 import { dobMonthDay, monthDay } from "@/lib/dates";
 import { useLiveEvents } from "@/lib/live-calendar";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 type Tab = "events" | "birthdays";
 
@@ -35,6 +36,7 @@ export function EventsBirthdaysHub({
   members?: Member[];
   initialTab?: Tab;
 }) {
+  const { t } = useUiLang();
   const seed = useMemo(() => [...upcoming, ...archive], [upcoming, archive]);
   const liveEvents = useLiveEvents(seed);
   const liveSplit = useMemo(() => splitUpcomingArchive(liveEvents), [liveEvents]);
@@ -71,7 +73,7 @@ export function EventsBirthdaysHub({
         <div
           className="events-birthdays-tabs"
           role="tablist"
-          aria-label="Events and birthdays"
+          aria-label={t("events.andBirthdays")}
         >
           <button
             type="button"
@@ -81,7 +83,7 @@ export function EventsBirthdaysHub({
             data-active={tab === "events" || undefined}
             onClick={() => selectTab("events")}
           >
-            Events
+            {t("events.title")}
           </button>
           <button
             type="button"
@@ -91,13 +93,13 @@ export function EventsBirthdaysHub({
             data-active={tab === "birthdays" || undefined}
             onClick={() => selectTab("birthdays")}
           >
-            Birthdays
+            {t("events.birthdays")}
           </button>
         </div>
       </div>
 
       {tab === "events" ? (
-        <div role="tabpanel" aria-label="Events">
+        <div role="tabpanel" aria-label={t("events.title")}>
           <EventsCalendar
             upcoming={liveSplit.upcoming}
             archive={liveSplit.archive}
@@ -110,7 +112,7 @@ export function EventsBirthdaysHub({
           />
         </div>
       ) : (
-        <div role="tabpanel" aria-label="Birthdays">
+        <div role="tabpanel" aria-label={t("events.birthdays")}>
           <TodayBirthdays members={todayMembers} />
           <UpcomingBirthdays members={members} />
           <EventsCalendar
@@ -129,15 +131,15 @@ export function EventsBirthdaysHub({
           <section className="section" id="birthday-wishes">
             <div className="section-head">
               <div>
-                <p className="eyebrow">Celebrate</p>
-                <h2>Birthday wishes</h2>
+                <p className="eyebrow">{t("events.celebrate")}</p>
+                <h2>{t("events.birthdayWishes")}</h2>
                 <p className="lede">
                   Share a smile with the birthday gallery — candles, laughter,
                   and the warmth of another year together.
                 </p>
               </div>
               <Link className="btn" href="/rvp-birthdays/">
-                Open birthday gallery
+                {t("events.openBirthdayGallery")}
               </Link>
             </div>
           </section>

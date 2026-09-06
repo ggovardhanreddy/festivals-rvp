@@ -55,6 +55,7 @@ import {
   createBlankMember,
 } from "./MemberEditProvider";
 import { MemberEditPanel } from "./MemberEditPanel";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const GROUP_ICONS = {
   legacy: Award,
@@ -93,6 +94,7 @@ function MemberCard({
   onDrop?: () => void;
   onDragEnd?: () => void;
 }) {
+  const { t } = useUiLang();
   const reduce = useReducedMotion();
   const hasPhoto = Boolean(member.photo);
   const birthdayLabel = formatBirthdayLabel(member.dob);
@@ -142,12 +144,12 @@ function MemberCard({
       ) : null}
 
       {memorial ? (
-        <span className="member-memorial-ribbon" aria-label="In Loving Memory">
-          <Heart size={12} aria-hidden /> In Loving Memory
+        <span className="member-memorial-ribbon" aria-label={t("members.inLovingMemory")}>
+          <Heart size={12} aria-hidden /> {t("members.inLovingMemory")}
         </span>
       ) : null}
       {isBirthdayToday && !memorial ? (
-        <span className="member-bday-ribbon" aria-label="Today's Birthday">
+        <span className="member-bday-ribbon" aria-label={t("members.todaysBirthday")}>
           Today&apos;s Birthday
         </span>
       ) : null}
@@ -170,7 +172,7 @@ function MemberCard({
             <span className="member-avatar-initials">
               {memberInitials(member.name)}
             </span>
-            <span className="member-photo-soon">Photo Coming Soon</span>
+            <span className="member-photo-soon">{t("members.photoSoon")}</span>
           </div>
         )}
         <span className={`member-group-badge member-group-badge--${group}`}>
@@ -184,7 +186,7 @@ function MemberCard({
               aria-label={`Upload photo for ${member.name}`}
               onClick={() => fileRef.current?.click()}
             >
-              <Upload size={14} aria-hidden /> Photo
+              <Upload size={14} aria-hidden /> {t("members.photo")}
             </button>
             <input
               ref={fileRef}
@@ -217,7 +219,7 @@ function MemberCard({
           </p>
         ) : null}
         {memorial ? (
-          <p className="member-forever">Forever Remembered</p>
+          <p className="member-forever">{t("members.foreverRemembered")}</p>
         ) : birthdayLabel ? (
           <p className="member-birthday">Birthday · {birthdayLabel}</p>
         ) : null}
@@ -242,7 +244,7 @@ function MemberCard({
             className="btn ghost member-profile-btn"
             onClick={() => onOpen(member)}
           >
-            View Profile
+            {t("members.viewProfile")}
           </button>
           {editMode ? (
             <button
@@ -270,6 +272,7 @@ function MemberProfileModal({
   editMode?: boolean;
   onEdit?: () => void;
 }) {
+  const { t } = useUiLang();
   const titleId = useId();
   const hasPhoto = Boolean(member.photo);
   const memorial = isMemorial(member);
@@ -300,7 +303,7 @@ function MemberProfileModal({
         <button
           type="button"
           className="icon-btn member-profile-close"
-          aria-label="Close profile"
+          aria-label={t("members.closeProfile")}
           onClick={onClose}
         >
           <X size={18} />
@@ -322,7 +325,7 @@ function MemberProfileModal({
               <span className="member-avatar-initials">
                 {memberInitials(member.name)}
               </span>
-              <span className="member-photo-soon">Photo Coming Soon</span>
+              <span className="member-photo-soon">{t("members.photoSoon")}</span>
             </div>
           )}
         </div>
@@ -342,7 +345,7 @@ function MemberProfileModal({
           {member.bio ? <p className="lede">{member.bio}</p> : null}
           {memorial ? (
             <p className="member-forever">
-              <Heart size={14} aria-hidden /> Forever Remembered
+              <Heart size={14} aria-hidden /> {t("members.foreverRemembered")}
             </p>
           ) : null}
           {birthdayLabel ? (
@@ -350,7 +353,7 @@ function MemberProfileModal({
           ) : null}
           {member.achievements?.length ? (
             <div className="member-achievements">
-              <p className="eyebrow">Achievements</p>
+              <p className="eyebrow">{t("members.achievements")}</p>
               <ul>
                 {member.achievements.map((item) => (
                   <li key={item}>{item}</li>
@@ -419,6 +422,7 @@ export function MembersGrid({
   title?: string;
   lede?: string;
 }) {
+  const { t } = useUiLang();
   const { editMode } = useEditMode();
   const edit = useMemberEditOptional();
   const members = edit?.members ?? seedMembers;
@@ -660,22 +664,22 @@ export function MembersGrid({
         </div>
       ) : null}
 
-      <div className="member-stats" aria-label="Community statistics">
+      <div className="member-stats" aria-label={t("members.communityStats")}>
         <div className="member-stat">
           <strong>{stats.total}</strong>
-          <span>Total Members</span>
+          <span>{t("members.totalMembers")}</span>
         </div>
         <div className="member-stat">
           <strong>{stats.byGroup.legacy}</strong>
-          <span>Legacy Circle</span>
+          <span>{t("members.legacyCircle")}</span>
         </div>
         <div className="member-stat">
           <strong>{stats.byGroup.core}</strong>
-          <span>Core Members</span>
+          <span>{t("members.coreMembers")}</span>
         </div>
         <div className="member-stat">
           <strong>{stats.byGroup.nextgen}</strong>
-          <span>Next Generation</span>
+          <span>{t("members.nextGeneration")}</span>
         </div>
         {PROFESSION_ORDER.map((key) => (
           <div key={key} className="member-stat member-stat--soft">
@@ -690,21 +694,21 @@ export function MembersGrid({
           <Search size={16} aria-hidden />
           <input
             type="search"
-            placeholder="Search by name or designation…"
+            placeholder={t("members.searchPlaceholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            aria-label="Search members"
+            aria-label={t("members.searchLabel")}
           />
         </label>
         <label>
-          Category
+          {t("members.category")}
           <select
             value={groupFilter}
             onChange={(e) =>
               setGroupFilter(e.target.value as MemberGroup | "all")
             }
           >
-            <option value="all">All categories</option>
+            <option value="all">{t("members.allCategories")}</option>
             {MEMBER_GROUP_ORDER.map((g) => (
               <option key={g} value={g}>
                 {MEMBER_GROUP_LABELS[g]}
@@ -713,14 +717,14 @@ export function MembersGrid({
           </select>
         </label>
         <label>
-          Profession
+          {t("members.profession")}
           <select
             value={profession}
             onChange={(e) =>
               setProfession(e.target.value as ProfessionKey | "all")
             }
           >
-            <option value="all">All professions</option>
+            <option value="all">{t("members.allProfessions")}</option>
             {PROFESSION_ORDER.map((key) => (
               <option key={key} value={key}>
                 {PROFESSION_LABELS[key]}
@@ -729,13 +733,13 @@ export function MembersGrid({
           </select>
         </label>
         <label>
-          Order
+          {t("members.order")}
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortMode)}
           >
-            <option value="group">By category</option>
-            <option value="alpha">Alphabetical</option>
+            <option value="group">{t("members.byCategory")}</option>
+            <option value="alpha">{t("members.alphabetical")}</option>
           </select>
         </label>
       </div>
@@ -825,7 +829,7 @@ export function MembersGrid({
 
       {!filtered.length ? (
         <p className="muted" style={{ marginTop: "1.5rem" }}>
-          No members match your search or filters.
+          {t("members.noMatch")}
         </p>
       ) : null}
 

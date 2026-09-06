@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { Announcement } from "@/lib/types";
 import { daysUntil, formatEventDate } from "@/lib/dates";
 import { useLiveAnnouncements } from "@/lib/live-calendar";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 /**
  * Every published village update, newest first.
@@ -16,6 +17,7 @@ export function VillageUpdatesList({
 }: {
   announcements: Announcement[];
 }) {
+  const { t } = useUiLang();
   const live = useLiveAnnouncements(announcements);
   const items = useMemo(() => {
     const source = live.length ? live : announcements;
@@ -30,9 +32,9 @@ export function VillageUpdatesList({
     <section className="section village-updates" id="updates" aria-labelledby="village-updates-heading">
       <div className="section-head">
         <div>
-          <p className="eyebrow">Notices</p>
-          <h2 id="village-updates-heading">Village Updates</h2>
-          <p className="lede">Announcements from the Gram Panchayat and RVP Youth.</p>
+          <p className="eyebrow">{t("events.notices")}</p>
+          <h2 id="village-updates-heading">{t("events.villageUpdates")}</h2>
+          <p className="lede">{t("events.announcementsLede")}</p>
         </div>
       </div>
       <ul className="village-update-list">

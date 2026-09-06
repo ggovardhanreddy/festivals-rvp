@@ -6,6 +6,7 @@ import { daysUntil, formatCountdown } from "@/lib/dates";
 import { festivalCardImage } from "@/lib/festivals";
 import { Reveal } from "@/components/Reveal";
 import type { SiteEvent } from "@/lib/types";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const FALLBACK_IMAGE = "/brand/village-aerial.webp";
 
@@ -19,6 +20,7 @@ export function FestivalCalendar({
   /** When true, render only the grid — parent supplies the heading. */
   embedded?: boolean;
 }) {
+  const { t } = useUiLang();
   if (!festivals.length) return null;
 
   const live = new Set(liveSlugs);
@@ -76,13 +78,13 @@ export function FestivalCalendar({
               />
             </div>
             <div className="festival-card-body">
-              {isNext ? <p className="festival-card-badge">Next up</p> : null}
+              {isNext ? <p className="festival-card-badge">{t("home.nextUp")}</p> : null}
               <p className="eyebrow">{formatCountdown(days)}</p>
               <h3>{event.title}</h3>
               <p className="muted">{event.date}</p>
               <p className="lede">{event.description}</p>
               {event.slug && live.has(event.slug) ? (
-                <span className="festival-card-link">View chapter</span>
+                <span className="festival-card-link">{t("home.viewChapter")}</span>
               ) : null}
             </div>
           </Link>
@@ -97,14 +99,14 @@ export function FestivalCalendar({
     <Reveal className="section home-festivals" id="festivals">
       <div className="section-head">
         <div>
-          <p className="eyebrow">Annual traditions</p>
-          <h2>Festival calendar</h2>
+          <p className="eyebrow">{t("home.annualTraditions")}</p>
+          <h2>{t("home.festivalCalendar")}</h2>
           <p className="lede">
-            Recurring celebrations that return to Kondreddigaripalli each year.
+            {t("home.recurringCelebrations")}
           </p>
         </div>
         <Link className="btn ghost" href="/temples/#upcoming-festivals">
-          Temples & Festivals
+          {t("home.templesFestivals")}
         </Link>
       </div>
       {grid}

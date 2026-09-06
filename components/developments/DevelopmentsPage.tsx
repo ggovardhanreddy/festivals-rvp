@@ -16,6 +16,7 @@ import type {
   DevelopmentWorkflowStage,
 } from "@/lib/types";
 import { Reveal } from "@/components/Reveal";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 const PUBLIC_FILTERS: { key: "all" | PublicDevelopmentStatus; label: string }[] = [
   { key: "all", label: "All" },
@@ -39,15 +40,16 @@ function StageWorkflow({
   stages: DevelopmentWorkflowStage[];
   currentStage: DevelopmentWorkflowStage;
 }) {
+  const { t } = useUiLang();
   const currentIndex = Math.max(0, stages.indexOf(currentStage));
   const labels = stages.map(
     (key) => WORKFLOW_STAGES.find((s) => s.key === key)?.label ?? stageLabel(key),
   );
 
   return (
-    <div className="dev-stage-workflow" aria-label="Project stage">
+    <div className="dev-stage-workflow" aria-label={t("dev.stage")}>
       <p className="dev-stage-workflow-label">
-        Current stage · <strong>{labels[currentIndex]}</strong>
+        {t("dev.currentStage")} <strong>{labels[currentIndex]}</strong>
       </p>
       <ol className="dev-stage-list">
         {stages.map((key, index) => {
@@ -77,6 +79,7 @@ function StageWorkflow({
 }
 
 function DevelopmentCard({ item }: { item: Development }) {
+  const { t } = useUiLang();
   const photos = item.images ?? [];
   const meta = STATUS_META[item.status];
   const milestones = [...(item.milestones ?? [])].sort((a, b) =>
@@ -134,7 +137,7 @@ function DevelopmentCard({ item }: { item: Development }) {
         </p>
         {milestones.length ? (
           <div className="dev-timeline">
-            <p className="eyebrow">Updates</p>
+            <p className="eyebrow">{t("dev.updates")}</p>
             <ol className="dev-timeline-list">
               {milestones.map((m) => (
                 <li key={`${m.date}-${m.title}`}>
@@ -156,6 +159,7 @@ function DevelopmentCard({ item }: { item: Development }) {
 }
 
 export function DevelopmentsPage({ developments }: { developments: Development[] }) {
+  const { t } = useUiLang();
   const [filter, setFilter] = useState<"all" | PublicDevelopmentStatus>("all");
 
   const filtered = useMemo(() => {
@@ -168,8 +172,8 @@ export function DevelopmentsPage({ developments }: { developments: Development[]
       <Reveal className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Village works</p>
-            <h1>Development</h1>
+            <p className="eyebrow">{t("dev.title")}</p>
+            <h1>{t("dev.eyebrow")}</h1>
             <p className="lede">
               Roads, water, schools, temples and community facilities in
               Reddivaripalli — recorded as they stand, without promotion.
@@ -177,7 +181,7 @@ export function DevelopmentsPage({ developments }: { developments: Development[]
           </div>
         </div>
 
-        <div className="dev-filters" role="tablist" aria-label="Filter by status">
+        <div className="dev-filters" role="tablist" aria-label={t("dev.filterStatus")}>
           {PUBLIC_FILTERS.map(({ key, label }) => (
             <button
               key={key}
@@ -200,7 +204,7 @@ export function DevelopmentsPage({ developments }: { developments: Development[]
             ))}
           </div>
         ) : (
-          <p className="muted">No developments match this filter.</p>
+          <p className="muted">{t("dev.noMatch")}</p>
         )}
       </Reveal>
     </div>

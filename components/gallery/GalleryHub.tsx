@@ -14,6 +14,7 @@ import { albumHref, BUCKETS, FESTIVAL_HEROES } from "@/lib/site";
 import type { Album, Development, MediaWithAlbum } from "@/lib/types";
 import { useMediaProtection } from "@/lib/use-media-protection";
 import { filterPublicMedia } from "@/lib/media-protection";
+import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 type FestivalDef = {
   key: string;
@@ -206,6 +207,7 @@ export function GalleryHub({
   media?: MediaWithAlbum[];
   years?: string[];
 }) {
+  const { t } = useUiLang();
   const router = useRouter();
   const { session, ready } = useMemberAuth();
   const [festivalKey, setFestivalKey] = useState<string | null>(null);
@@ -406,11 +408,11 @@ export function GalleryHub({
               className="btn ghost"
               onClick={() => setYear(null)}
             >
-              All years
+              {t("gallery.allYears")}
             </button>
           </div>
 
-          <div className="gallery-filters" role="tablist" aria-label="Media type">
+          <div className="gallery-filters" role="tablist" aria-label={t("gallery.mediaType")}>
             {(
               [
                 ["all", "All"],
@@ -435,12 +437,12 @@ export function GalleryHub({
           {filteredYearMedia.length ? (
             <Gallery items={filteredYearMedia} />
           ) : (
-            <p className="muted">No media in this view yet.</p>
+            <p className="muted">{t("gallery.noMedia")}</p>
           )}
 
           {yearCards.find((y) => y.year === year)?.albums.length ? (
             <div className="gallery-album-links">
-              <p className="eyebrow">Open album pages</p>
+              <p className="eyebrow">{t("gallery.openAlbums")}</p>
               <div className="btn-row">
                 {yearCards
                   .find((y) => y.year === year)!
@@ -474,13 +476,13 @@ export function GalleryHub({
                   className="linkish"
                   onClick={() => setFestivalKey(null)}
                 >
-                  Gallery
+                  {t("gallery.title")}
                 </button>
                 {" · Festival"}
               </p>
               <h2>{activeFest.title}</h2>
               <p className="lede">
-                Choose a year to browse photos and videos.
+                {t("gallery.chooseYear")}
               </p>
             </div>
             <button
@@ -488,7 +490,7 @@ export function GalleryHub({
               className="btn ghost"
               onClick={() => setFestivalKey(null)}
             >
-              All festivals
+              {t("gallery.allFestivals")}
             </button>
           </div>
 
@@ -538,8 +540,8 @@ export function GalleryHub({
       <section className="section">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Photographs</p>
-            <h2>Gallery</h2>
+            <p className="eyebrow">{t("gallery.photographs")}</p>
+            <h2>{t("gallery.title")}</h2>
             <p className="lede">
               Filter by people, families, temples, festivals, village,
               development, historical photographs, or memories.
@@ -547,7 +549,7 @@ export function GalleryHub({
           </div>
         </div>
 
-        <div className="gallery-filters" role="tablist" aria-label="Gallery category">
+        <div className="gallery-filters" role="tablist" aria-label={t("gallery.category")}>
           {GALLERY_CATEGORIES.map((item) => (
             <button
               key={item.id}
@@ -580,13 +582,13 @@ export function GalleryHub({
               ))}
             </ul>
           ) : (
-            <p className="muted">Development photographs will appear here as projects are documented.</p>
+            <p className="muted">{t("gallery.devPhotos")}</p>
           )
         ) : category !== "all" && category !== "festivals" ? (
           categoryMedia.length ? (
             <Gallery items={categoryMedia} />
           ) : (
-            <p className="muted">No photographs in this view yet.</p>
+            <p className="muted">{t("gallery.noPhotos")}</p>
           )
         ) : (
         <div className="gallery-album-grid gallery-festival-grid">
@@ -633,7 +635,7 @@ export function GalleryHub({
                   <h4>
                     {card.fest.title}
                     {locked ? (
-                      <span className="gallery-lock-label"> Locked</span>
+                      <span className="gallery-lock-label"> {t("gallery.locked")}</span>
                     ) : null}
                   </h4>
                   <p className="muted">
