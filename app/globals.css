@@ -14477,3 +14477,33 @@ a.dharma-division-link:focus-visible {
     padding-top: 1.5rem;
   }
 }
+
+/* ── Admin: the visible result of a save ──────────────────────────────────
+   Always in the same place above the panel it belongs to, so an administrator
+   learns where to look. An error carries the server's own message: "Admin
+   required" and a missing R2 binding need different responses. */
+
+.admin-save-status {
+  margin: 0 0 0.9rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.admin-save-status[data-state="saving"] {
+  color: var(--color-ink-soft, inherit);
+  opacity: 0.85;
+}
+
+.admin-save-status[data-state="saved"] {
+  border-color: color-mix(in srgb, #2c6446 45%, var(--color-line));
+  background: color-mix(in srgb, #2c6446 8%, transparent);
+}
+
+.admin-save-status[data-state="error"] {
+  border-color: color-mix(in srgb, #a32f22 55%, var(--color-line));
+  background: color-mix(in srgb, #a32f22 9%, transparent);
+  font-weight: 500;
+}

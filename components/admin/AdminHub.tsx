@@ -50,6 +50,8 @@ import { FamilyAdmin } from "@/components/families/admin/FamilyAdmin";
 import type { FamilyTreeDataset } from "@/lib/family-trees/entities";
 import { MediaProtectionPanel } from "@/components/admin/MediaProtectionPanel";
 import { AuditLogPanel } from "@/components/admin/AuditLogPanel";
+import { useAdminSave } from "@/components/admin/useAdminSave";
+import { SaveStatus } from "@/components/admin/SaveStatus";
 import { ROLE_CAPABILITIES } from "@/lib/roles";
 
 type Tab =
@@ -257,9 +259,11 @@ function ApprovalsManager() {
   const suggestions = useCommunityList<Suggestion>("suggestions", [], {
     admin: true,
   });
+  const save = useAdminSave();
 
   return (
     <div className="admin-approvals">
+      <SaveStatus state={save.state} error={save.error} label={save.label} />
       <section>
         <h3>Lost &amp; Found</h3>
         {lf.raw.map((item) => (
@@ -274,7 +278,7 @@ function ApprovalsManager() {
                 const next = lf.raw.map((i) =>
                   i.id === item.id ? { ...i, status } : i,
                 );
-                void lf.saveAll(next);
+                void save.run(() => lf.saveAll(next), item.title);
               }}
             />
           </article>
@@ -296,7 +300,7 @@ function ApprovalsManager() {
                 const next = heritage.raw.map((i) =>
                   i.id === item.id ? { ...i, status } : i,
                 );
-                void heritage.saveAll(next);
+                void save.run(() => heritage.saveAll(next), item.title);
               }}
             />
           </article>
@@ -326,7 +330,7 @@ function ApprovalsManager() {
                     ? { ...i, status: (status === "approved" ? "approved" : status === "rejected" ? "archived" : "pending") as SuggestionStatus }
                     : i,
                 );
-                void suggestions.saveAll(next);
+                void save.run(() => suggestions.saveAll(next), item.subject);
               }}
             />
           </article>
@@ -350,6 +354,7 @@ function DocumentsManager() {
   );
   const [items, setItems] = useState(seed);
   const [msg, setMsg] = useState<string | null>(null);
+  const docSave = useAdminSave();
   const [title, setTitle] = useState("");
   const [category, setCategory] =
     useState<PanchayatDocument["category"]>("Panchayat Notices");
@@ -387,6 +392,11 @@ function DocumentsManager() {
 
   return (
     <div>
+      <SaveStatus
+        state={docSave.state}
+        error={docSave.error}
+        label={docSave.label}
+      />
       <p className="muted">
         Upload the PDF via Media (category <code>documents/</code>), then register
         its R2 key here for public preview.
@@ -440,10 +450,17 @@ function DocumentsManager() {
             <button
               type="button"
               className="btn ghost"
-              onClick={() => {
+              onClick={async () => {
+                // The list is updated only after the server has accepted the
+                // removal. Updating first made a failed save indistinguishable
+                // from a successful one: the row vanished either way, and the
+                // document was still there on the next load.
                 const next = items.filter((i) => i.id !== doc.id);
-                setItems(next);
-                void saveAll(next);
+                const ok = await docSave.run(
+                  () => saveAll(next),
+                  `Remove ${doc.title}`,
+                );
+                if (ok) setItems(next);
               }}
             >
               Remove
