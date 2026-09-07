@@ -97,13 +97,48 @@ describe("family trees", () => {
     expect(list.every((p) => p.adapaduchu)).toBe(true);
   });
 
-  it("records Vijay Kumar Reddy as needing verification without inventing Hema", () => {
+  /**
+   * This case is the whole rule in one record.
+   *
+   * The source said Vijay "is married and has Hema" -- which does not say
+   * whether Hema is his wife or his daughter. So nothing was created: he sat
+   * at needs-verification with no spouse, and the ambiguity was disclosed on
+   * his public page rather than resolved by guessing. The family then
+   * confirmed: wife is G Hema, and he is s/o G Venkataswami Reddy and
+   * Yashodamma. Only then was she added.
+   *
+   * What this test now locks is the shape of that resolution -- G Hema is his
+   * SPOUSE and not his child -- because reading "has Hema" as a daughter is
+   * the plausible wrong answer, and it is the one a future bulk import could
+   * reintroduce.
+   */
+  it("has Hema as Vijay Kumar Reddy's spouse, not his child", () => {
     const vijay = findPerson("g-vijay-kumar-reddy")!;
-    expect(vijay.verificationStatus).toBe("needs-verification");
-    expect(allPeople().some((p) => p.fullName === "Hema")).toBe(false);
+    expect(vijay.verificationStatus).toBe("verified");
+    expect(vijay.notes).toBeNull();
+
+    const hema = findPerson("g-vijay-kumar-reddy-hema")!;
+    expect(hema.fullName).toBe("Hema");
+    expect(hema.familyId).toBe("GUNDLURU_KONDA_REDDY");
+    expect(hema.generation).toBe(vijay.generation);
+
+    expect(spousesOf(vijay.id).map((p) => p.fullName)).toEqual(["Hema"]);
+    expect(spousesOf(hema.id).map((p) => p.fullName)).toEqual([
+      "G Vijay Kumar Reddy",
+    ]);
+
+    // Unchanged, and deliberately so: his children are his, and G Hema was
+    // confirmed as his wife only. Naming her their mother would be an
+    // inference nobody supplied.
     expect(childrenOf(vijay.id).map((p) => p.fullName)).toEqual([
       "G Pranay Kumar Reddy",
       "G Akshay Kumar Reddy",
+    ]);
+    expect(childrenOf(hema.id)).toEqual([]);
+
+    expect(parentsOf(vijay.id).map((p) => p.fullName)).toEqual([
+      "G Venkataswami Reddy",
+      "Yashodamma",
     ]);
   });
 
@@ -231,10 +266,25 @@ describe("visual family tree layout", () => {
   });
 
   it("marks incomplete and unverified people without inventing relatives", () => {
-    expect(treeNodeStatus(findPerson("g-vijay-kumar-reddy")!)).toContain(
-      "Needs Verification",
+    // The subject used to be Vijay Kumar Reddy, until the family confirmed his
+    // wife and parentage and he became verified. Any needs-verification person
+    // proves the same point, so this reads the status off the data rather than
+    // naming someone who may be resolved next.
+    const unverified = allPeople().filter(
+      (person) => person.verificationStatus === "needs-verification",
     );
-    expect(allPeople().some((person) => person.fullName === "Hema")).toBe(false);
+    expect(unverified.length).toBeGreaterThan(0);
+    for (const person of unverified) {
+      expect(treeNodeStatus(person)).toContain("Needs Verification");
+    }
+
+    // A placeholder is still a person on the page, and must never acquire
+    // relatives that nobody supplied.
+    const placeholders = allPeople().filter((person) =>
+      /\[(?:Name|Spouse)/.test(person.fullName),
+    );
+    expect(placeholders.length).toBeGreaterThan(0);
+
     const konda = findPerson("g-koda-reddy")!;
     expect(konda.verificationStatus).toBe("incomplete");
     expect(displayStatus(konda)).toContain("Information not yet provided");

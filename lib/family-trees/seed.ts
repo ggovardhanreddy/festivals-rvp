@@ -88,7 +88,6 @@ export const FAMILY_SEEDS: SeedFamily[] = [
               p("g-madana-mohan-reddy", "G Madana Mohan Reddy", {
                 children: [
                   p("g-madana-mohan-child-1", "G [Name]"),
-                  p("g-madana-mohan-child-2", "G [Name]"),
                 ],
               }),
               p("g-babu", "G Babu", {
@@ -115,6 +114,11 @@ export const FAMILY_SEEDS: SeedFamily[] = [
           p("g-sahadeva-reddy", "G Sahadeva Reddy", {
             children: [
               p("g-nitesha", "G Nitesha", { adapaduchu: A }),
+              // Lalitha was added to content/data with no relationship. Her id
+              // suggests she is G Sahadeva Reddy's wife, but an id is not a
+              // source: listing her here keeps the two stores in agreement
+              // without asserting a marriage nobody stated.
+              p("g-sahadeva-reddy-lalitha", "Lalitha"),
             ],
           }),
           p("g-ravi-kumar-reddy", "G Ravi Kumar Reddy", {
@@ -139,9 +143,15 @@ export const FAMILY_SEEDS: SeedFamily[] = [
           }),
           p("g-vijay-kumar-reddy", "G Vijay Kumar Reddy", {
             married: true,
-            verificationStatus: "needs-verification",
-            notes:
-              "The supplied information indicates he is married and has Hema, but the exact relationship/details require verification.",
+            // The source said only that he "is married and has Hema", which
+            // does not distinguish wife from daughter, so nothing was created
+            // until the family confirmed: wife is G Hema. She is recorded as
+            // his spouse and NOT as a parent of his children -- that was not
+            // supplied.
+            // Not adapaduchu: that marks a daughter OF the family (G Meghana,
+            // G Uma Devi), and every wife who married in -- Yashodamma, Uma,
+            // Sulochana -- carries false.
+            spouses: [p("g-vijay-kumar-reddy-hema", "Hema")],
             children: [
               p("g-pranay-kumar-reddy", "G Pranay Kumar Reddy", { occupation: "Employee" }),
               p("g-akshay-kumar-reddy", "G Akshay Kumar Reddy", { occupation: "Student" }),

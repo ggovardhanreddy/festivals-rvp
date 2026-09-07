@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-05T03:14:24.739Z",
+  "updatedAt": "2026-09-07T16:24:53.260Z",
   "people": [
     {
       "id": "g-subbareddy",
@@ -304,7 +304,7 @@
       "photo": null,
       "gender": "male",
       "status": null,
-      "occupation":"CA and (Farmer)",
+      "occupation": "CA and (Farmer)",
       "location": "Reddivaripalli",
       "generation": 2,
       "adapaduchu": false,
@@ -653,7 +653,7 @@
       "createdAt": "2026-09-05T03:14:24.739Z",
       "updatedAt": "2026-09-05T03:14:24.739Z"
     },
-        {
+    {
       "id": "g-babu",
       "fullName": "G Babu",
       "familyId": "GUNDLURU_KONDA_REDDY",
@@ -1171,14 +1171,14 @@
       "adapaduchu": false,
       "deceased": false,
       "married": true,
-      "notes": "The supplied information indicates he is married and has Hema, but the exact relationship/details require verification.",
+      "notes": null,
       "verificationStatus": "verified",
       "customFields": [],
       "mediaIds": [],
       "createdAt": "2026-09-05T03:14:24.739Z",
-      "updatedAt": "2026-09-05T03:14:24.739Z"
+      "updatedAt": "2026-09-07T16:24:53.260Z"
     },
-     {
+    {
       "id": "g-vijay-kumar-reddy-hema",
       "fullName": "Hema",
       "familyId": "GUNDLURU_KONDA_REDDY",
@@ -1197,7 +1197,7 @@
       "customFields": [],
       "mediaIds": [],
       "createdAt": "2026-09-05T03:14:24.739Z",
-      "updatedAt": "2026-09-05T03:14:24.739Z"
+      "updatedAt": "2026-09-07T16:24:53.260Z"
     },
     {
       "id": "g-pranay-kumar-reddy",
@@ -2515,12 +2515,12 @@
       "adapaduchu": false,
       "deceased": false,
       "married": false,
-      "notes": "Information not yet provided / relationship requires verification",
+      "notes": "Information not yet provided",
       "verificationStatus": "needs-verification",
       "customFields": [],
       "mediaIds": [],
       "createdAt": "2026-09-05T03:14:24.739Z",
-      "updatedAt": "2026-09-05T03:14:24.739Z"
+      "updatedAt": "2026-09-07T16:24:53.260Z"
     },
     {
       "id": "d-viswanatha",
@@ -3103,12 +3103,12 @@
       "adapaduchu": false,
       "deceased": false,
       "married": false,
-      "notes": "Student / relationship requires verification",
+      "notes": "Student",
       "verificationStatus": "needs-verification",
       "customFields": [],
       "mediaIds": [],
       "createdAt": "2026-09-05T03:14:24.739Z",
-      "updatedAt": "2026-09-05T03:14:24.739Z"
+      "updatedAt": "2026-09-07T16:24:53.260Z"
     },
     {
       "id": "d-rammohan-reddy",

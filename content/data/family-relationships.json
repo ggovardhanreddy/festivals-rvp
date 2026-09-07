@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-05T03:14:24.739Z",
+  "updatedAt": "2026-09-07T16:24:53.260Z",
   "relationships": [
     {
       "id": "spouse:g-raghunatha-reddy:g-padma",
@@ -643,22 +643,6 @@
       "createdAt": "2026-09-05T03:14:24.739Z"
     },
     {
-      "id": "child:g-madana-mohan-reddy:g-madana-mohan-child-2",
-      "fromPersonId": "g-madana-mohan-reddy",
-      "toPersonId": "g-madana-mohan-child-2",
-      "relationshipType": "child",
-      "verificationStatus": "verified",
-      "createdAt": "2026-09-05T03:14:24.739Z"
-    },
-    {
-      "id": "parent:g-madana-mohan-child-2:g-madana-mohan-reddy",
-      "fromPersonId": "g-madana-mohan-child-2",
-      "toPersonId": "g-madana-mohan-reddy",
-      "relationshipType": "parent",
-      "verificationStatus": "verified",
-      "createdAt": "2026-09-05T03:14:24.739Z"
-    },
-    {
       "id": "child:g-krishna-reddy:g-babu",
       "fromPersonId": "g-krishna-reddy",
       "toPersonId": "g-babu",
@@ -1191,7 +1175,7 @@
       "fromPersonId": "g-venkataswami-reddy",
       "toPersonId": "g-vijay-kumar-reddy",
       "relationshipType": "child",
-      "verificationStatus": "needs-verification",
+      "verificationStatus": "verified",
       "createdAt": "2026-09-05T03:14:24.739Z"
     },
     {
@@ -1199,7 +1183,7 @@
       "fromPersonId": "g-vijay-kumar-reddy",
       "toPersonId": "g-venkataswami-reddy",
       "relationshipType": "parent",
-      "verificationStatus": "needs-verification",
+      "verificationStatus": "verified",
       "createdAt": "2026-09-05T03:14:24.739Z"
     },
     {
@@ -1207,7 +1191,7 @@
       "fromPersonId": "yashodamma",
       "toPersonId": "g-vijay-kumar-reddy",
       "relationshipType": "child",
-      "verificationStatus": "needs-verification",
+      "verificationStatus": "verified",
       "createdAt": "2026-09-05T03:14:24.739Z"
     },
     {
@@ -1215,7 +1199,7 @@
       "fromPersonId": "g-vijay-kumar-reddy",
       "toPersonId": "yashodamma",
       "relationshipType": "parent",
-      "verificationStatus": "needs-verification",
+      "verificationStatus": "verified",
       "createdAt": "2026-09-05T03:14:24.739Z"
     },
     {
@@ -5367,6 +5351,22 @@
       "relationshipType": "parent",
       "verificationStatus": "verified",
       "createdAt": "2026-09-05T03:14:24.739Z"
+    },
+    {
+      "id": "spouse:g-vijay-kumar-reddy:g-vijay-kumar-reddy-hema",
+      "fromPersonId": "g-vijay-kumar-reddy",
+      "toPersonId": "g-vijay-kumar-reddy-hema",
+      "relationshipType": "spouse",
+      "verificationStatus": "verified",
+      "createdAt": "2026-09-07T16:24:53.260Z"
+    },
+    {
+      "id": "spouse:g-vijay-kumar-reddy-hema:g-vijay-kumar-reddy",
+      "fromPersonId": "g-vijay-kumar-reddy-hema",
+      "toPersonId": "g-vijay-kumar-reddy",
+      "relationshipType": "spouse",
+      "verificationStatus": "verified",
+      "createdAt": "2026-09-07T16:24:53.260Z"
     }
   ]
 }
