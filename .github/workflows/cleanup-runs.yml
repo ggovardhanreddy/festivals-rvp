@@ -1,0 +1,125 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Workflow run cleanup — keeps the Actions history short.
+#
+# Retention is per workflow, not per repository: three successful Production
+# Deploy runs AND three successful Collect Knowledge Resources runs, rather
+# than three in total. Counting across workflows would let a busy schedule
+# quietly erase every deploy record.
+#
+# It never deletes a run that is still going, and it never deletes its own
+# runs — a cleanup that removes its own history leaves nothing to show it ran.
+# ─────────────────────────────────────────────────────────────────────────────
+name: Cleanup workflow runs
+
+on:
+  # Fires after either real workflow finishes, so the list is tidied as it
+  # grows. This workflow is deliberately NOT in the list: including it would
+  # make it re-trigger itself forever.
+  workflow_run:
+    workflows: ["Production Deploy", "Collect Knowledge Resources"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "List what would be deleted without deleting it"
+        type: boolean
+        default: false
+
+concurrency:
+  group: cleanup-runs
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prune old runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          # Successful runs to keep per workflow.
+          KEEP_SUCCESS: "3"
+          # Failed runs to keep per workflow. One, so the log explaining a
+          # broken deploy survives until someone has actually read it —
+          # set to 0 to keep none.
+          KEEP_FAILURE: "1"
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+
+          # This workflow's own id, so it can exclude itself.
+          self_id="$(gh api "repos/$REPO/actions/workflows" \
+            --jq '.workflows[] | select(.path==".github/workflows/cleanup-runs.yml") | .id' || true)"
+          echo "This workflow's id: ${self_id:-unknown}"
+
+          deleted=0
+          kept=0
+
+          # Every workflow in the repo, including any that no longer has a file.
+          for wf in $(gh api "repos/$REPO/actions/workflows" --jq '.workflows[].id'); do
+            if [ -n "$self_id" ] && [ "$wf" = "$self_id" ]; then
+              echo "── skipping this cleanup workflow ($wf)"
+              continue
+            fi
+
+            name="$(gh api "repos/$REPO/actions/workflows/$wf" --jq '.name')"
+            echo "── $name (id $wf)"
+
+            # completed runs only, newest first; a queued or in-progress run is
+            # never a deletion candidate.
+            runs="$(gh api --paginate \
+              "repos/$REPO/actions/workflows/$wf/runs?per_page=100&status=completed" \
+              --jq '.workflow_runs[] | [.id, (.conclusion // "none"), .run_number, .created_at] | @tsv' || true)"
+
+            [ -z "$runs" ] && { echo "   no completed runs"; continue; }
+
+            seen_success=0
+            seen_failure=0
+            while IFS=$'\t' read -r id concl number created; do
+              [ -z "${id:-}" ] && continue
+              case "$concl" in
+                success)
+                  seen_success=$((seen_success + 1))
+                  if [ "$seen_success" -le "$KEEP_SUCCESS" ]; then
+                    echo "   keep    #$number  $concl  $created"
+                    kept=$((kept + 1)); continue
+                  fi
+                  ;;
+                failure|timed_out|startup_failure)
+                  seen_failure=$((seen_failure + 1))
+                  if [ "$seen_failure" -le "$KEEP_FAILURE" ]; then
+                    echo "   keep    #$number  $concl  $created  (most recent failure)"
+                    kept=$((kept + 1)); continue
+                  fi
+                  ;;
+              esac
+
+              if [ "$DRY_RUN" = "true" ]; then
+                echo "   would delete #$number  $concl  $created"
+              else
+                if gh api -X DELETE "repos/$REPO/actions/runs/$id" >/dev/null 2>&1; then
+                  echo "   deleted #$number  $concl  $created"
+                  deleted=$((deleted + 1))
+                else
+                  # A run can already be gone, or be protected. Not fatal:
+                  # failing the job here would make the next deploy look broken.
+                  echo "   could not delete #$number (skipped)"
+                fi
+              fi
+            done <<< "$runs"
+          done
+
+          {
+            echo "### Workflow run cleanup"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Kept | $kept |"
+            echo "| Deleted | $deleted |"
+            echo "| Retention | $KEEP_SUCCESS success + $KEEP_FAILURE failure, per workflow |"
+            [ "$DRY_RUN" = "true" ] && echo "| Mode | dry run — nothing was deleted |"
+          } >> "$GITHUB_STEP_SUMMARY"
