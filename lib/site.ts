@@ -262,6 +262,23 @@ export const FOOTER_PRESERVE =
 export const HOME_HERO_PHOTO: string | null = "/brand/village-aerial.webp";
 
 /**
+ * Responsive widths for HOME_HERO_PHOTO, as [path, intrinsic width] pairs.
+ *
+ * The backdrop is the LCP element and is loaded with fetchPriority="high", so
+ * without a srcset every phone downloaded the full 1920px file: 204 KB for a
+ * 390px viewport. The 640px variant is 44 KB, which is roughly a fifth of the
+ * bytes on the one image that gates first paint.
+ *
+ * Widths, not a `sizes` guess: the hero is full-bleed, so `100vw` is exact.
+ */
+export const HOME_HERO_PHOTO_SRCSET: ReadonlyArray<readonly [string, number]> = [
+  ["/brand/village-aerial-640.webp", 640],
+  ["/brand/village-aerial-960.webp", 960],
+  ["/brand/village-aerial-1440.webp", 1440],
+  ["/brand/village-aerial.webp", 1920],
+];
+
+/**
  * Alt text for HOME_HERO_PHOTO. Describe what the image actually is, and never
  * assert that a decorative image documents the village.
  */

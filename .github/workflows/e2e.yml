@@ -1,0 +1,119 @@
+# Browser tests: Playwright + axe-core against the real static export.
+#
+# Why a separate workflow rather than steps in Production Deploy:
+# tests/e2e has existed for a while (routes, i18n, government, and an axe
+# sweep over 12 routes) but no workflow ever invoked it, so it has never
+# actually run — and it cannot run on the maintainer's machine, where the
+# Playwright browser download fails. It therefore starts from an unknown
+# baseline. Wiring it into the deploy job would let a pre-existing violation
+# block shipping; here it reports independently and blocks nothing, and the
+# HTML report is uploaded either way.
+#
+# Once it is green, moving these steps into deploy.yml as a real gate is the
+# right end state.
+name: Browser Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Only what can change rendered output. Content-only edits do not need
+      # a browser run.
+      - "app/**"
+      - "components/**"
+      - "lib/**"
+      - "styles/**"
+      - "tests/e2e/**"
+      - "playwright.config.ts"
+      - "next.config.*"
+      - "package-lock.json"
+      - ".github/workflows/e2e.yml"
+  workflow_dispatch:
+
+concurrency:
+  # A newer push supersedes an in-flight run; nothing here needs to finish.
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    name: Playwright and axe
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_PUBLIC_SITE_URL: https://www.reddivaripalli.com
+      NEXT_PUBLIC_R2_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://pub-f2609804d6a040368903177488b01d2d.r2.dev' }}
+      NEXT_PUBLIC_CONTACT_EMAIL: reddivaripalli.rvp@gmail.com
+      CMS_SKIP_EXIF: "1"
+
+    steps:
+      # Same sparse checkout as the deploy job: ~2 GiB of media is served
+      # from R2 and none of it is needed to exercise routes or run axe.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/public/images/**
+            !/public/videos/**
+            !/public/thumbs/**
+            !/public/audio/**
+            !/public/festivals/**
+            !/public/docs/**
+            !/content/**/*.jpg
+            !/content/**/*.jpeg
+            !/content/**/*.png
+            !/content/**/*.webp
+            !/content/**/*.mp4
+            !/content/**/*.mov
+            !/originals/**
+            /generated/albums.json
+            /generated/albums.r2.json
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Only Chromium: both Playwright projects (Pixel 5, Desktop Chrome) are
+      # Chromium, so Firefox and WebKit would be a pure download cost.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build the static export
+        run: npm run build
+
+      - name: Run browser tests
+        id: e2e
+        run: npm run test:e2e
+
+      # Uploaded on failure too — the report is the whole point when it fails.
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Summarise
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.e2e.outcome }}" = "success" ]; then
+            echo "### Browser tests passed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "### Browser tests failed"
+              echo ""
+              echo "Download the **playwright-report** artifact for the axe"
+              echo "violations and traces. This workflow does not gate deploys."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

@@ -16,7 +16,7 @@ on:
   # grows. This workflow is deliberately NOT in the list: including it would
   # make it re-trigger itself forever.
   workflow_run:
-    workflows: ["Production Deploy", "Collect Knowledge Resources"]
+    workflows: ["Production Deploy", "Collect Knowledge Resources", "Browser Tests"]
     types: [completed]
   workflow_dispatch:
     inputs:

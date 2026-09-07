@@ -101,7 +101,7 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-title": SITE_NAME,
     "apple-mobile-web-app-status-bar-style": "default",
-    "theme-color": "#1f4436",
+    "theme-color": "#1f4e3d",
     "geo.region": "IN-AP",
     "geo.placename": `${VILLAGE_ALSO_KNOWN_AS}, ${VILLAGE_ADDRESS.mandal}`,
     "geo.position": `${VILLAGE_COORDS.lat};${VILLAGE_COORDS.lng}`,

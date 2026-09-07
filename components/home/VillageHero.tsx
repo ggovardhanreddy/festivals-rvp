@@ -8,6 +8,7 @@ import { withBase } from "@/lib/base";
 import {
   HOME_HERO_PHOTO,
   HOME_HERO_PHOTO_ALT,
+  HOME_HERO_PHOTO_SRCSET,
   HOME_HERO_PILLARS,
   HOME_HERO_SUPPORT,
   HOME_HERO_TITLE,
@@ -96,6 +97,12 @@ export function VillageHero() {
         <div className="village-hero-photo">
           <img
             src={withBase(HOME_HERO_PHOTO)}
+            srcSet={HOME_HERO_PHOTO_SRCSET.map(
+              ([path, width]) => `${withBase(path)} ${width}w`,
+            ).join(", ")}
+            /* The hero is full-bleed, so the slot really is the viewport
+               width -- no estimate needed. */
+            sizes="100vw"
             alt={HOME_HERO_PHOTO_ALT}
             fetchPriority="high"
             decoding="async"

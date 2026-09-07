@@ -24,10 +24,16 @@ const R2_PREFIXES = [
   "/thumbs/",
   "/audio/",
   "/docs/",
-  "/brand/",
   "/festivals/",
   "/members/",
-  // /logo/ stays on Pages so brand updates ship with each deploy
+  // /logo/ and /brand/ stay on Pages so brand updates ship with each deploy.
+  //
+  // /brand/ was on R2, which meant changing the homepage backdrop or a festival
+  // hero took a separate manual R2 upload and the repo copy did nothing -- the
+  // site kept serving the old object after a deploy. These are 8 MB of small
+  // brand assets, all committed, so Pages is the right home for exactly the
+  // reason /logo/ already was. It also makes a responsive srcset possible:
+  // variants ship with the deploy instead of needing four more uploads.
 ] as const;
 
 export function r2Enabled(): boolean {

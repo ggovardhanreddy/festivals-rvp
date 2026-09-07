@@ -220,3 +220,94 @@ describe("the hero backdrop is framed for its aspect ratio", () => {
     expect(rule.slice(0, 200)).toMatch(/color:\s*#fffaf0/);
   });
 });
+
+describe("nothing on the green band takes page ink", () => {
+  /**
+   * The regression axe caught that the token tests could not: the nav's own
+   * rules coloured hover/active links with var(--ink) -- the PAGE ink -- which
+   * on the green band is #17251f on #1f4e3d, 1.67:1. Each token was fine on
+   * its own; the pairing was wrong, and only the rendered DOM knew which ink
+   * landed on which surface.
+   *
+   * This asserts the shape of the fix, not the contrast: the browser suite in
+   * .github/workflows/e2e.yml is what checks the rendered result.
+   */
+  it("overrides the nav link ink that defaults to var(--ink)", () => {
+    const rule = /\.nav \.nav-links a\[data-active="true"\]\s*\{([^}]*)\}/.exec(globalsCss);
+    expect(rule, "nav active-link override missing").not.toBeNull();
+    expect(rule![1]!).not.toMatch(/var\(--ink\)|var\(--color-ink\)/);
+  });
+
+  it("does not draw the nav underline in the ornament gold", () => {
+    // --accent is 2.96:1 on the band; the underline uses --color-gold-soft.
+    const rule = /\.nav \.nav-links a::after\s*\{([^}]*)\}/.exec(globalsCss);
+    expect(rule, "nav underline override missing").not.toBeNull();
+    expect(rule![1]!).toMatch(/var\(--color-gold-soft\)/);
+  });
+});
+
+describe("the hero backdrop ships with the deploy", () => {
+  const mediaUrl = read("lib/media-url.ts");
+  const siteTs = read("lib/site.ts");
+
+  /**
+   * /brand/ used to be rewritten to R2, so the repo copy of the homepage
+   * backdrop did nothing and changing it needed a separate manual upload --
+   * the site kept serving the old object after a deploy.
+   */
+  it("keeps /brand/ off the R2 rewrite list", () => {
+    const prefixes = /const R2_PREFIXES = \[([\s\S]*?)\] as const;/.exec(mediaUrl);
+    expect(prefixes, "R2_PREFIXES not found").not.toBeNull();
+    const entries = [...prefixes![1]!.matchAll(/"(\/[a-z]+\/)"/g)].map((m) => m[1]);
+    expect(entries).not.toContain("/brand/");
+    expect(entries).not.toContain("/logo/");
+  });
+
+  it("declares a responsive srcset whose widths all exist on disk", () => {
+    const block = /HOME_HERO_PHOTO_SRCSET[\s\S]*?\];/.exec(siteTs);
+    expect(block, "HOME_HERO_PHOTO_SRCSET not found").not.toBeNull();
+    const pairs = [...block![0]!.matchAll(/\["(\/brand\/[^"]+)",\s*(\d+)\]/g)];
+    expect(pairs.length).toBeGreaterThanOrEqual(3);
+    for (const [, path, width] of pairs) {
+      expect(
+        readFileSync(join(root, "public", path!)).byteLength,
+        `${path} should exist and be non-empty`,
+      ).toBeGreaterThan(0);
+      expect(Number(width)).toBeGreaterThan(0);
+    }
+    // Widths must ascend, or the browser picks wrongly.
+    const widths = pairs.map(([, , w]) => Number(w));
+    expect([...widths].sort((a, b) => a - b)).toEqual(widths);
+  });
+});
+
+describe("the edge cache lets a deploy be seen", () => {
+  const headers = read("public/_headers");
+
+  /**
+   * next.config sets trailingSlash: true, so every page is requested as a
+   * directory path -- `/`, `/about/` -- and never with a .html suffix. A lone
+   * `/*.html` rule therefore matched almost no real request and HTML fell
+   * through to the bare `/*` rule, which sets no Cache-Control at all.
+   */
+  it("revalidates HTML on directory paths, not just *.html", () => {
+    const rules = headers.split(/\n(?=\S)/);
+    const revalidating = rules
+      .filter((r) => /max-age=0|no-cache/.test(r))
+      .map((r) => r.split("\n")[0]!.trim());
+    expect(revalidating).toContain("/");
+    expect(revalidating).toContain("/*/");
+  });
+
+  /**
+   * Brand filenames are stable and unfingerprinted -- village-aerial.webp
+   * keeps its name when the picture changes -- so `immutable` for a year would
+   * pin the old backdrop in every returning visitor's cache.
+   */
+  it("does not mark unfingerprinted brand assets immutable", () => {
+    const brand = /\/brand\/\*\n\s*Cache-Control:\s*([^\n]+)/.exec(headers);
+    expect(brand, "/brand/* cache rule missing").not.toBeNull();
+    expect(brand![1]!).not.toMatch(/immutable/);
+    expect(brand![1]!).toMatch(/stale-while-revalidate|max-age=([0-9]{1,5})\b/);
+  });
+});

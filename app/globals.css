@@ -15637,3 +15637,18 @@ a.dharma-division-link:focus-visible {
   color: #1f4e3d;
   font-weight: var(--font-weight-semibold);
 }
+
+/* The nav's own rules colour hover/active links with var(--ink), which is the
+   PAGE ink. On the green band that is #17251f on #1f4e3d -- 1.67:1, i.e. the
+   current page's link was effectively invisible. Found by axe, not by the
+   token tests: the tokens are individually fine, it is the pairing that is
+   wrong, and only the rendered DOM knows which ink lands on which surface.
+   The underline uses --accent (2.96:1 on green) for the same reason. */
+.nav .nav-links a:hover,
+.nav .nav-links a[data-active="true"] {
+  color: #fff8ec;
+}
+
+.nav .nav-links a::after {
+  background: var(--color-gold-soft);
+}

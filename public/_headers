@@ -17,6 +17,18 @@
   Cache-Control: public, max-age=0, must-revalidate
 /members/
   Cache-Control: public, max-age=0, must-revalidate
+# HTML must revalidate on every request so a deploy is visible immediately.
+#
+# `/*.html` alone matched almost nothing: next.config has trailingSlash: true,
+# so every page is requested as a directory path -- `/`, `/about/`, `/people/`
+# -- and never with a .html suffix. Those requests fell through to the bare
+# `/*` rule, which sets no Cache-Control, leaving the cache lifetime to the
+# edge default. The two directory rules below are the ones that actually match
+# real requests; the .html rule is kept for any direct-file access.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/*/
+  Cache-Control: public, max-age=0, must-revalidate
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 /vendor/*
@@ -27,8 +39,14 @@
   Cache-Control: public, max-age=31536000, immutable
 /thumbs/*
   Cache-Control: public, max-age=31536000, immutable
+# Brand assets are served from Pages (see R2_PREFIXES in lib/media-url.ts) and
+# have stable, unfingerprinted filenames -- village-aerial.webp keeps its name
+# when the picture changes. `immutable` for a year would therefore pin the old
+# homepage backdrop in every returning visitor's browser cache. An hour of
+# freshness with a week of stale-while-revalidate keeps them effectively
+# cache-served while still picking up a deploy the same day.
 /brand/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=604800
 /videos/*
   Cache-Control: public, max-age=31536000, immutable
 /audio/*
