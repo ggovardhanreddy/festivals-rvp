@@ -47,7 +47,9 @@ jobs:
           # broken deploy survives until someone has actually read it —
           # set to 0 to keep none.
           KEEP_FAILURE: "1"
-          DRY_RUN: ${{ inputs.dry_run }}
+          # Empty on a workflow_run trigger; normalised so the test below is
+          # never comparing against an empty string.
+          DRY_RUN: ${{ inputs.dry_run || false }}
         run: |
           set -euo pipefail
 
@@ -113,6 +115,10 @@ jobs:
             done <<< "$runs"
           done
 
+          # Written with `if`, not `[ ... ] && echo`. A trailing && whose test is
+          # false returns 1, and as the script's last command under `set -e`
+          # that failed the whole step *after* the deletions had succeeded --
+          # a cleanup reporting failure on every deploy is worse than none.
           {
             echo "### Workflow run cleanup"
             echo ""
@@ -121,5 +127,9 @@ jobs:
             echo "| Kept | $kept |"
             echo "| Deleted | $deleted |"
             echo "| Retention | $KEEP_SUCCESS success + $KEEP_FAILURE failure, per workflow |"
-            [ "$DRY_RUN" = "true" ] && echo "| Mode | dry run — nothing was deleted |"
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "| Mode | dry run — nothing was deleted |"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "Cleanup finished: kept $kept, deleted $deleted."
