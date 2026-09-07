@@ -63,8 +63,13 @@ html {
   --color-gold-soft: #d9be7a;
   --color-gold-pale: #f0dfb4;
 
-  /* Legacy accent names map onto gold, which is what they always were. */
-  --color-accent: #8f6a32;
+  /* Legacy accent names map onto gold, which is what they always were.
+     --color-accent is used as a TEXT colour in a few dozen places (timeline
+     years, badges, small labels), so it has to clear 4.5:1 on cream AND on the
+     beige band -- the old #8f6a32 was 4.33 and 3.65, which axe caught on
+     /about/. #7d5a24 is 5.51 and 4.64. --color-accent-ink stays a touch darker
+     as the deliberate choice for the smallest text. */
+  --color-accent: #7d5a24;
   --color-accent-soft: #c49855;
   --color-accent-ink: #7a5a21;
   --color-dawn: #f0d7a0;

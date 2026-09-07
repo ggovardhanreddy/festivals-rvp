@@ -6,9 +6,28 @@ const ROUTES = [
   "/government/", "/banking/", "/safety/", "/search/", "/te/government/",
 ];
 
+/**
+ * Run the sweep with reduced motion.
+ *
+ * Not for coverage -- to remove a flake. The site animates entrances all over
+ * (reveals, the consent sheet, hero settle), and axe measures whatever colour
+ * an element has at the instant it runs. Catching a panel mid-fade yields a
+ * blended foreground and background and a contrast "violation" that does not
+ * exist once the transition finishes: a run of this sweep reported
+ * .consent-option-btn at 2.22:1 with colours (#94aaa2 on #f5f3f0) that appear
+ * nowhere in the stylesheet, and the same route passed on the next run.
+ *
+ * Every animation here honours prefers-reduced-motion, so emulating it settles
+ * the page instead of guessing at a timeout, and tests the palette as authored.
+ *
+ * Applied per page rather than via test.use so it stays scoped to this spec:
+ * the route and i18n specs should exercise the site as a visitor gets it.
+ */
+
 test.describe("accessibility", () => {
   for (const path of ROUTES) {
     test(`no serious or critical violations: ${path}`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(path);
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
@@ -23,6 +42,7 @@ test.describe("accessibility", () => {
   }
 
   test("the Telugu calendar uses a valid ARIA grid", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/events/");
     const grid = page.locator('[role="grid"]').first();
     if ((await grid.count()) === 0) test.skip();

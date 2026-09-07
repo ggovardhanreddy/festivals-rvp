@@ -78,6 +78,12 @@ describe.each([
     ["--color-muted", "--color-bg"],
     ["--color-muted", "--color-bg-band"],
     ["--color-muted", "--color-bg-elevated"],
+    // --color-accent is used as a text colour in a few dozen rules, not only
+    // as a brand tint, so it is checked on both warm surfaces. Omitting it is
+    // what let #8f6a32 sit at 4.33:1 on cream until axe found it on /about/.
+    ["--color-accent", "--color-bg"],
+    ["--color-accent", "--color-bg-band"],
+    ["--color-accent", "--color-bg-elevated"],
     ["--color-accent-ink", "--color-bg"],
     ["--color-accent-ink", "--color-bg-band"],
     ["--color-danger", "--color-bg"],
