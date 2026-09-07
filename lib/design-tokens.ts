@@ -3,20 +3,13 @@
  * Prefer CSS variables in components; use this for JS/3D config only.
  */
 export const tokens = {
-  /* Mirrors the dark (:root) palette in styles/tokens.css, which is the
-     source of truth. Only JS/3D config should read these -- components use
-     the CSS variables so they follow the active theme. */
   color: {
-    accent: "#a78bfa",
-    accentSoft: "#c4b5fd",
-    violet: "#8b5cf6",
-    indigo: "#4f46e5",
-    magenta: "#c026d3",
-    forest: "#6d28d9",
-    dawn: "#e9d5ff",
-    ink: "#eceafc",
-    bg: "#0a0a18",
-    bgElevated: "#12122a",
+    accent: "#8f6a32",
+    accentSoft: "#c49855",
+    forest: "#1f3d2e",
+    dawn: "#f0d7a0",
+    ink: "#13241b",
+    bg: "#fafaf8",
   },
   motion: {
     fast: 0.16,
@@ -40,10 +33,10 @@ export const tokens = {
     6: 64,
   },
   radius: {
-    sm: 14,
+    sm: 12,
     md: 18,
-    lg: 24,
-    xl: 34,
+    lg: 22,
+    xl: 28,
     pill: 999,
   },
   icon: {

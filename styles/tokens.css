@@ -1,14 +1,18 @@
 /**
  * RVP Youth — Design Tokens
  *
- * Dark-premium indigo/violet system. Dark is the default and the primary
- * expression; light is a violet-tinted counterpart, not an afterthought.
- * Every ink/surface pair below is checked against WCAG AA (4.5:1 for small
- * text) by tests/unit/design-tokens.test.ts — change a value, re-run the test.
+ * Warm village-heritage system, light-first. Three roles, deliberately not
+ * one accent:
+ *   forest green   — structure: nav, footer, headings, secondary buttons
+ *   terracotta     — action: primary buttons and calls to action
+ *   gold           — ornament: rules, icons, eyebrow marks
  *
- * The accent is a violet ramp. Semantic hues (danger, success, warning, the
- * Instagram gradient, the rainbow logo treatment) are deliberately NOT violet:
- * a status colour has to mean something on its own.
+ * A status colour (danger, success, warning) is never any of the three, so it
+ * keeps meaning something on its own.
+ *
+ * Every ink/surface pair below, and every stop of the button gradients, is
+ * checked against WCAG AA (4.5:1 for small text) by
+ * tests/unit/design-tokens.test.ts. Change a value, re-run the test.
  */
 
 html {
@@ -18,42 +22,64 @@ html {
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* ---- Surfaces: deep navy-indigo ground, indigo panels ---- */
-  --color-bg: #0a0a18;
-  --color-bg-elevated: #12122a;
-  --color-bg-sunken: #06060f;
+  /* ---- Surfaces: warm cream ground, beige alternating band ---- */
+  --color-bg: #f6f0e6;
+  --color-bg-elevated: #ffffff;
+  --color-bg-band: #e7ddcb;
+  --color-bg-soft: #f1eadc;
+  --color-bg-sunken: #ece4d4;
 
   /* ---- Ink ---- */
-  --color-ink: #eceafc;
-  --color-ink-soft: #d5d2ee;
-  --color-muted: #a5a2c8;
+  --color-ink: #17251f;
+  --color-ink-soft: #3a403b;
+  --color-muted: #525c56;
 
-  /* ---- Violet accent ramp ---- */
-  --color-accent: #a78bfa;
-  --color-accent-soft: #c4b5fd;
-  --color-accent-ink: #c4b5fd;
-  --color-accent-deep: #6d28d9;
-  --color-violet: #8b5cf6;
-  --color-indigo: #4f46e5;
-  --color-magenta: #c026d3;
-  --color-dawn: #e9d5ff;
-  /* Legacy name kept so nothing dangles; it is the solid-fill brand colour. */
-  --color-forest: #6d28d9;
-  --color-gold: #a78bfa;
+  /* ---- Chrome band: header and footer ----
+     Fixed in BOTH themes. The nav and footer are a solid green band whose ink
+     is hardcoded light, so the fill must not follow --color-forest (which
+     lightens in dark) or that ink drops below 4.5:1. */
+  --chrome-bg: #1f4e3d;
+  --chrome-ink: #efe9dc;
+  --chrome-ink-soft: #dfe7dd;
+  --chrome-ink-muted: #b9c8bc;
+
+  /* ---- Forest green: structure ---- */
+  --color-forest: #1f4e3d;
+  --color-forest-deep: #16382c;
+  --color-forest-soft: #2a5c49;
+
+  /* ---- Terracotta: action ---- */
+  --color-terracotta: #a8542e;
+  --color-terracotta-deep: #8c4728;
+  --color-terracotta-soft: #c2703f;
+
+  /* ---- Gold: ornament ----
+     --color-gold measures 2.83:1 on cream, which is fine for a rule, an icon
+     or a border and NOT fine for small text. --color-accent-ink is the gold
+     for text and badges; keep that split. */
+  --color-gold: #b08a3e;
+  --color-gold-soft: #d9be7a;
+  --color-gold-pale: #f0dfb4;
+
+  /* Legacy accent names map onto gold, which is what they always were. */
+  --color-accent: #8f6a32;
+  --color-accent-soft: #c49855;
+  --color-accent-ink: #7a5a21;
+  --color-dawn: #f0d7a0;
 
   /* ---- Semantic ---- */
-  --color-danger: #f87171;
-  --color-success: #4ade80;
-  --color-warning: #fbbf24;
+  --color-danger: #9b3b32;
+  --color-success: #2f6b45;
+  --color-warning: #b45309;
 
-  /* ---- Glass ---- */
-  --color-glass: rgba(24, 22, 52, 0.62);
-  --color-glass-strong: rgba(24, 22, 52, 0.88);
-  --color-line: rgba(196, 181, 253, 0.16);
-  --color-line-strong: rgba(196, 181, 253, 0.3);
-  --color-focus-ring: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  /* ---- Lines and glass ---- */
+  --color-glass: rgba(255, 255, 255, 0.78);
+  --color-glass-strong: rgba(255, 255, 255, 0.94);
+  --color-line: rgba(23, 37, 31, 0.12);
+  --color-line-strong: rgba(23, 37, 31, 0.22);
+  --color-focus-ring: color-mix(in srgb, var(--color-forest) 55%, transparent);
 
   /* ---- Legacy aliases used across the app ---- */
   --bg: var(--color-bg);
@@ -112,30 +138,22 @@ html {
   --content-max: 1180px;
   --max-width: 1180px;
 
-  /* ---- Radius: large, soft containers ---- */
-  --radius-sm: 14px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
-  --radius-xl: 34px;
-  --radius-2xl: 44px;
+  /* ---- Radius: modest. This is a printed-archive feel, not a glass app. ---- */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
   --radius-pill: 999px;
   --radius: var(--radius-lg);
 
-  /* ---- Elevation: shadow plus a violet rim, so cards read as glass ---- */
-  --elevation-1:
-    0 2px 10px rgba(3, 2, 12, 0.5),
-    0 0 0 1px rgba(196, 181, 253, 0.07);
-  --elevation-2:
-    0 14px 40px rgba(3, 2, 12, 0.55),
-    0 0 0 1px rgba(196, 181, 253, 0.09);
-  --elevation-3:
-    0 28px 70px rgba(3, 2, 12, 0.62),
-    0 0 0 1px rgba(196, 181, 253, 0.12);
+  /* ---- Elevation: soft, warm, no glow ---- */
+  --elevation-1: 0 2px 10px rgba(35, 30, 18, 0.07);
+  --elevation-2: 0 10px 28px rgba(35, 30, 18, 0.1);
+  --elevation-3: 0 20px 48px rgba(35, 30, 18, 0.14);
   --shadow: var(--elevation-2);
-  --glow-violet: 0 0 34px rgba(139, 92, 246, 0.34);
-  --glow-violet-strong: 0 0 56px rgba(139, 92, 246, 0.5);
-  --blur-glass: 20px;
-  --blur-strong: 30px;
+  --blur-glass: 18px;
+  --blur-strong: 22px;
 
   /* ---- Motion ---- */
   --motion-fast: 160ms;
@@ -155,115 +173,112 @@ html {
   --icon-lg: 42px;
   --control-height: 44px;
 
-  /* Both gradient endpoints are checked against --btn-fg at 4.5:1. A lighter
-     violet (#8b5cf6) only reaches 3.92:1, so the ramp starts at #7c3aed. */
-  --btn-bg: linear-gradient(135deg, #7c3aed, #4f46e5);
-  --btn-fg: #f7f5ff;
+  /* Primary action is terracotta; the secondary is forest green. Both inks are
+     contrast-checked against both gradient stops. */
+  --btn-bg: linear-gradient(135deg, var(--color-terracotta), var(--color-terracotta-deep));
+  --btn-fg: #fff8f2;
+  --btn-alt-bg: linear-gradient(135deg, var(--color-forest-soft), var(--color-forest-deep));
+  --btn-alt-fg: #f3eee2;
   --btn-ghost-bg: transparent;
-  --btn-ghost-fg: var(--color-ink);
+  --btn-ghost-fg: var(--color-forest);
   --btn-radius: var(--radius-pill);
   --btn-padding-x: 1.4rem;
   --btn-padding-y: 0.8rem;
 
-  --card-bg: var(--color-glass);
-  --card-bg-strong: var(--color-glass-strong);
-  --card: var(--color-glass);
+  --card-bg: var(--color-bg-elevated);
+  --card-bg-strong: var(--color-bg-elevated);
+  --card: var(--color-bg-elevated);
   --card-radius: var(--radius-lg);
   --card-padding: var(--space-4);
   --card-shadow: var(--elevation-1);
 
-  --input-bg: rgba(18, 18, 42, 0.72);
+  --input-bg: #ffffff;
   --input-fg: var(--color-ink);
   --input-border: var(--color-line);
   --input-radius: var(--radius-md);
-  --input-padding-x: 1rem;
-  --input-padding-y: 0.7rem;
+  --input-padding-x: 0.9rem;
+  --input-padding-y: 0.65rem;
   --input-focus-ring: var(--focus);
 
-  /* ---- Ambient field: the aurora behind everything ---- */
-  --glow:
-    radial-gradient(58% 44% at 14% 8%, rgba(109, 40, 217, 0.42), transparent 68%),
-    radial-gradient(52% 40% at 88% 4%, rgba(79, 70, 229, 0.34), transparent 66%),
-    radial-gradient(60% 50% at 78% 82%, rgba(192, 38, 211, 0.22), transparent 70%),
-    radial-gradient(48% 38% at 6% 74%, rgba(139, 92, 246, 0.2), transparent 68%);
-  --grain-color: rgba(196, 181, 253, 0.075);
+  /* No ambient wash: the mockup's calm comes from flat warm bands. */
+  --glow: none;
+  --grain-color: rgba(154, 107, 47, 0.07);
   --hero-fade: linear-gradient(
     180deg,
-    rgba(10, 10, 24, 0.2) 0%,
-    rgba(10, 10, 24, 0.66) 55%,
-    var(--color-bg) 100%
+    rgba(20, 30, 24, 0.3) 0%,
+    rgba(20, 30, 24, 0.5) 45%,
+    rgba(246, 240, 230, 0.96) 100%
   );
 }
 
 /* ---------------------------------------------------------------------------
-   Light theme — the same violet identity at high key. Kept fully working:
-   the theme toggle is an existing feature, not a legacy artefact.
+   Dark theme — the same warm identity after sunset, not a different design.
+   Kept fully working: the theme toggle is an existing feature.
    --------------------------------------------------------------------------- */
-.light {
-  color-scheme: light;
+.dark {
+  color-scheme: dark;
 
-  --color-bg: #f7f5ff;
-  --color-bg-elevated: #ffffff;
-  --color-bg-sunken: #ece8fb;
+  --color-bg: #121915;
+  --color-bg-elevated: #1a2420;
+  --color-bg-band: #16201c;
+  --color-bg-soft: #18221e;
+  --color-bg-sunken: #0d1310;
 
-  --color-ink: #17143a;
-  --color-ink-soft: #2e2860;
-  --color-muted: #565080;
+  --color-ink: #ede7da;
+  --color-ink-soft: #d6cfc0;
+  --color-muted: #a9b5ac;
 
-  --color-accent: #6d28d9;
-  --color-accent-soft: #8b5cf6;
-  --color-accent-ink: #5b21b6;
-  --color-accent-deep: #4c1d95;
-  --color-violet: #7c3aed;
-  --color-indigo: #4f46e5;
-  --color-magenta: #a21caf;
-  --color-dawn: #ddd0f7;
-  --color-forest: #4c1d95;
-  --color-gold: #6d28d9;
+  --color-forest: #2a5c49;
+  --color-forest-deep: #1c4034;
+  --color-forest-soft: #367053;
 
-  --color-danger: #b91c1c;
-  --color-success: #15803d;
-  --color-warning: #b45309;
+  --color-terracotta: #c2703f;
+  --color-terracotta-deep: #a8542e;
+  --color-terracotta-soft: #d98b5a;
 
-  --color-glass: rgba(255, 255, 255, 0.72);
-  --color-glass-strong: rgba(255, 255, 255, 0.93);
-  --color-line: rgba(23, 20, 58, 0.1);
-  --color-line-strong: rgba(23, 20, 58, 0.2);
+  --color-gold: #d9be7a;
+  --color-gold-soft: #f0dfb4;
+  --color-gold-pale: #f7ecd0;
 
-  --elevation-1:
-    0 2px 10px rgba(35, 22, 84, 0.07),
-    0 0 0 1px rgba(35, 22, 84, 0.045);
-  --elevation-2:
-    0 14px 40px rgba(35, 22, 84, 0.1),
-    0 0 0 1px rgba(35, 22, 84, 0.055);
-  --elevation-3:
-    0 28px 70px rgba(35, 22, 84, 0.14),
-    0 0 0 1px rgba(35, 22, 84, 0.07);
-  --glow-violet: 0 0 30px rgba(124, 58, 237, 0.22);
-  --glow-violet-strong: 0 0 50px rgba(124, 58, 237, 0.32);
+  --color-accent: #d4a45a;
+  --color-accent-soft: #f0c98a;
+  --color-accent-ink: #e2b877;
 
-  --input-bg: #ffffff;
-  --btn-bg: linear-gradient(135deg, #6d28d9, #4338ca);
-  --btn-fg: #f7f5ff;
+  --color-danger: #e08a80;
+  --color-success: #7ecda0;
+  --color-warning: #e0a95a;
 
-  --glow:
-    radial-gradient(58% 44% at 14% 8%, rgba(139, 92, 246, 0.17), transparent 68%),
-    radial-gradient(52% 40% at 88% 4%, rgba(79, 70, 229, 0.13), transparent 66%),
-    radial-gradient(60% 50% at 78% 82%, rgba(192, 38, 211, 0.1), transparent 70%),
-    radial-gradient(48% 38% at 6% 74%, rgba(109, 40, 217, 0.09), transparent 68%);
-  --grain-color: rgba(35, 22, 84, 0.055);
+  --color-glass: rgba(26, 36, 32, 0.76);
+  --color-glass-strong: rgba(26, 36, 32, 0.93);
+  --color-line: rgba(237, 231, 218, 0.13);
+  --color-line-strong: rgba(237, 231, 218, 0.24);
+
+  --elevation-1: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --elevation-2: 0 10px 28px rgba(0, 0, 0, 0.42);
+  --elevation-3: 0 20px 48px rgba(0, 0, 0, 0.52);
+
+  --input-bg: var(--color-bg-elevated);
+  /* Dark lightens --color-terracotta to #c2703f, which is only 3.51:1 against
+     the button ink, and --color-forest-soft to #367053. Both gradients are
+     therefore pinned to stops that clear 4.5:1 rather than tracking the
+     lightened structural tones. */
+  --btn-bg: linear-gradient(135deg, #a8542e, #8c4728);
+  --btn-fg: #fff8f2;
+  --btn-alt-bg: linear-gradient(135deg, #2a5c49, #1c4034);
+  --btn-alt-fg: #f3eee2;
+
+  --glow: none;
+  --grain-color: rgba(240, 215, 160, 0.05);
   --hero-fade: linear-gradient(
     180deg,
-    rgba(23, 20, 58, 0.28) 0%,
-    rgba(23, 20, 58, 0.5) 45%,
-    rgba(247, 245, 255, 0.96) 100%
+    rgba(18, 25, 21, 0.28) 0%,
+    rgba(18, 25, 21, 0.66) 55%,
+    var(--color-bg) 100%
   );
 }
 
-/* The theme provider historically toggled a `.dark` class. Dark is now the
-   :root default, so `.dark` needs no overrides — but the selector is kept as a
-   no-op anchor so an element that still carries the class behaves correctly
-   rather than inheriting a stale light palette. */
-.dark {
-  color-scheme: dark;
+/* next-themes writes `light` for an explicit light choice. Light is already
+   the :root default, so this only needs to exist as an anchor. */
+.light {
+  color-scheme: light;
 }

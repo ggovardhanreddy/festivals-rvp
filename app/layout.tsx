@@ -3,7 +3,6 @@ import { fontVariables } from "@/lib/fonts";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { AuroraField } from "@/components/atmosphere/AuroraField";
 import { LogoWatermark } from "@/components/LogoWatermark";
 import { Providers } from "@/components/Providers";
 import { LoadingScreen } from "@/components/LoadingScreen";
@@ -102,7 +101,7 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-title": SITE_NAME,
     "apple-mobile-web-app-status-bar-style": "default",
-    "theme-color": "#0a0a18",
+    "theme-color": "#1f4436",
     "geo.region": "IN-AP",
     "geo.placename": `${VILLAGE_ALSO_KNOWN_AS}, ${VILLAGE_ADDRESS.mandal}`,
     "geo.position": `${VILLAGE_COORDS.lat};${VILLAGE_COORDS.lng}`,
@@ -304,7 +303,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
-        <AuroraField />
         <Providers>
           <LoadingScreen />
           <div className="site-shell">
