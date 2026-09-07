@@ -19,6 +19,8 @@ import { PlausibleScript } from "./analytics/PlausibleScript";
 import { CloudflareWebAnalytics } from "./analytics/CloudflareWebAnalytics";
 import { LanguageProvider } from "./i18n/LanguageProvider";
 import { MobileBottomNav } from "./platform/MobileBottomNav";
+import { ScrollProgress } from "./motion/ScrollProgress";
+import { BackToTop } from "./motion/BackToTop";
 import { AutoDayNightSync } from "./Theme";
 import { SuperAdminProvider } from "@/lib/use-super-admin";
 import type { Announcement, Development, Member, SiteEvent } from "@/lib/types";
@@ -69,6 +71,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange={false}
     >
       <LazyMotion features={domAnimation}>
+        {/* Page-level chrome: one instance each, inside LazyMotion because
+            both read useReducedMotion. */}
+        <ScrollProgress />
         <AutoDayNightSync />
         <HydrationFlag />
         <LanguageProvider>
@@ -101,6 +106,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             </MemberAuthProvider>
           </SuperAdminProvider>
         </LanguageProvider>
+        <BackToTop />
       </LazyMotion>
     </ThemeProvider>
   );

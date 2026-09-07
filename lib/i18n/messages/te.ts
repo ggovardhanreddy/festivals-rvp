@@ -263,6 +263,7 @@ export const te: Partial<Record<keyof typeof en, string>> = {
   "home.birthdaysHeading": "పుట్టినరోజులు",
   "home.templesFestivals": "దేవాలయాలు & పండుగలు",
   "home.recurringCelebrations": "ప్రతి సంవత్సరం కొండ్రెడ్డిగారిపల్లెకు తిరిగి వచ్చే వేడుకలు.",
+  "common.backToTop": "పైకి వెళ్లండి",
   "person.married": "వివాహితులు",
   "person.deceased": "మరణించారు",
   "person.adapaduchu": "అదపడుచు (వివాహిత)",

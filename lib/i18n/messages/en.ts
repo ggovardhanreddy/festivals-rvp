@@ -445,6 +445,7 @@ export const en = {
   "home.birthdaysHeading": "Birthdays",
   "home.templesFestivals": "Temples & Festivals",
   "home.recurringCelebrations": "Recurring celebrations that return to Kondreddigaripalli each year.",
+  "common.backToTop": "Back to top",
   "person.married": "Married",
   "person.deceased": "Deceased",
   "person.adapaduchu": "Adapaduchu (Married)",

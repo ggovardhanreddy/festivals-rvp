@@ -6,6 +6,7 @@ import { ProtectedMedia } from "@/components/media/ProtectedMedia";
 import { loadVillageHeritage } from "@/lib/village-heritage";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { StaggerChildren, StaggerItem } from "@/components/motion";
+import { CinematicImage } from "@/components/motion/CinematicImage";
 
 const TEMPLE_PHOTOS: Record<string, string> = {
   "Sri Ramalayam": "/brand/rama-navami-hero.webp",
@@ -35,7 +36,7 @@ export function HomeTemples() {
         {temples.map((temple) => (
           <StaggerItem as="li" key={temple.name}>
             <Link className="home-temple-card" href="/temples/">
-              <span className="home-temple-media">
+              <CinematicImage className="home-temple-media" mask hover={1.04}>
                 {TEMPLE_PHOTOS[temple.name] ? (
                   <ProtectedMedia>
                     <img
@@ -49,10 +50,10 @@ export function HomeTemples() {
                   </ProtectedMedia>
                 ) : (
                   <span className="home-temple-photo-empty">
-                    Information not yet provided
+                    {t("person.infoNotProvided")}
                   </span>
                 )}
-              </span>
+              </CinematicImage>
               <span className="home-temple-body">
                 <strong>{temple.name}</strong>
                 <span className="muted">{temple.note}</span>

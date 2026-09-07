@@ -14898,17 +14898,11 @@ a.dharma-division-link:focus-visible {
   overflow: hidden;
 }
 
-.home-temple-media img {
-  transition: transform var(--dur-image) var(--ease);
-}
-
+/* The photograph's own motion belongs to CinematicImage now; leaving the CSS
+   zoom here as well meant two systems writing the same transform. The card
+   lift stays -- that is the card's, not the picture's. */
 .home-temple-card:hover {
   transform: translateY(var(--lift));
-}
-
-.home-temple-card:hover .home-temple-media img,
-.home-temple-card:focus-visible .home-temple-media img {
-  transform: scale(var(--zoom));
 }
 
 /* ── Event rows and memory tiles ─────────────────────────────────────────
@@ -15048,5 +15042,210 @@ a.dharma-division-link:focus-visible {
   .nav-drawer,
   .nav-drawer-backdrop {
     transition: none;
+  }
+}
+
+/* ══ Depth layer ═════════════════════════════════════════════════════════
+   Scroll progress, back-to-top and the glossy surface. All three sit on the
+   existing --glass / --line / --accent tokens, so they read correctly in both
+   themes -- the site defaults to the system theme, and a panel tuned only for
+   a dark page goes muddy on a light one. */
+
+/* ── Scroll progress ───────────────────────────────────────────────────── */
+
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: 90;
+  pointer-events: none;
+  /* Above the nav's blur but below any dialog. */
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 55%, transparent),
+    var(--accent)
+  );
+  opacity: 0;
+  transition: opacity var(--dur-reveal) var(--ease);
+  will-change: transform;
+}
+
+.scroll-progress-bar[data-instant] {
+  transition: none;
+}
+
+/* ── Back to top ───────────────────────────────────────────────────────── */
+
+.back-to-top {
+  position: fixed;
+  right: clamp(0.9rem, 3vw, 2rem);
+  bottom: clamp(4.5rem, 12vw, 2.5rem);
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  backdrop-filter: blur(14px) saturate(1.15);
+  color: inherit;
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  /* Parked, not hidden: it can then transition rather than pop. */
+  opacity: 0;
+  transform: translateY(10px) scale(0.94);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-reveal) var(--ease),
+    transform var(--dur-reveal) var(--ease),
+    border-color var(--dur-micro) var(--ease-short);
+}
+
+.back-to-top[data-shown] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+}
+
+.back-to-top:hover span {
+  transform: translateY(-2px);
+}
+
+.back-to-top span {
+  display: block;
+  transition: transform var(--dur-micro) var(--ease-short);
+}
+
+/* Clear of the mobile bottom navigation. */
+@media (max-width: 720px) {
+  .back-to-top {
+    bottom: 5.25rem;
+  }
+}
+
+/* ── Glossy surface ────────────────────────────────────────────────────────
+   The sweep runs once on arrival and again on hover. It never loops: a
+   highlight crossing every card forever is a screensaver, and on a phone it
+   costs battery for nothing. */
+
+.glossy-card {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px) saturate(1.12);
+  backdrop-filter: blur(16px) saturate(1.12);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition:
+    transform var(--dur-reveal) var(--ease),
+    border-color var(--dur-reveal) var(--ease),
+    box-shadow var(--dur-reveal) var(--ease);
+}
+
+/* A one-pixel inner highlight along the top edge: what makes a translucent
+   panel read as glass rather than as a flat tint. */
+.glossy-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 22%, transparent);
+  z-index: 2;
+}
+
+.glossy-card[data-sheen]::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  left: -35%;
+  width: 28%;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    color-mix(in srgb, #fff 16%, transparent),
+    transparent
+  );
+  transform: translateX(-140%) rotate(8deg);
+}
+
+/* Once, as the card arrives. */
+.glossy-card[data-sheen]::after {
+  animation: sheen 1500ms var(--ease) 400ms 1 both;
+}
+
+.glossy-card[data-sheen]:hover::after {
+  animation: sheen 900ms var(--ease) 1;
+}
+
+@keyframes sheen {
+  from { transform: translateX(-140%) rotate(8deg); }
+  to   { transform: translateX(520%) rotate(8deg); }
+}
+
+.glossy-card:hover {
+  transform: translateY(var(--lift)) scale(1.008);
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+}
+
+/* Blur is the expensive part. Phones keep the surface and lose the blur,
+   which costs nothing visually at that size and a great deal in frame time. */
+@media (max-width: 640px) {
+  .glossy-card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--color-bg-elevated, var(--glass));
+  }
+
+  .glossy-card[data-sheen]::after {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress-bar {
+    transition: none;
+  }
+
+  .back-to-top {
+    transition: opacity 1ms linear;
+    transform: none;
+  }
+
+  .back-to-top:hover span {
+    transform: none;
+  }
+
+  .glossy-card,
+  .glossy-card:hover {
+    transform: none;
+    transition: border-color 1ms linear;
+  }
+
+  .glossy-card[data-sheen]::after,
+  .glossy-card[data-sheen]:hover::after {
+    animation: none;
+    opacity: 0;
   }
 }
