@@ -6,15 +6,24 @@
 # than three in total. Counting across workflows would let a busy schedule
 # quietly erase every deploy record.
 #
-# It never deletes a run that is still going, and it never deletes its own
-# runs — a cleanup that removes its own history leaves nothing to show it ran.
+# It never deletes a run that is still going: the listing asks GitHub for
+# status=completed, which by definition cannot include the run doing the
+# asking. That one filter is the whole safety mechanism, and it is why this
+# workflow needs no special case for itself.
+#
+# It used to skip its own runs on the theory that a cleanup which deletes its
+# own history leaves nothing to show it ran. Three months of history says
+# otherwise: every other workflow sat at 1-4 stored runs while this one grew
+# to 13 and became the bulk of the Actions list. It is now pruned like
+# everything else, and the three most recent survive to show what happened.
 # ─────────────────────────────────────────────────────────────────────────────
 name: Cleanup workflow runs
 
 on:
-  # Fires after either real workflow finishes, so the list is tidied as it
-  # grows. This workflow is deliberately NOT in the list: including it would
-  # make it re-trigger itself forever.
+  # Fires after a real workflow finishes, so the list is tidied as it grows.
+  # This workflow is deliberately absent from the list below: a workflow_run
+  # trigger naming itself re-triggers forever. That is separate from whether
+  # its own RUNS get pruned, which they now do.
   workflow_run:
     workflows: ["Production Deploy", "Collect Knowledge Resources", "Browser Tests"]
     types: [completed]
@@ -53,21 +62,11 @@ jobs:
         run: |
           set -euo pipefail
 
-          # This workflow's own id, so it can exclude itself.
-          self_id="$(gh api "repos/$REPO/actions/workflows" \
-            --jq '.workflows[] | select(.path==".github/workflows/cleanup-runs.yml") | .id' || true)"
-          echo "This workflow's id: ${self_id:-unknown}"
-
           deleted=0
           kept=0
 
           # Every workflow in the repo, including any that no longer has a file.
           for wf in $(gh api "repos/$REPO/actions/workflows" --jq '.workflows[].id'); do
-            if [ -n "$self_id" ] && [ "$wf" = "$self_id" ]; then
-              echo "── skipping this cleanup workflow ($wf)"
-              continue
-            fi
-
             name="$(gh api "repos/$REPO/actions/workflows/$wf" --jq '.name')"
             echo "── $name (id $wf)"
 
@@ -91,6 +90,9 @@ jobs:
                     kept=$((kept + 1)); continue
                   fi
                   ;;
+                # cancelled, skipped and neutral are deliberately absent: they
+                # carry no log worth keeping, and Browser Tests cancels
+                # superseded runs by design, so they would otherwise pile up.
                 failure|timed_out|startup_failure)
                   seen_failure=$((seen_failure + 1))
                   if [ "$seen_failure" -le "$KEEP_FAILURE" ]; then
