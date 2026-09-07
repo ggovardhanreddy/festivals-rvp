@@ -14775,7 +14775,7 @@ a.dharma-division-link:focus-visible {
 
 @keyframes hero-settle {
   from { transform: scale(1) translate3d(0, 0, 0); }
-  to   { transform: scale(1.05) translate3d(0, 0, 0); }
+  to   { transform: scale(1.045) translate3d(0, 0, 0); }
 }
 
 .village-hero {
@@ -14792,14 +14792,14 @@ a.dharma-division-link:focus-visible {
 }
 
 .village-hero-photo img {
-  animation: hero-settle 18s var(--ease) both;
+  animation: hero-settle 16s var(--ease) both;
   transform-origin: 65% 50%;
 }
 
 /* Copy drifts against the photograph, not with it: a smaller move in the
    opposite direction is what separates the two planes. */
 .village-hero-copy {
-  transform: translate3d(calc(var(--par-x) * -0.45), calc(var(--par-y) * -0.45), 0);
+  transform: translate3d(calc(var(--par-x) * -0.42), calc(var(--par-y) * -0.42), 0);
   transition: transform 600ms var(--ease-short);
 }
 
@@ -14956,5 +14956,97 @@ a.dharma-division-link:focus-visible {
   .home-event:hover .home-event-media img,
   .home-memory-tile:hover img {
     transform: none;
+  }
+}
+
+/* ── Temple card overlay ──────────────────────────────────────────────────
+   The scrim over a temple photograph lifts slightly on hover, so the name
+   sitting on it stays legible as the picture eases closer. Opacity only. */
+
+.home-temple-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, #1a130c 55%, transparent),
+    transparent 62%
+  );
+  opacity: 0.8;
+  transition: opacity var(--dur-reveal) var(--ease);
+  pointer-events: none;
+}
+
+.home-temple-media {
+  position: relative;
+}
+
+.home-temple-card:hover .home-temple-media::after,
+.home-temple-card:focus-visible .home-temple-media::after {
+  opacity: 1;
+}
+
+/* ── Navigation ───────────────────────────────────────────────────────────
+   An indicator that grows from the centre of the link, and a drawer that
+   opens rather than appears. Nothing bounces. */
+
+.nav-link,
+.nav a[href] {
+  position: relative;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--dur-micro) var(--ease-short);
+  opacity: 0.7;
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after,
+.nav-links a[aria-current]::after {
+  transform: scaleX(1);
+}
+
+.nav-drawer {
+  transition:
+    transform var(--dur-reveal) var(--ease),
+    opacity var(--dur-reveal) var(--ease);
+}
+
+.nav-drawer[hidden] {
+  /* [hidden] wins via the reset, so this only matters while opening. */
+  transform: translateY(-8px);
+  opacity: 0;
+}
+
+.nav-drawer-backdrop {
+  transition: opacity var(--dur-reveal) var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-temple-card:hover .home-temple-media::after,
+  .home-temple-card:focus-visible .home-temple-media::after {
+    opacity: 0.8;
+  }
+
+  .nav-links a::after {
+    transition: none;
+  }
+
+  .nav-links a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .nav-drawer,
+  .nav-drawer-backdrop {
+    transition: none;
   }
 }

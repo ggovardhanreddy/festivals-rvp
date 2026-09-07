@@ -59,8 +59,8 @@ export function VillageHero() {
         // -1 .. 1 from the centre of the hero.
         const x = (event.clientX - box.left) / box.width - 0.5;
         const y = (event.clientY - box.top) / box.height - 0.5;
-        el.style.setProperty("--par-x", `${(x * 14).toFixed(2)}px`);
-        el.style.setProperty("--par-y", `${(y * 14).toFixed(2)}px`);
+        el.style.setProperty("--par-x", `${(x * 12).toFixed(2)}px`);
+        el.style.setProperty("--par-y", `${(y * 12).toFixed(2)}px`);
       });
     };
     const onLeave = () => {
@@ -119,7 +119,7 @@ export function VillageHero() {
         )}
 
         <div className="village-hero-copy">
-          <m.h1 id="village-hero-title" className="village-hero-title" {...rise(0.06)}>
+          <m.h1 id="village-hero-title" className="village-hero-title" {...rise(0.05)}>
             {t("village.name", HOME_HERO_TITLE)}
           </m.h1>
           <m.p className="village-hero-pillars" {...rise(0.12)}>
@@ -128,7 +128,7 @@ export function VillageHero() {
           <m.p className="village-hero-support" {...rise(0.18)}>
             {t("home.hero.support", HOME_HERO_SUPPORT)}
           </m.p>
-          <m.div className="village-hero-cta" {...rise(0.24)}>
+          <m.div className="village-hero-cta" {...rise(0.25)}>
             <Link className="btn" href="/about/">
               {t("home.exploreOurVillage")} <span aria-hidden>→</span>
             </Link>

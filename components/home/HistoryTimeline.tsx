@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { m, useReducedMotion } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
+import { DIST, DUR, EASE, VIEWPORT_SAFE } from "@/components/motion/tokens";
 import { withBase } from "@/lib/base";
 import type { TimelineEntry } from "@/lib/timeline";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
@@ -43,10 +44,26 @@ export function HistoryTimeline({ entries }: { entries: TimelineEntry[] }) {
               </div>
               <m.article
                 className="history-timeline-card"
-                initial={reduce ? false : { opacity: 0, y: 28 }}
+                /*
+                 * Starts fully opaque and only moves. This card used to start
+                 * at opacity 0, which meant a missed whileInView left a piece
+                 * of the village's history permanently invisible -- the one
+                 * failure mode the rest of the motion system is built to
+                 * avoid. VIEWPORT_SAFE also triggers earlier, because a tall
+                 * card with an image can otherwise clear the old 25%
+                 * threshold late.
+                 */
+                initial={reduce ? false : { opacity: 1, y: DIST.mid }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                viewport={VIEWPORT_SAFE}
+                transition={{
+                  duration: DUR.reveal,
+                  // Entries unfold one after another rather than together, and
+                  // the delay is capped so a long history never leaves the
+                  // last event waiting.
+                  delay: Math.min(index, 5) * 0.1,
+                  ease: EASE,
+                }}
               >
                 <p className="history-timeline-year">{entry.year}</p>
                 {entry.image ? (

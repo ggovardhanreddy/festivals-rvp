@@ -20,13 +20,13 @@ describe("hero", () => {
   it("settles the photograph once rather than looping forever", () => {
     // A looping zoom keeps pulling the eye back to the top of the page.
     expect(css).toContain("@keyframes hero-settle");
-    expect(css).toMatch(/animation: hero-settle 18s var\(--ease\) both/);
-    expect(css).toMatch(/to\s*\{\s*transform: scale\(1\.05\)/);
+    expect(css).toMatch(/animation: hero-settle 16s var\(--ease\) both/);
+    expect(css).toMatch(/to\s*\{\s*transform: scale\(1\.045\)/);
   });
 
   it("moves the copy against the photograph, not with it", () => {
     // Same direction at the same rate is not parallax, it is a pan.
-    expect(css).toMatch(/\.village-hero-copy[\s\S]{0,160}var\(--par-x\) \* -0\.45/);
+    expect(css).toMatch(/\.village-hero-copy[\s\S]{0,160}var\(--par-x\) \* -0\.42/);
   });
 
   it("drives parallax through CSS variables, not React state", () => {
@@ -106,5 +106,79 @@ describe("every home flourish is switched off for reduced motion", () => {
   it("stops Ken Burns and the hover zooms", () => {
     expect(blocks).toContain(".home-memory-grid[data-single] .home-memory-tile img");
     expect(blocks).toContain(".home-temple-card:hover");
+  });
+});
+
+
+/**
+ * The remaining sections the brief lists, and the one bug it surfaced.
+ */
+describe("history unfolds instead of appearing", () => {
+  const timeline = read("components/home/HistoryTimeline.tsx");
+
+  it("no longer starts a history card at zero opacity", () => {
+    // It used to. A missed whileInView left a piece of the village's history
+    // permanently invisible -- the one failure the motion system exists to
+    // prevent.
+    expect(timeline).not.toMatch(/initial=\{reduce \? false : \{ opacity: 0,/);
+    expect(timeline).toContain("opacity: 1, y: DIST.mid");
+  });
+
+  it("triggers early enough for a tall card carrying an image", () => {
+    expect(timeline).toContain("viewport={VIEWPORT_SAFE}");
+  });
+
+  it("staggers entries and caps the wait", () => {
+    expect(timeline).toMatch(/Math\.min\(index, 5\) \* 0\.1/);
+  });
+});
+
+describe("development cards join the staggered sections", () => {
+  it("wraps the progress grid and keeps its layout hook", () => {
+    const progress = read("components/home/VillageProgress.tsx");
+    expect(progress).toContain("StaggerChildren");
+    expect(progress).toContain('"data-count": shown.length');
+  });
+});
+
+describe("CinematicImage replaces four hand-rolled copies", () => {
+  const img = read("components/motion/CinematicImage.tsx");
+
+  it("clips on the frame so a hover never reflows the layout", () => {
+    expect(img).toContain('overflow: "hidden"');
+  });
+
+  it("animates transform and opacity only", () => {
+    expect(img).not.toMatch(/filter:/);
+    expect(img).not.toMatch(/blur\(/);
+  });
+
+  it("gives keyboard users the same response as a pointer", () => {
+    expect(img).toContain("whileFocus");
+  });
+
+  it("keeps the scale small enough to read as settling", () => {
+    expect(img).toMatch(/from = 1\.02/);
+    expect(img).toMatch(/hover = 1\.035/);
+  });
+
+  it("stands down entirely under reduced motion", () => {
+    expect(img).toContain("useReducedMotion");
+    expect(img).toMatch(/reduce \|\| hover === 1 \? undefined/);
+  });
+});
+
+describe("navigation gains motion without redesign", () => {
+  it("grows a link indicator from the centre", () => {
+    expect(css).toMatch(/\.nav-links a::after[\s\S]{0,200}transform: scaleX\(0\)/);
+    expect(css).toContain("transform-origin: center");
+  });
+
+  it("marks the current page, not only hover", () => {
+    expect(css).toContain('.nav-links a[aria-current]::after');
+  });
+
+  it("lifts the temple scrim with opacity, not a filter", () => {
+    expect(css).toMatch(/\.home-temple-media::after[\s\S]{0,240}transition: opacity/);
   });
 });

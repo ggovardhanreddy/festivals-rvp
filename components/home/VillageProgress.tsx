@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { StaggerChildren, StaggerItem } from "@/components/motion";
 import { withBase } from "@/lib/base";
 import { STATUS_META } from "@/lib/development-status";
 import type { Development } from "@/lib/types";
@@ -41,7 +42,12 @@ export function VillageProgress({
         </Link>
       </div>
 
-      <ul className="progress-grid" data-count={shown.length}>
+      <StaggerChildren
+        as="ul"
+        className="progress-grid"
+        dataset={{ "data-count": shown.length }}
+        safe
+      >
         {shown.map((project) => {
           const meta = STATUS_META[project.status];
           const image = project.images?.[0];
@@ -53,7 +59,7 @@ export function VillageProgress({
             project.summary ||
             project.description;
           return (
-            <li key={project.id}>
+            <StaggerItem as="li" key={project.id}>
               <Link className="progress-card" href="/developments/">
                 <span
                   className="progress-card-media"
@@ -83,10 +89,10 @@ export function VillageProgress({
                   </span>
                 </span>
               </Link>
-            </li>
+            </StaggerItem>
           );
         })}
-      </ul>
+      </StaggerChildren>
     </section>
   );
 }
