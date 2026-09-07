@@ -423,7 +423,9 @@ export function FamilyTreeView({
                 >
                   <span className="ft-node-photo" aria-hidden>
                     {photo ? (
-                      <ProtectedMedia>
+                      // A span, not the default div: this sits inside a
+                      // <button>, which only permits phrasing content.
+                      <ProtectedMedia as="span">
                         <img
                           src={photo}
                           alt=""

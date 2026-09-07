@@ -38,7 +38,9 @@ export function HomeTemples() {
             <Link className="home-temple-card" href="/temples/">
               <CinematicImage className="home-temple-media" mask hover={1.04}>
                 {TEMPLE_PHOTOS[temple.name] ? (
-                  <ProtectedMedia>
+                  // CinematicImage renders a <span>, so the wrapper must be
+                  // phrasing content too.
+                  <ProtectedMedia as="span">
                     <img
                       src={withBase(TEMPLE_PHOTOS[temple.name])}
                       alt=""

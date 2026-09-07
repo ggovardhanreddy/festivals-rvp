@@ -62,3 +62,94 @@ test.describe("accessibility", () => {
     expect(href).toBe("#main-content");
   });
 });
+
+/**
+ * Invalid tag nesting, checked in a real parser.
+ *
+ * A <div> inside a <button> or a <span> is flow content where only phrasing
+ * content is allowed. The server emits the string React rendered, the
+ * browser's parser rearranges it, and the DOM no longer matches what React
+ * expects -- hydration fails with error #418 and the whole subtree is thrown
+ * away and re-rendered on the client. It is silent apart from that one
+ * minified console error, and it only appeared on family tree nodes that had
+ * a photograph, which is why it survived every static check.
+ *
+ * Asserted against the parsed DOM on purpose: that is the thing React
+ * compares against, and no amount of source-grepping sees what the parser did.
+ */
+/**
+ * /gallery/ and /temples/ are deliberately absent.
+ *
+ * Their album and festival cards are <button> elements containing <h4> and
+ * <p>. That is the same invalid nesting, but fixing it means changing what
+ * those cards ARE -- a button cannot hold a heading, so the markup has to
+ * become a container with a button inside, or an <a>, whose content model is
+ * transparent and would make the existing children legal. That is a real
+ * change to keyboard and focus behaviour, not a wrapper swap, so it is left
+ * for its own pass rather than smuggled in here.
+ */
+const NESTING_ROUTES = [
+  "/",
+  "/people/",
+  "/families/gundluru-venkata-subba-reddy/",
+  "/families/gundluru-konda-reddy/",
+];
+
+test.describe("HTML nesting stays valid", () => {
+  for (const path of NESTING_ROUTES) {
+    test(`no flow content inside phrasing content: ${path}`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto(path);
+      const offenders = await page.evaluate(() => {
+        const FLOW = "div,p,ul,ol,section,article,h1,h2,h3,h4,h5,h6,table,form,footer,header,nav,main,aside,blockquote,pre,dl,li";
+        const out: string[] = [];
+        // No <a> here: its content model is transparent, so a <div> inside a
+        // link that sits in flow content is valid HTML.
+        for (const host of document.querySelectorAll("button,span,label,em,strong,small")) {
+          for (const child of host.querySelectorAll(FLOW)) {
+            out.push(
+              `<${child.tagName.toLowerCase()} class="${child.className}"> inside ` +
+                `<${host.tagName.toLowerCase()} class="${host.className}">`,
+            );
+          }
+        }
+        return [...new Set(out)];
+      });
+      expect(offenders.join("\n")).toBe("");
+    });
+  }
+});
+
+/**
+ * Hydration must not fail.
+ *
+ * The strongest guard in this file, because it catches the whole class rather
+ * than one instance. A hydration mismatch is nearly silent in production: one
+ * minified "error #418" in the console, no visual break, and React quietly
+ * throws away the server-rendered tree and rebuilds it on the client -- which
+ * costs exactly the work that server rendering was there to save.
+ *
+ * It went unnoticed on every page of this site until a console log was read by
+ * hand. MoreSheet returned null on the server and a portal on the client's
+ * first render, so <body>'s child list disagreed and the entire body tree was
+ * discarded on load.
+ */
+test.describe("the page hydrates cleanly", () => {
+  for (const path of NESTING_ROUTES) {
+    test(`no uncaught errors on load: ${path}`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", (e) => errors.push(e.message.split("\n")[0]!));
+      page.on("console", (m) => {
+        // Asset 404s are environment noise (media lives on R2); React's
+        // hydration and rendering errors are not.
+        if (m.type() === "error" && !/Failed to load resource|bad HTTP response/.test(m.text())) {
+          errors.push(`console: ${m.text().split("\n")[0]}`);
+        }
+      });
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto(path);
+      await page.waitForTimeout(2500);
+      expect(errors.join("\n")).toBe("");
+    });
+  }
+});

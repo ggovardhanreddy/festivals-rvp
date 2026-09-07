@@ -42,12 +42,23 @@ export function ProtectedMedia({
   className = "",
   watermark,
   children,
+  as: Tag = "div",
 }: {
   src?: string;
   alt?: string;
   className?: string;
   watermark?: boolean;
   children?: ReactNode;
+  /**
+   * The wrapper element. Defaults to a div.
+   *
+   * Pass "span" wherever this sits inside phrasing content -- a button, a
+   * span, a label. A div in there is invalid nesting: the browser's parser
+   * rearranges it, so the DOM stops matching what React rendered on the
+   * server and hydration fails with error #418, regenerating the tree. The
+   * family tree hit exactly this, but only on nodes that had a photograph.
+   */
+  as?: "div" | "span";
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
@@ -94,7 +105,7 @@ export function ProtectedMedia({
       : 0.35;
 
   return (
-    <div
+    <Tag
       ref={rootRef}
       className={`protected-media ${className}`.trim()}
       onContextMenu={block}
@@ -113,6 +124,6 @@ export function ProtectedMedia({
           {settings.watermarkText || "Reddivaripalli.com"}
         </span>
       ) : null}
-    </div>
+    </Tag>
   );
 }

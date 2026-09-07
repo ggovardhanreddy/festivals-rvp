@@ -9456,6 +9456,10 @@ body {
 }
 
 .protected-media {
+  /* display is explicit because this element is a <div> in most places and a
+     <span> inside phrasing content (see ProtectedMedia's `as` prop). Without
+     it the span would lay out inline and collapse the media box. */
+  display: block;
   position: relative;
   overflow: hidden;
   user-select: none;

@@ -10,6 +10,12 @@ type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   /** Wrap with drag/context-menu/watermark protection. Default true. */
   protect?: boolean;
   watermark?: boolean;
+  /**
+   * Wrapper element for the protected/skeleton/empty states. Pass "span"
+   * inside phrasing content -- a <button> or <span> may not contain a <div>,
+   * and the parser's repair of that breaks hydration. See ProtectedMedia.
+   */
+  as?: "div" | "span";
 };
 
 /**
@@ -24,6 +30,7 @@ export function MediaImage({
   className,
   protect = true,
   watermark,
+  as: Tag = "div",
   ...rest
 }: Props) {
   const [useFallback, setUseFallback] = useState(false);
@@ -34,14 +41,14 @@ export function MediaImage({
   if (!url) {
     if (loading) {
       return (
-        <div
+        <Tag
           className={`media-image-skeleton${className ? ` ${className}` : ""}`}
           aria-hidden
         />
       );
     }
     return (
-      <div
+      <Tag
         className={`media-image-empty${className ? ` ${className}` : ""}`}
         role="img"
         aria-label={error || alt || "Media unavailable"}
@@ -49,19 +56,19 @@ export function MediaImage({
         <span className="media-image-empty-label">
           {error?.includes("Sign in") ? "Sign in to view" : "Photo unavailable"}
         </span>
-      </div>
+      </Tag>
     );
   }
 
   if (broken) {
     return (
-      <div
+      <Tag
         className={`media-image-empty${className ? ` ${className}` : ""}`}
         role="img"
         aria-label={alt || "Media unavailable"}
       >
         <span className="media-image-empty-label">Photo unavailable</span>
-      </div>
+      </Tag>
     );
   }
 
@@ -89,7 +96,7 @@ export function MediaImage({
   if (!protect) return img;
 
   return (
-    <ProtectedMedia className={className} watermark={watermark}>
+    <ProtectedMedia className={className} watermark={watermark} as={Tag}>
       {img}
     </ProtectedMedia>
   );

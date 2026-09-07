@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { navHref } from "@/lib/routes/registry";
@@ -38,9 +38,25 @@ const UTILITY = [
 export function MoreSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t, lang } = useUiLang();
   const ref = useRef<HTMLDivElement>(null);
-  const mounted = useRef(false);
 
-  useEffect(() => { mounted.current = true; }, []);
+  /**
+   * Mount gate for the portal.
+   *
+   * This used to be `if (typeof document === "undefined") return null` right
+   * before createPortal -- the exact server/client branch React's hydration
+   * error names as cause #1. The server rendered nothing here; the client's
+   * FIRST render (the hydrating one) rendered a portal into document.body. So
+   * body's child list disagreed, and React threw away and re-rendered the
+   * entire body tree on every page of the site, reporting only a minified
+   * error #418.
+   *
+   * A ref cannot do this job -- it was a ref before, which is why the gate
+   * never worked: assigning to it triggers no re-render, so the portal still
+   * rendered on the first pass. State set in an effect is guaranteed to still
+   * be false while hydrating, because effects run after commit.
+   */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!open) return;
@@ -97,6 +113,7 @@ export function MoreSheet({ open, onClose }: { open: boolean; onClose: () => voi
     </>
   );
 
-  if (typeof document === "undefined") return null;
+  // Nothing until after hydration: see the note on `mounted` above.
+  if (!mounted) return null;
   return createPortal(sheet, document.body);
 }

@@ -317,3 +317,74 @@ describe("the edge cache lets a deploy be seen", () => {
     expect(brand![1]!).toMatch(/stale-while-revalidate|max-age=([0-9]{1,5})\b/);
   });
 });
+
+describe("the CSP allows what the page actually loads", () => {
+  const headers = read("public/_headers");
+
+  function directive(name: string): string[] {
+    const m = new RegExp(`${name} ([^;]+)`).exec(headers);
+    expect(m, `${name} missing from public/_headers`).not.toBeNull();
+    return m![1]!.trim().split(/\s+/);
+  }
+
+  /**
+   * Plausible was blocked on every page load for as long as the CSP has
+   * existed: the analytics component is enabled by default (it falls back to
+   * www.reddivaripalli.com when the env var is unset), but plausible.io was in
+   * neither script-src nor connect-src. So the script never ran, no analytics
+   * was ever collected, and the only symptom was a console violation.
+   *
+   * This reads the hosts out of the components rather than hardcoding them, so
+   * adding a third-party script without opening the CSP fails here.
+   */
+  it.each([
+    ["components/analytics/PlausibleScript.tsx", "script-src"],
+    ["components/analytics/CloudflareWebAnalytics.tsx", "script-src"],
+  ])("allows the script host used by %s", (file, name) => {
+    const src = read(file);
+    const hosts = [...src.matchAll(/src="(https:\/\/[^/"]+)/g)].map((m) => m[1]!);
+    expect(hosts.length, `${file} should load an external script`).toBeGreaterThan(0);
+    const allowed = directive(name);
+    for (const host of hosts) {
+      expect(allowed, `${host} must be in ${name}`).toContain(host);
+    }
+  });
+
+  it("lets the analytics beacons report back", () => {
+    // A script that loads but cannot POST its event is still no analytics.
+    expect(directive("connect-src")).toContain("https://plausible.io");
+  });
+});
+
+describe("no component branches on the server/client boundary while rendering", () => {
+  /**
+   * `if (typeof document === "undefined") return null` before a createPortal
+   * is the first cause React lists for a hydration mismatch, and it is easy to
+   * write because it looks like a safety check. It is not: the server renders
+   * nothing and the client's FIRST render -- the one React compares against
+   * the server HTML -- renders the portal.
+   *
+   * The correct gate is state set in an effect, which is still false while
+   * hydrating. A ref does not work either: assigning to it schedules no
+   * re-render, so the portal renders on the first pass anyway. MoreSheet had a
+   * ref named `mounted` sitting unused next to the broken branch.
+   */
+  const portalFiles = ["components/platform/MoreSheet.tsx", "components/SiteHeader.tsx"];
+
+  /** Comments describe the trap, so they must not be mistaken for it. */
+  const stripComments = (src: string) =>
+    src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+
+  it.each(portalFiles)("%s gates createPortal on mount state, not on typeof", (file) => {
+    const src = stripComments(read(file));
+    expect(src).toContain("createPortal");
+    expect(
+      /typeof (?:document|window) [!=]== "undefined"[\s\S]{0,120}createPortal/.test(src),
+      `${file} must not branch on typeof around createPortal`,
+    ).toBe(false);
+    expect(
+      /useState\(false\)/.test(src),
+      `${file} should gate on state set in an effect`,
+    ).toBe(true);
+  });
+});
