@@ -14767,3 +14767,194 @@ a.dharma-division-link:focus-visible {
     }
   }
 }
+
+/* ══ Home: hero ══════════════════════════════════════════════════════════
+   The aerial photograph settles inward over eighteen seconds and stops. A
+   looping zoom would draw the eye back to the top of the page forever; a
+   single slow move reads as the shot opening and then letting you read. */
+
+@keyframes hero-settle {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to   { transform: scale(1.05) translate3d(0, 0, 0); }
+}
+
+.village-hero {
+  --par-x: 0px;
+  --par-y: 0px;
+}
+
+.village-hero-photo {
+  /* The parallax layer. The photograph inside it owns the zoom, so the two
+     transforms never fight over the same property. */
+  transform: translate3d(var(--par-x), var(--par-y), 0);
+  transition: transform 600ms var(--ease-short);
+  will-change: transform;
+}
+
+.village-hero-photo img {
+  animation: hero-settle 18s var(--ease) both;
+  transform-origin: 65% 50%;
+}
+
+/* Copy drifts against the photograph, not with it: a smaller move in the
+   opposite direction is what separates the two planes. */
+.village-hero-copy {
+  transform: translate3d(calc(var(--par-x) * -0.45), calc(var(--par-y) * -0.45), 0);
+  transition: transform 600ms var(--ease-short);
+}
+
+.village-hero-scrollcue {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.village-hero-scrollcue span {
+  display: block;
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, currentColor 55%, transparent),
+    transparent
+  );
+  animation: scrollcue 2.6s var(--ease) infinite;
+}
+
+@keyframes scrollcue {
+  0%   { opacity: 0; transform: scaleY(0.35); transform-origin: top; }
+  35%  { opacity: 1; transform: scaleY(1); transform-origin: top; }
+  100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
+}
+
+/* A phone has no hover and a smaller screen: no parallax, and a gentler zoom
+   so the subject does not crawl out of frame on a tall viewport. */
+@media (max-width: 640px), (hover: none) {
+  .village-hero-photo,
+  .village-hero-copy {
+    transform: none;
+  }
+
+  .village-hero-photo img {
+    animation-duration: 24s;
+    animation-name: hero-settle-soft;
+  }
+
+  @keyframes hero-settle-soft {
+    from { transform: scale(1); }
+    to   { transform: scale(1.03); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .village-hero-photo img {
+    animation: none;
+    transform: none;
+  }
+
+  .village-hero-photo,
+  .village-hero-copy {
+    transform: none;
+    transition: none;
+  }
+
+  .village-hero-scrollcue span {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* ══ Home: sections ══════════════════════════════════════════════════════ */
+
+/* ── Ken Burns, on the featured photograph only ───────────────────────────
+   Reserved for the single large tile. Six tiles all drifting at once is
+   aquarium, not archive -- so the grid variants get a still image and the
+   feature gets the slow move. 1.00 to 1.04 over twenty seconds, once. */
+
+@keyframes ken-burns {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to   { transform: scale(1.04) translate3d(0, -1.2%, 0); }
+}
+
+.home-memory-grid[data-single] .home-memory-tile img {
+  animation: ken-burns 20s var(--ease) both;
+  transform-origin: 50% 45%;
+  will-change: transform;
+}
+
+/* ── Temple photographs ──────────────────────────────────────────────────
+   The card lifts, the photograph inside eases closer. Two different speeds:
+   the lift is a response to the pointer, the zoom is the picture opening. */
+
+.home-temple-card {
+  transition:
+    transform var(--dur-micro) var(--ease-short),
+    border-color var(--dur-micro) var(--ease-short),
+    box-shadow var(--dur-micro) var(--ease-short);
+}
+
+.home-temple-media {
+  display: block;
+  overflow: hidden;
+}
+
+.home-temple-media img {
+  transition: transform var(--dur-image) var(--ease);
+}
+
+.home-temple-card:hover {
+  transform: translateY(var(--lift));
+}
+
+.home-temple-card:hover .home-temple-media img,
+.home-temple-card:focus-visible .home-temple-media img {
+  transform: scale(var(--zoom));
+}
+
+/* ── Event rows and memory tiles ─────────────────────────────────────────
+   The photograph is inside a fixed frame, so a small scale reads as the tile
+   leaning in rather than the layout shifting. */
+
+.home-event-media,
+.home-memory-tile {
+  overflow: hidden;
+}
+
+.home-event-media img,
+.home-memory-tile img {
+  transition: transform var(--dur-image) var(--ease);
+}
+
+.home-event:hover .home-event-media img,
+.home-memory-tile:hover img {
+  transform: scale(var(--zoom));
+}
+
+/* ── The founders ────────────────────────────────────────────────────────
+   The closing section. A slightly warmer edge and a longer settle than the
+   cards above it, because this is where the page is meant to slow down. */
+
+.home-story-card {
+  transition:
+    transform var(--dur-reveal) var(--ease),
+    border-color var(--dur-reveal) var(--ease);
+}
+
+.home-story-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--color-line));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-memory-grid[data-single] .home-memory-tile img {
+    animation: none;
+    transform: none;
+  }
+
+  .home-temple-card:hover,
+  .home-temple-card:hover .home-temple-media img,
+  .home-temple-card:focus-visible .home-temple-media img,
+  .home-event:hover .home-event-media img,
+  .home-memory-tile:hover img {
+    transform: none;
+  }
+}

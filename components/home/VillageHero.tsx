@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { m, useReducedMotion } from "framer-motion";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { withBase } from "@/lib/base";
 import {
   HOME_HERO_PHOTO,
@@ -30,6 +30,55 @@ export function VillageHero() {
     window.dispatchEvent(new CustomEvent("rvp:intro-complete"));
   }, []);
 
+  /**
+   * A few pixels of pointer parallax, on desktop only.
+   *
+   * The photograph and the words shift by different amounts, which reads as
+   * depth rather than as movement -- the whole range is 14px on the image and
+   * 6px the other way on the copy. Written to CSS custom properties and
+   * applied with a transform, so the browser composites it and no React
+   * render happens on pointer move.
+   *
+   * Skipped entirely on anything without a fine pointer: a phone has no
+   * hover, and a touch-drag reading as parallax feels like a bug. Also
+   * skipped under reduced motion, where the spec asks for no parallax at all.
+   */
+  useEffect(() => {
+    if (reduce) return;
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (!fine.matches) return;
+    const el = heroRef.current;
+    if (!el) return;
+
+    let frame = 0;
+    const onMove = (event: PointerEvent) => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        const box = el.getBoundingClientRect();
+        // -1 .. 1 from the centre of the hero.
+        const x = (event.clientX - box.left) / box.width - 0.5;
+        const y = (event.clientY - box.top) / box.height - 0.5;
+        el.style.setProperty("--par-x", `${(x * 14).toFixed(2)}px`);
+        el.style.setProperty("--par-y", `${(y * 14).toFixed(2)}px`);
+      });
+    };
+    const onLeave = () => {
+      el.style.setProperty("--par-x", "0px");
+      el.style.setProperty("--par-y", "0px");
+    };
+
+    el.addEventListener("pointermove", onMove, { passive: true });
+    el.addEventListener("pointerleave", onLeave);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerleave", onLeave);
+    };
+  }, [reduce]);
+
+  const heroRef = useRef<HTMLElement>(null);
+
   const rise = (delay: number) => ({
     initial: reduce ? false : ({ opacity: 1, y: 14 } as const),
     animate: { opacity: 1, y: 0 },
@@ -38,6 +87,7 @@ export function VillageHero() {
 
   return (
     <section
+      ref={heroRef}
       className="village-hero"
       data-photo={HOME_HERO_PHOTO ? true : undefined}
       aria-labelledby="village-hero-title"
@@ -85,6 +135,19 @@ export function VillageHero() {
             <Link className="btn ghost" href="/gallery/">
               {t("home.hero.viewGallery", t("home.viewGallery"))} <span aria-hidden>→</span>
             </Link>
+          </m.div>
+
+          {/* Arrives last, once the words have settled, and only to say that
+              there is more below. Hidden from assistive tech: it is a hint
+              about scrolling, not content. */}
+          <m.div
+            className="village-hero-scrollcue"
+            aria-hidden
+            initial={reduce ? false : { opacity: 0.001 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span />
           </m.div>
         </div>
       </div>

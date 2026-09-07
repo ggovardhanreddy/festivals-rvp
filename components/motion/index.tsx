@@ -177,7 +177,15 @@ export function StaggerChildren({
   safe,
   as = "div",
   step = STAGGER,
-}: Common & { step?: number }) {
+  /**
+   * Layout hooks to forward, e.g. `{ "data-count": 3 }`.
+   *
+   * Wrapping an existing grid must not drop the attributes its CSS selects
+   * on. Passing them here keeps the element that carries the class the same
+   * element that carries the data.
+   */
+  dataset,
+}: Common & { step?: number; dataset?: Record<string, string | number | boolean | undefined> }) {
   const reduce = useReducedMotion();
   const { viewport } = useMotionProps(reduce, safe);
   const Tag = m[as];
@@ -192,6 +200,7 @@ export function StaggerChildren({
         hidden: {},
         shown: { transition: { staggerChildren: step, delayChildren: delay } },
       }}
+      {...dataset}
     >
       {children}
     </Tag>

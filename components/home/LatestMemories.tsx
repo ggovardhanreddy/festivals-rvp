@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MediaImage } from "@/components/media/MediaImage";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { StaggerChildren, StaggerItem } from "@/components/motion";
 import { BUCKET_TITLE_TE } from "@/lib/site";
 import type { Album, MediaWithAlbum } from "@/lib/types";
 
@@ -57,13 +58,19 @@ export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
         </Link>
       </div>
 
-      <ul
+      <StaggerChildren
+        as="ul"
         className="home-memory-grid"
-        data-single={single ? true : undefined}
-        data-count={Math.min(items.length, 3)}
+        // The grid's own layout hooks: dropping these would collapse the
+        // single-photo and three-up variants into the default.
+        dataset={{
+          "data-single": single ? true : undefined,
+          "data-count": Math.min(items.length, 3),
+        }}
+        safe
       >
         {items.map((item, index) => (
-          <li key={item.id}>
+          <StaggerItem as="li" key={item.id}>
             <Link className="home-memory-tile" href="/gallery/">
               <MediaImage
                 src={item.thumb || item.file}
@@ -84,9 +91,9 @@ export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
                 </span>
               )}
             </Link>
-          </li>
+          </StaggerItem>
         ))}
-      </ul>
+      </StaggerChildren>
     </section>
   );
 }

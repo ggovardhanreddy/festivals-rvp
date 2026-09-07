@@ -6,6 +6,7 @@ import { memberPhotoSrc } from "@/lib/member-image";
 import { memberInitials, resolveMemberGroup } from "@/lib/member-groups";
 import { publishedMembers, rosterStats } from "@/lib/people-stats";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { StaggerChildren, StaggerItem } from "@/components/motion";
 
 export function HomePeople({ members }: { members: Member[] }) {
   const { t } = useUiLang();
@@ -39,9 +40,9 @@ export function HomePeople({ members }: { members: Member[] }) {
           {t("home.meetOurPeople")} <span aria-hidden>→</span>
         </Link>
       </div>
-      <ul className="home-people-grid">
+      <StaggerChildren as="ul" className="home-people-grid" safe>
         {shown.map((member) => (
-          <li key={member.id}>
+          <StaggerItem as="li" key={member.id}>
             <Link className="home-person-card" href="/people/">
               <span
                 className="home-person-photo"
@@ -64,9 +65,9 @@ export function HomePeople({ members }: { members: Member[] }) {
                 <span className="muted">{member.designation}</span>
               ) : null}
             </Link>
-          </li>
+          </StaggerItem>
         ))}
-      </ul>
+      </StaggerChildren>
     </section>
   );
 }

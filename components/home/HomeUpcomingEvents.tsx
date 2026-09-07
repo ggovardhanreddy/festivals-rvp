@@ -4,6 +4,7 @@ import Link from "next/link";
 import { withBase } from "@/lib/base";
 import { daysUntil, eventPhase, formatEventDateRange } from "@/lib/dates";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { StaggerChildren, StaggerItem } from "@/components/motion";
 import { LOCALE_TAG } from "@/lib/i18n/config";
 import { festivalCardImage } from "@/lib/festivals";
 import type { SiteEvent } from "@/lib/types";
@@ -52,13 +53,13 @@ export function HomeUpcomingEvents({
       <h2 id="home-events-heading">{t("home.upcomingEvents")}</h2>
 
       {upcoming.length ? (
-        <ul className="home-event-list">
+        <StaggerChildren as="ul" className="home-event-list" safe>
           {upcoming.map((event) => {
             const phase = eventPhase(event.date, event.endDate);
             const href =
               event.slug && live.has(event.slug) ? `/${event.slug}/` : "/temples/";
             return (
-              <li key={event.id}>
+              <StaggerItem as="li" key={event.id}>
                 <Link className="home-event" href={href}>
                   <span className="home-event-media">
                     <img
@@ -95,10 +96,10 @@ export function HomeUpcomingEvents({
                     </span>
                   </span>
                 </Link>
-              </li>
+              </StaggerItem>
             );
           })}
-        </ul>
+        </StaggerChildren>
       ) : (
         <p className="home-empty">{t("home.events.empty")}</p>
       )}

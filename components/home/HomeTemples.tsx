@@ -5,6 +5,7 @@ import { withBase } from "@/lib/base";
 import { ProtectedMedia } from "@/components/media/ProtectedMedia";
 import { loadVillageHeritage } from "@/lib/village-heritage";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { StaggerChildren, StaggerItem } from "@/components/motion";
 
 const TEMPLE_PHOTOS: Record<string, string> = {
   "Sri Ramalayam": "/brand/rama-navami-hero.webp",
@@ -28,9 +29,11 @@ export function HomeTemples() {
           {t("home.viewTemples")} <span aria-hidden>→</span>
         </Link>
       </div>
-      <ul className="home-temple-grid">
+      {/* Each temple's photograph arrives after the one before it, so the row
+          reads across rather than snapping in as a block. */}
+      <StaggerChildren as="ul" className="home-temple-grid" safe>
         {temples.map((temple) => (
-          <li key={temple.name}>
+          <StaggerItem as="li" key={temple.name}>
             <Link className="home-temple-card" href="/temples/">
               <span className="home-temple-media">
                 {TEMPLE_PHOTOS[temple.name] ? (
@@ -55,9 +58,9 @@ export function HomeTemples() {
                 <span className="muted">{temple.note}</span>
               </span>
             </Link>
-          </li>
+          </StaggerItem>
         ))}
-      </ul>
+      </StaggerChildren>
     </section>
   );
 }
