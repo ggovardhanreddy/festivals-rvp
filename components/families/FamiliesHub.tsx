@@ -6,6 +6,7 @@ import { PeopleNav } from "@/components/people/PeopleNav";
 import { PersonCard } from "./PersonCard";
 import { searchPeople } from "@/lib/family-trees";
 import { useFamilyTreeOverlay } from "@/lib/family-trees/overlay";
+import { StaggerChildren, StaggerItem } from "@/components/motion";
 import {
   applyFamilyAssignments,
   familyHref,
@@ -155,19 +156,25 @@ export function FamiliesHub() {
               </p>
             </div>
           </div>
-          <div className="ft-family-grid">
+          {/*
+            The fourteen families arrive one after another rather than as a
+            single block. The parent owns the timing, so no card needs to know
+            its own index.
+          */}
+          <StaggerChildren className="ft-family-grid" safe>
             {families.map((family) => {
               const { peopleCount, generations } = counts(family);
               return (
-                <FamilyCard
-                  key={family.id}
-                  family={family}
-                  peopleCount={peopleCount}
-                  generations={generations}
-                />
+                <StaggerItem key={family.id}>
+                  <FamilyCard
+                    family={family}
+                    peopleCount={peopleCount}
+                    generations={generations}
+                  />
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerChildren>
         </section>
       )}
     </div>

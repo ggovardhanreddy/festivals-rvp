@@ -5030,11 +5030,33 @@ button.linkish {
     box-shadow var(--motion-base) var(--ease-out);
 }
 
+.nav-sticky {
+  transition:
+    padding var(--dur-reveal, 550ms) var(--ease, ease),
+    background var(--dur-reveal, 550ms) var(--ease, ease),
+    border-color var(--dur-reveal, 550ms) var(--ease, ease),
+    box-shadow var(--dur-reveal, 550ms) var(--ease, ease);
+  border-bottom: 1px solid transparent;
+}
+
+/* Settles into a translucent, blurred bar once the page has moved, so the
+   content scrolls under it rather than behind a solid slab. */
 .nav-sticky[data-scrolled] {
   padding-top: 0.55rem;
   padding-bottom: 0.55rem;
-  background: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom-color: color-mix(in srgb, var(--color-line) 70%, transparent);
   box-shadow: var(--elevation-1);
+}
+
+/* A single blurred bar is cheap; the fallback keeps it opaque where the
+   browser cannot blur, so text never sits on a half-transparent ground. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav-sticky[data-scrolled] {
+    background: var(--color-bg-elevated);
+  }
 }
 
 .nav-sticky .brand-logo {
@@ -14673,5 +14695,75 @@ a.dharma-division-link:focus-visible {
   :root {
     --lift: -3px;
     --zoom: 1;
+  }
+}
+
+/* ── The timeline, drawn ──────────────────────────────────────────────────
+   The rule down the middle grows from the top as the section arrives, and the
+   events settle in along it. One transform on one pseudo-element: the whole
+   effect costs a single composited layer, not a scroll listener. */
+
+@keyframes timeline-draw {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+.history-timeline::before {
+  transform-origin: top center;
+  animation: timeline-draw 1400ms var(--ease) both;
+}
+
+@media (min-width: 920px) {
+  .history-timeline::before {
+    /* Keeps the existing horizontal centring while adding the draw. */
+    animation-name: timeline-draw-centred;
+  }
+
+  @keyframes timeline-draw-centred {
+    from { transform: translateX(-50%) scaleY(0); }
+    to   { transform: translateX(-50%) scaleY(1); }
+  }
+}
+
+/* ── The portrait on a person's page ──────────────────────────────────────
+   Sized so a single face reads as a portrait rather than a thumbnail, and
+   capped so a tall photograph cannot push the name off the first screen. */
+
+.ft-profile-portrait {
+  width: min(280px, 62vw);
+  margin: 0 0 1.5rem;
+  border-radius: var(--radius-lg, 14px);
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  background: var(--sunken, var(--color-bg-elevated));
+  aspect-ratio: 1 / 1;
+}
+
+.ft-profile-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 920px) {
+  /* Portrait beside the name, the way a documentary title card sits. */
+  .ft-profile-portrait {
+    float: inline-start;
+    margin-inline-end: 2rem;
+    width: 240px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-timeline::before {
+    animation: none;
+    transform: scaleY(1);
+  }
+
+  @media (min-width: 920px) {
+    .history-timeline::before {
+      transform: translateX(-50%) scaleY(1);
+    }
   }
 }

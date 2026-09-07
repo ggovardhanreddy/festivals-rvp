@@ -102,12 +102,22 @@ describe("the family tree draws itself", () => {
 describe("reduced motion and small screens are handled once", () => {
   const css = read("app/globals.css");
 
-  it("neutralises the shared tokens in a single place", () => {
-    const block = css.slice(css.lastIndexOf("@media (prefers-reduced-motion: reduce)"));
+  it("neutralises the shared tokens where reduced motion is honoured", () => {
+    /**
+     * Searches every reduced-motion block rather than one of them. An earlier
+     * version of this test looked only at the last block in the file and
+     * broke the moment a second one was appended -- the code was fine, the
+     * locator was not. What matters is that the tokens are neutralised
+     * somewhere under the query, not which block does it.
+     */
+    const blocks = css
+      .split("@media (prefers-reduced-motion: reduce)")
+      .slice(1)
+      .join("\n");
     for (const token of ["--dur-micro", "--dur-reveal", "--dur-image", "--lift", "--zoom"]) {
-      expect(block, `${token} not neutralised`).toContain(token);
+      expect(blocks, `${token} not neutralised`).toContain(token);
     }
-    expect(block).toContain("animation: none");
+    expect(blocks).toContain("animation: none");
   });
 
   it("drops hover flourishes on phones, where there is no hover", () => {

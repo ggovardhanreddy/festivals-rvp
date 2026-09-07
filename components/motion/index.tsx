@@ -27,7 +27,7 @@ type Common = {
   id?: string;
   /** Lower the viewport threshold, for tall or late-mounting blocks. */
   safe?: boolean;
-  as?: "div" | "section" | "li" | "article" | "span";
+  as?: "div" | "section" | "li" | "article" | "span" | "ul" | "ol";
 };
 
 function useMotionProps(reduce: boolean | null, safe?: boolean) {
