@@ -9,6 +9,7 @@ import {
   useState,
   type PointerEvent,
 } from "react";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { ProtectedMedia } from "@/components/media/ProtectedMedia";
 import { memberPhotoSrc } from "@/lib/member-image";
@@ -28,6 +29,18 @@ const MAX_SCALE = 1.6;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+/**
+ * Whether a connection line touches the selected person's immediate family.
+ *
+ * The line's key carries the ids it was drawn between, so no second lookup is
+ * needed. A line nobody in the selection is on gets dimmed with the rest of
+ * the branch.
+ */
+function edgeTouchesKin(edgeId: string, kin: Set<string>): boolean {
+  const ids = edgeId.split(":").slice(1).join(":").split("+");
+  return ids.some((part) => part.split(":").some((id) => kin.has(id)));
 }
 
 function initials(name: string): string {
@@ -60,6 +73,7 @@ export function FamilyTreeView({
   unpublishedIds?: Set<string>;
 }) {
   const { t } = useUiLang();
+
   const peopleById = useMemo(
     () => new Map(people.map((person) => [person.id, person])),
     [people],
@@ -86,6 +100,58 @@ export function FamilyTreeView({
   const [selectedId, setSelectedId] = useState<string | null>(focusId ?? null);
 
   const selected = selectedId ? peopleById.get(selectedId) : undefined;
+
+  /**
+   * Immediate family of the selected person.
+   *
+   * Used to dim everyone else rather than hide them: on a page holding several
+   * unrelated families, dimming answers "which of these people belong with the
+   * one I just clicked" without moving anything or losing the rest of the
+   * tree. Parents, spouses and children only -- widening it to cousins lights
+   * up most of the branch and stops meaning anything.
+   */
+  const relatedIds = useMemo(() => {
+    if (!selectedId) return null;
+    const kin = new Set<string>([selectedId]);
+    for (const rel of relationships) {
+      if (rel.personId === selectedId) kin.add(rel.relatedPersonId);
+      if (rel.relatedPersonId === selectedId) kin.add(rel.personId);
+    }
+    return kin;
+  }, [relationships, selectedId]);
+
+  /**
+   * When each row arrives.
+   *
+   * The tree is drawn from its root downward, one generation at a time, so the
+   * shape of the descent is legible as it appears rather than everything
+   * landing at once. Delays are CSS custom properties: 266 people across the
+   * site means per-node JavaScript animation would cost far more than it buys.
+   */
+  const depthOf = useCallback(
+    (personId: string) => {
+      const person = peopleById.get(personId);
+      return Math.max(0, (person?.generation ?? 1) - 1);
+    },
+    [peopleById],
+  );
+
+  /**
+   * The same staging for a connection line, read from the ids in its own key.
+   *
+   * A spouse line belongs to the couple's row; a descent line belongs to the
+   * row of the children it reaches, so it draws just before they appear.
+   */
+  const edgeDepth = useCallback(
+    (edge: { id: string; kind: string }) => {
+      const ids = edge.id.split(":").slice(1).join(":").split("+");
+      const first = ids[0]?.split(":")[0];
+      const base = first ? depthOf(first) : 0;
+      return edge.kind === "spouse" ? base : base + 1;
+    },
+    [depthOf],
+  );
+
 
   const applyZoom = useCallback(
     (nextScale: number, clientX: number, clientY: number) => {
@@ -309,8 +375,20 @@ export function FamilyTreeView({
                 <path
                   key={edge.id}
                   d={edge.d}
+                  // pathLength normalises every path to 1 so one CSS rule can
+                  // draw lines of wildly different lengths at the same speed.
+                  pathLength={1}
                   className={
                     edge.kind === "spouse" ? "ft-line-spouse" : "ft-line-descent"
+                  }
+                  data-draw=""
+                  data-dim={
+                    relatedIds && !edgeTouchesKin(edge.id, relatedIds)
+                      ? ""
+                      : undefined
+                  }
+                  style={
+                    { "--ft-delay": `${edgeDepth(edge) * 160}ms` } as CSSProperties
                   }
                 />
               ))}
@@ -330,12 +408,17 @@ export function FamilyTreeView({
                   data-adapaduchu={person.adapaduchu || undefined}
                   data-deceased={person.deceased || undefined}
                   data-selected={open || undefined}
-                  style={{
-                    left: node.x,
-                    top: node.y,
-                    width: node.width,
-                    height: node.height,
-                  }}
+                  data-dim={relatedIds && !relatedIds.has(person.id) ? "" : undefined}
+                  data-enter=""
+                  style={
+                    {
+                      left: node.x,
+                      top: node.y,
+                      width: node.width,
+                      height: node.height,
+                      "--ft-delay": `${depthOf(person.id) * 160 + 80}ms`,
+                    } as CSSProperties
+                  }
                   onClick={() => setSelectedId(person.id)}
                 >
                   <span className="ft-node-photo" aria-hidden>

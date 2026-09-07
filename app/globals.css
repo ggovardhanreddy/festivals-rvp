@@ -14507,3 +14507,171 @@ a.dharma-division-link:focus-visible {
   background: color-mix(in srgb, #a32f22 9%, transparent);
   font-weight: 500;
 }
+
+/* ══ Motion system ═══════════════════════════════════════════════════════
+   The shared vocabulary. Mirrors components/motion/tokens.ts so CSS and
+   JavaScript move at the same speed rather than nearly the same speed. */
+
+:root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-short: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-micro: 180ms;
+  --dur-reveal: 550ms;
+  --dur-image: 900ms;
+  --lift: -6px;
+  --zoom: 1.03;
+}
+
+/* ── The family tree, drawn ───────────────────────────────────────────────
+   Root couple first, then each generation in turn, with the connection line
+   to a row drawing just before that row appears. CSS rather than JavaScript
+   because a large branch is 45 nodes and the whole thing must stay smooth on
+   a phone; delays ride in on a custom property set per node. */
+
+@keyframes ft-node-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes ft-line-in {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.ft-node[data-enter] {
+  animation: ft-node-in var(--dur-reveal) var(--ease) both;
+  animation-delay: var(--ft-delay, 0ms);
+}
+
+.ft-lines path[data-draw] {
+  stroke-dasharray: 1;
+  animation: ft-line-in 620ms var(--ease) both;
+  animation-delay: var(--ft-delay, 0ms);
+}
+
+/* Selecting a person quietens the rest of the branch. Dimmed, never hidden --
+   the tree stays whole and readable, and nothing moves. */
+.ft-node[data-dim] {
+  opacity: 0.34;
+  filter: saturate(0.55);
+  transition:
+    opacity var(--dur-reveal) var(--ease),
+    filter var(--dur-reveal) var(--ease);
+}
+
+.ft-lines path[data-dim] {
+  opacity: 0.2;
+  transition: opacity var(--dur-reveal) var(--ease);
+}
+
+.ft-node {
+  transition:
+    transform var(--dur-micro) var(--ease-short),
+    border-color var(--dur-micro) var(--ease-short),
+    box-shadow var(--dur-micro) var(--ease-short),
+    opacity var(--dur-reveal) var(--ease);
+}
+
+.ft-node:hover,
+.ft-node:focus-visible {
+  transform: translateY(-3px);
+  z-index: 3;
+}
+
+.ft-node[data-selected] {
+  transform: scale(1.04);
+  z-index: 4;
+}
+
+/* ── Micro-interactions ───────────────────────────────────────────────────
+   Spent sparingly and driven from the tokens above, so a card on the People
+   page lifts by exactly as much as one on the gallery. */
+
+.card-interactive,
+.ft-card,
+.family-card,
+.home-person-card {
+  transition:
+    transform var(--dur-micro) var(--ease-short),
+    border-color var(--dur-micro) var(--ease-short),
+    box-shadow var(--dur-micro) var(--ease-short);
+}
+
+.card-interactive:hover,
+.ft-card:hover,
+.family-card:hover,
+.home-person-card:hover {
+  transform: translateY(var(--lift));
+}
+
+/* An arrow that leans toward where it is taking you. */
+.btn [aria-hidden],
+.btn.ghost [aria-hidden] {
+  display: inline-block;
+  transition: transform var(--dur-micro) var(--ease-short);
+}
+
+.btn:hover [aria-hidden] {
+  transform: translateX(3px);
+}
+
+/* A photograph inside a fixed frame, easing closer on hover. */
+.ft-node-photo img,
+.family-card-media img,
+.album-card img {
+  transition: transform var(--dur-image) var(--ease);
+}
+
+.ft-card:hover .ft-node-photo img,
+.family-card:hover .family-card-media img,
+.album-card:hover img {
+  transform: scale(var(--zoom));
+}
+
+/* ══ Reduced motion ══════════════════════════════════════════════════════
+   One authoritative rule. There were eighteen separate blocks each
+   remembering this on their own, which is eighteen chances to forget.
+
+   Everything here is a transition or a decorative animation, so removing it
+   costs nothing: content is already visible at rest. The reveal components
+   check useReducedMotion themselves and skip their initial state entirely, so
+   this catches the CSS half. */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-micro: 1ms;
+    --dur-reveal: 1ms;
+    --dur-image: 1ms;
+    --lift: 0px;
+    --zoom: 1;
+  }
+
+  .ft-node[data-enter],
+  .ft-lines path[data-draw] {
+    animation: none;
+  }
+
+  .ft-lines path[data-draw] {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+
+  .ft-node:hover,
+  .ft-node:focus-visible,
+  .ft-node[data-selected] {
+    transform: none;
+  }
+
+  .btn:hover [aria-hidden] {
+    transform: none;
+  }
+}
+
+/* Phones get the reveal but not the flourish: shorter travel, no hover zoom
+   (there is no hover), and no lift on tap. */
+@media (max-width: 640px) {
+  :root {
+    --lift: -3px;
+    --zoom: 1;
+  }
+}

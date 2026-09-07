@@ -1,6 +1,7 @@
 "use client";
 
 import { m, useReducedMotion } from "framer-motion";
+import { DIST, DUR, EASE, VIEWPORT_SAFE } from "@/components/motion/tokens";
 
 export function Reveal({
   children,
@@ -23,10 +24,10 @@ export function Reveal({
       aria-labelledby={ariaLabelledBy}
       // Never start at opacity 0 — whileInView can miss on mobile when
       // overflow is locked or IntersectionObserver is delayed after nav.
-      initial={reduce ? false : { opacity: 1, y: 18 }}
+      initial={reduce ? false : { opacity: 1, y: DIST.near }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      viewport={VIEWPORT_SAFE}
+      transition={{ duration: DUR.reveal, delay, ease: EASE }}
     >
       {children}
     </m.div>

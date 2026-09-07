@@ -8,6 +8,7 @@ import { applyPersonPhotos } from "@/lib/family-trees";
 import { useFamilyTreeOverlay } from "@/lib/family-trees/overlay";
 import { splitIntoBranches } from "@/lib/family-trees/branches";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { FadeUp, STAGGER } from "@/components/motion";
 import {
   applyFamilyAssignments,
   findVillageFamily,
@@ -84,8 +85,18 @@ export function FamilyTreePage({
         <p className="ft-branch-note">{t("tree.separateNote", undefined, { count: branches.length })}</p>
       ) : null}
 
-      {branches.map((branch) => (
-        <section className="ft-branch" key={branch.id}>
+      {branches.map((branch, index) => (
+        // Each family on the page arrives just after the one above it, so a
+        // surname page holding ten separate trees reads as a list of families
+        // rather than one wall appearing at once. Capped, or the tenth branch
+        // would sit blank for most of a second.
+        <FadeUp
+          as="section"
+          className="ft-branch"
+          key={branch.id}
+          delay={Math.min(index, 4) * STAGGER}
+          safe
+        >
           <header className="ft-branch-head">
             <h2>{branch.title}</h2>
             <p className="muted">
@@ -108,7 +119,7 @@ export function FamilyTreePage({
             focusId={focusId}
             unpublishedIds={tree.unpublishedIds}
           />
-        </section>
+        </FadeUp>
       ))}
     </div>
   );
