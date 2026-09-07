@@ -1,19 +1,9 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 
-.dark {
-  /* Dark token overrides live in styles/tokens.css; keep glow overrides below if needed */
-  --glow:
-    radial-gradient(circle at 20% 20%, rgba(212, 164, 90, 0.16), transparent 42%),
-    radial-gradient(circle at 80% 10%, rgba(70, 120, 100, 0.14), transparent 36%),
-    radial-gradient(circle at 70% 80%, rgba(40, 70, 55, 0.16), transparent 40%);
-  --hero-fade: linear-gradient(
-    180deg,
-    rgba(15, 26, 20, 0.05),
-    rgba(15, 26, 20, 0.9) 70%,
-    var(--bg)
-  );
-}
+/* Theme palettes (both light and dark) live in styles/tokens.css. Nothing
+   theme-specific belongs here: a second source of truth is how the ambient
+   --glow got quietly overridden to a weaker value in the first place. */
 
 * {
   box-sizing: border-box;
@@ -42,7 +32,7 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: radial-gradient(rgba(154, 107, 47, 0.08) 0.7px, transparent 0.7px);
+  background-image: radial-gradient(var(--grain-color) 0.7px, transparent 0.7px);
   background-size: 28px 28px;
   opacity: 0.35;
   z-index: 0;
@@ -111,7 +101,7 @@ select {
     rgba(255, 255, 255, 0.48) 0%,
     rgba(255, 255, 255, 0.1) 26%,
     transparent 46%,
-    rgba(240, 215, 160, 0.14) 70%,
+    rgba(202, 171, 229, 0.14) 70%,
     transparent 100%
   );
   mix-blend-mode: soft-light;
@@ -132,7 +122,7 @@ select {
     105deg,
     transparent 38%,
     rgba(255, 255, 255, 0.55) 47%,
-    rgba(255, 248, 230, 0.32) 52%,
+    rgba(244, 240, 247, 0.32) 52%,
     transparent 62%
   );
   transform: translateX(-75%) skewX(-14deg);
@@ -252,7 +242,7 @@ html.dark body:has(.village-hero) .logo-watermark {
 .hero-logo {
   height: 54px;
   width: auto;
-  filter: drop-shadow(0 10px 30px rgba(212, 164, 90, 0.35));
+  filter: drop-shadow(0 10px 30px rgba(147, 90, 212, 0.35));
 }
 
 .loader-logo {
@@ -264,7 +254,7 @@ html.dark body:has(.village-hero) .logo-watermark {
   position: absolute;
   inset: -10%;
   background:
-    radial-gradient(circle at 20% 30%, rgba(212, 164, 90, 0.28), transparent 34%),
+    radial-gradient(circle at 20% 30%, rgba(147, 90, 212, 0.28), transparent 34%),
     radial-gradient(circle at 80% 20%, rgba(120, 160, 190, 0.18), transparent 32%),
     radial-gradient(circle at 60% 80%, rgba(180, 100, 80, 0.16), transparent 36%);
   filter: blur(18px);
@@ -440,8 +430,8 @@ html.dark body:has(.village-hero) .logo-watermark {
 .hero-fullbleed .hero-fade {
   background: linear-gradient(
     180deg,
-    rgba(15, 26, 20, 0.15),
-    rgba(15, 26, 20, 0.55) 45%,
+    rgba(15, 15, 26, 0.15),
+    rgba(15, 15, 26, 0.55) 45%,
     var(--bg) 96%
   );
 }
@@ -455,16 +445,16 @@ html.dark body:has(.village-hero) .logo-watermark {
 
 .hero-fullbleed .lede,
 .hero-fullbleed .scroll-hint {
-  color: rgba(244, 248, 245, 0.82);
+  color: rgba(246, 245, 247, 0.82);
 }
 
 .hero-media {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 30% 20%, rgba(212, 164, 90, 0.35), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(47, 79, 58, 0.35), transparent 42%),
-    linear-gradient(135deg, #13241b, #2a4a38 45%, #1a3328);
+    radial-gradient(circle at 30% 20%, rgba(147, 90, 212, 0.35), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(47, 47, 79, 0.35), transparent 42%),
+    linear-gradient(135deg, #131324, #2a2a4a 45%, #1b1a33);
   transform: scale(1.04);
 }
 
@@ -555,7 +545,7 @@ h3,
   border-radius: 999px;
   padding: 0.9rem 1.35rem;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #1a130c;
+  color: #110b1b;
   font-family: var(--font-accent);
   font-size: 0.92rem;
   cursor: pointer;
@@ -595,7 +585,7 @@ button:focus-visible {
 
 .btn.magnetic:hover {
   transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 18px 40px rgba(143, 106, 50, 0.35);
+  box-shadow: 0 18px 40px rgba(93, 50, 143, 0.35);
 }
 
 .section {
@@ -625,7 +615,7 @@ button:focus-visible {
 
 .glass-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 28px 70px rgba(40, 28, 16, 0.18);
+  box-shadow: 0 28px 70px rgba(25, 16, 40, 0.18);
 }
 
 .card-media {
@@ -633,7 +623,7 @@ button:focus-visible {
   object-fit: cover;
   width: 100%;
   display: block;
-  background: linear-gradient(135deg, #3a2a1c, #8a6840);
+  background: linear-gradient(135deg, #26193d, #5e3b8f);
 }
 
 .card-body {
@@ -737,8 +727,8 @@ button:focus-visible {
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #f7f3ea;
-  background: rgba(15, 20, 17, 0.72);
+  color: #f2f0f4;
+  background: rgba(13, 13, 22, 0.72);
   backdrop-filter: blur(6px);
 }
 
@@ -746,7 +736,7 @@ button:focus-visible {
   position: fixed;
   inset: 0;
   z-index: 80;
-  background: rgba(8, 7, 6, 0.86);
+  background: rgba(6, 4, 10, 0.86);
   backdrop-filter: blur(10px);
   display: grid;
   place-items: center;
@@ -955,7 +945,7 @@ button:focus-visible {
   display: grid;
   place-content: center;
   padding: 1.2rem;
-  background: linear-gradient(160deg, var(--forest), #1a3328);
+  background: linear-gradient(160deg, var(--forest), #1b1a33);
   color: #f4f8f5;
 }
 
@@ -984,20 +974,20 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  color: #f7efe4;
+  color: #efecf1;
 }
 
 .media-speed select {
   border-radius: 0.5rem;
-  border: 1px solid rgba(247, 239, 228, 0.35);
-  background: rgba(15, 20, 17, 0.55);
-  color: #f7efe4;
+  border: 1px solid rgba(239, 236, 241, 0.35);
+  background: rgba(13, 13, 22, 0.55);
+  color: #efecf1;
   padding: 0.25rem 0.45rem;
 }
 
 .media-error {
   margin: 0;
-  color: #f0c9a0;
+  color: #c2abe5;
   font-size: 0.9rem;
 }
 
@@ -1160,7 +1150,7 @@ button:focus-visible {
   padding: 0.75rem 1rem;
   border-radius: 999px;
   background: var(--accent);
-  color: #13241b;
+  color: #131324;
   font-family: var(--font-accent);
 }
 
@@ -1195,7 +1185,7 @@ button:focus-visible {
   width: 180px;
   height: 54px;
   border-radius: 999px;
-  background: rgba(244, 248, 245, 0.16);
+  background: rgba(246, 245, 247, 0.16);
   filter: blur(1px);
 }
 
@@ -1244,7 +1234,7 @@ button:focus-visible {
   height: auto;
   top: 12%;
   right: 8%;
-  color: rgba(244, 248, 245, 0.55);
+  color: rgba(246, 245, 247, 0.55);
 }
 
 .atm-sunrays {
@@ -1255,9 +1245,9 @@ button:focus-visible {
   background: conic-gradient(
     from 200deg at 70% 30%,
     transparent 0deg,
-    rgba(240, 215, 160, 0.18) 28deg,
+    rgba(202, 171, 229, 0.18) 28deg,
     transparent 56deg,
-    rgba(240, 215, 160, 0.12) 90deg,
+    rgba(202, 171, 229, 0.12) 90deg,
     transparent 130deg
   );
   mix-blend-mode: screen;
@@ -1314,19 +1304,19 @@ button:focus-visible {
   inset: 7px;
   border-radius: 50%;
   background: var(--accent-2);
-  box-shadow: 0 0 0 2px rgba(15, 26, 20, 0.35);
+  box-shadow: 0 0 0 2px rgba(15, 15, 26, 0.35);
 }
 
 .map-hotspot-glow {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: rgba(212, 164, 90, 0.35);
+  background: rgba(147, 90, 212, 0.35);
   animation: hotspotPulse 2.4s ease-in-out infinite;
 }
 
 .map-hotspot[data-active="true"] .map-hotspot-glow {
-  background: rgba(240, 201, 138, 0.55);
+  background: rgba(187, 152, 226, 0.55);
   transform: scale(1.25);
 }
 
@@ -1484,9 +1474,9 @@ button:focus-visible {
   display: grid;
   align-items: center;
   background:
-    radial-gradient(circle at 20% 15%, rgba(240, 215, 160, 0.28), transparent 36%),
-    radial-gradient(circle at 80% 20%, rgba(255, 154, 92, 0.18), transparent 32%),
-    linear-gradient(165deg, #13241b 0%, #1a3328 42%, #0f1a14 100%);
+    radial-gradient(circle at 20% 15%, rgba(202, 171, 229, 0.28), transparent 36%),
+    radial-gradient(circle at 80% 20%, rgba(149, 113, 234, 0.18), transparent 32%),
+    linear-gradient(165deg, #131324 0%, #1b1a33 42%, #0f0f1a 100%);
 }
 
 .landing-hero-sky {
@@ -1509,8 +1499,8 @@ button:focus-visible {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(15, 26, 20, 0.25) 0%, rgba(15, 26, 20, 0.55) 55%, rgba(15, 26, 20, 0.88) 100%),
-    radial-gradient(circle at 50% 0%, rgba(240, 215, 160, 0.2), transparent 50%);
+    linear-gradient(180deg, rgba(15, 15, 26, 0.25) 0%, rgba(15, 15, 26, 0.55) 55%, rgba(15, 15, 26, 0.88) 100%),
+    radial-gradient(circle at 50% 0%, rgba(202, 171, 229, 0.2), transparent 50%);
   pointer-events: none;
 }
 
@@ -1519,11 +1509,11 @@ button:focus-visible {
   inset: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle at 12% 18%, rgba(255, 236, 190, 0.9) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 78% 22%, rgba(255, 236, 190, 0.75) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 34% 40%, rgba(255, 200, 120, 0.7) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 88% 48%, rgba(255, 236, 190, 0.65) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 56% 14%, rgba(255, 154, 92, 0.7) 0 1.2px, transparent 2px);
+    radial-gradient(circle at 12% 18%, rgba(225, 199, 246, 0.9) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 78% 22%, rgba(225, 199, 246, 0.75) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 34% 40%, rgba(183, 139, 236, 0.7) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 88% 48%, rgba(225, 199, 246, 0.65) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 56% 14%, rgba(149, 113, 234, 0.7) 0 1.2px, transparent 2px);
   animation: sparkleDrift 10s ease-in-out infinite alternate;
   opacity: 0.85;
 }
@@ -1562,9 +1552,9 @@ button:focus-visible {
   border-radius: calc(var(--radius-xl) + 4px);
   overflow: hidden;
   box-shadow:
-    0 0 0 1px rgba(240, 215, 160, 0.28),
+    0 0 0 1px rgba(202, 171, 229, 0.28),
     0 28px 80px rgba(0, 0, 0, 0.45);
-  background: #1a2a22;
+  background: #1a1a2a;
   transform: rotate(-1.2deg);
 }
 
@@ -1580,8 +1570,8 @@ button:focus-visible {
 .landing-hero-portrait figcaption {
   padding: 0.75rem 1rem 0.95rem;
   font-size: var(--text-sm);
-  color: rgba(247, 250, 247, 0.82);
-  background: linear-gradient(180deg, rgba(19, 36, 27, 0.2), rgba(19, 36, 27, 0.85));
+  color: rgba(248, 248, 249, 0.82);
+  background: linear-gradient(180deg, rgba(19, 19, 36, 0.2), rgba(19, 19, 36, 0.85));
 }
 
 .landing-hero-copy.festival-copy {
@@ -1597,12 +1587,12 @@ button:focus-visible {
   width: min(220px, 58vw);
   height: auto;
   margin-bottom: 1rem;
-  filter: drop-shadow(0 8px 28px rgba(212, 164, 90, 0.45));
+  filter: drop-shadow(0 8px 28px rgba(147, 90, 212, 0.45));
 }
 
 .landing-hero-copy .eyebrow,
 .landing-hero-copy .lede {
-  color: rgba(247, 250, 247, 0.92);
+  color: rgba(248, 248, 249, 0.92);
 }
 
 .landing-hero-copy h1 {
@@ -1610,15 +1600,15 @@ button:focus-visible {
   font-size: var(--text-hero);
   line-height: var(--leading-tight);
   margin: 0.15rem 0 0.75rem;
-  color: #fff6df;
-  -webkit-text-fill-color: #fff6df;
+  color: #f1ecf5;
+  -webkit-text-fill-color: #f1ecf5;
   text-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
 }
 
 .landing-hero-copy .btn.ghost {
   color: #f7faf7;
-  border-color: rgba(240, 215, 160, 0.45);
-  background: rgba(19, 36, 27, 0.35);
+  border-color: rgba(202, 171, 229, 0.45);
+  background: rgba(19, 19, 36, 0.35);
   backdrop-filter: blur(8px);
 }
 
@@ -1705,7 +1695,7 @@ button:focus-visible {
   margin: 0.15rem 0 0;
   font-family: var(--font-display);
   font-size: clamp(1.15rem, 2.2vw, 1.55rem);
-  color: #fff6df;
+  color: #f1ecf5;
   letter-spacing: -0.02em;
 }
 
@@ -1722,13 +1712,13 @@ button:focus-visible {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: rgba(255, 246, 223, 0.35);
+  background: rgba(241, 236, 245, 0.35);
   transition: width 0.3s ease, background 0.3s ease;
 }
 
 .map-viewport-slideshow-dot.is-active {
   width: 18px;
-  background: #f0d7a0;
+  background: #caabe5;
 }
 
 .map-hotspot-strip {
@@ -1744,10 +1734,10 @@ button:focus-visible {
 }
 
 .map-hotspot-chip {
-  border: 1px solid rgba(240, 215, 160, 0.22);
-  background: rgba(8, 14, 12, 0.62);
+  border: 1px solid rgba(202, 171, 229, 0.22);
+  background: rgba(8, 8, 14, 0.62);
   backdrop-filter: blur(12px);
-  color: rgba(247, 250, 247, 0.9);
+  color: rgba(248, 248, 249, 0.9);
   border-radius: 999px;
   padding: 0.35rem 0.7rem;
   font-size: 0.72rem;
@@ -1759,15 +1749,15 @@ button:focus-visible {
 
 .map-hotspot-chip:hover,
 .map-hotspot-chip.is-active {
-  background: rgba(212, 164, 90, 0.28);
-  border-color: rgba(240, 215, 160, 0.55);
-  color: #fff6df;
+  background: rgba(147, 90, 212, 0.28);
+  border-color: rgba(202, 171, 229, 0.55);
+  color: #f1ecf5;
 }
 
 .village-canvas-fallback {
   background:
-    radial-gradient(circle at 30% 20%, rgba(212, 164, 90, 0.28), transparent 40%),
-    linear-gradient(135deg, #13241b, #2a4a38 45%, #1a3328);
+    radial-gradient(circle at 30% 20%, rgba(147, 90, 212, 0.28), transparent 40%),
+    linear-gradient(135deg, #131324, #2a2a4a 45%, #1b1a33);
   background-size: cover;
   background-position: center;
 }
@@ -1788,12 +1778,12 @@ button:focus-visible {
 
 .cinematic-copy .lede,
 .cinematic-copy .eyebrow {
-  color: rgba(244, 248, 245, 0.84);
+  color: rgba(246, 245, 247, 0.84);
 }
 
 .hotspot-chip {
-  border: 1px solid rgba(244, 248, 245, 0.2);
-  background: rgba(15, 26, 20, 0.45);
+  border: 1px solid rgba(246, 245, 247, 0.2);
+  background: rgba(15, 15, 26, 0.45);
   color: #f4f8f5;
   backdrop-filter: blur(12px);
   border-radius: 999px;
@@ -1803,8 +1793,8 @@ button:focus-visible {
 }
 
 .hotspot-chip[data-active="true"] {
-  border-color: rgba(240, 201, 138, 0.7);
-  background: rgba(143, 106, 50, 0.45);
+  border-color: rgba(187, 152, 226, 0.7);
+  background: rgba(93, 50, 143, 0.45);
 }
 
 .interactive-village-map {
@@ -1832,7 +1822,7 @@ button:focus-visible {
 
 .card-3d:hover .card-lift {
   transform: translateY(-8px);
-  box-shadow: 0 28px 70px rgba(19, 36, 27, 0.22);
+  box-shadow: 0 28px 70px rgba(19, 19, 36, 0.22);
 }
 
 .glass-year {
@@ -1849,7 +1839,7 @@ button:focus-visible {
   border-radius: 50%;
   pointer-events: none;
   z-index: 90;
-  background: radial-gradient(circle, rgba(212, 164, 90, 0.16), transparent 65%);
+  background: radial-gradient(circle, rgba(147, 90, 212, 0.16), transparent 65%);
   mix-blend-mode: screen;
 }
 
@@ -1865,7 +1855,7 @@ button:focus-visible {
 }
 
 .landing-loader {
-  background: #1f3d2e;
+  background: #201f3d;
   gap: 1rem;
   color: #e8efe9;
   overflow: hidden;
@@ -1902,22 +1892,22 @@ button:focus-visible {
   padding: clamp(1.25rem, 3vw, 2rem);
   border-radius: var(--radius-xl);
   background:
-    radial-gradient(circle at 12% 20%, rgba(240, 215, 160, 0.22), transparent 42%),
-    linear-gradient(135deg, #1a2a22, #13241b 55%, #2a1f14);
-  color: #f7f3ea;
+    radial-gradient(circle at 12% 20%, rgba(202, 171, 229, 0.22), transparent 42%),
+    linear-gradient(135deg, #1a1a2a, #131324 55%, #1c122c);
+  color: #f2f0f4;
   box-shadow: var(--elevation-2);
-  border: 1px solid rgba(240, 215, 160, 0.22);
+  border: 1px solid rgba(202, 171, 229, 0.22);
 }
 
 .festival-idol-panel .eyebrow,
 .festival-idol-panel .lede {
-  color: rgba(247, 243, 234, 0.86);
+  color: rgba(242, 240, 244, 0.86);
 }
 
 .festival-idol-crest {
   width: clamp(96px, 16vw, 140px);
   height: auto;
-  filter: drop-shadow(0 12px 28px rgba(212, 164, 90, 0.35));
+  filter: drop-shadow(0 12px 28px rgba(147, 90, 212, 0.35));
 }
 
 .festival-idol-photo {
@@ -1980,7 +1970,7 @@ button:focus-visible {
   overflow: hidden;
   isolation: isolate;
   perspective: 900px;
-  background: #1a2a22;
+  background: #1a1a2a;
   box-shadow: var(--elevation-3);
 }
 
@@ -2000,8 +1990,8 @@ button:focus-visible {
 
 .village-depth-mist {
   background:
-    radial-gradient(circle at 30% 40%, rgba(240, 217, 160, 0.12), transparent 42%),
-    linear-gradient(180deg, transparent 40%, rgba(15, 26, 20, 0.35));
+    radial-gradient(circle at 30% 40%, rgba(203, 171, 229, 0.12), transparent 42%),
+    linear-gradient(180deg, transparent 40%, rgba(15, 15, 26, 0.35));
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
@@ -2012,7 +2002,7 @@ button:focus-visible {
   height: 180px;
   translate: -50% -50%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 164, 90, 0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(147, 90, 212, 0.35), transparent 70%);
   pointer-events: none;
   filter: blur(4px);
 }
@@ -2060,7 +2050,7 @@ button:focus-visible {
 .village-depth-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 45%, rgba(15, 26, 20, 0.45));
+  background: radial-gradient(circle at center, transparent 45%, rgba(15, 15, 26, 0.45));
   pointer-events: none;
 }
 
@@ -2272,7 +2262,7 @@ body {
   width: auto;
   max-width: min(70vw, 300px);
   object-fit: contain;
-  filter: drop-shadow(0 0 40px rgba(240, 215, 160, 0.35))
+  filter: drop-shadow(0 0 40px rgba(202, 171, 229, 0.35))
     drop-shadow(0 24px 60px rgba(0, 0, 0, 0.55));
 }
 
@@ -2281,7 +2271,7 @@ body {
   inset: 8% 12%;
   background: radial-gradient(
     circle,
-    rgba(240, 215, 160, 0.38) 0%,
+    rgba(202, 171, 229, 0.38) 0%,
     rgba(74, 129, 191, 0.12) 42%,
     transparent 70%
   );
@@ -2359,7 +2349,7 @@ body {
   font-family: var(--font-display);
   font-size: clamp(1rem, 2.2vw, 1.4rem);
   letter-spacing: 0.04em;
-  color: rgba(255, 246, 223, 0.95);
+  color: rgba(241, 236, 245, 0.95);
   text-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
 }
 
@@ -2375,8 +2365,8 @@ body {
 
 .aaa-welcome.is-spotlight,
 .cinematic-landing.is-highlighting-welcome .aaa-welcome {
-  filter: drop-shadow(0 0 28px rgba(240, 215, 160, 0.65))
-    drop-shadow(0 0 60px rgba(255, 154, 92, 0.35));
+  filter: drop-shadow(0 0 28px rgba(202, 171, 229, 0.65))
+    drop-shadow(0 0 60px rgba(149, 113, 234, 0.35));
 }
 
 .cinematic-landing.is-highlighting-welcome .aaa-welcome-line {
@@ -2408,7 +2398,7 @@ body {
   font-size: clamp(1rem, 2vw, 1.3rem);
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(255, 246, 223, 0.88);
+  color: rgba(241, 236, 245, 0.88);
   margin: 0 0 0.45rem;
 }
 
@@ -2424,10 +2414,10 @@ body {
   font-weight: 700;
   letter-spacing: 0.06em;
   /* Solid readable color — no transparent text fill */
-  color: #fff6df;
-  -webkit-text-fill-color: #fff6df;
+  color: #f1ecf5;
+  -webkit-text-fill-color: #f1ecf5;
   text-shadow:
-    0 0 24px rgba(240, 215, 160, 0.45),
+    0 0 24px rgba(202, 171, 229, 0.45),
     0 8px 32px rgba(0, 0, 0, 0.55);
   background: none;
 }
@@ -2452,14 +2442,14 @@ body {
   font-family: var(--font-display);
   font-size: clamp(0.92rem, 1.85vw, 1.18rem);
   letter-spacing: 0.02em;
-  color: rgba(255, 246, 223, 0.9);
+  color: rgba(241, 236, 245, 0.9);
   text-shadow: 0 6px 28px rgba(0, 0, 0, 0.45);
   text-align: center;
   line-height: 1.35;
 }
 
 .aaa-brand-taglines li:first-child {
-  color: #fff6df;
+  color: #f1ecf5;
   font-size: clamp(1rem, 2.1vw, 1.28rem);
 }
 
@@ -2484,9 +2474,9 @@ body {
 }
 
 .cursor-prefs-btn {
-  border: 1px solid rgba(240, 215, 160, 0.35);
-  background: rgba(10, 18, 14, 0.45);
-  color: rgba(247, 250, 247, 0.9);
+  border: 1px solid rgba(202, 171, 229, 0.35);
+  background: rgba(10, 10, 18, 0.45);
+  color: rgba(248, 248, 249, 0.9);
   border-radius: 999px;
   padding: 0.7rem 1rem;
   cursor: pointer;
@@ -2500,7 +2490,7 @@ body {
   padding: 0.95rem 1.6rem;
   font-size: 1.02rem;
   letter-spacing: 0.03em;
-  box-shadow: 0 0 0 1px rgba(240, 215, 160, 0.28), 0 16px 48px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 1px rgba(202, 171, 229, 0.28), 0 16px 48px rgba(0, 0, 0, 0.35);
 }
 
 .aaa-scroll-hint {
@@ -2509,7 +2499,7 @@ body {
   align-items: center;
   gap: 0.35rem;
   margin-top: 0.35rem;
-  color: rgba(247, 250, 247, 0.72);
+  color: rgba(248, 248, 249, 0.72);
   font-size: 0.78rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -2518,7 +2508,7 @@ body {
 .aaa-scroll-mouse {
   width: 22px;
   height: 34px;
-  border: 1.5px solid rgba(240, 215, 160, 0.55);
+  border: 1.5px solid rgba(202, 171, 229, 0.55);
   border-radius: 12px;
   position: relative;
 }
@@ -2531,7 +2521,7 @@ body {
   height: 7px;
   margin-left: -1.5px;
   border-radius: 2px;
-  background: rgba(240, 215, 160, 0.9);
+  background: rgba(202, 171, 229, 0.9);
   animation: aaaScrollDot 1.6s ease-in-out infinite;
 }
 
@@ -2549,7 +2539,7 @@ body {
 .aaa-scroll-arrow {
   animation: aaaScrollArrow 1.6s ease-in-out infinite;
   font-size: 1rem;
-  color: rgba(240, 215, 160, 0.85);
+  color: rgba(202, 171, 229, 0.85);
 }
 
 @keyframes aaaScrollArrow {
@@ -2761,9 +2751,9 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(40, 70, 55, 0.45), transparent 55%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(41, 40, 70, 0.45), transparent 55%),
     radial-gradient(circle at 70% 18%, rgba(180, 200, 255, 0.12), transparent 28%),
-    linear-gradient(180deg, #02040a 0%, #071018 45%, #0c1a16 100%);
+    linear-gradient(180deg, #02040a 0%, #071018 45%, #0d0c1a 100%);
 }
 
 .night-village-stars {
@@ -2772,10 +2762,10 @@ body {
   background-image:
     radial-gradient(1px 1px at 8% 12%, rgba(255, 255, 255, 0.85), transparent),
     radial-gradient(1px 1px at 22% 28%, rgba(255, 255, 255, 0.65), transparent),
-    radial-gradient(1.5px 1.5px at 41% 16%, rgba(255, 250, 230, 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 41% 16%, rgba(245, 240, 247, 0.9), transparent),
     radial-gradient(1px 1px at 63% 22%, rgba(255, 255, 255, 0.7), transparent),
     radial-gradient(1px 1px at 78% 10%, rgba(255, 255, 255, 0.8), transparent),
-    radial-gradient(1.2px 1.2px at 91% 30%, rgba(255, 245, 220, 0.75), transparent),
+    radial-gradient(1.2px 1.2px at 91% 30%, rgba(239, 234, 244, 0.75), transparent),
     radial-gradient(1px 1px at 15% 45%, rgba(255, 255, 255, 0.55), transparent),
     radial-gradient(1px 1px at 55% 38%, rgba(255, 255, 255, 0.5), transparent),
     radial-gradient(1px 1px at 84% 48%, rgba(255, 255, 255, 0.6), transparent);
@@ -2796,9 +2786,9 @@ body {
   height: 64px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 35% 35%, #f7f1df 0%, #d8cda8 42%, #a99a72 100%);
+    radial-gradient(circle at 35% 35%, #ede9f0 0%, #c3afd1 42%, #935ebd 100%);
   box-shadow:
-    0 0 40px rgba(240, 230, 190, 0.45),
+    0 0 40px rgba(219, 197, 233, 0.45),
     0 0 120px rgba(180, 200, 255, 0.18);
   opacity: 0.85;
 }
@@ -2839,7 +2829,7 @@ body {
 .night-village-rays {
   position: absolute;
   inset: 0;
-  background: conic-gradient(from 200deg at 78% 16%, transparent 0deg, rgba(255, 240, 200, 0.06) 18deg, transparent 36deg);
+  background: conic-gradient(from 200deg at 78% 16%, transparent 0deg, rgba(230, 208, 247, 0.06) 18deg, transparent 36deg);
   opacity: 0.5;
   pointer-events: none;
   mix-blend-mode: screen;
@@ -2887,9 +2877,9 @@ body {
   right: 0;
   bottom: 0;
   height: 18%;
-  background: linear-gradient(180deg, transparent, rgba(2, 6, 4, 0.85));
+  background: linear-gradient(180deg, transparent, rgba(2, 2, 6, 0.85));
   z-index: 3;
-  box-shadow: inset 0 20px 40px rgba(240, 215, 160, 0.04);
+  box-shadow: inset 0 20px 40px rgba(202, 171, 229, 0.04);
 }
 
 .night-village-birds span {
@@ -2941,9 +2931,9 @@ body {
   inset: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle at 20% 70%, rgba(255, 230, 180, 0.25) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 70% 60%, rgba(255, 230, 180, 0.2) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 45% 80%, rgba(255, 200, 140, 0.18) 0 1px, transparent 1.5px);
+    radial-gradient(circle at 20% 70%, rgba(218, 191, 244, 0.25) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 60%, rgba(218, 191, 244, 0.2) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 45% 80%, rgba(190, 156, 239, 0.18) 0 1px, transparent 1.5px);
   animation: sparkleDrift 12s ease-in-out infinite alternate;
   opacity: 0.5;
   z-index: 4;
@@ -2961,7 +2951,7 @@ body {
   z-index: 2;
   width: min(200px, 52vw);
   height: auto;
-  filter: drop-shadow(0 0 28px rgba(240, 215, 160, 0.35));
+  filter: drop-shadow(0 0 28px rgba(202, 171, 229, 0.35));
 }
 
 .landing-hero-brand-vertical {
@@ -2978,7 +2968,7 @@ body {
 .cinematic-landing-logo-glow {
   position: absolute;
   inset: -30% -20%;
-  background: radial-gradient(circle, rgba(240, 215, 160, 0.28), transparent 65%);
+  background: radial-gradient(circle, rgba(202, 171, 229, 0.28), transparent 65%);
   filter: blur(12px);
   z-index: 1;
 }
@@ -3032,15 +3022,15 @@ body {
 
 .cinematic-landing-cta .btn.ghost {
   color: #f7faf7;
-  border-color: rgba(240, 215, 160, 0.45);
-  background: rgba(19, 36, 27, 0.35);
+  border-color: rgba(202, 171, 229, 0.45);
+  background: rgba(19, 19, 36, 0.35);
   backdrop-filter: blur(8px);
 }
 
 .cinematic-landing-cta .audio-toggle {
-  color: rgba(247, 250, 247, 0.9);
-  border-color: rgba(240, 215, 160, 0.35);
-  background: rgba(10, 18, 14, 0.45);
+  color: rgba(248, 248, 249, 0.9);
+  border-color: rgba(202, 171, 229, 0.35);
+  background: rgba(10, 10, 18, 0.45);
   backdrop-filter: blur(8px);
 }
 
@@ -3173,13 +3163,13 @@ body {
 html.cursor-magnetic .liquid-cursor-ring {
   width: 64px;
   height: 64px;
-  border-color: rgba(240, 215, 160, 0.55);
-  box-shadow: 0 0 32px rgba(240, 215, 160, 0.28);
+  border-color: rgba(202, 171, 229, 0.55);
+  box-shadow: 0 0 32px rgba(202, 171, 229, 0.28);
 }
 
 html.cursor-magnetic .liquid-cursor-blob {
   background:
-    radial-gradient(circle at 30% 30%, rgba(255, 245, 220, 0.85), rgba(240, 215, 160, 0.3) 50%, transparent 75%);
+    radial-gradient(circle at 30% 30%, rgba(239, 234, 244, 0.85), rgba(202, 171, 229, 0.3) 50%, transparent 75%);
 }
 
 /* ─── Glass cinematic music player ─── */
@@ -3196,29 +3186,29 @@ html.cursor-magnetic .liquid-cursor-blob {
   gap: 0.4rem;
   padding: 0.45rem;
   border-radius: 999px;
-  background: rgba(15, 26, 20, 0.72);
-  border: 1px solid rgba(240, 215, 160, 0.3);
+  background: rgba(15, 15, 26, 0.72);
+  border: 1px solid rgba(202, 171, 229, 0.3);
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
 }
 
 .music-mini-btn {
-  border: 1px solid rgba(240, 215, 160, 0.35);
+  border: 1px solid rgba(202, 171, 229, 0.35);
   border-radius: 999px;
   padding: 0.5rem 0.9rem;
   font-family: var(--font-accent);
   font-size: 0.82rem;
   cursor: pointer;
-  color: #fff6df;
-  background: rgba(240, 215, 160, 0.16);
+  color: #f1ecf5;
+  background: rgba(202, 171, 229, 0.16);
 }
 
 .music-mini-btn:hover {
-  background: rgba(240, 215, 160, 0.28);
+  background: rgba(202, 171, 229, 0.28);
 }
 
 .music-mini-btn:focus-visible {
-  outline: 2px solid #f0d7a0;
+  outline: 2px solid #caabe5;
   outline-offset: 2px;
 }
 
@@ -3228,7 +3218,7 @@ html.cursor-magnetic .liquid-cursor-blob {
 }
 
 .music-mini-btn.ghost {
-  background: rgba(10, 18, 14, 0.4);
+  background: rgba(10, 10, 18, 0.4);
 }
 
 @media (max-width: 640px) {
@@ -3239,7 +3229,7 @@ html.cursor-magnetic .liquid-cursor-blob {
 }
 
 .glass-music-btn.ghost {
-  background: rgba(10, 18, 14, 0.35);
+  background: rgba(10, 10, 18, 0.35);
 }
 .glass-music-eq.mini.is-playing i:nth-child(1) {
   animation: eqBar 0.9s ease-in-out infinite;
@@ -3293,7 +3283,7 @@ html.intro-active .glass-music {
 .apple-stage-skeleton {
   min-height: 70svh;
   background:
-    linear-gradient(180deg, rgba(15, 26, 20, 0.4), transparent 40%),
+    linear-gradient(180deg, rgba(15, 15, 26, 0.4), transparent 40%),
     #05080c;
 }
 
@@ -3350,22 +3340,22 @@ html.intro-active .glass-music {
   padding: 1.1rem 1.35rem;
   border-radius: 1.15rem;
   background:
-    linear-gradient(160deg, rgba(240, 215, 160, 0.14), transparent 55%),
+    linear-gradient(160deg, rgba(202, 171, 229, 0.14), transparent 55%),
     color-mix(in srgb, var(--glass-strong) 88%, transparent);
-  border: 1px solid rgba(240, 215, 160, 0.18);
+  border: 1px solid rgba(202, 171, 229, 0.18);
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease;
 }
 
 .apple-year-tile:hover {
   transform: translateY(-4px);
-  border-color: rgba(240, 215, 160, 0.42);
+  border-color: rgba(202, 171, 229, 0.42);
 }
 
 .apple-year-tile-label {
   font-family: var(--font-display);
   font-size: 1.35rem;
-  color: #fff6df;
+  color: #f1ecf5;
   letter-spacing: -0.02em;
 }
 
@@ -3408,7 +3398,7 @@ html.intro-active .glass-music {
   min-height: min(92svh, 920px);
   overflow: hidden;
   isolation: isolate;
-  background: #0a100c;
+  background: #0a0a10;
 }
 
 .apple-festival-hero-img {
@@ -3428,13 +3418,13 @@ html.intro-active .glass-music {
   background:
     linear-gradient(
       180deg,
-      rgba(5, 10, 8, 0.45) 0%,
-      rgba(5, 10, 8, 0.2) 35%,
-      rgba(5, 10, 8, 0.78) 100%
+      rgba(5, 5, 10, 0.45) 0%,
+      rgba(5, 5, 10, 0.2) 35%,
+      rgba(5, 5, 10, 0.78) 100%
     ),
     linear-gradient(
       90deg,
-      rgba(5, 10, 8, 0.55) 0%,
+      rgba(5, 5, 10, 0.55) 0%,
       transparent 55%
     );
 }
@@ -3451,7 +3441,7 @@ html.intro-active .glass-music {
 }
 
 .apple-festival-hero-copy .eyebrow {
-  color: rgba(240, 215, 160, 0.92);
+  color: rgba(202, 171, 229, 0.92);
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
 }
 
@@ -3460,13 +3450,13 @@ html.intro-active .glass-music {
   font-size: clamp(2.4rem, 6vw, 4.2rem);
   letter-spacing: -0.03em;
   line-height: 1.05;
-  color: #fff6df;
+  color: #f1ecf5;
   margin: 0.25rem 0 0.65rem;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
 }
 
 .apple-festival-hero-copy .apple-chapter-lede {
-  color: rgba(247, 250, 247, 0.88);
+  color: rgba(248, 248, 249, 0.88);
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
 }
 
@@ -3502,13 +3492,13 @@ html.intro-active .glass-music {
   font-size: clamp(2.1rem, 5.2vw, 3.6rem);
   letter-spacing: -0.03em;
   line-height: 1.05;
-  color: #fff6df;
+  color: #f1ecf5;
   margin: 0.2rem 0 0.55rem;
 }
 
 .apple-chapter-lede {
   max-width: 36rem;
-  color: rgba(247, 250, 247, 0.78);
+  color: rgba(248, 248, 249, 0.78);
   margin: 0;
 }
 
@@ -3552,7 +3542,7 @@ html.intro-active .glass-music {
   pointer-events: none;
   background:
     linear-gradient(180deg, rgba(5, 8, 12, 0.15) 0%, transparent 35%, rgba(5, 8, 12, 0.72) 100%),
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(15, 26, 20, 0.55), transparent 70%);
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(15, 15, 26, 0.55), transparent 70%);
 }
 
 .apple-slideshow-caption {
@@ -3566,14 +3556,14 @@ html.intro-active .glass-music {
 .apple-slideshow-title {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3.6vw, 2.4rem);
-  color: #fff6df;
+  color: #f1ecf5;
   margin: 0.15rem 0 0.25rem;
   letter-spacing: -0.02em;
 }
 
 .apple-slideshow-meta {
   margin: 0;
-  color: rgba(240, 215, 160, 0.85);
+  color: rgba(202, 171, 229, 0.85);
   font-family: var(--font-accent);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -3593,13 +3583,13 @@ html.intro-active .glass-music {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: rgba(255, 246, 223, 0.35);
+  background: rgba(241, 236, 245, 0.35);
   transition: width 0.35s ease, background 0.35s ease;
 }
 
 .apple-slideshow-dot.is-active {
   width: 22px;
-  background: #f0d7a0;
+  background: #caabe5;
 }
 
 .float-field {
@@ -3629,7 +3619,7 @@ html.intro-active .glass-music {
   transform: translateY(-8px) scale(1.015);
   box-shadow:
     0 28px 60px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(240, 215, 160, 0.18);
+    0 0 0 1px rgba(202, 171, 229, 0.18);
   z-index: 3;
 }
 
@@ -3710,8 +3700,8 @@ html.intro-active .glass-music {
 
 .float-tile-bg--empty {
   background:
-    radial-gradient(circle at 30% 30%, rgba(212, 164, 90, 0.35), transparent 50%),
-    #13241b;
+    radial-gradient(circle at 30% 30%, rgba(147, 90, 212, 0.35), transparent 50%),
+    #131324;
 }
 
 .float-tile-shade {
@@ -3734,14 +3724,14 @@ html.intro-active .glass-music {
 .float-tile-copy h3 {
   font-family: var(--font-display);
   font-size: clamp(1.35rem, 2.4vw, 2rem);
-  color: #fff6df;
+  color: #f1ecf5;
   margin: 0.15rem 0 0.35rem;
   letter-spacing: -0.02em;
 }
 
 .float-tile-blurb {
   margin: 0;
-  color: rgba(247, 250, 247, 0.78);
+  color: rgba(248, 248, 249, 0.78);
   font-size: 0.92rem;
   max-width: 28rem;
   line-height: 1.45;
@@ -3763,7 +3753,7 @@ html.intro-active .glass-music {
   border-radius: 1.35rem;
   overflow: hidden;
   isolation: isolate;
-  background: #0a1210;
+  background: #0a0a12;
   color: inherit;
   text-align: left;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
@@ -3776,7 +3766,7 @@ html.intro-active .glass-music {
   transform: translateY(-6px);
   box-shadow:
     0 26px 54px rgba(0, 0, 0, 0.42),
-    0 0 0 1px rgba(240, 215, 160, 0.2);
+    0 0 0 1px rgba(202, 171, 229, 0.2);
   outline: none;
 }
 
@@ -3828,7 +3818,7 @@ html.intro-active .glass-music {
 .hover-slide-tile-caption h3 {
   font-family: var(--font-display);
   font-size: clamp(1rem, 1.6vw, 1.25rem);
-  color: #fff6df;
+  color: #f1ecf5;
   margin: 0.1rem 0 0;
 }
 
@@ -3939,7 +3929,7 @@ html.intro-active .glass-music {
 .pwa-install-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(10, 16, 12, 0.28);
+  background: rgba(10, 10, 16, 0.28);
   animation: pwa-fade-in 0.3s ease both;
 }
 
@@ -3956,7 +3946,7 @@ html.intro-active .glass-music {
   border-radius: 1.25rem;
   background: color-mix(in srgb, var(--color-bg-elevated) 94%, #fff);
   border: 1px solid color-mix(in srgb, var(--line) 80%, var(--color-accent));
-  box-shadow: 0 18px 48px rgba(15, 26, 20, 0.22);
+  box-shadow: 0 18px 48px rgba(15, 15, 26, 0.22);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   color: var(--ink);
@@ -4017,7 +4007,7 @@ html.intro-active .glass-music {
   height: 64px;
   border-radius: 16px;
   object-fit: cover;
-  box-shadow: 0 8px 20px rgba(15, 26, 20, 0.16);
+  box-shadow: 0 8px 20px rgba(15, 15, 26, 0.16);
   background: var(--color-bg);
 }
 
@@ -4031,8 +4021,8 @@ html.intro-active .glass-music {
   text-transform: uppercase;
   padding: 0.15rem 0.4rem;
   border-radius: 999px;
-  background: var(--color-forest, #1f3d2e);
-  color: #f7f3ea;
+  background: var(--color-forest, #201f3d);
+  color: #f2f0f4;
   white-space: nowrap;
 }
 
@@ -4086,7 +4076,7 @@ html.intro-active .glass-music {
   height: 1.5rem;
   display: inline-grid;
   place-items: center;
-  color: var(--color-accent, #8f6a32);
+  color: var(--color-accent, #5d328f);
   flex-shrink: 0;
 }
 
@@ -4175,8 +4165,8 @@ html.intro-active .glass-music {
   border-radius: 0.85rem;
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, var(--color-accent, #c4a574) 18%, transparent);
-  color: var(--color-accent, #8b6914);
+  background: color-mix(in srgb, var(--color-accent, #9a72c6) 18%, transparent);
+  color: var(--color-accent, #55158a);
 }
 
 .members-group-title {
@@ -4225,8 +4215,8 @@ html.intro-active .glass-music {
   background:
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--color-accent, #c4a574) 22%, transparent),
-      color-mix(in srgb, var(--color-bg-elevated, #1a2420) 88%, #c4a574 12%)
+      color-mix(in srgb, var(--color-accent, #9a72c6) 22%, transparent),
+      color-mix(in srgb, var(--color-bg-elevated, #181826) 88%, #9a72c6 12%)
     );
 }
 
@@ -4257,7 +4247,7 @@ html.intro-active .glass-music {
   font-weight: 700;
   font-size: clamp(1.15rem, 4.5vw, 1.65rem);
   letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--ink, #1a1a1a) 70%, #8b6914);
+  color: color-mix(in srgb, var(--ink, #1a1a1a) 70%, #55158a);
 }
 
 .member-avatar-initials {
@@ -4300,7 +4290,7 @@ html.intro-active .glass-music {
 }
 
 .member-forever {
-  color: color-mix(in srgb, #6b4f3a 70%, var(--ink));
+  color: color-mix(in srgb, #473075 70%, var(--ink));
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -4332,7 +4322,7 @@ html.intro-active .glass-music {
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  background: color-mix(in srgb, var(--color-bg, #fff) 75%, #c4a574);
+  background: color-mix(in srgb, var(--color-bg, #fff) 75%, #9a72c6);
   color: var(--ink);
 }
 
@@ -4345,7 +4335,7 @@ html.intro-active .glass-music {
 }
 
 .member-group-badge--legacy {
-  background: color-mix(in srgb, #c4a574 35%, #fff);
+  background: color-mix(in srgb, #9a72c6 35%, #fff);
 }
 
 .member-group-badge--core {
@@ -4370,12 +4360,12 @@ html.intro-active .glass-music {
   font-size: 0.68rem;
   font-weight: 650;
   background: rgba(255, 255, 255, 0.92);
-  color: #4a3a2a;
+  color: #352252;
 }
 
 .member-memorial-ribbon {
-  background: color-mix(in srgb, #5c4636 88%, #fff);
-  color: #f7f1e8;
+  background: color-mix(in srgb, #3f2a68 88%, #fff);
+  color: #f1eff3;
 }
 
 .member-profile-btn {
@@ -4395,7 +4385,7 @@ html.intro-active .glass-music {
 
 .member-social-link {
   font-size: 0.75rem;
-  color: var(--color-accent, #8b6914);
+  color: var(--color-accent, #55158a);
 }
 
 .member-stats {
@@ -4408,7 +4398,7 @@ html.intro-active .glass-music {
 .member-stat {
   padding: 0.85rem 0.9rem;
   border-radius: var(--radius-md, 0.85rem);
-  background: color-mix(in srgb, var(--color-bg-elevated, #fff) 92%, #c4a574 8%);
+  background: color-mix(in srgb, var(--color-bg-elevated, #fff) 92%, #9a72c6 8%);
   border: 1px solid color-mix(in srgb, var(--line, #ddd) 80%, transparent);
 }
 
@@ -4484,7 +4474,7 @@ html.intro-active .glass-music {
   position: fixed;
   inset: 0;
   z-index: 120;
-  background: rgba(10, 14, 12, 0.55);
+  background: rgba(9, 9, 15, 0.55);
   display: grid;
   place-items: center;
   padding: 1rem;
@@ -4496,7 +4486,7 @@ html.intro-active .glass-music {
   max-height: min(88vh, 40rem);
   overflow: auto;
   border-radius: 1.25rem;
-  background: var(--color-bg, #fafaf8);
+  background: var(--color-bg, #fafafb);
   color: var(--ink);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
   display: grid;
@@ -4516,7 +4506,7 @@ html.intro-active .glass-music {
   aspect-ratio: 1;
   border-radius: 1rem;
   overflow: hidden;
-  background: color-mix(in srgb, var(--color-accent, #c4a574) 18%, transparent);
+  background: color-mix(in srgb, var(--color-accent, #9a72c6) 18%, transparent);
 }
 
 .member-profile-photo img {
@@ -4660,11 +4650,11 @@ html.intro-active .glass-music {
 }
 
 .calendar-cell[data-has-event="true"] {
-  outline: 1px solid color-mix(in srgb, #c4a574 55%, transparent);
+  outline: 1px solid color-mix(in srgb, #9a72c6 55%, transparent);
 }
 
 .calendar-cell[data-has-birthday="true"] {
-  outline-color: color-mix(in srgb, #8f6a32 65%, transparent);
+  outline-color: color-mix(in srgb, #5d328f 65%, transparent);
 }
 
 .calendar-day {
@@ -4852,7 +4842,7 @@ button.linkish {
 .lightbox-frame-inner:fullscreen {
   width: 100%;
   height: 100%;
-  background: #0b1210;
+  background: #0b0b12;
   place-content: center;
   padding: 1rem;
 }
@@ -4878,7 +4868,7 @@ button.linkish {
 }
 
 .gallery-filters .btn[data-active="true"] {
-  outline: 1px solid color-mix(in srgb, #c4a574 70%, transparent);
+  outline: 1px solid color-mix(in srgb, #9a72c6 70%, transparent);
 }
 
 .notif-bell {
@@ -4966,7 +4956,7 @@ button.linkish {
   position: fixed;
   inset: 0;
   z-index: 120;
-  background: rgba(8, 12, 10, 0.55);
+  background: rgba(8, 8, 12, 0.55);
   display: grid;
   place-items: center;
   padding: 1.25rem;
@@ -4976,7 +4966,7 @@ button.linkish {
   width: min(28rem, 100%);
   border-radius: 1.25rem;
   padding: 1.5rem 1.4rem 1.35rem;
-  background: var(--color-bg-elevated, #151c18);
+  background: var(--color-bg-elevated, #13131e);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
@@ -5090,7 +5080,7 @@ button.linkish {
   position: fixed;
   inset: 0;
   z-index: 300;
-  background: rgba(8, 12, 10, 0.42);
+  background: rgba(8, 8, 12, 0.42);
   opacity: 0;
   pointer-events: none !important;
   visibility: hidden;
@@ -5127,7 +5117,7 @@ button.linkish {
     visibility 0s linear 0.32s;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  box-shadow: -12px 0 40px rgba(8, 12, 10, 0.18);
+  box-shadow: -12px 0 40px rgba(8, 8, 12, 0.18);
 }
 
 .nav-drawer[data-open] {
@@ -5202,7 +5192,7 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 
 .dark .clean-hero-veil {
   background:
-    linear-gradient(180deg, rgba(8, 12, 10, 0.4), rgba(8, 12, 10, 0.75) 55%, var(--color-bg));
+    linear-gradient(180deg, rgba(8, 8, 12, 0.4), rgba(8, 8, 12, 0.75) 55%, var(--color-bg));
 }
 
 .clean-hero-cta .btn {
@@ -6207,8 +6197,8 @@ html:not(.nav-drawer-open):not(.intro-locked) body {
 }
 
 .safety-banner--bank {
-  border-color: color-mix(in srgb, #b8860b 45%, var(--line));
-  background: color-mix(in srgb, #b8860b 10%, transparent);
+  border-color: color-mix(in srgb, #6819aa 45%, var(--line));
+  background: color-mix(in srgb, #6819aa 10%, transparent);
 }
 
 .safety-banner-icon {
@@ -7739,7 +7729,7 @@ a.kids-card:focus-visible {
   place-items: end center;
   padding: 1rem;
   padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-  background: rgba(15, 20, 17, 0.34);
+  background: rgba(13, 13, 22, 0.34);
   animation: consent-fade 0.25s ease both;
 }
 
@@ -8087,8 +8077,8 @@ a.kids-card:focus-visible {
   /* Static atmosphere when Vanta/three.js is skipped (mobile shell). */
   background:
     radial-gradient(ellipse 90% 70% at 40% 30%, rgba(74, 143, 106, 0.4), transparent 52%),
-    radial-gradient(ellipse 70% 50% at 75% 60%, rgba(232, 192, 122, 0.18), transparent 45%),
-    linear-gradient(165deg, #0a100e 0%, #152820 50%, #0c1410 100%);
+    radial-gradient(ellipse 70% 50% at 75% 60%, rgba(176, 122, 232, 0.18), transparent 45%),
+    linear-gradient(165deg, #0a0a10 0%, #161528 50%, #0c0c14 100%);
 }
 
 .hero-vanta {
@@ -8099,8 +8089,8 @@ a.kids-card:focus-visible {
   opacity: 0;
   transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1);
   background:
-    radial-gradient(ellipse 80% 60% at 50% 35%, #1e3a2e 0%, transparent 55%),
-    linear-gradient(165deg, #0c1410 0%, #1a2c22 45%, #0f1814 100%);
+    radial-gradient(ellipse 80% 60% at 50% 35%, #1f1e3a 0%, transparent 55%),
+    linear-gradient(165deg, #0c0c14 0%, #1a1a2c 45%, #0f0f18 100%);
 }
 
 .hero-vanta--ready {
@@ -8116,8 +8106,8 @@ a.kids-card:focus-visible {
   opacity: 1;
   background:
     radial-gradient(ellipse 90% 70% at 40% 30%, rgba(74, 143, 106, 0.45), transparent 50%),
-    radial-gradient(ellipse 70% 50% at 75% 60%, rgba(232, 192, 122, 0.22), transparent 45%),
-    linear-gradient(165deg, #0a100e 0%, #152820 50%, #0c1410 100%);
+    radial-gradient(ellipse 70% 50% at 75% 60%, rgba(176, 122, 232, 0.22), transparent 45%),
+    linear-gradient(165deg, #0a0a10 0%, #161528 50%, #0c0c14 100%);
 }
 
 .hero-vanta canvas {
@@ -8132,10 +8122,10 @@ a.kids-card:focus-visible {
   background:
     linear-gradient(
       180deg,
-      rgba(8, 12, 10, 0.58) 0%,
-      rgba(8, 12, 10, 0.4) 35%,
-      rgba(8, 12, 10, 0.62) 68%,
-      rgba(250, 250, 248, 0.98) 100%
+      rgba(8, 8, 12, 0.58) 0%,
+      rgba(8, 8, 12, 0.4) 35%,
+      rgba(8, 8, 12, 0.62) 68%,
+      rgba(250, 250, 251, 0.98) 100%
     );
 }
 
@@ -8143,9 +8133,9 @@ a.kids-card:focus-visible {
   background:
     linear-gradient(
       180deg,
-      rgba(4, 8, 6, 0.62) 0%,
-      rgba(4, 8, 6, 0.42) 40%,
-      rgba(4, 8, 6, 0.78) 72%,
+      rgba(4, 4, 8, 0.62) 0%,
+      rgba(4, 4, 8, 0.42) 40%,
+      rgba(4, 4, 8, 0.78) 72%,
       var(--color-bg) 100%
     );
 }
@@ -8996,12 +8986,12 @@ body {
 }
 
 .gallery-chapter-card {
-  color: #f7f3ea;
+  color: #f2f0f4;
 }
 
 .gallery-chapter-card .eyebrow,
 .gallery-chapter-card h3 {
-  color: #f7f3ea;
+  color: #f2f0f4;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
 }
 
@@ -9024,10 +9014,10 @@ body {
 
 .member-card.is-birthday-today {
   position: relative;
-  outline: 2px solid #c9a227;
-  border-color: #c9a227;
+  outline: 2px solid #8627c9;
+  border-color: #8627c9;
   box-shadow:
-    0 0 0 1px color-mix(in srgb, #c9a227 55%, transparent),
+    0 0 0 1px color-mix(in srgb, #8627c9 55%, transparent),
     var(--elevation-2);
   overflow: visible;
 }
@@ -9042,8 +9032,8 @@ body {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #1a1408;
-  background: linear-gradient(135deg, #f0d78c, #c9a227);
+  color: #11081a;
+  background: linear-gradient(135deg, #c49ae2, #8627c9);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   border-radius: 0 0.35rem 0.35rem 0;
 }
@@ -9060,13 +9050,13 @@ body {
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 650;
-  color: #1a1408;
-  background: color-mix(in srgb, #f0d78c 92%, #fff);
-  border: 1px solid color-mix(in srgb, #c9a227 70%, transparent);
+  color: #11081a;
+  background: color-mix(in srgb, #c49ae2 92%, #fff);
+  border: 1px solid color-mix(in srgb, #8627c9 70%, transparent);
 }
 
 .member-bday-icon {
-  color: #c9a227;
+  color: #8627c9;
   font-weight: 700;
 }
 
@@ -9197,9 +9187,9 @@ body {
   background:
     linear-gradient(
       180deg,
-      rgba(8, 12, 10, 0.42) 0%,
-      rgba(8, 12, 10, 0.55) 55%,
-      rgba(8, 12, 10, 0.78) 100%
+      rgba(8, 8, 12, 0.42) 0%,
+      rgba(8, 8, 12, 0.55) 55%,
+      rgba(8, 8, 12, 0.78) 100%
     );
 }
 
@@ -9237,8 +9227,8 @@ body {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #1a1408;
-  background: linear-gradient(135deg, #f0d78c, #c9a227);
+  color: #11081a;
+  background: linear-gradient(135deg, #c49ae2, #8627c9);
 }
 
 .notif-modal-media {
@@ -9605,7 +9595,7 @@ body {
 .analytics-bar-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #c9a227, #4a8f6a);
+  background: linear-gradient(90deg, #8627c9, #4a8f6a);
 }
 
 .admin-manage-list {
@@ -9790,8 +9780,8 @@ body {
 }
 
 .nav-edit-mode-btn.is-active {
-  background: color-mix(in srgb, var(--color-accent, #8f6a32) 18%, var(--color-bg));
-  border-color: color-mix(in srgb, var(--color-accent, #8f6a32) 45%, var(--line));
+  background: color-mix(in srgb, var(--color-accent, #5d328f) 18%, var(--color-bg));
+  border-color: color-mix(in srgb, var(--color-accent, #5d328f) 45%, var(--line));
   color: var(--color-ink, var(--ink));
 }
 
@@ -9816,7 +9806,7 @@ body {
 }
 
 .members-section--edit {
-  outline: 1px dashed color-mix(in srgb, var(--color-accent, #8f6a32) 35%, transparent);
+  outline: 1px dashed color-mix(in srgb, var(--color-accent, #5d328f) 35%, transparent);
   outline-offset: 0.5rem;
   border-radius: var(--radius-lg);
 }
@@ -9833,7 +9823,7 @@ body {
   background:
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--color-accent, #8f6a32) 10%, var(--color-bg-elevated, #fff)),
+      color-mix(in srgb, var(--color-accent, #5d328f) 10%, var(--color-bg-elevated, #fff)),
       var(--color-bg-elevated, #fff)
     );
 }
@@ -9855,16 +9845,16 @@ body {
 }
 
 .member-card.is-edit-mode {
-  border: 1px solid color-mix(in srgb, var(--color-accent, #8f6a32) 28%, var(--line));
+  border: 1px solid color-mix(in srgb, var(--color-accent, #5d328f) 28%, var(--line));
   border-radius: var(--radius-lg);
   padding: 0.55rem;
-  background: color-mix(in srgb, var(--color-bg-elevated, #fff) 92%, var(--color-accent, #8f6a32));
+  background: color-mix(in srgb, var(--color-bg-elevated, #fff) 92%, var(--color-accent, #5d328f));
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .member-card.is-edit-mode.is-selected {
-  border-color: color-mix(in srgb, var(--color-accent, #8f6a32) 65%, var(--line));
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent, #8f6a32) 22%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent, #5d328f) 65%, var(--line));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent, #5d328f) 22%, transparent);
 }
 
 .member-card.is-edit-mode[draggable="true"] {
@@ -9911,7 +9901,7 @@ body {
   font-weight: 650;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.92);
-  color: #2a2418;
+  color: #21132f;
   backdrop-filter: blur(8px);
 }
 
@@ -9934,7 +9924,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: 80;
-  background: rgba(18, 22, 18, 0.45);
+  background: rgba(15, 16, 25, 0.45);
   display: flex;
   justify-content: flex-end;
   animation: member-edit-fade 0.22s ease;
@@ -9950,7 +9940,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg, #fafaf8);
+  background: var(--color-bg, #fafafb);
   color: var(--color-ink, var(--ink));
   border-left: 1px solid var(--line);
   box-shadow: -12px 0 40px rgba(0, 0, 0, 0.12);
@@ -10017,8 +10007,8 @@ body {
   background:
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--color-accent, #c4a574) 22%, transparent),
-      color-mix(in srgb, var(--color-bg-elevated, #1a2420) 88%, #c4a574 12%)
+      color-mix(in srgb, var(--color-accent, #9a72c6) 22%, transparent),
+      color-mix(in srgb, var(--color-bg-elevated, #181826) 88%, #9a72c6 12%)
     );
 }
 
@@ -10153,7 +10143,7 @@ body {
   font-family: var(--font-display, var(--font-body));
   font-size: clamp(1.05rem, 2.2vw, 1.35rem);
   letter-spacing: 0.02em;
-  color: color-mix(in srgb, var(--ink) 88%, var(--accent, #9a6b2f));
+  color: color-mix(in srgb, var(--ink) 88%, var(--accent, #5d2f9a));
 }
 
 .village-heritage-tagline--end {
@@ -10179,7 +10169,7 @@ body {
 
 .village-heritage-toc a:hover {
   color: var(--ink);
-  border-bottom-color: color-mix(in srgb, var(--accent, #9a6b2f) 55%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--accent, #5d2f9a) 55%, transparent);
 }
 
 .village-heritage-prose {
@@ -10428,7 +10418,7 @@ body {
 }
 
 .telugu-calendar-cell[data-has-birthday] {
-  background: color-mix(in srgb, #c4a574 10%, var(--color-bg-elevated));
+  background: color-mix(in srgb, #9a72c6 10%, var(--color-bg-elevated));
 }
 
 .telugu-calendar-daynum {
@@ -10459,7 +10449,7 @@ body {
 }
 
 .telugu-calendar-mark--bday {
-  color: #8f6a32;
+  color: #5d328f;
 }
 
 .telugu-calendar-mark--event {
@@ -10726,7 +10716,7 @@ body {
 .usearch-voice[data-listening] { background: var(--color-accent); color: #fff; }
 .usearch-submit {
   flex: none; border: 0; border-radius: var(--radius-pill); cursor: pointer;
-  background: var(--color-forest); color: #f7f3ea;
+  background: var(--color-forest); color: #f2f0f4;
   padding: 0.7rem 1.15rem; font-size: var(--text-sm); font-weight: 600;
   min-height: 44px; font-family: var(--font-body);
 }
@@ -10787,7 +10777,7 @@ body {
 
 /* ── Promise bar ──────────────────────────────────────────────────────── */
 .promise-bar {
-  background: var(--color-forest); color: #f7f3ea;
+  background: var(--color-forest); color: #f2f0f4;
   padding: 1.1rem var(--page-gutter);
 }
 .promise-bar ul {
@@ -10810,7 +10800,7 @@ body {
   color: var(--color-muted); background: transparent; min-height: 32px;
   display: inline-flex; align-items: center;
 }
-.lang-switch-btn[data-active] { background: var(--color-forest); color: #f7f3ea; }
+.lang-switch-btn[data-active] { background: var(--color-forest); color: #f2f0f4; }
 
 /* ── Mobile bottom navigation ─────────────────────────────────────────── */
 .bottom-nav { display: none; }
@@ -11034,9 +11024,9 @@ body {
   overflow: hidden;
   padding: clamp(2.5rem, 8vw, 5.5rem) var(--page-gutter);
   background:
-    radial-gradient(90% 70% at 50% 0%, rgba(240, 215, 160, 0.22), transparent 62%),
-    linear-gradient(168deg, #16301f 0%, var(--color-forest) 52%, #12261c 100%);
-  color: #f6f2e7;
+    radial-gradient(90% 70% at 50% 0%, rgba(202, 171, 229, 0.22), transparent 62%),
+    linear-gradient(168deg, #161630 0%, var(--color-forest) 52%, #121226 100%);
+  color: #f0eef2;
 }
 
 /* Photographic hero, active only when HOME_HERO_PHOTO is set in lib/site.ts.
@@ -11063,8 +11053,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(12, 26, 18, 0.88) 0%, rgba(12, 26, 18, 0.62) 55%, rgba(12, 26, 18, 0.45) 100%),
-    linear-gradient(180deg, rgba(12, 26, 18, 0.35), rgba(12, 26, 18, 0.7));
+    linear-gradient(90deg, rgba(12, 12, 26, 0.88) 0%, rgba(12, 12, 26, 0.62) 55%, rgba(12, 12, 26, 0.45) 100%),
+    linear-gradient(180deg, rgba(12, 12, 26, 0.35), rgba(12, 12, 26, 0.7));
 }
 
 @media (max-width: 920px) {
@@ -11077,8 +11067,8 @@ body {
   .village-hero-scrim {
     background: linear-gradient(
       180deg,
-      rgba(12, 26, 18, 0.68),
-      rgba(12, 26, 18, 0.82)
+      rgba(12, 12, 26, 0.68),
+      rgba(12, 12, 26, 0.82)
     );
   }
 }
@@ -11087,7 +11077,7 @@ body {
   position: absolute;
   inset: auto -10% -45% -10%;
   height: 70%;
-  background: radial-gradient(50% 60% at 50% 100%, rgba(196, 152, 85, 0.28), transparent 70%);
+  background: radial-gradient(50% 60% at 50% 100%, rgba(137, 85, 196, 0.28), transparent 70%);
   pointer-events: none;
   z-index: -1;
 }
@@ -11154,7 +11144,7 @@ body {
 .village-hero-support {
   margin: 0.85rem 0 0;
   font-size: var(--text-lg);
-  color: rgba(246, 242, 231, 0.82);
+  color: rgba(240, 238, 242, 0.82);
 }
 
 .village-hero-cta {
@@ -11166,14 +11156,14 @@ body {
 
 .village-hero-cta .btn {
   background: var(--color-accent-soft);
-  color: #1b2d22;
+  color: #1b1b2d;
   border: 1px solid transparent;
 }
 
 .village-hero-cta .btn.ghost {
   background: transparent;
-  color: #f6f2e7;
-  border: 1px solid rgba(246, 242, 231, 0.45);
+  color: #f0eef2;
+  border: 1px solid rgba(240, 238, 242, 0.45);
 }
 
 .village-hero-cta .btn:hover {
@@ -11547,18 +11537,18 @@ body {
   gap: 0.5rem;
   padding: 0.75rem 0.7rem 0.55rem;
   font-size: var(--text-xs);
-  color: #f6f2e7;
+  color: #f0eef2;
   background: linear-gradient(
     180deg,
-    rgba(11, 20, 15, 0) 0%,
-    rgba(11, 20, 15, 0.55) 45%,
-    rgba(11, 20, 15, 0.9) 100%
+    rgba(11, 11, 20, 0) 0%,
+    rgba(11, 11, 20, 0.55) 45%,
+    rgba(11, 11, 20, 0.9) 100%
   );
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
 }
 
 .home-memory-meta .muted {
-  color: rgba(246, 242, 231, 0.78);
+  color: rgba(240, 238, 242, 0.78);
 }
 
 /* ---- Village progress ---------------------------------------------------- */
@@ -12406,7 +12396,7 @@ body {
 }
 
 .admin-stat--warn {
-  border-color: color-mix(in srgb, #b8860b 55%, var(--line));
+  border-color: color-mix(in srgb, #6819aa 55%, var(--line));
 }
 
 .admin-stat--bad {
@@ -12452,7 +12442,7 @@ body {
 }
 
 .admin-note--warning {
-  border-left: 3px solid #b8860b;
+  border-left: 3px solid #6819aa;
 }
 
 .admin-note-kind {
@@ -12502,7 +12492,7 @@ body {
 
 .resource-status--needs-review,
 .licence-badge--unknown {
-  background: color-mix(in srgb, #b8860b 16%, transparent);
+  background: color-mix(in srgb, #6819aa 16%, transparent);
 }
 
 .resource-status--source-unavailable,
@@ -12840,8 +12830,8 @@ a.dharma-division-link:focus-visible {
   margin: 0.7rem 0 0;
   padding: 0.65rem 0.85rem;
   border-radius: 11px;
-  border: 1px solid color-mix(in srgb, #b8860b 45%, var(--line));
-  background: color-mix(in srgb, #b8860b 7%, transparent);
+  border: 1px solid color-mix(in srgb, #6819aa 45%, var(--line));
+  background: color-mix(in srgb, #6819aa 7%, transparent);
   font-size: 0.85rem;
   line-height: 1.6;
   max-width: 72ch;
@@ -12918,7 +12908,7 @@ a.dharma-division-link:focus-visible {
 
 /* A restricted author is marked structurally, not only by colour. */
 .culture-author.is-restricted {
-  border-left: 3px solid color-mix(in srgb, #b8860b 65%, var(--line));
+  border-left: 3px solid color-mix(in srgb, #6819aa 65%, var(--line));
 }
 
 .culture-author-head {
@@ -12971,7 +12961,7 @@ a.dharma-division-link:focus-visible {
 }
 
 .culture-author-status--held {
-  background: color-mix(in srgb, #b8860b 12%, transparent);
+  background: color-mix(in srgb, #6819aa 12%, transparent);
 }
 
 /* Sources nested inside an author card are a sub-block, not a page section. */
@@ -13032,7 +13022,7 @@ a.dharma-division-link:focus-visible {
   max-width: 42rem;
   font-size: clamp(1rem, 2.2vw, 1.2rem);
   line-height: 1.55;
-  color: rgba(246, 242, 231, 0.92);
+  color: rgba(240, 238, 242, 0.92);
 }
 
 .village-hero-cta {
@@ -13083,7 +13073,7 @@ a.dharma-division-link:focus-visible {
   display: block;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: var(--color-forest, #16301f);
+  background: var(--color-forest, #161630);
 }
 
 .home-temple-media img,
@@ -13096,7 +13086,7 @@ a.dharma-division-link:focus-visible {
 .home-person-photo[data-placeholder] {
   display: grid;
   place-items: center;
-  color: #f6f2e7;
+  color: #f0eef2;
   font-family: var(--font-display);
   font-size: 1.5rem;
 }
@@ -13269,7 +13259,7 @@ a.dharma-division-link:focus-visible {
   overflow: hidden;
   display: grid;
   place-items: center;
-  background: var(--color-forest, #16301f);
+  background: var(--color-forest, #161630);
   color: #fff;
   flex-shrink: 0;
 }
@@ -13459,7 +13449,7 @@ a.dharma-division-link:focus-visible {
 
 .family-card-photo {
   aspect-ratio: 16 / 10;
-  background: color-mix(in srgb, var(--color-gold, #c4a35a) 18%, var(--card-bg));
+  background: color-mix(in srgb, var(--color-gold, #925ac4) 18%, var(--card-bg));
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -13556,7 +13546,7 @@ a.dharma-division-link:focus-visible {
 }
 
 .ft-card[data-adapaduchu] {
-  border-color: var(--color-gold, #c4a35a);
+  border-color: var(--color-gold, #925ac4);
 }
 
 .ft-card[data-deceased] {
@@ -13642,7 +13632,7 @@ a.dharma-division-link:focus-visible {
 .ft-line-spouse,
 .ft-line-descent {
   fill: none;
-  stroke: color-mix(in srgb, var(--color-gold, #c4a35a) 75%, var(--color-line));
+  stroke: color-mix(in srgb, var(--color-gold, #925ac4) 75%, var(--color-line));
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -13670,24 +13660,24 @@ a.dharma-division-link:focus-visible {
   text-align: left;
   font: inherit;
   cursor: pointer;
-  box-shadow: 0 6px 18px color-mix(in srgb, #1a130c 10%, transparent);
+  box-shadow: 0 6px 18px color-mix(in srgb, #110b1b 10%, transparent);
   overflow: hidden;
   z-index: 1;
 }
 
 .ft-node:hover,
 .ft-node:focus-visible {
-  border-color: var(--color-gold, #c4a35a);
+  border-color: var(--color-gold, #925ac4);
   outline: none;
 }
 
 .ft-node[data-selected] {
-  border-color: var(--color-gold, #c4a35a);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-gold, #c4a35a) 45%, transparent);
+  border-color: var(--color-gold, #925ac4);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-gold, #925ac4) 45%, transparent);
 }
 
 .ft-node[data-adapaduchu] {
-  border-color: var(--color-gold, #c4a35a);
+  border-color: var(--color-gold, #925ac4);
 }
 
 .ft-node[data-deceased] {
@@ -13701,7 +13691,7 @@ a.dharma-division-link:focus-visible {
   height: 48px;
   overflow: hidden;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-gold, #c4a35a) 18%, var(--card-bg));
+  background: color-mix(in srgb, var(--color-gold, #925ac4) 18%, var(--card-bg));
   color: var(--muted, #5c685f);
   font-size: 0.85rem;
   font-weight: 600;
@@ -13982,8 +13972,8 @@ a.dharma-division-link:focus-visible {
 }
 
 .ft-editor-dirty {
-  background: color-mix(in srgb, #b8860b 12%, transparent);
-  border-color: color-mix(in srgb, #b8860b 45%, var(--line));
+  background: color-mix(in srgb, #6819aa 12%, transparent);
+  border-color: color-mix(in srgb, #6819aa 45%, var(--line));
 }
 
 .ft-editor-ok {
@@ -14071,7 +14061,7 @@ a.dharma-division-link:focus-visible {
    colour so it survives a colour-blind reader and a greyscale print. */
 .ft-node.is-ambiguous .ft-node-hit {
   border-style: dashed;
-  border-color: color-mix(in srgb, #b8860b 65%, var(--line));
+  border-color: color-mix(in srgb, #6819aa 65%, var(--line));
 }
 
 .ft-node-name {
@@ -14089,7 +14079,7 @@ a.dharma-division-link:focus-visible {
 }
 
 .ft-node-verify--needs-verification {
-  color: color-mix(in srgb, #b8860b 85%, canvastext);
+  color: color-mix(in srgb, #6819aa 85%, canvastext);
 }
 
 .ft-node-tools {
@@ -14292,8 +14282,8 @@ a.dharma-division-link:focus-visible {
   margin: 0;
   padding: 0.55rem 0.75rem;
   border-radius: 9px;
-  background: color-mix(in srgb, #b8860b 13%, transparent);
-  border: 1px solid color-mix(in srgb, #b8860b 45%, var(--line));
+  background: color-mix(in srgb, #6819aa 13%, transparent);
+  border: 1px solid color-mix(in srgb, #6819aa 45%, var(--line));
   font-size: 0.84rem;
   line-height: 1.5;
 }
@@ -14360,7 +14350,7 @@ a.dharma-division-link:focus-visible {
 
 .ft-cross {
   font-size: 0.75rem;
-  color: color-mix(in srgb, #b8860b 85%, canvastext);
+  color: color-mix(in srgb, #6819aa 85%, canvastext);
 }
 
 /* ---- families and history -------------------------------------------- */
@@ -14448,9 +14438,9 @@ a.dharma-division-link:focus-visible {
   margin: 0.75rem 0 1.5rem;
   padding: 0.75rem 0.9rem;
   border: 1px solid var(--color-line);
-  border-left: 3px solid var(--color-gold, #c4a35a);
+  border-left: 3px solid var(--color-gold, #925ac4);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-gold, #c4a35a) 7%, transparent);
+  background: color-mix(in srgb, var(--color-gold, #925ac4) 7%, transparent);
   font-size: 0.9rem;
   line-height: 1.55;
 }
@@ -14963,7 +14953,7 @@ a.dharma-division-link:focus-visible {
   inset: 0;
   background: linear-gradient(
     to top,
-    color-mix(in srgb, #1a130c 55%, transparent),
+    color-mix(in srgb, #110b1b 55%, transparent),
     transparent 62%
   );
   opacity: 0.8;
@@ -15248,4 +15238,553 @@ a.dharma-division-link:focus-visible {
     animation: none;
     opacity: 0;
   }
+}
+
+/* ===========================================================================
+   PREMIUM SHELL — dark-indigo ground, violet aurora, glass containers.
+   Original implementation: every gradient, blob path and highlight below is
+   authored here, not lifted from the reference artwork.
+   =========================================================================== */
+
+/* --- Ambient aurora field (see components/atmosphere/AuroraField.tsx) --- */
+.aurora-field {
+  position: fixed;
+  inset: -10vh -10vw;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+.aurora-blobs {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: blur(90px) saturate(1.15);
+  opacity: 0.62;
+}
+
+.light .aurora-blobs {
+  filter: blur(100px) saturate(1.05);
+  opacity: 0.4;
+}
+
+.aurora-blob {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.aurora-blob--1 {
+  animation: aurora-drift-a 34s var(--ease-soft) infinite alternate;
+}
+
+.aurora-blob--2 {
+  animation: aurora-drift-b 42s var(--ease-soft) infinite alternate;
+}
+
+.aurora-blob--3 {
+  animation: aurora-drift-c 38s var(--ease-soft) infinite alternate;
+}
+
+/* Phones and reduced-motion: keep the colour, drop the cost. A blur this
+   wide over three animated shapes is the most expensive paint on the page. */
+.aurora-field[data-lean] .aurora-blobs {
+  filter: blur(56px) saturate(1.1);
+  opacity: 0.5;
+}
+
+.aurora-field[data-lean] .aurora-blob--3 {
+  display: none;
+}
+
+@keyframes aurora-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(5%, 4%, 0) scale(1.14);
+  }
+}
+
+@keyframes aurora-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  to {
+    transform: translate3d(-6%, 5%, 0) scale(0.94);
+  }
+}
+
+@keyframes aurora-drift-c {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.96);
+  }
+  to {
+    transform: translate3d(4%, -6%, 0) scale(1.12);
+  }
+}
+
+/* --- Glass surface primitives ---------------------------------------------
+   `.surface` is the shared premium container: glass fill, a violet rim drawn
+   as a gradient border, and a soft inner top highlight so the edge catches
+   light the way the reference containers do. Opt-in, so no existing card
+   changes shape unless it asks to. */
+.surface,
+.surface-strong {
+  position: relative;
+  border-radius: var(--radius-xl);
+  background: var(--glass);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--elevation-2);
+  backdrop-filter: blur(var(--blur-glass)) saturate(1.35);
+  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(1.35);
+  isolation: isolate;
+}
+
+.surface-strong {
+  background: var(--glass-strong);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--elevation-3);
+}
+
+/* Top-edge specular line. Drawn on a pseudo-element so it sits above the
+   backdrop-filter but below content, and inherits the container's radius. */
+.surface::before,
+.surface-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--color-accent-soft) 42%, transparent) 0%,
+    transparent 38%,
+    transparent 62%,
+    color-mix(in srgb, var(--color-magenta) 22%, transparent) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Browsers without backdrop-filter get a solid panel rather than an
+   unreadable transparent one. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .surface,
+  .surface-strong,
+  .nav {
+    background: color-mix(in srgb, var(--bg-2) 94%, var(--accent));
+  }
+}
+
+/* --- Glow accents --------------------------------------------------------- */
+.glow-ring {
+  box-shadow: var(--elevation-2), var(--glow-violet);
+}
+
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-accent-soft) 0%,
+    var(--color-violet) 42%,
+    var(--color-magenta) 78%,
+    var(--color-accent-soft) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* If background-clip: text is unsupported the text would vanish, so the
+     fallback colour is set first and only overridden inside @supports. */
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .text-gradient {
+    background: none;
+    color: var(--color-accent-soft);
+  }
+}
+
+/* --- Reduced motion: freeze the drift, keep the colour -------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob--1,
+  .aurora-blob--2,
+  .aurora-blob--3 {
+    animation: none !important;
+  }
+}
+
+/* ===========================================================================
+   PREMIUM SURFACES — glass fills, large radii, violet rim light.
+   Appended last on purpose: these are deliberate overrides of the earlier
+   flat-card rules, and source order is the mechanism rather than !important.
+   =========================================================================== */
+
+/* --- Buttons -------------------------------------------------------------
+   The old rule hardcoded `linear-gradient(var(--accent), var(--accent-2))`
+   with a fixed dark ink. That inverted badly in light mode (2.72:1). Both
+   themes now supply their own gradient and ink through tokens, and both
+   gradient endpoints are contrast-checked. */
+.btn {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  box-shadow: var(--elevation-2), var(--glow-violet);
+  border-radius: var(--radius-pill);
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.01em;
+}
+
+.btn:hover {
+  box-shadow: var(--elevation-3), var(--glow-violet-strong);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--elevation-2), var(--focus);
+}
+
+/* Outlined pill — the "READ MORE" treatment from the reference direction,
+   redrawn with our own tokens. */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  color: var(--color-accent-ink);
+  font-family: var(--font-accent);
+  font-size: 0.92rem;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    border-color var(--motion-base) var(--ease-out),
+    background var(--motion-base) var(--ease-out),
+    box-shadow var(--motion-base) var(--ease-out);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  box-shadow: var(--glow-violet);
+}
+
+.btn-outline:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+/* --- Panels and cards ----------------------------------------------------
+   `.glass-card` had a later rule replacing its glass fill with a solid
+   elevated background, which cancelled the glass entirely. Restored here,
+   with the rim light and the larger radius. */
+.home-panel,
+.glass-card,
+.glossy-card {
+  border-radius: var(--radius-xl);
+  background: var(--glass);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--elevation-2);
+  backdrop-filter: blur(var(--blur-glass)) saturate(1.3);
+  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(1.3);
+}
+
+.home-panel::after,
+.glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--color-accent-soft) 26%, transparent) 0%,
+    transparent 30%
+  );
+  opacity: 0.7;
+  mix-blend-mode: soft-light;
+}
+
+.home-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Nested tiles read as sunken glass rather than a second floating card, so
+   the eye keeps one clear hierarchy per panel. */
+.community-stat,
+.stat-card,
+.tile-kind {
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--sunken) 62%, transparent);
+  border: 1px solid var(--color-line);
+}
+
+/* --- Navigation ---------------------------------------------------------- */
+.nav {
+  border-bottom: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--glass-strong) 82%, transparent);
+  backdrop-filter: blur(var(--blur-strong)) saturate(1.5);
+  -webkit-backdrop-filter: blur(var(--blur-strong)) saturate(1.5);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-accent-soft) 10%, transparent);
+}
+
+/* --- Inputs -------------------------------------------------------------- */
+input,
+select,
+textarea {
+  border-radius: var(--input-radius);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--color-accent) 60%, var(--color-line));
+  box-shadow: var(--focus);
+}
+
+/* --- Phones: glass is the first thing to go ------------------------------
+   Stacked backdrop-filters are the most expensive part of this design on a
+   mid-range Android. Below 820px the fills go opaque and the blur is
+   dropped, which keeps the palette and loses the cost. */
+@media (max-width: 820px) {
+  .home-panel,
+  .glass-card,
+  .glossy-card,
+  .surface,
+  .surface-strong {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: color-mix(in srgb, var(--bg-2) 92%, var(--accent));
+  }
+
+  .nav {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--bg) 94%, var(--accent));
+  }
+}
+
+/* ===========================================================================
+   HERO — the reference direction's signature: one very large rounded
+   container on a deep indigo ground, with soft violet spheres drifting behind
+   the copy. Drawn entirely with gradients and pseudo-elements.
+   =========================================================================== */
+.village-hero {
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  background:
+    radial-gradient(80% 60% at 18% 8%, rgba(124, 58, 237, 0.42), transparent 64%),
+    radial-gradient(70% 55% at 86% 12%, rgba(79, 70, 229, 0.36), transparent 62%),
+    radial-gradient(90% 70% at 62% 100%, rgba(192, 38, 211, 0.24), transparent 68%),
+    linear-gradient(168deg, #120f26 0%, #1a1440 48%, #0d0b1e 100%);
+  color: #f2effc;
+}
+
+/* Two soft spheres. `::before` and `::after` on .village-hero were both free
+   -- the existing decoration lives on child elements -- so no markup changes. */
+.village-hero::before,
+.village-hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.village-hero::before {
+  width: clamp(180px, 30vw, 420px);
+  aspect-ratio: 1;
+  top: -12%;
+  right: -6%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(233, 213, 255, 0.9), transparent 46%),
+    linear-gradient(150deg, #a78bfa, #6d28d9 58%, #3f2a86);
+  opacity: 0.5;
+  animation: hero-orb-a 26s var(--ease-soft) infinite alternate;
+}
+
+.village-hero::after {
+  width: clamp(120px, 18vw, 250px);
+  aspect-ratio: 1;
+  bottom: -14%;
+  left: -4%;
+  background:
+    radial-gradient(circle at 36% 30%, rgba(240, 224, 255, 0.85), transparent 48%),
+    linear-gradient(150deg, #c026d3, #6d28d9 62%, #312a70);
+  opacity: 0.38;
+  animation: hero-orb-b 32s var(--ease-soft) infinite alternate;
+}
+
+@keyframes hero-orb-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-6%, 8%, 0) scale(1.1);
+  }
+}
+
+@keyframes hero-orb-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.06);
+  }
+  to {
+    transform: translate3d(8%, -7%, 0) scale(0.96);
+  }
+}
+
+/* The hero title carries the gradient. The fallback colour is declared first
+   so the text is never invisible where background-clip: text is unsupported. */
+.village-hero-title {
+  color: #ffffff;
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #e9d5ff 34%,
+    #c4b5fd 62%,
+    #ffffff 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .village-hero-title {
+    color: transparent;
+  }
+}
+
+.village-hero-glow {
+  background: radial-gradient(
+    50% 60% at 50% 100%,
+    rgba(167, 139, 250, 0.34),
+    transparent 70%
+  );
+}
+
+/* Section rhythm: generous vertical space is what makes the glass panels read
+   as separate objects floating over the aurora rather than a stacked list. */
+.home-panel {
+  padding: clamp(1.5rem, 3.5vw, 2.6rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .village-hero::before,
+  .village-hero::after {
+    animation: none !important;
+  }
+}
+
+/* Phones: the orbs are decoration on top of an already-expensive gradient
+   stack, and the hero is the first paint. Drop the smaller one and the blur. */
+@media (max-width: 820px) {
+  .village-hero {
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  }
+
+  .village-hero::before {
+    filter: none;
+    opacity: 0.34;
+  }
+
+  .village-hero::after {
+    display: none;
+  }
+}
+
+/* ===========================================================================
+   REFINEMENTS after visual review of the built page.
+   =========================================================================== */
+
+/* The hero spheres read as flat hard-edged discs at blur(2px). The reference
+   shapes are soft liquid volumes, so the blur goes up an order of magnitude
+   and the opacity comes down -- they should suggest depth behind the copy,
+   not sit on top of it as objects. */
+.village-hero::before {
+  filter: blur(46px);
+  opacity: 0.55;
+  top: -20%;
+  right: -10%;
+}
+
+.village-hero::after {
+  filter: blur(38px);
+  opacity: 0.42;
+}
+
+@media (max-width: 820px) {
+  .village-hero::before {
+    filter: blur(30px);
+    opacity: 0.4;
+  }
+}
+
+/* Photo-less people. Most of the archive has no portrait yet, so this
+   placeholder is on screen far more often than a real photo -- a saturated
+   solid disc turns a whole grid into loud violet dots. Glass disc, violet rim,
+   gradient initial: present but quiet, and clearly "no photo" rather than
+   "this is their photo". */
+.people-chip-photo {
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--sunken));
+}
+
+.people-chip-photo[data-placeholder] {
+  background:
+    radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--color-accent) 26%, transparent), transparent 68%),
+    color-mix(in srgb, var(--sunken) 88%, var(--color-accent));
+  border: 1px solid color-mix(in srgb, var(--color-accent) 34%, transparent);
+  color: var(--color-accent-ink);
+}
+
+.people-chip-photo[data-placeholder] span {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* Section eyebrows carry the accent so the violet reads as a system rather
+   than decoration confined to the hero. */
+.eyebrow {
+  color: var(--color-accent-ink);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Portrait wells. `var(--color-forest)` is now the solid brand violet, so a
+   grid of photo-less people turned into a row of loud saturated discs. Both
+   the homepage grid and the people hub get the same quiet treatment: a
+   violet-tinted glass well, with the initials in accent ink when there is no
+   photograph. A photo, when it exists, covers this entirely. */
+.home-person-photo,
+.people-chip-photo {
+  background:
+    radial-gradient(
+      120% 120% at 30% 20%,
+      color-mix(in srgb, var(--color-accent) 22%, transparent),
+      transparent 70%
+    ),
+    color-mix(in srgb, var(--sunken) 86%, var(--color-accent));
+}
+
+.home-person-photo[data-placeholder],
+.people-chip-photo[data-placeholder] {
+  border: 1px solid color-mix(in srgb, var(--color-accent) 32%, transparent);
+  color: var(--color-accent-ink);
 }

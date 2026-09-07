@@ -19,9 +19,13 @@ export function AutoDayNightSync() {
       const next = isDaytimeAtVillage() ? "light" : "dark";
       if (next === last) return;
       last = next;
-      // Apply class without changing stored preference away from system
-      document.documentElement.classList.toggle("dark", next === "dark");
-      document.documentElement.style.colorScheme = next;
+      // Apply class without changing stored preference away from system.
+      // Dark is the :root default, so `light` must be set explicitly —
+      // merely dropping `dark` would leave a daytime visitor in dark.
+      const root = document.documentElement;
+      root.classList.toggle("dark", next === "dark");
+      root.classList.toggle("light", next === "light");
+      root.style.colorScheme = next;
     };
     apply();
     const id = window.setInterval(apply, 60_000);

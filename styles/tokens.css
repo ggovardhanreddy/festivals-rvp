@@ -1,6 +1,14 @@
 /**
  * RVP Youth — Design Tokens
- * Clean, light, museum-inspired system. One gold accent from the logo.
+ *
+ * Dark-premium indigo/violet system. Dark is the default and the primary
+ * expression; light is a violet-tinted counterpart, not an afterthought.
+ * Every ink/surface pair below is checked against WCAG AA (4.5:1 for small
+ * text) by tests/unit/design-tokens.test.ts — change a value, re-run the test.
+ *
+ * The accent is a violet ramp. Semantic hues (danger, success, warning, the
+ * Instagram gradient, the rainbow logo treatment) are deliberately NOT violet:
+ * a status colour has to mean something on its own.
  */
 
 html {
@@ -10,29 +18,44 @@ html {
 }
 
 :root {
-  color-scheme: light;
-  /* Brand / color — predominantly white/light */
-  --color-bg: #fafaf8;
-  --color-bg-elevated: #ffffff;
-  --color-ink: #1a1f1c;
-  --color-muted: #5c675f;
-  --color-accent: #8f6a32;
-  --color-accent-soft: #c49855;
-  --color-forest: #1f3d2e;
-  --color-dawn: #f0d7a0;
-  --color-danger: #9b3b32;
-  --color-success: #2f6b45;
-  --color-glass: rgba(255, 255, 255, 0.72);
-  --color-glass-strong: rgba(255, 255, 255, 0.92);
-  --color-line: rgba(26, 31, 28, 0.1);
-  --color-focus-ring: color-mix(in srgb, var(--color-accent) 45%, transparent);
-  /* Gold at --color-accent measures 3.99:1 on a 16% gold tint, below the 4.5:1
-     WCAG AA threshold for small text. This darker step is for small text and
-     badges only; --color-accent stays the brand colour for larger type and
-     non-text use. Verified by tests/e2e/a11y.spec.ts. */
-  --color-accent-ink: #7a5a2a;
+  color-scheme: dark;
 
-  /* Legacy aliases used across the app */
+  /* ---- Surfaces: deep navy-indigo ground, indigo panels ---- */
+  --color-bg: #0a0a18;
+  --color-bg-elevated: #12122a;
+  --color-bg-sunken: #06060f;
+
+  /* ---- Ink ---- */
+  --color-ink: #eceafc;
+  --color-ink-soft: #d5d2ee;
+  --color-muted: #a5a2c8;
+
+  /* ---- Violet accent ramp ---- */
+  --color-accent: #a78bfa;
+  --color-accent-soft: #c4b5fd;
+  --color-accent-ink: #c4b5fd;
+  --color-accent-deep: #6d28d9;
+  --color-violet: #8b5cf6;
+  --color-indigo: #4f46e5;
+  --color-magenta: #c026d3;
+  --color-dawn: #e9d5ff;
+  /* Legacy name kept so nothing dangles; it is the solid-fill brand colour. */
+  --color-forest: #6d28d9;
+  --color-gold: #a78bfa;
+
+  /* ---- Semantic ---- */
+  --color-danger: #f87171;
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+
+  /* ---- Glass ---- */
+  --color-glass: rgba(24, 22, 52, 0.62);
+  --color-glass-strong: rgba(24, 22, 52, 0.88);
+  --color-line: rgba(196, 181, 253, 0.16);
+  --color-line-strong: rgba(196, 181, 253, 0.3);
+  --color-focus-ring: color-mix(in srgb, var(--color-accent) 55%, transparent);
+
+  /* ---- Legacy aliases used across the app ---- */
   --bg: var(--color-bg);
   --bg-2: var(--color-bg-elevated);
   --ink: var(--color-ink);
@@ -43,12 +66,15 @@ html {
   --glass: var(--color-glass);
   --glass-strong: var(--color-glass-strong);
   --line: var(--color-line);
+  --sunken: var(--color-bg-sunken);
   --focus: 0 0 0 3px var(--color-focus-ring);
+  --ok-bg: color-mix(in srgb, var(--color-success) 14%, transparent);
 
-  /* Typography — Telugu faces come first in every stack so Telugu glyphs
-     resolve to Noto Sans Telugu instead of an arbitrary device fallback.
-     Latin text is unaffected: Noto Sans Telugu has no Latin coverage, so the
-     browser falls through to Playfair / Poppins for Latin characters. */
+  /* ---- Typography ----
+     Telugu faces come first in every stack so Telugu glyphs resolve to
+     Noto Sans Telugu instead of an arbitrary device fallback. Latin text is
+     unaffected: Noto Sans Telugu has no Latin coverage, so the browser falls
+     through to Playfair / Poppins for Latin characters. */
   --font-telugu-stack: var(--font-telugu), "Noto Sans Telugu", Gautami, sans-serif;
   --font-display: var(--font-playfair), var(--font-telugu), Georgia, "Times New Roman", serif;
   --font-body: var(--font-poppins), var(--font-telugu), system-ui, sans-serif;
@@ -74,7 +100,7 @@ html {
   --leading-relaxed: 1.7;
   --tracking-eyebrow: 0.22em;
 
-  /* Spacing scale */
+  /* ---- Spacing ---- */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
@@ -84,24 +110,34 @@ html {
   --space-7: 6rem;
   --page-gutter: max(1.25rem, 4vw);
   --content-max: 1180px;
+  --max-width: 1180px;
 
-  /* Radius — 12–16px cards */
-  --radius-sm: 12px;
-  --radius-md: 14px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  /* ---- Radius: large, soft containers ---- */
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 34px;
+  --radius-2xl: 44px;
   --radius-pill: 999px;
   --radius: var(--radius-lg);
 
-  /* Soft elevation */
-  --elevation-1: 0 4px 16px rgba(26, 31, 28, 0.06);
-  --elevation-2: 0 12px 32px rgba(26, 31, 28, 0.08);
-  --elevation-3: 0 20px 48px rgba(26, 31, 28, 0.12);
+  /* ---- Elevation: shadow plus a violet rim, so cards read as glass ---- */
+  --elevation-1:
+    0 2px 10px rgba(3, 2, 12, 0.5),
+    0 0 0 1px rgba(196, 181, 253, 0.07);
+  --elevation-2:
+    0 14px 40px rgba(3, 2, 12, 0.55),
+    0 0 0 1px rgba(196, 181, 253, 0.09);
+  --elevation-3:
+    0 28px 70px rgba(3, 2, 12, 0.62),
+    0 0 0 1px rgba(196, 181, 253, 0.12);
   --shadow: var(--elevation-2);
-  --blur-glass: 18px;
-  --blur-strong: 22px;
+  --glow-violet: 0 0 34px rgba(139, 92, 246, 0.34);
+  --glow-violet-strong: 0 0 56px rgba(139, 92, 246, 0.5);
+  --blur-glass: 20px;
+  --blur-strong: 30px;
 
-  /* Motion — smooth, not flashy */
+  /* ---- Motion ---- */
   --motion-fast: 160ms;
   --motion-base: 280ms;
   --motion-slow: 500ms;
@@ -117,62 +153,117 @@ html {
   --icon-sm: 16px;
   --icon-md: 22px;
   --icon-lg: 42px;
-  --control-height: 42px;
+  --control-height: 44px;
 
-  --btn-bg: var(--color-forest);
-  --btn-fg: #f7f3ea;
+  /* Both gradient endpoints are checked against --btn-fg at 4.5:1. A lighter
+     violet (#8b5cf6) only reaches 3.92:1, so the ramp starts at #7c3aed. */
+  --btn-bg: linear-gradient(135deg, #7c3aed, #4f46e5);
+  --btn-fg: #f7f5ff;
   --btn-ghost-bg: transparent;
   --btn-ghost-fg: var(--color-ink);
-  --btn-radius: var(--radius-md);
-  --btn-padding-x: 1.25rem;
-  --btn-padding-y: 0.75rem;
+  --btn-radius: var(--radius-pill);
+  --btn-padding-x: 1.4rem;
+  --btn-padding-y: 0.8rem;
 
-  --card-bg: var(--color-bg-elevated);
-  --card-bg-strong: var(--color-bg-elevated);
+  --card-bg: var(--color-glass);
+  --card-bg-strong: var(--color-glass-strong);
+  --card: var(--color-glass);
   --card-radius: var(--radius-lg);
   --card-padding: var(--space-4);
   --card-shadow: var(--elevation-1);
 
-  --input-bg: #ffffff;
+  --input-bg: rgba(18, 18, 42, 0.72);
   --input-fg: var(--color-ink);
   --input-border: var(--color-line);
   --input-radius: var(--radius-md);
-  --input-padding-x: 0.9rem;
-  --input-padding-y: 0.65rem;
+  --input-padding-x: 1rem;
+  --input-padding-y: 0.7rem;
   --input-focus-ring: var(--focus);
 
-  --glow: none;
+  /* ---- Ambient field: the aurora behind everything ---- */
+  --glow:
+    radial-gradient(58% 44% at 14% 8%, rgba(109, 40, 217, 0.42), transparent 68%),
+    radial-gradient(52% 40% at 88% 4%, rgba(79, 70, 229, 0.34), transparent 66%),
+    radial-gradient(60% 50% at 78% 82%, rgba(192, 38, 211, 0.22), transparent 70%),
+    radial-gradient(48% 38% at 6% 74%, rgba(139, 92, 246, 0.2), transparent 68%);
+  --grain-color: rgba(196, 181, 253, 0.075);
   --hero-fade: linear-gradient(
     180deg,
-    rgba(26, 31, 28, 0.35) 0%,
-    rgba(26, 31, 28, 0.55) 45%,
-    rgba(250, 250, 248, 0.95) 100%
+    rgba(10, 10, 24, 0.2) 0%,
+    rgba(10, 10, 24, 0.66) 55%,
+    var(--color-bg) 100%
   );
 }
 
-.dark {
-  color-scheme: dark;
-  --color-bg: #0f1411;
-  --color-bg-elevated: #17201a;
-  --color-ink: #e8efe9;
-  --color-muted: #a8b8ae;
-  --color-accent: #d4a45a;
-  --color-accent-soft: #f0c98a;
-  --color-accent-ink: #e2b877;
-  --color-forest: #2a4a38;
-  --color-glass: rgba(23, 32, 26, 0.72);
-  --color-glass-strong: rgba(23, 32, 26, 0.9);
-  --color-line: rgba(232, 239, 233, 0.12);
-  --elevation-1: 0 4px 16px rgba(0, 0, 0, 0.28);
-  --elevation-2: 0 12px 32px rgba(0, 0, 0, 0.4);
-  --elevation-3: 0 20px 48px rgba(0, 0, 0, 0.5);
-  --glow: none;
+/* ---------------------------------------------------------------------------
+   Light theme — the same violet identity at high key. Kept fully working:
+   the theme toggle is an existing feature, not a legacy artefact.
+   --------------------------------------------------------------------------- */
+.light {
+  color-scheme: light;
+
+  --color-bg: #f7f5ff;
+  --color-bg-elevated: #ffffff;
+  --color-bg-sunken: #ece8fb;
+
+  --color-ink: #17143a;
+  --color-ink-soft: #2e2860;
+  --color-muted: #565080;
+
+  --color-accent: #6d28d9;
+  --color-accent-soft: #8b5cf6;
+  --color-accent-ink: #5b21b6;
+  --color-accent-deep: #4c1d95;
+  --color-violet: #7c3aed;
+  --color-indigo: #4f46e5;
+  --color-magenta: #a21caf;
+  --color-dawn: #ddd0f7;
+  --color-forest: #4c1d95;
+  --color-gold: #6d28d9;
+
+  --color-danger: #b91c1c;
+  --color-success: #15803d;
+  --color-warning: #b45309;
+
+  --color-glass: rgba(255, 255, 255, 0.72);
+  --color-glass-strong: rgba(255, 255, 255, 0.93);
+  --color-line: rgba(23, 20, 58, 0.1);
+  --color-line-strong: rgba(23, 20, 58, 0.2);
+
+  --elevation-1:
+    0 2px 10px rgba(35, 22, 84, 0.07),
+    0 0 0 1px rgba(35, 22, 84, 0.045);
+  --elevation-2:
+    0 14px 40px rgba(35, 22, 84, 0.1),
+    0 0 0 1px rgba(35, 22, 84, 0.055);
+  --elevation-3:
+    0 28px 70px rgba(35, 22, 84, 0.14),
+    0 0 0 1px rgba(35, 22, 84, 0.07);
+  --glow-violet: 0 0 30px rgba(124, 58, 237, 0.22);
+  --glow-violet-strong: 0 0 50px rgba(124, 58, 237, 0.32);
+
+  --input-bg: #ffffff;
+  --btn-bg: linear-gradient(135deg, #6d28d9, #4338ca);
+  --btn-fg: #f7f5ff;
+
+  --glow:
+    radial-gradient(58% 44% at 14% 8%, rgba(139, 92, 246, 0.17), transparent 68%),
+    radial-gradient(52% 40% at 88% 4%, rgba(79, 70, 229, 0.13), transparent 66%),
+    radial-gradient(60% 50% at 78% 82%, rgba(192, 38, 211, 0.1), transparent 70%),
+    radial-gradient(48% 38% at 6% 74%, rgba(109, 40, 217, 0.09), transparent 68%);
+  --grain-color: rgba(35, 22, 84, 0.055);
   --hero-fade: linear-gradient(
     180deg,
-    rgba(15, 20, 17, 0.25) 0%,
-    rgba(15, 20, 17, 0.7) 55%,
-    var(--color-bg) 100%
+    rgba(23, 20, 58, 0.28) 0%,
+    rgba(23, 20, 58, 0.5) 45%,
+    rgba(247, 245, 255, 0.96) 100%
   );
-  --btn-fg: #f7f3ea;
-  --input-bg: var(--color-bg-elevated);
+}
+
+/* The theme provider historically toggled a `.dark` class. Dark is now the
+   :root default, so `.dark` needs no overrides — but the selector is kept as a
+   no-op anchor so an element that still carries the class behaves correctly
+   rather than inheriting a stale light palette. */
+.dark {
+  color-scheme: dark;
 }
