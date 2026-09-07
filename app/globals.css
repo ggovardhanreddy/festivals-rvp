@@ -15788,3 +15788,58 @@ textarea:focus-visible {
   border: 1px solid color-mix(in srgb, var(--color-accent) 32%, transparent);
   color: var(--color-accent-ink);
 }
+
+/* ===========================================================================
+   HERO PHOTOGRAPH — framing for the landscape backdrop.
+   =========================================================================== */
+
+/* The backdrop is a wide 16:9 image in a hero that is nearly square on a
+   tablet and strongly portrait on a phone. `object-fit: cover` therefore
+   crops horizontally, and only the x focal point matters: at 390px only about
+   29% of the image width is on screen, so the default 65% lands on foliage
+   and empty sky and drops the temple and the road entirely. Pushing x right on
+   narrow screens keeps recognisable subject matter in frame. */
+@media (max-width: 640px) {
+  .village-hero-photo img {
+    object-position: 80% 50%;
+    transform-origin: 80% 50%;
+  }
+}
+
+/* Between phone and desktop the visible band is wide enough for the pond and
+   the temple together, so the default focal point holds. */
+@media (min-width: 641px) and (max-width: 920px) {
+  .village-hero-photo img {
+    object-position: 68% 50%;
+    transform-origin: 68% 50%;
+  }
+}
+
+/* The scrim was tuned for a darker portrait photograph. Over a bright sunrise
+   it flattened the image to dusk, losing the light that is the whole reason to
+   use it. Eased on the right-hand side, where no copy sits; the left stays
+   dark enough to carry the heading, which is what the scrim is for. */
+.village-hero-scrim {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(12, 12, 26, 0.84) 0%,
+      rgba(12, 12, 26, 0.52) 52%,
+      rgba(12, 12, 26, 0.26) 100%
+    ),
+    linear-gradient(180deg, rgba(12, 12, 26, 0.22), rgba(18, 15, 38, 0.62));
+}
+
+/* On a phone the copy sits over the middle of the frame rather than the left
+   third, so the horizontal ramp is no help and a flat veil is what keeps the
+   heading legible. */
+@media (max-width: 640px) {
+  .village-hero-scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(12, 12, 26, 0.42) 0%,
+      rgba(12, 12, 26, 0.66) 45%,
+      rgba(12, 12, 26, 0.82) 100%
+    );
+  }
+}

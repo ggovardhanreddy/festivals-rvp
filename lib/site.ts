@@ -247,14 +247,26 @@ export const FOOTER_PRESERVE =
   "Preserving Our Village for Future Generations";
 
 /**
- * Photographic backdrop for the homepage hero — the village aerial already
- * in public/brand/. A scrim keeps the heading readable over the photograph.
+ * Decorative backdrop for the homepage hero, from public/brand/. A scrim keeps
+ * the heading readable over it.
+ *
+ * This is an ILLUSTRATION of a South Indian village, not a photograph of
+ * Reddivaripalli: it is a ground-level view, and its temple is a large
+ * Dravidian gopuram rather than the small shrines the village actually has
+ * (Sri Ramalayam, Sri Shiva Temple, Sri Mulasthanamma and the rest). The alt
+ * text below says so deliberately. This is an archive, and a visitor — or a
+ * descendant reading it in thirty years — must not be able to mistake artwork
+ * for a record of the place. If a real photograph of the village replaces this
+ * file, update HOME_HERO_PHOTO_ALT to describe that photograph instead.
  */
 export const HOME_HERO_PHOTO: string | null = "/brand/village-aerial.webp";
 
-/** Alt text for HOME_HERO_PHOTO. Describe the actual photograph when set. */
+/**
+ * Alt text for HOME_HERO_PHOTO. Describe what the image actually is, and never
+ * assert that a decorative image documents the village.
+ */
 export const HOME_HERO_PHOTO_ALT =
-  "Aerial view of Reddivaripalli village — fields, houses and the temple at the heart of the settlement";
+  "Illustration of a South Indian village at sunrise — paddy fields, a temple pond and a temple tower beneath low hills";
 
 /** Homepage identity lines. */
 export const HOME_HERO_TITLE = "REDDIVARIPALLI";
