@@ -36,7 +36,7 @@ export function HomeBelowFold({
   liveSlugs?: string[];
 }) {
   return (
-    <div className="home">
+    <div className="home home-heritage-grid">
       <VillageUpdate seed={announcements} />
 
       <Reveal id="overview">{villageIntro}</Reveal>

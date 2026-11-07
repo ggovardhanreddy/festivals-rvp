@@ -135,6 +135,11 @@ export function VillageHero() {
           <m.p className="village-hero-support" {...rise(0.18)}>
             {t("home.hero.support", HOME_HERO_SUPPORT)}
           </m.p>
+          <m.ul className="village-hero-highlights" {...rise(0.22)}>
+            <li>{t("nav.templesFestivals", "Temples & Festivals")}</li>
+            <li>{t("nav.gallery", "Gallery")}</li>
+            <li>{t("nav.people", "Community")}</li>
+          </m.ul>
           <m.div className="village-hero-cta" {...rise(0.25)}>
             <Link className="btn" href="/about/">
               {t("home.exploreOurVillage")} <span aria-hidden>→</span>

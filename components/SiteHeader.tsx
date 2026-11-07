@@ -292,7 +292,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="nav nav-sticky" data-scrolled={scrolled || undefined}>
+      <header className="nav nav-sticky nav-heritage" data-scrolled={scrolled || undefined}>
         <Link href="/" className="brand-link" aria-label="Reddivaripalli home">
           <Logo />
         </Link>
