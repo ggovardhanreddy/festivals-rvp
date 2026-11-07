@@ -45,7 +45,7 @@ export function SiteFooter() {
         </div>
 
         <div className="footer-col">
-          <p className="footer-heading">Reddivaripalli</p>
+          <p className="footer-heading">{t("primary-nav")}</p>
           <div className="footer-links">
             {NAV.map((item) => (
               <Link key={item.href} href={item.href}>
@@ -53,6 +53,12 @@ export function SiteFooter() {
               </Link>
             ))}
           </div>
+        </div>
+        <div className="footer-col footer-col--heritage">
+          <p className="footer-heading">{t("home.ourVillage")}</p>
+          <p className="muted footer-heritage-note">
+            {t("footer.preserve", FOOTER_PRESERVE)}
+          </p>
         </div>
       </div>
 

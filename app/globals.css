@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
+@import "../styles/heritage-redesign.css";
 
 /* Theme palettes -- both light and dark -- live in styles/tokens.css. Nothing
    theme-specific belongs here: a second `.dark` block is exactly how the

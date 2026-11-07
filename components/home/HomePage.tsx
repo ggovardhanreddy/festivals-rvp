@@ -28,7 +28,7 @@ export function HomePage() {
   const liveSlugs = bucketsWithContent();
 
   return (
-    <main>
+    <main className="home-main heritage-home">
       <VillageHero />
       <HomeBelowFold
         villageIntro={
