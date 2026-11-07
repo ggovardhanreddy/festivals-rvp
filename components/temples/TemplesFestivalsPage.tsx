@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { FestivalCalendar } from "@/components/home/FestivalCalendar";
 import { Reveal } from "@/components/Reveal";
@@ -13,6 +15,7 @@ import {
 import { loadVillageHeritage } from "@/lib/village-heritage";
 import { VILLAGE_MAPS_URL } from "@/lib/site";
 import type { SiteEvent } from "@/lib/types";
+import { useVillageNow } from "@/lib/use-village-now";
 
 const TEMPLE_PHOTOS: Record<string, string> = {
   "Sri Ramalayam": "/brand/rama-navami-hero.webp",
@@ -79,15 +82,18 @@ export function TemplesFestivalsPage({
     villagePractices: isTe ? "గ్రామ ఆచారాలు" : "Village practices",
   };
   const heritage = loadVillageHeritage();
+  const now = useVillageNow();
   const festivalEvents = festivals.filter((event) => event.category === "festival");
   const upcomingFestivals = festivalEvents
-    .filter((event) => eventPhase(event.date, event.endDate) !== "completed")
+    .filter((event) => eventPhase(event.date, event.endDate, now) !== "completed")
     .sort((a, b) => a.date.localeCompare(b.date));
   const completedFestivals = festivalEvents
-    .filter((event) => eventPhase(event.date, event.endDate) === "completed")
+    .filter((event) => eventPhase(event.date, event.endDate, now) === "completed")
     .sort((a, b) => b.date.localeCompare(a.date));
   const nextFestivals = upcoming.filter(
-    (event) => event.category === "festival" && eventPhase(event.date, event.endDate) !== "completed",
+    (event) =>
+      event.category === "festival" &&
+      eventPhase(event.date, event.endDate, now) !== "completed",
   );
 
   return (

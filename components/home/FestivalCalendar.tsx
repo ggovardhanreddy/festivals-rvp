@@ -13,6 +13,7 @@ import { Reveal } from "@/components/Reveal";
 import type { SiteEvent } from "@/lib/types";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { LOCALE_TAG } from "@/lib/i18n/config";
+import { useVillageNow } from "@/lib/use-village-now";
 
 const FALLBACK_IMAGE = "/brand/village-aerial.webp";
 
@@ -28,6 +29,7 @@ export function FestivalCalendar({
 }) {
   const { t, lang } = useUiLang();
   const tag = LOCALE_TAG[lang];
+  const now = useVillageNow();
   if (!festivals.length) return null;
 
   const live = new Set(liveSlugs);
@@ -43,13 +45,17 @@ export function FestivalCalendar({
       bySlug.set(key, event);
       continue;
     }
-    const existingPhase = eventPhase(existing.date, existing.endDate);
-    const nextPhase = eventPhase(event.date, event.endDate);
+    const existingPhase = eventPhase(existing.date, existing.endDate, now);
+    const nextPhase = eventPhase(event.date, event.endDate, now);
     if (existingPhase === "completed" && nextPhase !== "completed") bySlug.set(key, event);
   }
 
   const withStatus = [...bySlug.values()]
-    .map((event) => ({ event, days: daysUntil(event.date), phase: eventPhase(event.date, event.endDate) }))
+    .map((event) => ({
+      event,
+      days: daysUntil(event.date, now),
+      phase: eventPhase(event.date, event.endDate, now),
+    }))
     .sort((a, b) => {
       const aRank = a.phase === "today" ? -1 : a.phase === "upcoming" ? a.days : 10_000 + Math.abs(a.days);
       const bRank = b.phase === "today" ? -1 : b.phase === "upcoming" ? b.days : 10_000 + Math.abs(b.days);
@@ -91,7 +97,7 @@ export function FestivalCalendar({
               {isNext && hasUpcoming && phase !== "completed" ? (
                 <p className="festival-card-badge">{t("home.nextUp")}</p>
               ) : null}
-              <p className="eyebrow">{eventStatusLabel(event.date, event.endDate)}</p>
+              <p className="eyebrow">{eventStatusLabel(event.date, event.endDate, now)}</p>
               <h3>{(lang === "te" && event.titleTe) || event.title}</h3>
               <p className="muted">{formatEventDateRange(event.date, event.endDate, tag)}</p>
               <p className="lede">{event.description}</p>
