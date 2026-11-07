@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { m, useReducedMotion } from "framer-motion";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { useEffect, useRef } from "react";
@@ -13,6 +14,12 @@ import {
   HOME_HERO_SUPPORT,
   HOME_HERO_TITLE,
 } from "@/lib/site";
+import { Progressive3D } from "@/components/three/Progressive3D";
+
+const VillageLandingScene = dynamic(
+  () => import("@/components/three/VillageLandingScene").then((m) => m.VillageLandingScene),
+  { ssr: false },
+);
 
 /**
  * Homepage hero.
@@ -110,6 +117,9 @@ export function VillageHero() {
           <div className="village-hero-scrim" aria-hidden />
         </div>
       ) : null}
+      <Progressive3D className="village-hero-3d-wrap">
+        <VillageLandingScene />
+      </Progressive3D>
       <div className="village-hero-glow" aria-hidden />
       <div className="village-hero-inner">
         {HOME_HERO_PHOTO ? null : (
