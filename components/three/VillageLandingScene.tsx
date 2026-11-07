@@ -1,7 +1,9 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, OrbitControls, Stars } from "@react-three/drei";
+import { useMemo } from "react";
+import { Vector3 } from "three";
 
 function Huts() {
   return (
@@ -22,9 +24,21 @@ function Huts() {
   );
 }
 
-export function VillageLandingScene() {
+function CameraDolly({ entered }: { entered: boolean }) {
+  const { camera } = useThree();
+  const start = useMemo(() => new Vector3(0, 3.4, 9.4), []);
+  const target = useMemo(() => new Vector3(0, 2.1, 6.2), []);
+  useFrame(() => {
+    const to = entered ? target : start;
+    camera.position.lerp(to, 0.028);
+    camera.lookAt(0, 0.65, -1.8);
+  });
+  return null;
+}
+
+export function VillageLandingScene({ entered = true }: { entered?: boolean }) {
   return (
-    <Canvas className="village-landing-3d" camera={{ position: [0, 2.1, 6.2], fov: 43 }}>
+    <Canvas className="village-landing-3d" camera={{ position: [0, 3.4, 9.4], fov: 43 }}>
       <color attach="background" args={["#0f2c22"]} />
       <fog attach="fog" args={["#0f2c22", 6, 15]} />
       <ambientLight intensity={0.5} />
@@ -46,6 +60,7 @@ export function VillageLandingScene() {
         <cylinderGeometry args={[0.2, 0.3, 1.1, 18]} />
         <meshStandardMaterial color="#e2c78b" />
       </mesh>
+      <CameraDolly entered={entered} />
       <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.25} maxPolarAngle={1.35} minPolarAngle={0.95} />
     </Canvas>
   );

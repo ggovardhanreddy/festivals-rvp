@@ -1,10 +1,12 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { FestivalCalendar } from "@/components/home/FestivalCalendar";
 import { Reveal } from "@/components/Reveal";
 import { MediaImage } from "@/components/media/MediaImage";
 import { ProtectedMedia } from "@/components/media/ProtectedMedia";
+import { Progressive3D } from "@/components/three/Progressive3D";
 import { withBase } from "@/lib/base";
 import { eventPhase } from "@/lib/dates";
 import {
@@ -16,6 +18,14 @@ import { loadVillageHeritage } from "@/lib/village-heritage";
 import { VILLAGE_MAPS_URL } from "@/lib/site";
 import type { SiteEvent } from "@/lib/types";
 import { useVillageNow } from "@/lib/use-village-now";
+
+const TempleShowcaseScene = dynamic(
+  () =>
+    import("@/components/three/TempleShowcaseScene").then(
+      (m) => m.TempleShowcaseScene,
+    ),
+  { ssr: false },
+);
 
 const TEMPLE_PHOTOS: Record<string, string> = {
   "Sri Ramalayam": "/brand/rama-navami-hero.webp",
@@ -171,6 +181,11 @@ export function TemplesFestivalsPage({
     culturalLede: isTe
       ? "రెడ్డివారిపల్లి సంప్రదాయ సాంస్కృతిక కార్యక్రమాలకు పేరుగాంచింది. వీటిలో అనేక ఆచారాలు శ్రీ జి. కొండారెడ్డి ప్రోత్సాహంతో ప్రారంభమై నేటికీ కొనసాగుతున్నాయి."
       : heritage.culturalEvents.lede,
+    temple3dEyebrow: isTe ? "ఆలయ దర్శనం" : "Temple showcase",
+    temple3dTitle: isTe ? "సంకల్ప 3D వారసత్వ దృశ్యం" : "Conceptual 3D heritage view",
+    temple3dLede: isTe
+      ? "ఇది అసలు ఆలయ నిర్మాణానికి ఖచ్చిత ప్రతిరూపం కాదు. వాస్తవ ఫోటోలు, ధృవీకరించిన సమాచారం ఆధారంగా రూపొందించిన భావ దృశ్యం."
+      : "This is an illustrative model, not a verified reconstruction. Real photographs and documented details remain the source of truth.",
   };
   const now = useVillageNow();
   const festivalEvents = festivals.filter((event) => event.category === "festival");
@@ -261,6 +276,22 @@ export function TemplesFestivalsPage({
             );
           })}
         </div>
+      </Reveal>
+
+      <Reveal className="section" id="temple-3d">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">{labels.temple3dEyebrow}</p>
+            <h2>{labels.temple3dTitle}</h2>
+            <p className="lede">{labels.temple3dLede}</p>
+          </div>
+        </div>
+        <Progressive3D
+          className="home-temple-3d-card"
+          fallback={<div className="home-temple-3d-fallback" />}
+        >
+          <TempleShowcaseScene />
+        </Progressive3D>
       </Reveal>
 
       {festivalEvents.length ? (

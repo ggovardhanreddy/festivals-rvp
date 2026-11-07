@@ -84,4 +84,27 @@ describe("production regression guards", () => {
     const src = fs.readFileSync(teEvents, "utf8");
     expect(src).toContain("EventsBirthdaysHub");
   });
+
+  it("keeps cinematic intro gate and enter-village CTA on hero", () => {
+    const src = fs.readFileSync(
+      path.join(process.cwd(), "components/home/VillageHero.tsx"),
+      "utf8",
+    );
+    expect(src).toContain("village-hero-intro");
+    expect(src).toContain("Enter Village");
+    expect(src).toContain("VillageLandingScene entered={entered}");
+  });
+
+  it("marks 3D temple/map experiences as conceptual or illustrative", () => {
+    const temples = fs.readFileSync(
+      path.join(process.cwd(), "components/temples/TemplesFestivalsPage.tsx"),
+      "utf8",
+    );
+    expect(temples).toContain("illustrative model");
+    const map = fs.readFileSync(
+      path.join(process.cwd(), "components/three/VillageMapScene.tsx"),
+      "utf8",
+    );
+    expect(map).toContain("Historic temple remembrance site");
+  });
 });
