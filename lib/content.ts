@@ -203,6 +203,34 @@ export const cmsAlbumFolders = () => CMS_ALBUMS;
 export { albumHref } from "./site";
 export { slugify };
 
+export function selectLatestMemories(
+  items: MediaWithAlbum[],
+  limit = 6,
+): MediaWithAlbum[] {
+  if (limit <= 0) return [];
+  const sorted = [...items].sort(
+    (a, b) =>
+      String(b.date || b.album.year).localeCompare(
+        String(a.date || a.album.year),
+      ) || String(a.id).localeCompare(String(b.id)),
+  );
+  const picked: MediaWithAlbum[] = [];
+  const seenAlbums = new Set<string>();
+  for (const item of sorted) {
+    if (picked.length >= limit) break;
+    const albumKey = `${item.album.year}:${item.album.slug}`;
+    if (seenAlbums.has(albumKey)) continue;
+    picked.push(item);
+    seenAlbums.add(albumKey);
+  }
+  if (picked.length >= limit) return picked;
+  for (const item of sorted) {
+    if (picked.length >= limit) break;
+    if (!picked.some((p) => p.id === item.id)) picked.push(item);
+  }
+  return picked.slice(0, limit);
+}
+
 /**
  * Newest public photographs, for the homepage "Latest Memories" strip.
  *
@@ -211,18 +239,12 @@ export { slugify };
  * year and media-type filters, stays on /gallery/.
  */
 export function latestMemories(limit = 6): MediaWithAlbum[] {
-  return liveAlbums()
+  const photos = liveAlbums()
     .filter((album) => album.bucket !== "fun-trips")
     .flatMap((album) =>
       album.media
         .filter((media) => media.type === "image")
         .map((media) => ({ ...media, album })),
-    )
-    .sort(
-      (a, b) =>
-        String(b.date || b.album.year).localeCompare(
-          String(a.date || a.album.year),
-        ) || String(a.id).localeCompare(String(b.id)),
-    )
-    .slice(0, limit);
+    );
+  return selectLatestMemories(photos, limit);
 }

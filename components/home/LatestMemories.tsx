@@ -4,7 +4,7 @@ import Link from "next/link";
 import { MediaImage } from "@/components/media/MediaImage";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { StaggerChildren, StaggerItem } from "@/components/motion";
-import { BUCKET_TITLE_TE } from "@/lib/site";
+import { BUCKET_TITLE_TE, albumHref } from "@/lib/site";
 import type { Album, MediaWithAlbum } from "@/lib/types";
 
 /**
@@ -71,9 +71,10 @@ export function LatestMemories({ items }: { items: MediaWithAlbum[] }) {
       >
         {items.map((item, index) => (
           <StaggerItem as="li" key={item.id}>
-            <Link className="home-memory-tile" href="/gallery/">
+            <Link className="home-memory-tile" href={albumHref(item.album)}>
               <MediaImage
                 src={item.thumb || item.file}
+                fallback="/logo/logo-mark.webp"
                 // Distinct per tile: six identical alt strings read as six
                 // identical links to anyone using a screen reader.
                 alt={t("home.memories.photoAlt", undefined, {
