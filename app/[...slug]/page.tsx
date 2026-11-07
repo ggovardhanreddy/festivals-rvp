@@ -918,6 +918,7 @@ export default async function ArchiveRoute({
   }
 
   if (path === "temples") {
+    const festivalEvents = loadEvents().filter((e) => e.category === "festival");
     const liveSlugs = [
       ...new Set(
         publicAlbums()
@@ -939,9 +940,9 @@ export default async function ArchiveRoute({
           secondaryLabel="Our Village"
         />
         <TemplesFestivalsPage
-          upcoming={upcomingEvents(8)}
+          upcoming={festivalEvents}
           liveSlugs={liveSlugs}
-          festivals={loadEvents().filter((e) => e.category === "festival")}
+          festivals={festivalEvents}
         />
       </main>
     );

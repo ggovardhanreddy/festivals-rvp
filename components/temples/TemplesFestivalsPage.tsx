@@ -55,6 +55,13 @@ export function TemplesFestivalsPage({
   festivals?: SiteEvent[];
 }) {
   const heritage = loadVillageHeritage();
+  const festivalEvents = festivals.filter((event) => event.category === "festival");
+  const upcomingFestivals = festivalEvents
+    .filter((event) => eventPhase(event.date, event.endDate) !== "completed")
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const completedFestivals = festivalEvents
+    .filter((event) => eventPhase(event.date, event.endDate) === "completed")
+    .sort((a, b) => b.date.localeCompare(a.date));
   const nextFestivals = upcoming.filter(
     (event) => event.category === "festival" && eventPhase(event.date, event.endDate) !== "completed",
   );
@@ -91,7 +98,15 @@ export function TemplesFestivalsPage({
                   </div>
                 ) : (
                   <div className="temple-card-photo temple-card-photo--empty">
-                    <span>Information not yet provided</span>
+                    <img
+                      src={withBase("/logo/logo-mark.webp")}
+                      alt={`Authentic photo pending for ${temple.name}`}
+                      width={220}
+                      height={220}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span>Authentic temple photograph will be added when available</span>
                   </div>
                 )}
                 <div className="temple-card-body">
@@ -124,7 +139,7 @@ export function TemplesFestivalsPage({
         </div>
       </Reveal>
 
-      {festivals.length ? (
+      {festivalEvents.length ? (
         <Reveal className="section" id="upcoming-festivals">
           <div className="section-head">
             <div>
@@ -136,7 +151,18 @@ export function TemplesFestivalsPage({
               </p>
             </div>
           </div>
-          <FestivalCalendar festivals={festivals} liveSlugs={liveSlugs} embedded />
+          {upcomingFestivals.length ? (
+            <>
+              <p className="eyebrow">Upcoming & ongoing</p>
+              <FestivalCalendar festivals={upcomingFestivals} liveSlugs={liveSlugs} embedded />
+            </>
+          ) : null}
+          {completedFestivals.length ? (
+            <>
+              <p className="eyebrow">Completed</p>
+              <FestivalCalendar festivals={completedFestivals} liveSlugs={liveSlugs} embedded />
+            </>
+          ) : null}
         </Reveal>
       ) : nextFestivals.length ? (
         <Reveal className="section" id="upcoming-festivals">
