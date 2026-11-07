@@ -38,6 +38,18 @@ export function LanguageSwitcher({ className }: { className?: string }) {
               </span>
             );
           }
+          if (!exact) {
+            return (
+              <span
+                key={locale}
+                className="lang-switch-btn"
+                aria-disabled="true"
+                title={t("lang.notTranslated")}
+              >
+                {label}
+              </span>
+            );
+          }
           return (
             <Link
               key={locale}
@@ -47,13 +59,10 @@ export function LanguageSwitcher({ className }: { className?: string }) {
               lang={locale}
               onClick={() => setLang(locale)}
               title={
-                exact
-                  ? t("lang.switchTo", undefined, { language: label })
-                  : t("lang.notTranslated")
+                t("lang.switchTo", undefined, { language: label })
               }
             >
               {label}
-              {exact ? null : <span className="sr-only"> — {t("lang.notTranslated")}</span>}
             </Link>
           );
         })}
