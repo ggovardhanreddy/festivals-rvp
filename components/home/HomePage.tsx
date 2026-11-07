@@ -1,6 +1,6 @@
 import { bucketsWithContent, latestMemories } from "@/lib/content";
 import { activeMembers } from "@/lib/members";
-import { loadAnnouncements, loadEvents } from "@/lib/events";
+import { festivalEvents, loadAnnouncements } from "@/lib/events";
 import { loadDevelopments } from "@/lib/developments";
 import { toMediaCards } from "@/lib/media-card";
 import { VillageHero } from "@/components/home/VillageHero";
@@ -22,7 +22,7 @@ import { HomeContact } from "@/components/home/HomeContact";
 export function HomePage() {
   const memories = toMediaCards(latestMemories(6));
   const members = activeMembers();
-  const nextEvents = loadEvents().filter((event) => event.category === "festival");
+  const nextEvents = festivalEvents();
   const announcements = loadAnnouncements();
   const developments = loadDevelopments();
   const liveSlugs = bucketsWithContent();
