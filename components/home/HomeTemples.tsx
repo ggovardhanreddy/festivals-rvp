@@ -14,6 +14,7 @@ const TEMPLE_PHOTOS: Record<string, string> = {
   "Sri Devapatlamma Temple": "/brand/devapatlamma-hero.webp",
   "Sri Mulasthanamma Temple": "/brand/mulasthanamma.webp",
 };
+const TEMPLE_FALLBACK = "/logo/logo-mark.webp";
 
 export function HomeTemples() {
   const { t } = useUiLang();
@@ -43,16 +44,19 @@ export function HomeTemples() {
                   <ProtectedMedia as="span">
                     <img
                       src={withBase(TEMPLE_PHOTOS[temple.name])}
-                      alt=""
+                      alt={`${temple.name} — Reddivaripalli`}
                       width={400}
                       height={280}
                       loading="lazy"
                       draggable={false}
+                      onError={(event) => {
+                        event.currentTarget.src = withBase(TEMPLE_FALLBACK);
+                      }}
                     />
                   </ProtectedMedia>
                 ) : (
                   <span className="home-temple-photo-empty">
-                    {t("person.infoNotProvided")}
+                    {t("person.infoNotProvided", "Image not yet available")}
                   </span>
                 )}
               </CinematicImage>

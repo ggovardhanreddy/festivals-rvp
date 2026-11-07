@@ -4,7 +4,7 @@ import { Reveal } from "@/components/Reveal";
 import { MediaImage } from "@/components/media/MediaImage";
 import { ProtectedMedia } from "@/components/media/ProtectedMedia";
 import { withBase } from "@/lib/base";
-import { daysUntil, eventPhase, formatEventDateRange } from "@/lib/dates";
+import { eventPhase } from "@/lib/dates";
 import {
   CULTURE_FESTIVALS,
   festivalThumbPath,
@@ -55,9 +55,8 @@ export function TemplesFestivalsPage({
   festivals?: SiteEvent[];
 }) {
   const heritage = loadVillageHeritage();
-  const live = new Set(liveSlugs);
   const nextFestivals = upcoming.filter(
-    (event) => eventPhase(event.date, event.endDate) !== "completed",
+    (event) => event.category === "festival" && eventPhase(event.date, event.endDate) !== "completed",
   );
 
   return (
@@ -151,32 +150,7 @@ export function TemplesFestivalsPage({
               </p>
             </div>
           </div>
-          <ul className="temple-upcoming-list">
-            {nextFestivals.map((event) => {
-              const href =
-                event.slug && live.has(event.slug)
-                  ? `/${event.slug}/`
-                  : "/gallery/";
-              const days = daysUntil(event.date);
-              return (
-                <li key={event.id}>
-                  <Link href={href} className="temple-upcoming-card">
-                    <span className="temple-upcoming-date">
-                      {formatEventDateRange(event.date, event.endDate)}
-                    </span>
-                    <strong>{event.title}</strong>
-                    <span className="muted">
-                      {days <= 0
-                        ? "Today"
-                        : days === 1
-                          ? "Tomorrow"
-                          : `In ${days} days`}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <FestivalCalendar festivals={nextFestivals} liveSlugs={liveSlugs} embedded />
         </Reveal>
       ) : null}
 
@@ -204,6 +178,7 @@ export function TemplesFestivalsPage({
                     width={640}
                     height={360}
                     loading="lazy"
+                    fallback="/logo/logo-mark.webp"
                   />
                   <div>
                     <h3>{item.name}</h3>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { withBase } from "@/lib/base";
-import { daysUntil, eventPhase, formatEventDateRange } from "@/lib/dates";
+import { daysUntil, eventPhase, eventStatusLabel, formatEventDateRange } from "@/lib/dates";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { StaggerChildren, StaggerItem } from "@/components/motion";
 import { LOCALE_TAG } from "@/lib/i18n/config";
@@ -34,8 +34,9 @@ export function HomeUpcomingEvents({
   /** Countdown wording, translated. Never derived from colour alone. */
   const statusLabel = (date: string, endDate?: string | null) => {
     const phase = eventPhase(date, endDate);
-    if (phase === "completed") return t("common.completed");
-    if (phase === "today") return t("common.today");
+    const stable = eventStatusLabel(date, endDate);
+    if (stable === "Completed" || phase === "completed") return t("common.completed");
+    if (stable === "Today" || phase === "today") return t("common.today");
     const days = daysUntil(date);
     if (days === 1) return t("common.tomorrow");
     return t("common.inDays", undefined, { days });
