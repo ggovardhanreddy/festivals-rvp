@@ -13135,6 +13135,36 @@ a.dharma-division-link:focus-visible {
   color: #f7ecd8;
   font-size: 0.66rem;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.map-3d-label[data-active] {
+  background: rgba(205, 167, 92, 0.88);
+  color: #1b2f27;
+}
+
+.village-map-3d-wrap {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+.map-3d-detail {
+  border-top: 1px solid color-mix(in srgb, var(--color-line) 78%, transparent);
+  padding: 0.58rem 0.7rem 0.66rem;
+  background: color-mix(in srgb, var(--color-forest) 15%, var(--card-bg));
+}
+
+.map-3d-detail strong {
+  display: block;
+  color: var(--heading);
+  font-size: var(--text-sm);
+  margin-bottom: 0.15rem;
+}
+
+.map-3d-detail p {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--muted);
 }
 
 .home-temple-card,
