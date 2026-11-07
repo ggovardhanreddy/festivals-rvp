@@ -44,7 +44,6 @@ export function LanguageSwitcher({ className }: { className?: string }) {
                 key={locale}
                 className="lang-switch-btn"
                 aria-disabled="true"
-                title={t("lang.notTranslated")}
               >
                 {label}
               </span>

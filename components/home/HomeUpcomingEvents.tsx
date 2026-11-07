@@ -44,6 +44,7 @@ export function HomeUpcomingEvents({
 
   const live = new Set(liveSlugs);
   const upcoming = events
+    .filter((event) => event.category === "festival")
     .filter((event) => eventPhase(event.date, event.endDate) !== "completed")
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, limit);

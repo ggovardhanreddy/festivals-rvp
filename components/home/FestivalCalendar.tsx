@@ -60,6 +60,7 @@ export function FestivalCalendar({
 
   const nextId =
     withStatus.find((item) => item.phase !== "completed")?.event.id || withStatus[0]?.event.id;
+  const hasUpcoming = withStatus.some((item) => item.phase !== "completed");
 
   const grid = (
     <div className="festival-calendar-grid">
@@ -87,7 +88,9 @@ export function FestivalCalendar({
               />
             </div>
             <div className="festival-card-body">
-              {isNext ? <p className="festival-card-badge">{t("home.nextUp")}</p> : null}
+              {isNext && hasUpcoming && phase !== "completed" ? (
+                <p className="festival-card-badge">{t("home.nextUp")}</p>
+              ) : null}
               <p className="eyebrow">{eventStatusLabel(event.date, event.endDate)}</p>
               <h3>{(lang === "te" && event.titleTe) || event.title}</h3>
               <p className="muted">{formatEventDateRange(event.date, event.endDate, tag)}</p>
