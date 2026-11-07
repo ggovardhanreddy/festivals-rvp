@@ -7,14 +7,16 @@ import { memberInitials, resolveMemberGroup } from "@/lib/member-groups";
 import { publishedMembers, rosterStats } from "@/lib/people-stats";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { StaggerChildren, StaggerItem } from "@/components/motion";
+import { useLiveMembers } from "@/lib/live-calendar";
 
 export function HomePeople({ members }: { members: Member[] }) {
   const { t } = useUiLang();
+  const liveMembers = useLiveMembers(members);
   // publishedMembers, not a bare !archived filter: retired ids in
   // members-removed.json must drop out here too, or the homepage advertises a
   // total the People page does not list.
-  const living = publishedMembers(members);
-  const stats = rosterStats(members);
+  const living = publishedMembers(liveMembers);
+  const stats = rosterStats(liveMembers);
   const shown = living
     .sort((a, b) => {
       const order = { legacy: 0, core: 1, nextgen: 2 } as const;

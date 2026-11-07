@@ -10,11 +10,12 @@ import {
   type ReactNode,
 } from "react";
 import { withBase } from "@/lib/base";
-import type { Announcement, SiteEvent } from "@/lib/types";
+import type { Announcement, Member, SiteEvent } from "@/lib/types";
 
 type LiveCalendarCtx = {
   events: SiteEvent[];
   announcements: Announcement[];
+  members: Member[];
   loading: boolean;
   refresh: (opts?: { silent?: boolean }) => Promise<void>;
 };
@@ -51,15 +52,18 @@ async function fetchItems<T>(collection: string, signal?: AbortSignal): Promise<
 export function LiveCalendarProvider({
   seedEvents,
   seedAnnouncements,
+  seedMembers,
   children,
 }: {
   seedEvents: SiteEvent[];
   seedAnnouncements: Announcement[];
+  seedMembers: Member[];
   children: ReactNode;
 }) {
   const [events, setEvents] = useState<SiteEvent[]>(seedEvents);
   const [announcements, setAnnouncements] =
     useState<Announcement[]>(seedAnnouncements);
+  const [members, setMembers] = useState<Member[]>(seedMembers);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async (opts?: { silent?: boolean }) => {
@@ -68,22 +72,25 @@ export function LiveCalendarProvider({
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), FETCH_MS);
     try {
-      const [remoteEvents, remoteAnnouncements] = await Promise.all([
+      const [eventsData, announcementsData, membersData] = await Promise.all([
         fetchItems<SiteEvent>("events", controller.signal),
         fetchItems<Announcement>("announcements", controller.signal),
+        fetchItems<Member>("members", controller.signal),
       ]);
-      setEvents(mergeById(seedEvents, remoteEvents));
-      setAnnouncements(mergeById(seedAnnouncements, remoteAnnouncements));
+      setEvents(mergeById(seedEvents, eventsData));
+      setAnnouncements(mergeById(seedAnnouncements, announcementsData));
+      setMembers(mergeById(seedMembers, membersData));
     } catch {
       if (!silent) {
         setEvents(seedEvents);
         setAnnouncements(seedAnnouncements);
+        setMembers(seedMembers);
       }
     } finally {
       window.clearTimeout(timer);
       if (!silent) setLoading(false);
     }
-  }, [seedEvents, seedAnnouncements]);
+  }, [seedEvents, seedAnnouncements, seedMembers]);
 
   useEffect(() => {
     void refresh();
@@ -106,8 +113,8 @@ export function LiveCalendarProvider({
   }, [refresh]);
 
   const value = useMemo(
-    () => ({ events, announcements, loading, refresh }),
-    [events, announcements, loading, refresh],
+    () => ({ events, announcements, members, loading, refresh }),
+    [events, announcements, members, loading, refresh],
   );
 
   return (
@@ -134,4 +141,9 @@ export function useLiveEvents(seed: SiteEvent[]): SiteEvent[] {
 export function useLiveAnnouncements(seed: Announcement[]): Announcement[] {
   const ctx = useContext(LiveCalendarContext);
   return ctx?.announcements ?? seed;
+}
+
+export function useLiveMembers(seed: Member[]): Member[] {
+  const ctx = useContext(LiveCalendarContext);
+  return ctx?.members ?? seed;
 }

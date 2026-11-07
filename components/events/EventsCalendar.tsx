@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { withBase } from "@/lib/base";
-import { daysUntil, formatCountdown } from "@/lib/dates";
+import { eventStatusLabel, formatEventDateRange } from "@/lib/dates";
 import type { Member, SiteEvent } from "@/lib/types";
 import { TeluguCalendar } from "@/components/events/TeluguCalendar";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
@@ -48,7 +48,6 @@ export function EventsCalendar({
           <div className="event-cards">
             {upcoming.length ? (
               upcoming.map((event) => {
-                const days = daysUntil(event.date);
                 return (
                   <article
                     key={event.id}
@@ -66,14 +65,11 @@ export function EventsCalendar({
                       </div>
                     ) : null}
                     <div className="event-card-body">
-                      <p className="eyebrow">{formatCountdown(days)}</p>
-                      <h3>{event.title}</h3>
-                      <p className="muted">
-                        {event.date}
-                        {event.endDate && event.endDate !== event.date
-                          ? ` – ${event.endDate}`
-                          : ""}
+                      <p className="eyebrow">
+                        {eventStatusLabel(event.date, event.endDate)}
                       </p>
+                      <h3>{event.title}</h3>
+                      <p className="muted">{formatEventDateRange(event.date, event.endDate)}</p>
                       <p className="lede">{event.description}</p>
                       {event.slug && live.has(event.slug) ? (
                         <Link className="btn" href={`/${event.slug}/`}>

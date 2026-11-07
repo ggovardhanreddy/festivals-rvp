@@ -49,11 +49,35 @@ export function TemplesFestivalsPage({
   upcoming,
   liveSlugs,
   festivals = [],
+  locale = "en",
 }: {
   upcoming: SiteEvent[];
   liveSlugs: string[];
   festivals?: SiteEvent[];
+  locale?: "en" | "te";
 }) {
+  const isTe = locale === "te";
+  const labels = {
+    faithEyebrow: isTe ? "గ్రామ విశ్వాసం" : "Faith of the village",
+    photoPending: isTe
+      ? "నిజమైన ఆలయ ఫోటో లభించిన వెంటనే ఇక్కడ చూపిస్తాము"
+      : "Authentic temple photograph will be added when available",
+    openLocation: isTe ? "లొకేషన్ తెరవండి" : "Open location",
+    villageCalendar: isTe ? "గ్రామ క్యాలెండర్" : "Village calendar",
+    festivalCalendar: isTe ? "పండుగల క్యాలెండర్" : "Festival calendar",
+    festivalLede: isTe
+      ? "రెడ్డివారిపల్లిలో జరుపుకునే పండుగలు, జాతరల తేదీలు."
+      : "Festivals and jatharas as they are celebrated in Reddivaripalli — not a general religious calendar.",
+    upcomingOngoing: isTe ? "రానున్నవి & జరుగుతున్నవి" : "Upcoming & ongoing",
+    completed: isTe ? "పూర్తైనవి" : "Completed",
+    upcomingFestivals: isTe ? "రానున్న పండుగలు" : "Upcoming festivals",
+    upcomingFestivalsLede: isTe
+      ? "ఈ ఏడాది రెడ్డివారిపల్లిలో తెలిసిన పండుగ తేదీలు."
+      : "Dates and gatherings as they are known in Reddivaripalli this year.",
+    celebratedTogether: isTe ? "కలిసే జరుపుకుంటాం" : "Celebrated together",
+    previousCelebrations: isTe ? "గత వేడుకల ఫోటోలు →" : "Previous celebrations →",
+    villagePractices: isTe ? "గ్రామ ఆచారాలు" : "Village practices",
+  };
   const heritage = loadVillageHeritage();
   const festivalEvents = festivals.filter((event) => event.category === "festival");
   const upcomingFestivals = festivalEvents
@@ -71,7 +95,7 @@ export function TemplesFestivalsPage({
       <Reveal className="section" id="temples">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Faith of the village</p>
+            <p className="eyebrow">{labels.faithEyebrow}</p>
             <h2>{heritage.temples.title}</h2>
             <p className="lede">{heritage.temples.lede}</p>
           </div>
@@ -106,7 +130,7 @@ export function TemplesFestivalsPage({
                       loading="lazy"
                       decoding="async"
                     />
-                    <span>Authentic temple photograph will be added when available</span>
+                    <span>{labels.photoPending}</span>
                   </div>
                 )}
                 <div className="temple-card-body">
@@ -129,7 +153,7 @@ export function TemplesFestivalsPage({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Open location
+                      {labels.openLocation}
                     </a>
                   ) : null}
                 </div>
@@ -143,23 +167,20 @@ export function TemplesFestivalsPage({
         <Reveal className="section" id="upcoming-festivals">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Village calendar</p>
-              <h2>Festival calendar</h2>
-              <p className="lede">
-                Festivals and jatharas as they are celebrated in
-                Reddivaripalli — not a general religious calendar.
-              </p>
+              <p className="eyebrow">{labels.villageCalendar}</p>
+              <h2>{labels.festivalCalendar}</h2>
+              <p className="lede">{labels.festivalLede}</p>
             </div>
           </div>
           {upcomingFestivals.length ? (
             <>
-              <p className="eyebrow">Upcoming & ongoing</p>
+              <p className="eyebrow">{labels.upcomingOngoing}</p>
               <FestivalCalendar festivals={upcomingFestivals} liveSlugs={liveSlugs} embedded />
             </>
           ) : null}
           {completedFestivals.length ? (
             <>
-              <p className="eyebrow">Completed</p>
+              <p className="eyebrow">{labels.completed}</p>
               <FestivalCalendar festivals={completedFestivals} liveSlugs={liveSlugs} embedded />
             </>
           ) : null}
@@ -168,12 +189,9 @@ export function TemplesFestivalsPage({
         <Reveal className="section" id="upcoming-festivals">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Village calendar</p>
-              <h2>Upcoming festivals</h2>
-              <p className="lede">
-                Dates and gatherings as they are known in Reddivaripalli this
-                year.
-              </p>
+              <p className="eyebrow">{labels.villageCalendar}</p>
+              <h2>{labels.upcomingFestivals}</h2>
+              <p className="lede">{labels.upcomingFestivalsLede}</p>
             </div>
           </div>
           <FestivalCalendar festivals={nextFestivals} liveSlugs={liveSlugs} embedded />
@@ -183,7 +201,7 @@ export function TemplesFestivalsPage({
       <Reveal className="section" id="festivals">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Celebrated together</p>
+            <p className="eyebrow">{labels.celebratedTogether}</p>
             <h2>{heritage.festivals.title}</h2>
             <p className="lede">{heritage.festivals.lede}</p>
           </div>
@@ -211,7 +229,7 @@ export function TemplesFestivalsPage({
                     <p className="muted">{item.note}</p>
                     {fest ? (
                       <span className="festival-card-cta">
-                        Previous celebrations →
+                        {labels.previousCelebrations}
                       </span>
                     ) : null}
                   </div>
@@ -225,7 +243,7 @@ export function TemplesFestivalsPage({
       <Reveal className="section" id="traditions">
         <div className="section-head">
           <div>
-            <p className="eyebrow">Village practices</p>
+            <p className="eyebrow">{labels.villagePractices}</p>
             <h2>{heritage.culturalEvents.title}</h2>
             <p className="lede">{heritage.culturalEvents.lede}</p>
           </div>

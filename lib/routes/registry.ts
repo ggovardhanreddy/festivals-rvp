@@ -50,7 +50,7 @@ export type RouteEntry = {
 export const LIVE_ROUTES: RouteEntry[] = [
   { path: "/",              section: "village",   labelKey: "nav.home",            status: "live", hasTelugu: true },
   { path: "/about/",        section: "heritage",  labelKey: "nav.ourVillage",      status: "live", hasTelugu: false },
-  { path: "/temples/",      section: "temples",   labelKey: "nav.templesFestivals", status: "live", hasTelugu: false },
+  { path: "/temples/",      section: "temples",   labelKey: "nav.templesFestivals", status: "live", hasTelugu: true },
   { path: "/stories/",      section: "heritage",  labelKey: "nav.stories",         status: "live", hasTelugu: false },
   { path: "/heritage/",     section: "heritage",  labelKey: "nav.heritageArchive", status: "live", hasTelugu: false, noindex: true },
   { path: "/timeline/",     section: "heritage",  labelKey: "nav.timeline",        status: "live", hasTelugu: false, noindex: true },

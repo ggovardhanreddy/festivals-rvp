@@ -48,6 +48,7 @@ export function LiveCalendarBridge({
     <LiveCalendarProvider
       seedEvents={seedEvents}
       seedAnnouncements={seedAnnouncements}
+      seedMembers={members}
     >
       <NotificationWithLive members={members} developments={developments}>
         {children}

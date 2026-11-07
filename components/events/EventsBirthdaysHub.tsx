@@ -6,19 +6,18 @@ import type { Member, SiteEvent } from "@/lib/types";
 import { EventsCalendar } from "@/components/events/EventsCalendar";
 import { TodayBirthdays } from "@/components/home/TodayBirthdays";
 import { UpcomingBirthdays } from "@/components/home/UpcomingBirthdays";
-import { dobMonthDay, monthDay } from "@/lib/dates";
-import { useLiveEvents } from "@/lib/live-calendar";
+import { dobMonthDay, eventPhase, monthDay } from "@/lib/dates";
+import { useLiveEvents, useLiveMembers } from "@/lib/live-calendar";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 type Tab = "events" | "birthdays";
 
 function splitUpcomingArchive(events: SiteEvent[], from = new Date()) {
-  const today = from.toISOString().slice(0, 10);
   const upcoming = events
-    .filter((e) => e.date >= today)
+    .filter((e) => eventPhase(e.date, e.endDate, from) !== "completed")
     .sort((a, b) => a.date.localeCompare(b.date));
   const archive = events
-    .filter((e) => e.date < today)
+    .filter((e) => eventPhase(e.date, e.endDate, from) === "completed")
     .sort((a, b) => b.date.localeCompare(a.date));
   return { upcoming, archive };
 }
@@ -39,6 +38,7 @@ export function EventsBirthdaysHub({
   const { t } = useUiLang();
   const seed = useMemo(() => [...upcoming, ...archive], [upcoming, archive]);
   const liveEvents = useLiveEvents(seed);
+  const liveMembers = useLiveMembers(members);
   const liveSplit = useMemo(() => splitUpcomingArchive(liveEvents), [liveEvents]);
   const [tab, setTab] = useState<Tab>(initialTab);
   const [todayMembers, setTodayMembers] = useState<Member[]>([]);
@@ -54,10 +54,10 @@ export function EventsBirthdaysHub({
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       const key = monthDay(new Date());
-      setTodayMembers(members.filter((m) => dobMonthDay(m.dob) === key));
+      setTodayMembers(liveMembers.filter((m) => dobMonthDay(m.dob) === key));
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [members]);
+  }, [liveMembers]);
 
   function selectTab(next: Tab) {
     setTab(next);
@@ -104,7 +104,7 @@ export function EventsBirthdaysHub({
             upcoming={liveSplit.upcoming}
             archive={liveSplit.archive}
             liveSlugs={liveSlugs}
-            members={members}
+            members={liveMembers}
             showBirthdays
             showEvents
             calendarEyebrow="Telugu calendar"
@@ -114,12 +114,12 @@ export function EventsBirthdaysHub({
       ) : (
         <div role="tabpanel" aria-label={t("events.birthdays")}>
           <TodayBirthdays members={todayMembers} />
-          <UpcomingBirthdays members={members} />
+          <UpcomingBirthdays members={liveMembers} />
           <EventsCalendar
             upcoming={liveSplit.upcoming}
             archive={liveSplit.archive}
             liveSlugs={liveSlugs}
-            members={members}
+            members={liveMembers}
             showBirthdays
             showEvents
             calendarOnly
