@@ -47,4 +47,19 @@ describe("latest memories selection", () => {
       "album-c:c1",
     ]);
   });
+
+  it("prefers a mix of event buckets when available", () => {
+    const source = [
+      item("d1", "deva-2026", "2026", "2026-11-08"),
+      item("d2", "deva-2025", "2025", "2026-11-07"),
+      item("u1", "ugadi-2026", "2026", "2026-11-06"),
+      item("s1", "sank-2026", "2026", "2026-11-05"),
+    ];
+    source[0]!.album.bucket = "devapatlamma-jathara";
+    source[1]!.album.bucket = "devapatlamma-jathara";
+    source[2]!.album.bucket = "ugadi";
+    source[3]!.album.bucket = "sankranthi";
+    const out = selectLatestMemories(source, 3);
+    expect(out.map((i) => i.id)).toEqual(["d1", "u1", "s1"]);
+  });
 });

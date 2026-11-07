@@ -215,18 +215,42 @@ export function selectLatestMemories(
       ) || String(a.id).localeCompare(String(b.id)),
   );
   const picked: MediaWithAlbum[] = [];
+  const seenIds = new Set<string>();
   const seenAlbums = new Set<string>();
+  const seenBuckets = new Set<string>();
+
+  // First pick: newest frame per bucket to avoid one event dominating homepage.
   for (const item of sorted) {
     if (picked.length >= limit) break;
+    const bucket = item.album.bucket || "";
+    if (!bucket || seenBuckets.has(bucket)) continue;
+    picked.push(item);
+    seenIds.add(item.id);
+    seenBuckets.add(bucket);
+    seenAlbums.add(`${item.album.year}:${item.album.slug}`);
+  }
+  if (picked.length >= limit) return picked;
+
+  // Second pick: broaden album variety within the remaining newest frames.
+  for (const item of sorted) {
+    if (picked.length >= limit) break;
+    if (seenIds.has(item.id)) continue;
     const albumKey = `${item.album.year}:${item.album.slug}`;
     if (seenAlbums.has(albumKey)) continue;
     picked.push(item);
+    seenIds.add(item.id);
     seenAlbums.add(albumKey);
+    if (item.album.bucket) seenBuckets.add(item.album.bucket);
   }
   if (picked.length >= limit) return picked;
+
+  // Final fill: allow repeats only when needed to reach requested count.
   for (const item of sorted) {
     if (picked.length >= limit) break;
-    if (!picked.some((p) => p.id === item.id)) picked.push(item);
+    if (!seenIds.has(item.id)) {
+      picked.push(item);
+      seenIds.add(item.id);
+    }
   }
   return picked.slice(0, limit);
 }

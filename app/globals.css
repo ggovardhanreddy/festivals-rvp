@@ -9538,11 +9538,32 @@ body {
   display: grid;
   place-items: center;
   min-height: 10rem;
-  padding: 1rem;
+  padding: 1.1rem;
+  gap: 0.65rem;
   text-align: center;
   font-size: 0.9rem;
   color: var(--muted);
-  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
+  background:
+    radial-gradient(
+      120% 95% at 50% 0%,
+      color-mix(in srgb, var(--color-gold) 18%, transparent),
+      transparent 60%
+    ),
+    color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
+}
+
+.temple-card-photo--empty img,
+.home-temple-photo-empty img {
+  width: clamp(4.2rem, 17vw, 5.8rem);
+  height: clamp(4.2rem, 17vw, 5.8rem);
+  object-fit: contain;
+  opacity: 0.94;
+}
+
+.temple-card-photo--empty span,
+.home-temple-photo-empty span {
+  max-width: 22ch;
+  line-height: 1.35;
 }
 
 .heritage-media {
@@ -11904,6 +11925,11 @@ body {
 @media (max-width: 720px) {
   .home-memory-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .home-memory-tile {
+    aspect-ratio: 1 / 1;
   }
 }
 

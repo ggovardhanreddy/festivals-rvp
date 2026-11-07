@@ -61,7 +61,7 @@ export const LIVE_ROUTES: RouteEntry[] = [
   { path: "/members/",      section: "community", labelKey: "nav.people",          status: "live", hasTelugu: false, noindex: true },
   { path: "/families/",     section: "community", labelKey: "nav.familyTrees",     status: "live", hasTelugu: false },
   { path: "/adapaduchulu/", section: "community", labelKey: "nav.adapaduchulu",    status: "live", hasTelugu: false },
-  { path: "/events/",       section: "temples",   labelKey: "nav.events",          status: "live", hasTelugu: false, noindex: true },
+  { path: "/events/",       section: "temples",   labelKey: "nav.events",          status: "live", hasTelugu: true, noindex: true },
   { path: "/directory/",    section: "community", labelKey: "nav.directory",       status: "live", hasTelugu: false, noindex: true },
   { path: "/developments/", section: "community", labelKey: "nav.developments",    status: "live", hasTelugu: false },
   { path: "/suggestions/",  section: "community", labelKey: "nav.suggestions",     status: "live", hasTelugu: false },

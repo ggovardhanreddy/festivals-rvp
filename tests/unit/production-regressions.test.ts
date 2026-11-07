@@ -70,4 +70,18 @@ describe("production regression guards", () => {
     const src = fs.readFileSync(teTemples, "utf8");
     expect(src).toContain('locale="te"');
   });
+
+  it("enables Telugu events route with a real page implementation", () => {
+    const registry = fs.readFileSync(
+      path.join(process.cwd(), "lib/routes/registry.ts"),
+      "utf8",
+    );
+    expect(registry).toContain('path: "/events/"');
+    expect(registry).toContain("hasTelugu: true");
+
+    const teEvents = path.join(process.cwd(), "app/te/events/page.tsx");
+    expect(fs.existsSync(teEvents)).toBe(true);
+    const src = fs.readFileSync(teEvents, "utf8");
+    expect(src).toContain("EventsBirthdaysHub");
+  });
 });

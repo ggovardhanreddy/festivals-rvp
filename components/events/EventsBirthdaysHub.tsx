@@ -28,12 +28,21 @@ export function EventsBirthdaysHub({
   liveSlugs = [],
   members = [],
   initialTab = "events",
+  labels,
 }: {
   upcoming: SiteEvent[];
   archive: SiteEvent[];
   liveSlugs?: string[];
   members?: Member[];
   initialTab?: Tab;
+  labels?: {
+    eventsCalendarEyebrow?: string;
+    eventsCalendarLede?: string;
+    birthdaysCalendarEyebrow?: string;
+    birthdaysCalendarTitle?: string;
+    birthdaysCalendarLede?: string;
+    birthdayWishesLede?: string;
+  };
 }) {
   const { t } = useUiLang();
   const seed = useMemo(() => [...upcoming, ...archive], [upcoming, archive]);
@@ -107,8 +116,11 @@ export function EventsBirthdaysHub({
             members={liveMembers}
             showBirthdays
             showEvents
-            calendarEyebrow="Telugu calendar"
-            calendarLede="Tap a date for Tithi, Nakshatra, Rahu Kalam, Yama Gandam, festivals, and birthdays."
+            calendarEyebrow={labels?.eventsCalendarEyebrow || "Telugu calendar"}
+            calendarLede={
+              labels?.eventsCalendarLede ||
+              "Tap a date for Tithi, Nakshatra, Rahu Kalam, Yama Gandam, festivals, and birthdays."
+            }
           />
         </div>
       ) : (
@@ -124,9 +136,12 @@ export function EventsBirthdaysHub({
             showEvents
             calendarOnly
             emphasizeBirthdays
-            calendarEyebrow="Birthday · Telugu calendar"
-            calendarTitle="When we celebrate"
-            calendarLede="Member birthdays with Tithi, Nakshatra, Rahu Kalam, and Yama Gandam — tap a date for details."
+            calendarEyebrow={labels?.birthdaysCalendarEyebrow || "Birthday · Telugu calendar"}
+            calendarTitle={labels?.birthdaysCalendarTitle || "When we celebrate"}
+            calendarLede={
+              labels?.birthdaysCalendarLede ||
+              "Member birthdays with Tithi, Nakshatra, Rahu Kalam, and Yama Gandam — tap a date for details."
+            }
           />
           <section className="section" id="birthday-wishes">
             <div className="section-head">
@@ -134,8 +149,8 @@ export function EventsBirthdaysHub({
                 <p className="eyebrow">{t("events.celebrate")}</p>
                 <h2>{t("events.birthdayWishes")}</h2>
                 <p className="lede">
-                  Share a smile with the birthday gallery — candles, laughter,
-                  and the warmth of another year together.
+                  {labels?.birthdayWishesLede ||
+                    "Share a smile with the birthday gallery — candles, laughter, and the warmth of another year together."}
                 </p>
               </div>
               <Link className="btn" href="/rvp-birthdays/">
