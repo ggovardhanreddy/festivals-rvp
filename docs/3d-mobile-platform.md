@@ -16,6 +16,10 @@
   - `lib/mobile-content.ts` (shared fetch contract)
 - Cross-platform mobile app scaffold:
   - `apps/mobile/*` (Expo + React Native + Expo Router)
+  - Live list/detail screens for festivals and gallery items
+  - API-backed people/news/developments screens
+  - Offline-safe seeded content fallback when network is unavailable
+  - Push token registration UI wired to `/api/public/subscribe`
 
 ## Preview / Development
 

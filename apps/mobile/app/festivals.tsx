@@ -1,4 +1,5 @@
-import { Text } from "react-native";
+import { Pressable, Text } from "react-native";
+import { useRouter } from "expo-router";
 import { MobileListScreen, styles } from "@/src/MobileListScreen";
 import { useVillageContent } from "@/src/content";
 import { festivalStatus } from "@/src/dates";
@@ -6,6 +7,7 @@ import { useLang } from "@/src/lang";
 
 export default function FestivalsPage() {
   const { lang } = useLang();
+  const router = useRouter();
   const { data, loading, error } = useVillageContent();
   const events = (data?.events || [])
     .filter((e) => e.date)
@@ -22,9 +24,11 @@ export default function FestivalsPage() {
         const status = festivalStatus(event.date);
         const title = lang === "te" ? event.titleTe || event.title : event.title;
         return (
-          <Text key={event.id} style={styles.row}>
-            • <Text style={styles.rowTitle}>{title}</Text> — {event.date} · {status.label}
-          </Text>
+          <Pressable key={event.id} onPress={() => router.push(`/festivals/${event.id}`)}>
+            <Text style={styles.row}>
+              • <Text style={styles.rowTitle}>{title}</Text> — {event.date} · {status.label}
+            </Text>
+          </Pressable>
         );
       })}
     </MobileListScreen>

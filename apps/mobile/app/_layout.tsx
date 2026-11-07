@@ -29,8 +29,10 @@ function LayoutInner() {
       <Stack.Screen name="people" options={{ title: t("people") }} />
       <Stack.Screen name="temples" options={{ title: t("temples") }} />
       <Stack.Screen name="festivals" options={{ title: t("festivals") }} />
+      <Stack.Screen name="festivals/[id]" options={{ title: t("festivals") }} />
       <Stack.Screen name="news" options={{ title: t("news") }} />
       <Stack.Screen name="gallery" options={{ title: t("gallery") }} />
+      <Stack.Screen name="gallery/[id]" options={{ title: t("gallery") }} />
       <Stack.Screen name="developments" options={{ title: t("developments") }} />
       <Stack.Screen name="contact" options={{ title: t("contact") }} />
     </Stack>
