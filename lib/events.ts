@@ -33,6 +33,38 @@ export function loadEvents(): SiteEvent[] {
   return eventsCache;
 }
 
+/** Canonical festival feed used by home, temples and events pages. */
+export function festivalEvents(): SiteEvent[] {
+  return loadEvents()
+    .filter((event) => event.category === "festival")
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export function splitFestivalsByPhase(
+  events: SiteEvent[],
+  from = new Date(),
+): { upcoming: SiteEvent[]; completed: SiteEvent[] } {
+  const festivals = events
+    .filter((event) => event.category === "festival")
+    .sort((a, b) => a.date.localeCompare(b.date));
+  return {
+    upcoming: festivals.filter(
+      (event) => eventPhase(event.date, event.endDate, from) !== "completed",
+    ),
+    completed: festivals.filter(
+      (event) => eventPhase(event.date, event.endDate, from) === "completed",
+    ),
+  };
+}
+
+/** Split festivals by current village day, so pages cannot drift in status. */
+export function festivalBuckets(from = new Date()): {
+  upcoming: SiteEvent[];
+  completed: SiteEvent[];
+} {
+  return splitFestivalsByPhase(loadEvents(), from);
+}
+
 export function loadAnnouncements(): Announcement[] {
   if (announcementsCache) return announcementsCache;
   if (!fs.existsSync(ANNOUNCEMENTS_PATH)) {

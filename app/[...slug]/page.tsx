@@ -85,7 +85,11 @@ import {
 } from "@/lib/resources/server";
 import { FestivalCalendar } from "@/components/home/FestivalCalendar";
 import { VillageUpdatesList } from "@/components/events/VillageUpdatesList";
-import { loadAnnouncements, loadEvents } from "@/lib/events";
+import {
+  festivalBuckets,
+  festivalEvents,
+  loadAnnouncements,
+} from "@/lib/events";
 
 const BUCKET_ACCENT: Record<
   BucketKey,
@@ -812,6 +816,8 @@ export default async function ArchiveRoute({
   }
 
   if (path === "events") {
+    const festivals = festivalEvents();
+    const { upcoming: upcomingFestivals } = festivalBuckets();
     const liveSlugs = [
       ...new Set(
         publicAlbums()
@@ -841,7 +847,7 @@ export default async function ArchiveRoute({
         {/* Moved off the homepage: the full annual festival calendar and the
             announcement archive now live with the rest of the calendar. */}
         <FestivalCalendar
-          festivals={loadEvents().filter((e) => e.category === "festival")}
+          festivals={upcomingFestivals.length ? upcomingFestivals : festivals}
           liveSlugs={liveSlugs}
         />
         <VillageUpdatesList announcements={loadAnnouncements()} />
@@ -918,6 +924,7 @@ export default async function ArchiveRoute({
   }
 
   if (path === "temples") {
+    const festivals = festivalEvents();
     const liveSlugs = [
       ...new Set(
         publicAlbums()
@@ -939,9 +946,9 @@ export default async function ArchiveRoute({
           secondaryLabel="Our Village"
         />
         <TemplesFestivalsPage
-          upcoming={upcomingEvents(8)}
+          upcoming={festivals}
           liveSlugs={liveSlugs}
-          festivals={loadEvents().filter((e) => e.category === "festival")}
+          festivals={festivals}
         />
       </main>
     );

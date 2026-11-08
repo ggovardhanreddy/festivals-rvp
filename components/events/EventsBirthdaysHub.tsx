@@ -6,19 +6,18 @@ import type { Member, SiteEvent } from "@/lib/types";
 import { EventsCalendar } from "@/components/events/EventsCalendar";
 import { TodayBirthdays } from "@/components/home/TodayBirthdays";
 import { UpcomingBirthdays } from "@/components/home/UpcomingBirthdays";
-import { dobMonthDay, monthDay } from "@/lib/dates";
-import { useLiveEvents } from "@/lib/live-calendar";
+import { dobMonthDay, eventPhase, monthDay } from "@/lib/dates";
+import { useLiveEvents, useLiveMembers } from "@/lib/live-calendar";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 
 type Tab = "events" | "birthdays";
 
 function splitUpcomingArchive(events: SiteEvent[], from = new Date()) {
-  const today = from.toISOString().slice(0, 10);
   const upcoming = events
-    .filter((e) => e.date >= today)
+    .filter((e) => eventPhase(e.date, e.endDate, from) !== "completed")
     .sort((a, b) => a.date.localeCompare(b.date));
   const archive = events
-    .filter((e) => e.date < today)
+    .filter((e) => eventPhase(e.date, e.endDate, from) === "completed")
     .sort((a, b) => b.date.localeCompare(a.date));
   return { upcoming, archive };
 }
@@ -29,16 +28,26 @@ export function EventsBirthdaysHub({
   liveSlugs = [],
   members = [],
   initialTab = "events",
+  labels,
 }: {
   upcoming: SiteEvent[];
   archive: SiteEvent[];
   liveSlugs?: string[];
   members?: Member[];
   initialTab?: Tab;
+  labels?: {
+    eventsCalendarEyebrow?: string;
+    eventsCalendarLede?: string;
+    birthdaysCalendarEyebrow?: string;
+    birthdaysCalendarTitle?: string;
+    birthdaysCalendarLede?: string;
+    birthdayWishesLede?: string;
+  };
 }) {
   const { t } = useUiLang();
   const seed = useMemo(() => [...upcoming, ...archive], [upcoming, archive]);
   const liveEvents = useLiveEvents(seed);
+  const liveMembers = useLiveMembers(members);
   const liveSplit = useMemo(() => splitUpcomingArchive(liveEvents), [liveEvents]);
   const [tab, setTab] = useState<Tab>(initialTab);
   const [todayMembers, setTodayMembers] = useState<Member[]>([]);
@@ -54,10 +63,10 @@ export function EventsBirthdaysHub({
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       const key = monthDay(new Date());
-      setTodayMembers(members.filter((m) => dobMonthDay(m.dob) === key));
+      setTodayMembers(liveMembers.filter((m) => dobMonthDay(m.dob) === key));
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [members]);
+  }, [liveMembers]);
 
   function selectTab(next: Tab) {
     setTab(next);
@@ -104,29 +113,35 @@ export function EventsBirthdaysHub({
             upcoming={liveSplit.upcoming}
             archive={liveSplit.archive}
             liveSlugs={liveSlugs}
-            members={members}
+            members={liveMembers}
             showBirthdays
             showEvents
-            calendarEyebrow="Telugu calendar"
-            calendarLede="Tap a date for Tithi, Nakshatra, Rahu Kalam, Yama Gandam, festivals, and birthdays."
+            calendarEyebrow={labels?.eventsCalendarEyebrow || "Telugu calendar"}
+            calendarLede={
+              labels?.eventsCalendarLede ||
+              "Tap a date for Tithi, Nakshatra, Rahu Kalam, Yama Gandam, festivals, and birthdays."
+            }
           />
         </div>
       ) : (
         <div role="tabpanel" aria-label={t("events.birthdays")}>
           <TodayBirthdays members={todayMembers} />
-          <UpcomingBirthdays members={members} />
+          <UpcomingBirthdays members={liveMembers} />
           <EventsCalendar
             upcoming={liveSplit.upcoming}
             archive={liveSplit.archive}
             liveSlugs={liveSlugs}
-            members={members}
+            members={liveMembers}
             showBirthdays
             showEvents
             calendarOnly
             emphasizeBirthdays
-            calendarEyebrow="Birthday · Telugu calendar"
-            calendarTitle="When we celebrate"
-            calendarLede="Member birthdays with Tithi, Nakshatra, Rahu Kalam, and Yama Gandam — tap a date for details."
+            calendarEyebrow={labels?.birthdaysCalendarEyebrow || "Birthday · Telugu calendar"}
+            calendarTitle={labels?.birthdaysCalendarTitle || "When we celebrate"}
+            calendarLede={
+              labels?.birthdaysCalendarLede ||
+              "Member birthdays with Tithi, Nakshatra, Rahu Kalam, and Yama Gandam — tap a date for details."
+            }
           />
           <section className="section" id="birthday-wishes">
             <div className="section-head">
@@ -134,8 +149,8 @@ export function EventsBirthdaysHub({
                 <p className="eyebrow">{t("events.celebrate")}</p>
                 <h2>{t("events.birthdayWishes")}</h2>
                 <p className="lede">
-                  Share a smile with the birthday gallery — candles, laughter,
-                  and the warmth of another year together.
+                  {labels?.birthdayWishesLede ||
+                    "Share a smile with the birthday gallery — candles, laughter, and the warmth of another year together."}
                 </p>
               </div>
               <Link className="btn" href="/rvp-birthdays/">

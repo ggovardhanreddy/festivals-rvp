@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { withBase } from "@/lib/base";
 import { ProtectedMedia } from "@/components/media/ProtectedMedia";
 import { loadVillageHeritage } from "@/lib/village-heritage";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { StaggerChildren, StaggerItem } from "@/components/motion";
 import { CinematicImage } from "@/components/motion/CinematicImage";
+import { Progressive3D } from "@/components/three/Progressive3D";
 
 const TEMPLE_PHOTOS: Record<string, string> = {
   "Sri Ramalayam": "/brand/rama-navami-hero.webp",
@@ -14,6 +16,18 @@ const TEMPLE_PHOTOS: Record<string, string> = {
   "Sri Devapatlamma Temple": "/brand/devapatlamma-hero.webp",
   "Sri Mulasthanamma Temple": "/brand/mulasthanamma.webp",
 };
+const TEMPLE_FALLBACK = "/logo/logo-mark.webp";
+const TempleShowcaseScene = dynamic(
+  () =>
+    import("@/components/three/TempleShowcaseScene").then(
+      (m) => m.TempleShowcaseScene,
+    ),
+  { ssr: false },
+);
+const VillageMapScene = dynamic(
+  () => import("@/components/three/VillageMapScene").then((m) => m.VillageMapScene),
+  { ssr: false },
+);
 
 export function HomeTemples() {
   const { t } = useUiLang();
@@ -43,16 +57,19 @@ export function HomeTemples() {
                   <ProtectedMedia as="span">
                     <img
                       src={withBase(TEMPLE_PHOTOS[temple.name])}
-                      alt=""
+                      alt={`${temple.name} — Reddivaripalli`}
                       width={400}
                       height={280}
                       loading="lazy"
                       draggable={false}
+                      onError={(event) => {
+                        event.currentTarget.src = withBase(TEMPLE_FALLBACK);
+                      }}
                     />
                   </ProtectedMedia>
                 ) : (
                   <span className="home-temple-photo-empty">
-                    {t("person.infoNotProvided")}
+                    {t("person.infoNotProvided", "Image not yet available")}
                   </span>
                 )}
               </CinematicImage>
@@ -64,6 +81,20 @@ export function HomeTemples() {
           </StaggerItem>
         ))}
       </StaggerChildren>
+      <div className="home-temple-3d-grid">
+        <Progressive3D
+          className="home-temple-3d-card"
+          fallback={<div className="home-temple-3d-fallback" />}
+        >
+          <TempleShowcaseScene />
+        </Progressive3D>
+        <Progressive3D
+          className="home-temple-3d-card"
+          fallback={<div className="home-temple-3d-fallback" />}
+        >
+          <VillageMapScene />
+        </Progressive3D>
+      </div>
     </section>
   );
 }

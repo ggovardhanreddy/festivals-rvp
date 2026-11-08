@@ -9538,11 +9538,32 @@ body {
   display: grid;
   place-items: center;
   min-height: 10rem;
-  padding: 1rem;
+  padding: 1.1rem;
+  gap: 0.65rem;
   text-align: center;
   font-size: 0.9rem;
   color: var(--muted);
-  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
+  background:
+    radial-gradient(
+      120% 95% at 50% 0%,
+      color-mix(in srgb, var(--color-gold) 18%, transparent),
+      transparent 60%
+    ),
+    color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
+}
+
+.temple-card-photo--empty img,
+.home-temple-photo-empty img {
+  width: clamp(4.2rem, 17vw, 5.8rem);
+  height: clamp(4.2rem, 17vw, 5.8rem);
+  object-fit: contain;
+  opacity: 0.94;
+}
+
+.temple-card-photo--empty span,
+.home-temple-photo-empty span {
+  max-width: 22ch;
+  line-height: 1.35;
 }
 
 .heritage-media {
@@ -11045,6 +11066,46 @@ body {
   overflow: hidden;
 }
 
+.village-hero-3d-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.village-hero-intro {
+  position: absolute;
+  inset: clamp(1rem, 4vw, 2rem);
+  max-width: min(34rem, calc(100% - 2rem));
+  padding: clamp(1rem, 2.8vw, 1.5rem);
+  border: 1px solid rgba(214, 182, 116, 0.35);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(170deg, rgba(9, 27, 20, 0.9), rgba(9, 27, 20, 0.72));
+  backdrop-filter: blur(4px);
+  z-index: 3;
+  display: grid;
+  gap: 0.68rem;
+  transition: opacity 280ms ease, transform 280ms ease;
+}
+
+.village-hero-intro h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: #f8f2e5;
+}
+
+.village-hero[data-entered] .village-hero-intro {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.village-landing-3d {
+  width: 100%;
+  height: 100%;
+}
+
 .village-hero-photo img {
   width: 100%;
   height: 100%;
@@ -11095,6 +11156,8 @@ body {
   grid-template-columns: minmax(220px, 360px) 1fr;
   align-items: center;
   gap: clamp(1.5rem, 5vw, 3.5rem);
+  position: relative;
+  z-index: 2;
 }
 
 .village-hero-emblem {
@@ -11904,6 +11967,15 @@ body {
 @media (max-width: 720px) {
   .home-memory-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .home-memory-tile {
+    aspect-ratio: 1 / 1;
+  }
+
+  .home-temple-3d-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -13050,6 +13122,77 @@ a.dharma-division-link:focus-visible {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
+}
+
+.home-temple-3d-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.home-temple-3d-card {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-forest) 7%, var(--card-bg));
+  min-height: 13.5rem;
+}
+
+.home-temple-3d-fallback {
+  width: 100%;
+  min-height: 13.5rem;
+  background:
+    radial-gradient(120% 90% at 20% 5%, rgba(209, 168, 96, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(25, 58, 45, 0.36), rgba(16, 33, 28, 0.62));
+}
+
+.temple-showcase-3d,
+.village-map-3d {
+  width: 100%;
+  height: 13.5rem;
+}
+
+.map-3d-label {
+  display: inline-block;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 210, 171, 0.45);
+  background: rgba(18, 35, 30, 0.72);
+  color: #f7ecd8;
+  font-size: 0.66rem;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+}
+
+.map-3d-label[data-active] {
+  background: rgba(205, 167, 92, 0.88);
+  color: #1b2f27;
+}
+
+.village-map-3d-wrap {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+.map-3d-detail {
+  border-top: 1px solid color-mix(in srgb, var(--color-line) 78%, transparent);
+  padding: 0.58rem 0.7rem 0.66rem;
+  background: color-mix(in srgb, var(--color-forest) 15%, var(--card-bg));
+}
+
+.map-3d-detail strong {
+  display: block;
+  color: var(--heading);
+  font-size: var(--text-sm);
+  margin-bottom: 0.15rem;
+}
+
+.map-3d-detail p {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--muted);
 }
 
 .home-temple-card,

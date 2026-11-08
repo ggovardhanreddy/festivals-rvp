@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { withBase } from "@/lib/base";
-import { daysUntil, eventPhase, formatEventDateRange } from "@/lib/dates";
+import { daysUntil, eventPhase, eventStatusLabel, formatEventDateRange } from "@/lib/dates";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { StaggerChildren, StaggerItem } from "@/components/motion";
 import { LOCALE_TAG } from "@/lib/i18n/config";
 import { festivalCardImage } from "@/lib/festivals";
 import type { SiteEvent } from "@/lib/types";
+import { useVillageNow } from "@/lib/use-village-now";
 
 const FALLBACK_IMAGE = "/logo/logo-mark.webp";
 
@@ -30,20 +31,23 @@ export function HomeUpcomingEvents({
 }) {
   const { t, lang } = useUiLang();
   const tag = LOCALE_TAG[lang];
+  const now = useVillageNow();
 
   /** Countdown wording, translated. Never derived from colour alone. */
   const statusLabel = (date: string, endDate?: string | null) => {
-    const phase = eventPhase(date, endDate);
-    if (phase === "completed") return t("common.completed");
-    if (phase === "today") return t("common.today");
-    const days = daysUntil(date);
+    const phase = eventPhase(date, endDate, now);
+    const stable = eventStatusLabel(date, endDate, now);
+    if (stable === "Completed" || phase === "completed") return t("common.completed");
+    if (stable === "Today" || phase === "today") return t("common.today");
+    const days = daysUntil(date, now);
     if (days === 1) return t("common.tomorrow");
     return t("common.inDays", undefined, { days });
   };
 
   const live = new Set(liveSlugs);
   const upcoming = events
-    .filter((event) => eventPhase(event.date, event.endDate) !== "completed")
+    .filter((event) => event.category === "festival")
+    .filter((event) => eventPhase(event.date, event.endDate, now) !== "completed")
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, limit);
 
@@ -55,7 +59,7 @@ export function HomeUpcomingEvents({
       {upcoming.length ? (
         <StaggerChildren as="ul" className="home-event-list" safe>
           {upcoming.map((event) => {
-            const phase = eventPhase(event.date, event.endDate);
+            const phase = eventPhase(event.date, event.endDate, now);
             const href =
               event.slug && live.has(event.slug) ? `/${event.slug}/` : "/temples/";
             return (
@@ -91,7 +95,7 @@ export function HomeUpcomingEvents({
                       {phase === "today"
                         ? t("home.events.srToday")
                         : t("home.events.srInDays", undefined, {
-                            days: daysUntil(event.date),
+                            days: daysUntil(event.date, now),
                           })}
                     </span>
                   </span>

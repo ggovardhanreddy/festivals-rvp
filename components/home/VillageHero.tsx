@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { m, useReducedMotion } from "framer-motion";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { withBase } from "@/lib/base";
 import {
   HOME_HERO_PHOTO,
@@ -13,6 +14,12 @@ import {
   HOME_HERO_SUPPORT,
   HOME_HERO_TITLE,
 } from "@/lib/site";
+import { Progressive3D } from "@/components/three/Progressive3D";
+
+const VillageLandingScene = dynamic(
+  () => import("@/components/three/VillageLandingScene").then((m) => m.VillageLandingScene),
+  { ssr: false },
+);
 
 /**
  * Homepage hero.
@@ -23,6 +30,7 @@ import {
 export function VillageHero() {
   const reduce = useReducedMotion();
   const { t } = useUiLang();
+  const [entered, setEntered] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -91,6 +99,7 @@ export function VillageHero() {
       ref={heroRef}
       className="village-hero"
       data-photo={HOME_HERO_PHOTO ? true : undefined}
+      data-entered={entered || undefined}
       aria-labelledby="village-hero-title"
     >
       {HOME_HERO_PHOTO ? (
@@ -108,6 +117,24 @@ export function VillageHero() {
             decoding="async"
           />
           <div className="village-hero-scrim" aria-hidden />
+        </div>
+      ) : null}
+      <Progressive3D className="village-hero-3d-wrap">
+        <VillageLandingScene entered={entered} />
+      </Progressive3D>
+      {!entered ? (
+        <div className="village-hero-intro">
+          <p className="eyebrow">{t("village.name", HOME_HERO_TITLE)}</p>
+          <h2>{t("home.hero.pillars", "Our Village. Our Heritage. Our Home.")}</h2>
+          <p className="muted">
+            {t(
+              "home.hero.support",
+              "Explore culture, temples, stories, festivals, and people through an immersive digital village experience.",
+            )}
+          </p>
+          <button className="btn" onClick={() => setEntered(true)} type="button">
+            {t("common.enterVillage", "Enter Village")}
+          </button>
         </div>
       ) : null}
       <div className="village-hero-glow" aria-hidden />

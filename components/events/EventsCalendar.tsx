@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { withBase } from "@/lib/base";
-import { daysUntil, formatCountdown } from "@/lib/dates";
+import { eventStatusLabel, formatEventDateRange } from "@/lib/dates";
 import type { Member, SiteEvent } from "@/lib/types";
 import { TeluguCalendar } from "@/components/events/TeluguCalendar";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
+import { LOCALE_TAG } from "@/lib/i18n/config";
 
 export function EventsCalendar({
   upcoming,
@@ -32,7 +33,8 @@ export function EventsCalendar({
   calendarTitle?: string;
   calendarLede?: string;
 }) {
-  const { t } = useUiLang();
+  const { t, lang } = useUiLang();
+  const tag = LOCALE_TAG[lang];
   const live = new Set(liveSlugs);
 
   return (
@@ -48,7 +50,6 @@ export function EventsCalendar({
           <div className="event-cards">
             {upcoming.length ? (
               upcoming.map((event) => {
-                const days = daysUntil(event.date);
                 return (
                   <article
                     key={event.id}
@@ -66,13 +67,12 @@ export function EventsCalendar({
                       </div>
                     ) : null}
                     <div className="event-card-body">
-                      <p className="eyebrow">{formatCountdown(days)}</p>
-                      <h3>{event.title}</h3>
+                      <p className="eyebrow">
+                        {eventStatusLabel(event.date, event.endDate)}
+                      </p>
+                      <h3>{(lang === "te" && event.titleTe) || event.title}</h3>
                       <p className="muted">
-                        {event.date}
-                        {event.endDate && event.endDate !== event.date
-                          ? ` – ${event.endDate}`
-                          : ""}
+                        {formatEventDateRange(event.date, event.endDate, tag)}
                       </p>
                       <p className="lede">{event.description}</p>
                       {event.slug && live.has(event.slug) ? (
@@ -115,8 +115,8 @@ export function EventsCalendar({
           <ul className="event-archive">
             {archive.map((event) => (
               <li key={event.id}>
-                <span className="muted">{event.date}</span>
-                <strong>{event.title}</strong>
+                <span className="muted">{formatEventDateRange(event.date, event.endDate, tag)}</span>
+                <strong>{(lang === "te" && event.titleTe) || event.title}</strong>
                 {event.slug && live.has(event.slug) ? (
                   <Link href={`/${event.slug}/`}>{t("events.gallery")}</Link>
                 ) : null}

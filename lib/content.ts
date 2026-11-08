@@ -203,6 +203,58 @@ export const cmsAlbumFolders = () => CMS_ALBUMS;
 export { albumHref } from "./site";
 export { slugify };
 
+export function selectLatestMemories(
+  items: MediaWithAlbum[],
+  limit = 6,
+): MediaWithAlbum[] {
+  if (limit <= 0) return [];
+  const sorted = [...items].sort(
+    (a, b) =>
+      String(b.date || b.album.year).localeCompare(
+        String(a.date || a.album.year),
+      ) || String(a.id).localeCompare(String(b.id)),
+  );
+  const picked: MediaWithAlbum[] = [];
+  const seenIds = new Set<string>();
+  const seenAlbums = new Set<string>();
+  const seenBuckets = new Set<string>();
+
+  // First pick: newest frame per bucket to avoid one event dominating homepage.
+  for (const item of sorted) {
+    if (picked.length >= limit) break;
+    const bucket = item.album.bucket || "";
+    if (!bucket || seenBuckets.has(bucket)) continue;
+    picked.push(item);
+    seenIds.add(item.id);
+    seenBuckets.add(bucket);
+    seenAlbums.add(`${item.album.year}:${item.album.slug}`);
+  }
+  if (picked.length >= limit) return picked;
+
+  // Second pick: broaden album variety within the remaining newest frames.
+  for (const item of sorted) {
+    if (picked.length >= limit) break;
+    if (seenIds.has(item.id)) continue;
+    const albumKey = `${item.album.year}:${item.album.slug}`;
+    if (seenAlbums.has(albumKey)) continue;
+    picked.push(item);
+    seenIds.add(item.id);
+    seenAlbums.add(albumKey);
+    if (item.album.bucket) seenBuckets.add(item.album.bucket);
+  }
+  if (picked.length >= limit) return picked;
+
+  // Final fill: allow repeats only when needed to reach requested count.
+  for (const item of sorted) {
+    if (picked.length >= limit) break;
+    if (!seenIds.has(item.id)) {
+      picked.push(item);
+      seenIds.add(item.id);
+    }
+  }
+  return picked.slice(0, limit);
+}
+
 /**
  * Newest public photographs, for the homepage "Latest Memories" strip.
  *
@@ -211,18 +263,12 @@ export { slugify };
  * year and media-type filters, stays on /gallery/.
  */
 export function latestMemories(limit = 6): MediaWithAlbum[] {
-  return liveAlbums()
+  const photos = liveAlbums()
     .filter((album) => album.bucket !== "fun-trips")
     .flatMap((album) =>
       album.media
         .filter((media) => media.type === "image")
         .map((media) => ({ ...media, album })),
-    )
-    .sort(
-      (a, b) =>
-        String(b.date || b.album.year).localeCompare(
-          String(a.date || a.album.year),
-        ) || String(a.id).localeCompare(String(b.id)),
-    )
-    .slice(0, limit);
+    );
+  return selectLatestMemories(photos, limit);
 }

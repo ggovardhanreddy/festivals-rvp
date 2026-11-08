@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Reddivaripalli",
+    "slug": "reddivaripalli-mobile",
+    "scheme": "reddivaripalli",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "../../public/logo/app-icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "../../public/logo/logo-mark.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1f3d2e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.reddivaripalli.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "../../public/logo/app-icon.png",
+        "backgroundColor": "#1f3d2e"
+      },
+      "package": "com.reddivaripalli.app"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
