@@ -167,7 +167,7 @@ function TemplePond() {
 }
 
 function Birds() {
-  const flock = useRef<Group>(null);
+  const flock = useRef<Group | null>(null);
   useFrame(({ clock }) => {
     if (flock.current) {
       flock.current.position.x = Math.sin(clock.elapsedTime * 0.16) * 1.1;
