@@ -189,7 +189,7 @@ function Birds() {
 }
 
 function CinematicCamera({ entered }: { entered: boolean }) {
-  const { camera, pointer } = useThree();
+  const { camera } = useThree();
   const from = useMemo(() => new Vector3(0, 15.5, 21), []);
   const to = useMemo(() => new Vector3(0, 8.2, 13.2), []);
   const lookFrom = useMemo(() => new Vector3(0, 0, -1), []);
