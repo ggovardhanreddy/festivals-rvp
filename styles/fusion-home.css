@@ -1,0 +1,190 @@
+/*
+ * Fusion homepage — editorial heritage, restrained ornament, documentary
+ * photography. Imported after heritage-redesign.css.
+ */
+
+.village-hero {
+  min-height: clamp(640px, 82svh, 900px);
+  display: flex;
+  align-items: center;
+  padding-block: clamp(5rem, 10vh, 8rem);
+  background:
+    radial-gradient(70% 70% at 78% 12%, rgba(176, 138, 62, 0.18), transparent 66%),
+    linear-gradient(145deg, #10291f 0%, #1f4e3d 58%, #142c22 100%);
+}
+
+.village-hero[data-photo] .village-hero-inner {
+  position: relative;
+  z-index: 2;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.village-hero[data-photo] .village-hero-copy {
+  grid-column: 1;
+  max-width: 780px;
+}
+
+.village-hero-photo { z-index: 0; }
+
+.village-hero-photo img,
+.village-hero-photo .village-hero-archive-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 48%;
+  display: block;
+  transform: translate3d(var(--par-x, 0px), var(--par-y, 0px), 0) scale(1.035);
+  will-change: transform;
+}
+
+.village-hero-scrim {
+  background:
+    linear-gradient(90deg, rgba(10, 25, 18, 0.88) 0%, rgba(10, 25, 18, 0.72) 42%, rgba(10, 25, 18, 0.25) 100%),
+    linear-gradient(180deg, rgba(10, 25, 18, 0.18), rgba(10, 25, 18, 0.48));
+}
+
+.village-hero-kicker {
+  margin: 0 0 1.15rem;
+  color: #e7ce91;
+  font: 600 0.72rem/1.5 var(--font-accent);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.village-hero-title {
+  max-width: 100%;
+  font-size: clamp(2.3rem, 7vw, 5.25rem);
+  line-height: 0.98;
+  letter-spacing: 0.015em;
+  text-wrap: balance;
+}
+
+.village-hero-pillars {
+  margin-top: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  letter-spacing: 0.11em;
+  line-height: 1.5;
+}
+
+.village-hero-support {
+  max-width: 42rem;
+  margin-top: 1rem;
+  color: rgba(250, 247, 239, 0.88);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.8;
+}
+
+.village-hero-highlights { gap: 0.65rem; margin-top: 1.65rem; }
+.village-hero-highlights li {
+  border-color: rgba(231, 206, 145, 0.48);
+  background: rgba(10, 25, 18, 0.34);
+  color: #fbf5e8;
+  letter-spacing: 0.045em;
+  text-transform: none;
+  padding: 0.48rem 0.85rem;
+}
+
+.village-hero-cta { margin-top: 1.8rem; gap: 0.85rem; }
+.village-hero-cta .btn {
+  min-height: 48px;
+  padding-inline: 1.45rem;
+  background: linear-gradient(135deg, #c18c4a, #a8542e);
+  color: #fffaf2;
+  border: 1px solid rgba(255, 244, 220, 0.18);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+.village-hero-cta .btn.ghost {
+  background: rgba(14, 35, 26, 0.38);
+  color: #fffaf2;
+  border: 1px solid rgba(247, 235, 207, 0.5);
+  box-shadow: none;
+}
+
+.home.home-heritage-grid {
+  width: min(1240px, calc(100% - max(2.5rem, 6vw)));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(4rem, 7vw, 6rem);
+}
+
+.home.home-heritage-grid .section,
+.home.home-heritage-grid .home-panel,
+.home.home-heritage-grid .village-update-card {
+  border: 1px solid color-mix(in srgb, var(--color-gold-soft) 26%, var(--color-line));
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(42, 34, 20, 0.065);
+}
+
+.home.home-heritage-grid .section,
+.home.home-heritage-grid .home-panel {
+  padding: clamp(1.25rem, 2.7vw, 2rem);
+  background: linear-gradient(180deg, #fffdf8, #f8f3e9);
+}
+
+.home.home-heritage-grid .eyebrow {
+  color: var(--color-accent-ink);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+}
+.home.home-heritage-grid .home-section-head h2,
+.home.home-heritage-grid .home-panel h2 { color: #1f392d; letter-spacing: -0.025em; }
+.home.home-heritage-grid .home-panel-lede,
+.home.home-heritage-grid .muted { line-height: 1.75; }
+
+.home.home-heritage-grid .home-temple-card,
+.home.home-heritage-grid .home-person-card,
+.home.home-heritage-grid .home-story-card,
+.home.home-heritage-grid .progress-card {
+  border-color: color-mix(in srgb, var(--color-gold-soft) 32%, var(--color-line));
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(35, 30, 18, 0.045);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+.home.home-heritage-grid .home-temple-card:hover,
+.home.home-heritage-grid .home-person-card:hover,
+.home.home-heritage-grid .home-story-card:hover,
+.home.home-heritage-grid .progress-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--color-gold) 55%, var(--color-line));
+  box-shadow: 0 14px 28px rgba(35, 30, 18, 0.09);
+}
+.home.home-heritage-grid .home-memory-tile {
+  border-radius: 10px;
+  border-color: color-mix(in srgb, var(--color-gold-soft) 38%, var(--color-line));
+}
+.home.home-heritage-grid .home-contact-map { overflow: hidden; border: 1px solid var(--color-line); border-radius: 12px; }
+
+.dark .home.home-heritage-grid .section,
+.dark .home.home-heritage-grid .home-panel { background: linear-gradient(180deg, #1b2821, #17221c); }
+.dark .home.home-heritage-grid .home-section-head h2,
+.dark .home.home-heritage-grid .home-panel h2 { color: var(--color-ink); }
+
+@media (max-width: 920px) {
+  .village-hero { min-height: 700px; padding-block: 5rem 4.5rem; }
+  .village-hero[data-photo] .village-hero-inner { grid-template-columns: minmax(0, 1fr); }
+  .village-hero[data-photo] .village-hero-copy { max-width: 680px; margin-inline: auto; text-align: center; }
+  .village-hero[data-photo] .village-hero-cta { justify-content: center; }
+  .village-hero-photo img,
+  .village-hero-photo .village-hero-archive-image { object-position: 52% 50%; }
+  .village-hero-scrim { background: linear-gradient(180deg, rgba(10, 25, 18, 0.62), rgba(10, 25, 18, 0.84)); }
+  .home.home-heritage-grid { width: min(1240px, calc(100% - 1.25rem)); }
+}
+
+@media (max-width: 600px) {
+  .village-hero { min-height: 650px; padding-inline: 1.1rem; }
+  .village-hero-kicker { font-size: 0.62rem; letter-spacing: 0.16em; }
+  .village-hero-title { font-size: clamp(2rem, 10vw, 3.25rem); overflow-wrap: anywhere; }
+  .village-hero-highlights { justify-content: center; }
+  .village-hero-cta { flex-direction: column; align-items: stretch; }
+  .village-hero-cta .btn { width: 100%; }
+  .home.home-heritage-grid .section,
+  .home.home-heritage-grid .home-panel { padding: 1.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .village-hero-photo img,
+  .village-hero-photo .village-hero-archive-image,
+  .home.home-heritage-grid .home-temple-card,
+  .home.home-heritage-grid .home-person-card,
+  .home.home-heritage-grid .home-story-card,
+  .home.home-heritage-grid .progress-card { transform: none; transition: none; will-change: auto; }
+}

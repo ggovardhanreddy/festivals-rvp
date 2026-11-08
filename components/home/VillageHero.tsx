@@ -6,10 +6,8 @@ import { m, useReducedMotion } from "framer-motion";
 import { useUiLang } from "@/components/i18n/LanguageProvider";
 import { useEffect, useRef, useState } from "react";
 import { withBase } from "@/lib/base";
+import { MediaImage } from "@/components/media/MediaImage";
 import {
-  HOME_HERO_PHOTO,
-  HOME_HERO_PHOTO_ALT,
-  HOME_HERO_PHOTO_SRCSET,
   HOME_HERO_PILLARS,
   HOME_HERO_SUPPORT,
   HOME_HERO_TITLE,
@@ -25,9 +23,15 @@ const VillageLandingScene = dynamic(
  * Homepage hero.
  *
  * Village name, tagline, a short promise, and two doors into the site.
- * The aerial photograph is the village itself — not a stock image.
+ * When available, the backdrop is selected from the published public photo archive.
  */
-export function VillageHero() {
+type VillageHeroProps = {
+  /** Public archive image selected by HomePage; never a generated concept image. */
+  photo?: string | null;
+  photoAlt?: string;
+};
+
+export function VillageHero({ photo, photoAlt }: VillageHeroProps) {
   const reduce = useReducedMotion();
   const { t } = useUiLang();
   const [entered, setEntered] = useState(false);
@@ -98,23 +102,22 @@ export function VillageHero() {
     <section
       ref={heroRef}
       className="village-hero"
-      data-photo={HOME_HERO_PHOTO ? true : undefined}
+      data-photo={photo ? true : undefined}
       data-entered={entered || undefined}
       aria-labelledby="village-hero-title"
     >
-      {HOME_HERO_PHOTO ? (
+      {photo ? (
         <div className="village-hero-photo">
-          <img
-            src={withBase(HOME_HERO_PHOTO)}
-            srcSet={HOME_HERO_PHOTO_SRCSET.map(
-              ([path, width]) => `${withBase(path)} ${width}w`,
-            ).join(", ")}
-            /* The hero is full-bleed, so the slot really is the viewport
-               width -- no estimate needed. */
-            sizes="100vw"
-            alt={HOME_HERO_PHOTO_ALT}
+          <MediaImage
+            src={photo}
+            alt={photoAlt || "Photograph from the Reddivaripalli village archive"}
+            className="village-hero-archive-image"
+            protect={false}
             fetchPriority="high"
-            decoding="async"
+            loading="eager"
+            sizes="100vw"
+            width={1920}
+            height={1080}
           />
           <div className="village-hero-scrim" aria-hidden />
         </div>
@@ -139,7 +142,7 @@ export function VillageHero() {
       ) : null}
       <div className="village-hero-glow" aria-hidden />
       <div className="village-hero-inner">
-        {HOME_HERO_PHOTO ? null : (
+        {photo ? null : (
           <m.img
             className="village-hero-emblem"
             src={withBase("/logo/logo-vertical.webp")}
@@ -153,6 +156,9 @@ export function VillageHero() {
         )}
 
         <div className="village-hero-copy">
+          <m.p className="village-hero-kicker" {...rise(0.02)}>
+            OUR VILLAGE · OUR HERITAGE · OUR HOME
+          </m.p>
           <m.h1 id="village-hero-title" className="village-hero-title" {...rise(0.05)}>
             {t("village.name", HOME_HERO_TITLE)}
           </m.h1>
