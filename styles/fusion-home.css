@@ -432,3 +432,39 @@
   .village-hero[data-entered] .village-hero-inner { animation: none; }
   .village-hero-intro .btn { transition: none; }
 }
+
+
+/* Accessible contrast for the contact panel on the light heritage surface. */
+.home.home-heritage-grid .home-contact {
+  color: #243b30;
+}
+.home.home-heritage-grid .home-contact .eyebrow {
+  color: #80501f;
+}
+.home.home-heritage-grid .home-contact .home-section-head h2,
+.home.home-heritage-grid .home-contact h2 {
+  color: #183b2c;
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-shadow: none;
+}
+.home.home-heritage-grid .home-contact .home-panel-lede,
+.home.home-heritage-grid .home-contact .muted {
+  color: #455b50;
+  opacity: 1;
+}
+.home.home-heritage-grid .home-contact .btn {
+  color: #fffaf2;
+}
+.home.home-heritage-grid .home-contact .btn.ghost {
+  color: #70451f;
+  border-color: #b88b50;
+  background: #fffaf0;
+}
+.home.home-heritage-grid .home-contact .btn.ghost:hover {
+  color: #fffaf2;
+  background: #80502f;
+}
+.home.home-heritage-grid .home-contact-map {
+  background: #f5f0e6;
+}
