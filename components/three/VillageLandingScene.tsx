@@ -5,10 +5,7 @@ import { Float, Sparkles } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import {
   CatmullRomCurve3,
-  Color,
   Group,
-  MathUtils,
-  Mesh,
   Vector3,
 } from "three";
 
@@ -198,12 +195,12 @@ function CinematicCamera({ entered }: { entered: boolean }) {
   const lookFrom = useMemo(() => new Vector3(0, 0, -1), []);
   const lookTo = useMemo(() => new Vector3(0, 0, -1.4), []);
   const look = useMemo(() => new Vector3(), []);
-  useFrame(({ clock }) => {
-    const target = entered ? to : from;
-    const t = 1 - Math.exp(-clock.getDelta() * 1.15);
+  useFrame(({ pointer }, delta) => {
+    const base = entered ? to : from;
+    const target = new Vector3(base.x + pointer.x * (entered ? 0.42 : 0.18), base.y, base.z);
+    const t = 1 - Math.exp(-delta * 1.15);
     camera.position.lerp(target, t);
     look.lerp(entered ? lookTo : lookFrom, t);
-    camera.position.x += (pointer.x * (entered ? 0.18 : 0.08) - camera.position.x * 0.0004);
     camera.lookAt(look.x, look.y, look.z);
   });
   return null;
