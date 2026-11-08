@@ -188,3 +188,129 @@
   .home.home-heritage-grid .home-story-card,
   .home.home-heritage-grid .progress-card { transform: none; transition: none; will-change: auto; }
 }
+
+
+/* Cinematic 3D village reveal. The archive photograph remains the truthful
+   documentary backdrop; this transparent, procedural 3D layer is an artistic
+   interpretation and never replaces or alters the underlying archive. */
+.village-hero {
+  isolation: isolate;
+  overflow: hidden;
+}
+.village-hero-3d-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.96;
+  mask-image: linear-gradient(180deg, #000 0%, #000 76%, transparent 100%);
+}
+.village-hero-3d-wrap canvas,
+.village-landing-3d {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.village-hero[data-photo] .village-hero-photo {
+  z-index: 0;
+}
+.village-hero[data-photo] .village-hero-scrim {
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(8, 22, 16, 0.78) 0%, rgba(8, 22, 16, 0.44) 48%, rgba(8, 22, 16, 0.16) 100%),
+    linear-gradient(180deg, rgba(8, 22, 16, 0.12), rgba(8, 22, 16, 0.54));
+}
+.village-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+.village-hero-intro {
+  position: absolute;
+  z-index: 4;
+  top: clamp(6.5rem, 13vh, 9rem);
+  right: clamp(1.25rem, 5vw, 5rem);
+  width: min(340px, calc(100% - 2.5rem));
+  padding: 1.45rem 1.5rem;
+  border: 1px solid rgba(232, 207, 151, 0.42);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(13, 34, 25, 0.88), rgba(23, 52, 38, 0.72));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+  color: #fff8eb;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.village-hero-intro .eyebrow {
+  margin-bottom: 0.55rem;
+  color: #e8cf97;
+}
+.village-hero-intro h2 {
+  margin: 0 0 0.65rem;
+  color: #fff8eb;
+  font-size: clamp(1.45rem, 2.3vw, 1.9rem);
+  line-height: 1.12;
+}
+.village-hero-intro .muted {
+  margin: 0 0 1rem;
+  color: rgba(255, 248, 235, 0.8);
+  font-size: 0.92rem;
+}
+.village-hero-intro .btn {
+  min-height: 46px;
+  width: 100%;
+  border: 1px solid rgba(255, 242, 212, 0.25);
+  background: linear-gradient(135deg, #c18c4a, #a8542e);
+  color: #fffaf2;
+}
+.village-hero-glow {
+  z-index: 1;
+  pointer-events: none;
+}
+.village-hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  text-shadow: 0 2px 18px rgba(7, 18, 12, 0.34);
+}
+.village-hero[data-photo] .village-hero-copy {
+  max-width: 680px;
+}
+@media (max-width: 920px) {
+  .village-hero-3d-wrap {
+    opacity: 0.76;
+    mask-image: linear-gradient(180deg, #000 0%, #000 64%, transparent 100%);
+  }
+  .village-hero-intro {
+    top: auto;
+    right: 1rem;
+    bottom: 1.25rem;
+    width: min(320px, calc(100% - 2rem));
+  }
+  .village-hero[data-photo] .village-hero-copy {
+    max-width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .village-hero-3d-wrap {
+    opacity: 0.55;
+  }
+  .village-hero-intro {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    width: auto;
+    padding: 1.05rem 1.15rem;
+  }
+  .village-hero-intro h2 {
+    font-size: 1.35rem;
+  }
+  .village-hero-intro .muted {
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .village-hero-3d-wrap {
+    display: none;
+  }
+}
