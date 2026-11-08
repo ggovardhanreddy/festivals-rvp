@@ -188,3 +188,247 @@
   .home.home-heritage-grid .home-story-card,
   .home.home-heritage-grid .progress-card { transform: none; transition: none; will-change: auto; }
 }
+
+
+/* Cinematic 3D village reveal. The archive photograph remains the truthful
+   documentary backdrop; this transparent, procedural 3D layer is an artistic
+   interpretation and never replaces or alters the underlying archive. */
+.village-hero {
+  isolation: isolate;
+  overflow: hidden;
+}
+.village-hero-3d-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.96;
+  mask-image: linear-gradient(180deg, #000 0%, #000 76%, transparent 100%);
+}
+.village-hero-3d-wrap canvas,
+.village-landing-3d {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.village-hero[data-photo] .village-hero-photo {
+  z-index: 0;
+}
+.village-hero[data-photo] .village-hero-scrim {
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(8, 22, 16, 0.78) 0%, rgba(8, 22, 16, 0.44) 48%, rgba(8, 22, 16, 0.16) 100%),
+    linear-gradient(180deg, rgba(8, 22, 16, 0.12), rgba(8, 22, 16, 0.54));
+}
+.village-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+.village-hero-intro {
+  position: absolute;
+  z-index: 4;
+  top: clamp(6.5rem, 13vh, 9rem);
+  right: clamp(1.25rem, 5vw, 5rem);
+  width: min(340px, calc(100% - 2.5rem));
+  padding: 1.45rem 1.5rem;
+  border: 1px solid rgba(232, 207, 151, 0.42);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(13, 34, 25, 0.88), rgba(23, 52, 38, 0.72));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+  color: #fff8eb;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.village-hero-intro .eyebrow {
+  margin-bottom: 0.55rem;
+  color: #e8cf97;
+}
+.village-hero-intro h2 {
+  margin: 0 0 0.65rem;
+  color: #fff8eb;
+  font-size: clamp(1.45rem, 2.3vw, 1.9rem);
+  line-height: 1.12;
+}
+.village-hero-intro .muted {
+  margin: 0 0 1rem;
+  color: rgba(255, 248, 235, 0.8);
+  font-size: 0.92rem;
+}
+.village-hero-intro .btn {
+  min-height: 46px;
+  width: 100%;
+  border: 1px solid rgba(255, 242, 212, 0.25);
+  background: linear-gradient(135deg, #c18c4a, #a8542e);
+  color: #fffaf2;
+}
+.village-hero-glow {
+  z-index: 1;
+  pointer-events: none;
+}
+.village-hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  text-shadow: 0 2px 18px rgba(7, 18, 12, 0.34);
+}
+.village-hero[data-photo] .village-hero-copy {
+  max-width: 680px;
+}
+@media (max-width: 920px) {
+  .village-hero-3d-wrap {
+    opacity: 0.76;
+    mask-image: linear-gradient(180deg, #000 0%, #000 64%, transparent 100%);
+  }
+  .village-hero-intro {
+    top: auto;
+    right: 1rem;
+    bottom: 1.25rem;
+    width: min(320px, calc(100% - 2rem));
+  }
+  .village-hero[data-photo] .village-hero-copy {
+    max-width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .village-hero-3d-wrap {
+    opacity: 0.55;
+  }
+  .village-hero-intro {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    width: auto;
+    padding: 1.05rem 1.15rem;
+  }
+  .village-hero-intro h2 {
+    font-size: 1.35rem;
+  }
+  .village-hero-intro .muted {
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .village-hero-3d-wrap {
+    display: none;
+  }
+}
+
+
+/* Reference-inspired cinematic opening: quiet, centred and immersive. */
+.village-hero {
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding: 0;
+  align-items: stretch;
+  background:
+    radial-gradient(ellipse at 50% 38%, rgba(39, 91, 61, 0.34), transparent 58%),
+    linear-gradient(180deg, #071a12 0%, #102c1e 55%, #07170f 100%);
+}
+.village-hero-photo img,
+.village-hero-photo .village-hero-archive-image {
+  object-position: center 48%;
+  filter: saturate(0.72) brightness(0.56);
+  transform: scale(1.045);
+}
+.village-hero[data-photo] .village-hero-scrim {
+  background:
+    linear-gradient(180deg, rgba(3, 15, 10, 0.38), rgba(4, 19, 12, 0.18) 42%, rgba(3, 14, 9, 0.72)),
+    radial-gradient(ellipse at 50% 48%, transparent 8%, rgba(3, 15, 10, 0.42) 100%);
+}
+.village-hero-3d-wrap {
+  opacity: 0.9;
+  mask-image: linear-gradient(180deg, #000 0%, #000 88%, transparent 100%);
+}
+.village-hero-intro {
+  top: 50%;
+  right: auto;
+  left: 50%;
+  bottom: auto;
+  width: min(760px, calc(100% - 2.5rem));
+  padding: clamp(1.5rem, 4vw, 3.25rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.village-hero-intro .eyebrow {
+  margin: 0 0 1.25rem;
+  color: #e7ce91;
+  font: 600 0.72rem/1.5 var(--font-accent);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.village-hero-intro h2 {
+  margin: 0 auto 1.1rem;
+  max-width: 850px;
+  color: #fffaf0;
+  font-size: clamp(2.5rem, 7.2vw, 6.25rem);
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  line-height: 0.98;
+  text-wrap: balance;
+  text-shadow: 0 8px 40px rgba(0,0,0,0.36);
+}
+.village-hero-intro .muted {
+  max-width: 560px;
+  margin: 0 auto 2rem;
+  color: rgba(255, 250, 240, 0.82);
+  font-size: clamp(0.96rem, 1.5vw, 1.12rem);
+  line-height: 1.8;
+}
+.village-hero-intro .btn {
+  width: auto;
+  min-width: 176px;
+  min-height: 48px;
+  padding: 0.8rem 1.8rem;
+  border: 1px solid rgba(238, 216, 166, 0.72);
+  border-radius: 999px;
+  background: rgba(194, 142, 75, 0.92);
+  color: #fffaf2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease;
+}
+.village-hero-intro .btn:hover {
+  transform: translateY(-2px);
+  background: #d19b58;
+  box-shadow: 0 16px 46px rgba(0,0,0,0.32);
+}
+.village-hero:not([data-entered]) .village-hero-inner {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.village-hero[data-entered] .village-hero-inner {
+  animation: village-content-arrive 900ms cubic-bezier(.22,1,.36,1) both;
+}
+.village-hero[data-entered] .village-hero-intro {
+  display: none;
+}
+.village-hero[data-entered] .village-hero-photo img,
+.village-hero[data-entered] .village-hero-photo .village-hero-archive-image {
+  filter: saturate(0.88) brightness(0.48);
+}
+@keyframes village-content-arrive {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@media (max-width: 600px) {
+  .village-hero { min-height: 100svh; min-height: 100dvh; }
+  .village-hero-intro { width: calc(100% - 2rem); padding: 1.25rem 0.5rem; }
+  .village-hero-intro .eyebrow { letter-spacing: 0.2em; }
+  .village-hero-intro h2 { font-size: clamp(2.3rem, 11vw, 3.6rem); }
+  .village-hero-intro .muted { margin-bottom: 1.5rem; }
+  .village-hero-intro .btn { width: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .village-hero[data-entered] .village-hero-inner { animation: none; }
+  .village-hero-intro .btn { transition: none; }
+}
