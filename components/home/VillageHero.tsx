@@ -23,7 +23,7 @@ const VillageLandingScene = dynamic(
  * Homepage hero.
  *
  * Village name, tagline, a short promise, and two doors into the site.
- * The aerial photograph is the village itself — not a stock image.
+ * When available, the backdrop is selected from the published public photo archive.
  */
 type VillageHeroProps = {
   /** Public archive image selected by HomePage; never a generated concept image. */
